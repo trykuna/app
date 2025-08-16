@@ -549,6 +549,13 @@ final class VikunjaAPI {
     }
 
     // MARK: - Attachments
+    /// Fetch attachments for a task.
+    func getTaskAttachments(taskId: Int) async throws -> [TaskAttachment] {
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "attachments"])
+        let data = try await request(ep)
+        return try JSONDecoder.vikunja.decode([TaskAttachment].self, from: data)
+    }
+
     /// Upload a file attachment for the given task.
     ///
     /// - Parameters:
@@ -592,6 +599,12 @@ final class VikunjaAPI {
                 throw APIError.http(http.statusCode)
             }
         }
+    }
+
+    /// Delete a task attachment.
+    func deleteAttachment(taskId: Int, attachmentId: Int) async throws {
+        let ep = Endpoint(method: "DELETE", pathComponents: ["tasks", "\(taskId)", "attachments", "\(attachmentId)"])
+        _ = try await request(ep)
     }
 
     // MARK: - Favorites

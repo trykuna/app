@@ -136,7 +136,7 @@ struct TaskDetailView: View {
                             title: "ATTACHMENTS",
                             isExpanded: $isAttachmentsExpanded
                         ) {
-                            TaskAttachmentView(task: task, api: api)
+                            AttachmentsView(task: task, api: api)
                                 .settingsCardStyle()
                         }
 

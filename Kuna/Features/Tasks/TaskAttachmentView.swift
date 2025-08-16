@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 struct TaskAttachmentView: View {
     let task: VikunjaTask
     let api: VikunjaAPI
+    var onUpload: (() -> Void)? = nil
 
     @State private var showingSourceDialog = false
     @State private var showPhotoPicker = false
@@ -53,6 +54,7 @@ struct TaskAttachmentView: View {
                 return
             }
             try await api.uploadAttachment(taskId: task.id, fileName: "photo.jpg", data: data, mimeType: "image/jpeg")
+            onUpload?()
         } catch {
             uploadError = error.localizedDescription
         }
@@ -68,6 +70,7 @@ struct TaskAttachmentView: View {
                     let data = try Data(contentsOf: url)
                     let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
                     try await api.uploadAttachment(taskId: task.id, fileName: url.lastPathComponent, data: data, mimeType: mime)
+                    onUpload?()
                 } catch {
                     uploadError = error.localizedDescription
                 }

@@ -434,6 +434,40 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     }
 }
 
+struct TaskAttachment: Identifiable, Decodable {
+    let id: Int
+    let fileName: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case fileName = "file_name"
+        case file
+    }
+
+    struct FileInfo: Decodable {
+        let fileName: String?
+        let name: String?
+
+        enum CodingKeys: String, CodingKey {
+            case fileName = "file_name"
+            case name
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+
+        if let direct = try container.decodeIfPresent(String.self, forKey: .fileName) {
+            fileName = direct
+        } else if let file = try container.decodeIfPresent(FileInfo.self, forKey: .file) {
+            fileName = file.fileName ?? file.name ?? ""
+        } else {
+            fileName = ""
+        }
+    }
+}
+
 // MARK: - Color Extension
 extension Color {
     init(hex: String) {
