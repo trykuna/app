@@ -6,7 +6,7 @@ struct RootView: View {
 
     var body: some View {
         if app.isAuthenticated, let api = app.api {
-            ProjectListView(api: api)
+            MainContainerView(api: api)
         } else {
             LoginView()
         }

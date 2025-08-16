@@ -9,6 +9,10 @@ struct KunaApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(appState)
+                .onAppear {
+                    // Restore selected app icon on app launch
+                    AppIconManager.shared.restoreSelectedIcon()
+                }
         }
     }
 }

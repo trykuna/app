@@ -2,6 +2,9 @@
 import Foundation
 import Security
 
+// Forward declaration - AuthenticationMethod is defined in AppState.swift
+// This will work because both files are compiled together
+
 enum Keychain {
     // App Group identifier - must match in both app and widget entitlements
     private static let appGroupIdentifier = "group.tech.systemsmystery.kuna"
@@ -74,9 +77,24 @@ enum Keychain {
         delete(account: "vikunja-token")
     }
     
+    // Authentication method storage
+    static func saveAuthMethod(_ method: AuthenticationMethod) throws {
+        try save(token: method.rawValue, account: "vikunja-auth-method")
+    }
+
+    static func readAuthMethod() -> AuthenticationMethod? {
+        guard let methodString = read(account: "vikunja-auth-method") else { return nil }
+        return AuthenticationMethod(rawValue: methodString)
+    }
+
+    static func deleteAuthMethod() {
+        delete(account: "vikunja-auth-method")
+    }
+
     // Clear all
     static func clearAll() {
         deleteToken()
         deleteServerURL()
+        deleteAuthMethod()
     }
 }

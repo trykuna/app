@@ -6,6 +6,68 @@ struct AuthResponse: Decodable {
     let token: String
 }
 
+struct VikunjaUser: Identifiable, Codable {
+    let id: Int
+    let username: String
+    let name: String?
+    let email: String?
+    let avatarProvider: String?
+    let avatarFileId: Int?
+    let created: Date?
+    let updated: Date?
+
+    var displayName: String {
+        if let name = name, !name.isEmpty {
+            return name
+        }
+        return username
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, username, name, email, created, updated
+        case avatarProvider = "avatar_provider"
+        case avatarFileId = "avatar_file_id"
+    }
+
+    // Custom decoder to handle dates
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try container.decode(Int.self, forKey: .id)
+        username = try container.decode(String.self, forKey: .username)
+        name = try container.decodeIfPresent(String.self, forKey: .name)
+        email = try container.decodeIfPresent(String.self, forKey: .email)
+        avatarProvider = try container.decodeIfPresent(String.self, forKey: .avatarProvider)
+        avatarFileId = try container.decodeIfPresent(Int.self, forKey: .avatarFileId)
+
+        // Handle dates
+        let formatter = ISO8601DateFormatter()
+        if let createdString = try container.decodeIfPresent(String.self, forKey: .created) {
+            created = formatter.date(from: createdString)
+        } else {
+            created = nil
+        }
+
+        if let updatedString = try container.decodeIfPresent(String.self, forKey: .updated) {
+            updated = formatter.date(from: updatedString)
+        } else {
+            updated = nil
+        }
+    }
+
+    // Manual initializer for testing/previews
+    init(id: Int, username: String, name: String? = nil, email: String? = nil) {
+        self.id = id
+        self.username = username
+        self.name = name
+        self.email = email
+        self.avatarProvider = nil
+        self.avatarFileId = nil
+        self.created = nil
+        self.updated = nil
+    }
+}
+
 struct Project: Identifiable, Codable {
     let id: Int
     let title: String
@@ -118,11 +180,19 @@ struct Label: Identifiable, Decodable, Encodable {
             hexColor = nil
         }
     }
-    
+
+    // Manual initializer for creating labels programmatically (e.g., in previews)
+    init(id: Int, title: String, hexColor: String? = nil, description: String? = nil) {
+        self.id = id
+        self.title = title
+        self.hexColor = hexColor
+        self.description = description
+    }
+
     // Custom encoder - only encode the fields we care about
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         try container.encode(id, forKey: .id)
         try container.encode(title, forKey: .title)
         try container.encodeIfPresent(description, forKey: .description)
@@ -189,6 +259,10 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     var hexColor: String? // Task color as hex string
     var repeatAfter: Int? // Repeat interval in seconds
     var repeatMode: RepeatMode // How the task repeats
+    var assignees: [VikunjaUser]? // Users assigned to this task
+    var createdBy: VikunjaUser? // User who created the task
+    var isFavorite: Bool // Whether this task is favorited by the current user
+    var projectId: Int? // The ID of the project this task belongs to
     
     var color: Color {
         Color(hex: hexColor ?? "007AFF") // Default to blue if no color set
@@ -199,7 +273,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, title, description, done, labels, reminders, priority
+        case id, title, description, done, labels, reminders, priority, assignees
         case dueDate = "due_date"
         case startDate = "start_date"
         case endDate = "end_date"
@@ -207,6 +281,9 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         case hexColor = "hex_color"
         case repeatAfter = "repeat_after"
         case repeatMode = "repeat_mode"
+        case createdBy = "created_by"
+        case isFavorite = "is_favorite"
+        case projectId = "project_id"
     }
     
     // Custom decoder to handle missing fields gracefully
@@ -271,6 +348,52 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         } else {
             hexColor = nil
         }
+
+        // Handle assignees and created by
+        assignees = try container.decodeIfPresent([VikunjaUser].self, forKey: .assignees)
+        createdBy = try container.decodeIfPresent(VikunjaUser.self, forKey: .createdBy)
+
+        // Handle project ID
+        projectId = try container.decodeIfPresent(Int.self, forKey: .projectId)
+
+        // Handle favorite status
+        isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
+
+        #if DEBUG
+        if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
+            print("Task \(id) (\(title)) decoded isFavorite: \(favoriteValue)")
+        } else {
+            print("Task \(id) (\(title)) has no isFavorite field, defaulting to false")
+        }
+
+        if let projectIdValue = projectId {
+            print("Task \(id) (\(title)) belongs to project ID: \(projectIdValue)")
+        } else {
+            print("Task \(id) (\(title)) has no project ID")
+        }
+        #endif
+    }
+
+    // Manual initializer for testing/previews
+    init(id: Int, title: String, description: String? = nil, done: Bool = false, dueDate: Date? = nil, startDate: Date? = nil, endDate: Date? = nil, labels: [Label]? = nil, reminders: [Reminder]? = nil, priority: TaskPriority = .unset, percentDone: Double = 0.0, hexColor: String? = nil, repeatAfter: Int? = nil, repeatMode: RepeatMode = .afterAmount, assignees: [VikunjaUser]? = nil, createdBy: VikunjaUser? = nil, projectId: Int? = nil, isFavorite: Bool = false) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.done = done
+        self.dueDate = dueDate
+        self.startDate = startDate
+        self.endDate = endDate
+        self.labels = labels
+        self.reminders = reminders
+        self.priority = priority
+        self.percentDone = percentDone
+        self.hexColor = hexColor
+        self.repeatAfter = repeatAfter
+        self.repeatMode = repeatMode
+        self.assignees = assignees
+        self.createdBy = createdBy
+        self.projectId = projectId
+        self.isFavorite = isFavorite
     }
     
     // Custom encoder
@@ -304,6 +427,10 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         
         try container.encodeIfPresent(labels, forKey: .labels)
         try container.encodeIfPresent(reminders, forKey: .reminders)
+        try container.encodeIfPresent(assignees, forKey: .assignees)
+        try container.encodeIfPresent(createdBy, forKey: .createdBy)
+        try container.encodeIfPresent(projectId, forKey: .projectId)
+        try container.encode(isFavorite, forKey: .isFavorite)
     }
 }
 

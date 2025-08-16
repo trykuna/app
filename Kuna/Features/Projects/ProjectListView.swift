@@ -11,8 +11,18 @@ final class ProjectListVM: ObservableObject {
 
     func load() async {
         loading = true; defer { loading = false }
-        do { 
-            projects = try await api.fetchProjects()
+        do {
+            let allProjects = try await api.fetchProjects()
+            // Filter out projects named "Favorites" to avoid confusion with the dedicated Favorites section
+            projects = allProjects.filter { $0.title.lowercased() != "favorites" }
+
+            #if DEBUG
+            let filteredCount = allProjects.count - projects.count
+            if filteredCount > 0 {
+                print("Filtered out \(filteredCount) project(s) named 'Favorites'")
+            }
+            #endif
+
             // Cache projects for widget configuration
             WidgetCacheWriter.writeProjectsSnapshot(from: projects)
             // Persist projects to App Group for widgets
@@ -88,72 +98,7 @@ struct ProjectListView: View {
                     .environmentObject(app)
             }
             .sheet(isPresented: $showingNewProject) {
-                NewProjectView(vm: vm, isPresented: $showingNewProject)
-            }
-        }
-    }
-}
-
-struct NewProjectView: View {
-    @ObservedObject var vm: ProjectListVM
-    @Binding var isPresented: Bool
-    @State private var projectTitle = ""
-    @State private var projectDescription = ""
-    @State private var isCreating = false
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Project Name", text: $projectTitle)
-                        .textInputAutocapitalization(.words)
-                    
-                    TextField("Description (Optional)", text: $projectDescription, axis: .vertical)
-                        .lineLimit(3...6)
-                        .textInputAutocapitalization(.sentences)
-                } header: {
-                    Text("Project Details")
-                }
-            }
-            .navigationTitle("New Project")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        isPresented = false
-                    }
-                    .disabled(isCreating)
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Create") {
-                        createProject()
-                    }
-                    .disabled(projectTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isCreating)
-                }
-            }
-        }
-        .overlay {
-            if isCreating {
-                ProgressView("Creating...")
-                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(8)
-                    .shadow(radius: 4)
-            }
-        }
-    }
-    
-    private func createProject() {
-        isCreating = true
-        Task {
-            await vm.createProject(
-                title: projectTitle.trimmingCharacters(in: .whitespacesAndNewlines),
-                description: projectDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : projectDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-            )
-            isCreating = false
-            if vm.error == nil {
-                isPresented = false
+                NewProjectView(isPresented: $showingNewProject, api: api)
             }
         }
     }

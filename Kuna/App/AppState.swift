@@ -2,12 +2,36 @@
 import SwiftUI
 import Foundation
 
+enum AuthenticationMethod: String, CaseIterable {
+    case usernamePassword = "Username & Password"
+    case personalToken = "Personal API Token"
+
+    var description: String {
+        return self.rawValue
+    }
+
+    var systemImage: String {
+        switch self {
+        case .usernamePassword: return "person.circle"
+        case .personalToken: return "key"
+        }
+    }
+}
+
 @MainActor
 final class AppState: ObservableObject {
     @Published var isAuthenticated: Bool
     @Published var api: VikunjaAPI?
+    @Published var authenticationMethod: AuthenticationMethod?
+    @Published var tokenExpirationDate: Date?
 
     init() {
+        // Initialize all properties first
+        self.isAuthenticated = false
+        self.api = nil
+        self.authenticationMethod = nil
+        self.tokenExpirationDate = nil
+
         // Check if we have stored credentials
         if let serverURLString = Keychain.readServerURL(),
            let token = Keychain.readToken() {
@@ -16,24 +40,34 @@ final class AppState: ObservableObject {
                 let apiURL = try Self.buildAPIURL(from: serverURLString)
                 self.api = VikunjaAPI(
                     config: .init(baseURL: apiURL),
-                    tokenProvider: { 
+                    tokenProvider: {
                         let t = Keychain.readToken()
                         // Do not log token values
                         return t
+                    },
+                    tokenRefreshHandler: { [weak self] newToken in
+                        try await self?.refreshToken(newToken: newToken)
+                    },
+                    tokenRefreshFailureHandler: { [weak self] in
+                        self?.handleTokenRefreshFailure()
                     }
                 )
                 self.isAuthenticated = true
+                // Determine authentication method from stored data
+                self.authenticationMethod = Keychain.readAuthMethod()
+                // Decode token to get expiration date
+                self.tokenExpirationDate = try? JWTDecoder.getExpirationDate(from: token)
             } catch {
                 // Invalid stored URL, clear credentials
                 Log.app.error("Error building API URL from stored server URL; clearing credentials")
                 Keychain.clearAll()
                 self.api = nil
                 self.isAuthenticated = false
+                self.authenticationMethod = nil
+                self.tokenExpirationDate = nil
             }
         } else {
             Log.app.debug("No stored credentials found")
-            self.api = nil
-            self.isAuthenticated = false
         }
     }
     
@@ -56,26 +90,90 @@ final class AppState: ObservableObject {
 
     func login(serverURL: String, username: String, password: String) async throws {
         let apiURL = try Self.buildAPIURL(from: serverURL)
-        
-        // Create temporary API instance for login
+
+        // Create temporary API instance for login (no token refresh needed)
         let tempAPI = VikunjaAPI(
             config: .init(baseURL: apiURL),
             tokenProvider: { nil }
         )
-        
+
         let token = try await tempAPI.login(username: username, password: password)
-        
+
+        // Decode token to get expiration date
+        let expirationDate = try? JWTDecoder.getExpirationDate(from: token)
+
+        #if DEBUG
+        if let expDate = expirationDate {
+            Log.app.debug("Token expires at: \(expDate, privacy: .public)")
+        } else {
+            Log.app.debug("Could not decode token expiration")
+        }
+        #endif
+
         // Save credentials
         try Keychain.saveToken(token)
         try Keychain.saveServerURL(serverURL)
-        
+        try Keychain.saveAuthMethod(.usernamePassword)
+
         // Create authenticated API instance
         self.api = VikunjaAPI(
             config: .init(baseURL: apiURL),
-            tokenProvider: { Keychain.readToken() }
+            tokenProvider: { Keychain.readToken() },
+            tokenRefreshHandler: { [weak self] newToken in
+                try await self?.refreshToken(newToken: newToken)
+            },
+            tokenRefreshFailureHandler: { [weak self] in
+                self?.handleTokenRefreshFailure()
+            }
         )
-        
+
         isAuthenticated = true
+        authenticationMethod = .usernamePassword
+        tokenExpirationDate = expirationDate
+    }
+
+    func loginWithTOTP(serverURL: String, username: String, password: String, totpCode: String) async throws {
+        let apiURL = try Self.buildAPIURL(from: serverURL)
+
+        // Create temporary API instance for login (no token refresh needed)
+        let tempAPI = VikunjaAPI(
+            config: .init(baseURL: apiURL),
+            tokenProvider: { nil }
+        )
+
+        let token = try await tempAPI.loginWithTOTP(username: username, password: password, totpCode: totpCode)
+
+        // Decode token to get expiration date
+        let expirationDate = try? JWTDecoder.getExpirationDate(from: token)
+
+        #if DEBUG
+        if let expDate = expirationDate {
+            Log.app.debug("TOTP Token expires at: \(expDate, privacy: .public)")
+        } else {
+            Log.app.debug("Could not decode TOTP token expiration")
+        }
+        #endif
+
+        // Save credentials
+        try Keychain.saveToken(token)
+        try Keychain.saveServerURL(serverURL)
+        try Keychain.saveAuthMethod(.usernamePassword)
+
+        // Create authenticated API instance
+        self.api = VikunjaAPI(
+            config: .init(baseURL: apiURL),
+            tokenProvider: { Keychain.readToken() },
+            tokenRefreshHandler: { [weak self] newToken in
+                try await self?.refreshToken(newToken: newToken)
+            },
+            tokenRefreshFailureHandler: { [weak self] in
+                self?.handleTokenRefreshFailure()
+            }
+        )
+
+        isAuthenticated = true
+        authenticationMethod = .usernamePassword
+        tokenExpirationDate = expirationDate
     }
 
     func usePersonalToken(serverURL: String, token: String) throws {
@@ -86,30 +184,96 @@ final class AppState: ObservableObject {
         // Save credentials
         try Keychain.saveToken(token)
         try Keychain.saveServerURL(serverURL)
-        
+        try Keychain.saveAuthMethod(.personalToken)
+
         // Verify token was saved
         if Keychain.readToken() != nil {
             Log.app.debug("Token saved and retrieved (value not logged)")
         } else {
             Log.app.error("Token was not saved properly")
         }
-        
+
         // Create authenticated API instance
         self.api = VikunjaAPI(
             config: .init(baseURL: apiURL),
-            tokenProvider: { 
+            tokenProvider: {
                 let t = Keychain.readToken()
                 // Do not log token values
                 return t
+            },
+            tokenRefreshHandler: { [weak self] newToken in
+                // Personal tokens don't refresh, but we include the handler for consistency
+                try await self?.refreshToken(newToken: newToken)
+            },
+            tokenRefreshFailureHandler: { [weak self] in
+                self?.handleTokenRefreshFailure()
             }
         )
-        
+
         isAuthenticated = true
+        authenticationMethod = .personalToken
+        // Personal tokens don't have expiration in JWT format, so we don't decode them
+        tokenExpirationDate = nil
     }
 
     func logout() {
         Keychain.clearAll()
         api = nil
         isAuthenticated = false
+        authenticationMethod = nil
+        tokenExpirationDate = nil
+    }
+
+    // MARK: - Token Management
+    var isTokenExpiringSoon: Bool {
+        guard let expirationDate = tokenExpirationDate else { return false }
+        let timeUntilExpiration = expirationDate.timeIntervalSinceNow
+        return timeUntilExpiration > 0 && timeUntilExpiration < 86400 // Less than 24 hours
+    }
+
+    var isTokenExpired: Bool {
+        guard let expirationDate = tokenExpirationDate else { return false }
+        return Date() > expirationDate
+    }
+
+    var timeUntilTokenExpiration: TimeInterval? {
+        guard let expirationDate = tokenExpirationDate else { return nil }
+        let timeInterval = expirationDate.timeIntervalSinceNow
+        return timeInterval > 0 ? timeInterval : nil
+    }
+
+    /// User management features are only available for username/password authentication
+    var canManageUsers: Bool {
+        return authenticationMethod == .usernamePassword
+    }
+
+    // MARK: - Token Refresh
+    @MainActor
+    func refreshToken(newToken: String) async throws {
+        // Decode the new token to get expiration
+        let expirationDate = try? JWTDecoder.getExpirationDate(from: newToken)
+
+        // Update keychain with new token
+        try Keychain.saveToken(newToken)
+
+        // Update our state
+        self.tokenExpirationDate = expirationDate
+
+        #if DEBUG
+        if let expDate = expirationDate {
+            Log.app.debug("Token refreshed, new expiration: \(expDate, privacy: .public)")
+        } else {
+            Log.app.debug("Token refreshed but could not decode expiration")
+        }
+        #endif
+    }
+
+    // Handle token refresh failures by logging out the user
+    func handleTokenRefreshFailure() {
+        #if DEBUG
+        Log.app.debug("Token refresh failed, logging out user")
+        #endif
+
+        logout()
     }
 }

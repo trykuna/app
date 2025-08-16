@@ -19,13 +19,14 @@ struct Endpoint {
 
 
 enum APIError: Error, LocalizedError {
-    case badURL, http(Int), decoding, missingToken, other(String)
+    case badURL, http(Int), decoding, missingToken, totpRequired, other(String)
     var errorDescription: String? {
         switch self {
         case .badURL: return "Bad URL"
         case .http(let code): return "HTTP \(code)"
         case .decoding: return "Decoding failed"
         case .missingToken: return "No auth token"
+        case .totpRequired: return "TOTP code required"
         case .other(let s): return s
         }
     }
@@ -47,6 +48,15 @@ final class VikunjaAPI {
         let url = try url(for: endpoint)
         Log.network.debug("Request: \(endpoint.method, privacy: .public) \(url.absoluteString, privacy: .public)")
 
+        // Skip token validation for auth endpoints
+        let isAuthEndpoint = endpoint.pathComponents.contains("login") ||
+                           endpoint.pathComponents.contains("token") ||
+                           endpoint.pathComponents.joined(separator: "/") == "user/token"
+
+        if !isAuthEndpoint && tokenRefreshHandler != nil {
+            try await ensureValidToken()
+        }
+
         var req = URLRequest(url: url)
         req.httpMethod = endpoint.method
         req.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -55,7 +65,7 @@ final class VikunjaAPI {
             #if DEBUG
             Log.network.debug("Authorization header set for endpoint \(endpoint.pathComponents.joined(separator: "/"), privacy: .public)")
             #endif
-        } else {
+        } else if !isAuthEndpoint {
             Log.network.error("No token available for request to \(url.absoluteString, privacy: .public)")
         }
         if let enc = body {
@@ -80,6 +90,10 @@ final class VikunjaAPI {
                 }
                 if LogConfig.verboseNetwork {
                     Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public)")
+                }
+                // Check for TOTP required (412 Precondition Failed)
+                if http.statusCode == 412 {
+                    throw APIError.totpRequired
                 }
                 // Try to extract server error message
                 let message = extractErrorMessage(from: data)
@@ -135,11 +149,17 @@ final class VikunjaAPI {
     /// Injected so this layer never touches Keychain directly.
     private let tokenProvider: () -> String?
     private let session: URLSession
+    /// Handler to refresh token when it expires
+    private let tokenRefreshHandler: ((String) async throws -> Void)?
+    /// Handler for when token refresh fails
+    private let tokenRefreshFailureHandler: (() async -> Void)?
 
 
-    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, session: URLSession = .shared) {
+    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, tokenRefreshHandler: ((String) async throws -> Void)? = nil, tokenRefreshFailureHandler: (() async -> Void)? = nil, session: URLSession = .shared) {
         self.config = config
         self.tokenProvider = tokenProvider
+        self.tokenRefreshHandler = tokenRefreshHandler
+        self.tokenRefreshFailureHandler = tokenRefreshFailureHandler
         self.session = session
     }
 
@@ -147,7 +167,11 @@ final class VikunjaAPI {
 
     // MARK: - Auth
     func login(username: String, password: String) async throws -> String {
-        struct LoginBody: Encodable { let username: String; let password: String }
+        struct LoginBody: Encodable {
+            let username: String
+            let password: String
+            let long_token: Bool = true
+        }
         let data = try await request("login", method: "POST", body: LoginBody(username: username, password: password))
 
         // Optionally log response size in debug (avoid body content)
@@ -158,6 +182,91 @@ final class VikunjaAPI {
         let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
         // Return token to caller (AppState) who will persist it to Keychain
         return auth.token
+    }
+
+    func loginWithTOTP(username: String, password: String, totpCode: String) async throws -> String {
+        struct LoginBodyWithTOTP: Encodable {
+            let username: String
+            let password: String
+            let totp_passcode: String
+            let long_token: Bool = true
+        }
+        let data = try await request("login", method: "POST", body: LoginBodyWithTOTP(username: username, password: password, totp_passcode: totpCode))
+
+        // Optionally log response size in debug (avoid body content)
+        #if DEBUG
+        Log.network.debug("Login with TOTP response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
+        // Return token to caller (AppState) who will persist it to Keychain
+        return auth.token
+    }
+
+    func refreshToken() async throws -> String {
+        // Use the current token to get a new one
+        let data = try await request("user/token", method: "POST")
+
+        #if DEBUG
+        Log.network.debug("Token refresh response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
+        return auth.token
+    }
+
+    // MARK: - Token Management
+    private func ensureValidToken() async throws {
+        guard let currentToken = tokenProvider() else {
+            throw APIError.missingToken
+        }
+
+        // Check if token is expired or expiring soon (within 5 minutes)
+        if let timeUntilExpiration = JWTDecoder.timeUntilExpiration(for: currentToken),
+           timeUntilExpiration < 300 { // 5 minutes
+
+            #if DEBUG
+            Log.network.debug("Token expires in \(timeUntilExpiration, privacy: .public) seconds, refreshing...")
+            #endif
+
+            // Try to refresh the token
+            do {
+                let newToken = try await refreshToken()
+
+                // Notify the handler (AppState) about the new token
+                try await tokenRefreshHandler?(newToken)
+
+                #if DEBUG
+                Log.network.debug("Token refreshed successfully")
+                #endif
+            } catch {
+                #if DEBUG
+                Log.network.error("Token refresh failed: \(String(describing: error), privacy: .public)")
+                #endif
+                await tokenRefreshFailureHandler?()
+                throw error
+            }
+        } else if JWTDecoder.isTokenExpired(currentToken) {
+            #if DEBUG
+            Log.network.debug("Token is expired, attempting refresh...")
+            #endif
+
+            // Token is expired, try to refresh
+            do {
+                let newToken = try await refreshToken()
+                try await tokenRefreshHandler?(newToken)
+
+                #if DEBUG
+                Log.network.debug("Expired token refreshed successfully")
+                #endif
+            } catch {
+                #if DEBUG
+                Log.network.error("Failed to refresh expired token: \(String(describing: error), privacy: .public)")
+                #endif
+                await tokenRefreshFailureHandler?()
+                throw error
+            }
+        }
     }
 
     // MARK: - Projects
@@ -349,6 +458,31 @@ final class VikunjaAPI {
         }
     }
 
+    func updateLabel(labelId: Int, title: String, hexColor: String, description: String? = nil) async throws -> Label {
+        struct UpdateLabel: Encodable {
+            let title: String
+            let hex_color: String
+            let description: String?
+        }
+
+        let updateLabel = UpdateLabel(title: title, hex_color: hexColor, description: description)
+        let data = try await request("labels/\(labelId)", method: "POST", body: updateLabel)
+
+        #if DEBUG
+        Log.network.debug("Update label response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        return try JSONDecoder.vikunja.decode(Label.self, from: data)
+    }
+
+    func deleteLabel(labelId: Int) async throws {
+        let _ = try await request("labels/\(labelId)", method: "DELETE")
+
+        #if DEBUG
+        Log.network.debug("Label deleted: \(labelId, privacy: .public)")
+        #endif
+    }
+
     // MARK: - Reminders
     func addReminderToTask(taskId: Int, reminderDate: Date) async throws -> VikunjaTask {
         struct NewReminder: Encodable {
@@ -373,6 +507,135 @@ final class VikunjaAPI {
 
     func deleteTask(taskId: Int) async throws {
         let _ = try await request("tasks/\(taskId)", method: "DELETE")
+    }
+
+    // MARK: - Users (only available for username/password authentication)
+    func searchUsers(query: String) async throws -> [VikunjaUser] {
+        let queryItems = [URLQueryItem(name: "s", value: query)]
+        let ep = Endpoint(method: "GET", pathComponents: ["users"], queryItems: queryItems)
+        let data = try await request(ep)
+
+        #if DEBUG
+        Log.network.debug("User search response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        return try JSONDecoder.vikunja.decode([VikunjaUser].self, from: data)
+    }
+
+    func assignUserToTask(taskId: Int, userId: Int) async throws -> VikunjaTask {
+        struct UserAssignment: Encodable { let user_id: Int }
+        let _ = try await request("tasks/\(taskId)/assignees", method: "PUT",
+                                  body: UserAssignment(user_id: userId))
+
+        // Fetch the updated task
+        return try await getTask(taskId: taskId)
+    }
+
+    func removeUserFromTask(taskId: Int, userId: Int) async throws -> VikunjaTask {
+        let _ = try await request("tasks/\(taskId)/assignees/\(userId)", method: "DELETE")
+
+        // Fetch the updated task
+        return try await getTask(taskId: taskId)
+    }
+
+    func getTaskAssignees(taskId: Int) async throws -> [VikunjaUser] {
+        let data = try await request("tasks/\(taskId)/assignees")
+
+        #if DEBUG
+        Log.network.debug("Task assignees response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        return try JSONDecoder.vikunja.decode([VikunjaUser].self, from: data)
+    }
+
+    // MARK: - Favorites
+    func getFavoriteTasks() async throws -> [VikunjaTask] {
+        // First try with filter parameter
+        do {
+            let queryItems = [URLQueryItem(name: "filter", value: "is_favorite = true")]
+            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"], queryItems: queryItems)
+            let data = try await request(ep)
+
+            #if DEBUG
+            Log.network.debug("Favorite tasks response bytes: \(data.count, privacy: .public)")
+            #endif
+
+            let tasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+            let favoriteTasks = tasks.filter { $0.isFavorite }
+
+            #if DEBUG
+            print("Server returned \(tasks.count) tasks, \(favoriteTasks.count) are favorites")
+            #endif
+
+            return favoriteTasks
+        } catch {
+            #if DEBUG
+            print("Filter approach failed, falling back to fetching all tasks: \(error)")
+            #endif
+
+            // Fallback: get all tasks and filter client-side
+            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"])
+            let data = try await request(ep)
+            let allTasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+            let favoriteTasks = allTasks.filter { $0.isFavorite }
+
+            #if DEBUG
+            print("Fallback: Got \(allTasks.count) total tasks, \(favoriteTasks.count) are favorites")
+            #endif
+
+            return favoriteTasks
+        }
+    }
+
+    func toggleTaskFavorite(task: VikunjaTask) async throws -> VikunjaTask {
+        // Create a copy with toggled favorite status
+        var updatedTask = task
+        updatedTask.isFavorite = !task.isFavorite
+
+        #if DEBUG
+        print("Toggling favorite for task:")
+        print("- ID: \(task.id)")
+        print("- Title: \(task.title)")
+        print("- Current isFavorite: \(task.isFavorite)")
+        print("- New isFavorite: \(updatedTask.isFavorite)")
+        print("- createdBy: \(task.createdBy?.name ?? "nil")")
+        print("- assignees count: \(task.assignees?.count ?? 0)")
+        #endif
+
+        // Send the complete task object to preserve all fields
+        let data = try await request("tasks/\(task.id)", method: "POST", body: updatedTask)
+
+        #if DEBUG
+        Log.network.debug("Toggle favorite response bytes: \(data.count, privacy: .public)")
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Toggle favorite API response: \(jsonString)")
+        }
+        #endif
+
+        let finalTask = try JSONDecoder.vikunja.decode(VikunjaTask.self, from: data)
+
+        #if DEBUG
+        print("Final task after favorite toggle:")
+        print("- ID: \(finalTask.id)")
+        print("- Title: \(finalTask.title)")
+        print("- isFavorite: \(finalTask.isFavorite)")
+        print("- createdBy: \(finalTask.createdBy?.name ?? "nil")")
+        print("- assignees count: \(finalTask.assignees?.count ?? 0)")
+        #endif
+
+        return finalTask
+    }
+
+    func toggleTaskFavorite(taskId: Int, currentFavoriteStatus: Bool) async throws -> VikunjaTask {
+        // Fallback method that fetches the task first
+        let currentTask = try await getTask(taskId: taskId)
+        return try await toggleTaskFavorite(task: currentTask)
+    }
+
+    // Convenience method that fetches current status first
+    func toggleTaskFavorite(taskId: Int) async throws -> VikunjaTask {
+        let currentTask = try await getTask(taskId: taskId)
+        return try await toggleTaskFavorite(taskId: taskId, currentFavoriteStatus: currentTask.isFavorite)
     }
 }
 

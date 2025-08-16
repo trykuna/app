@@ -5,10 +5,12 @@ struct TaskDetailView: View {
     @State private var task: VikunjaTask
     let api: VikunjaAPI
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var appState: AppState
     @State private var isEditing = false
     @State private var hasChanges = false
     @State private var isUpdating = false
     @State private var updateError: String?
+    @State private var isUpdatingFavorite = false
     
     // Editing state
     @State private var editedDescription = ""
@@ -19,6 +21,7 @@ struct TaskDetailView: View {
     @State private var isTaskInfoExpanded = true
     @State private var isSchedulingExpanded = true
     @State private var isOrganizationExpanded = true
+    @State private var isAssigneeExpanded = true
     @State private var isStatusExpanded = true
     
     // Date picker states
@@ -96,8 +99,24 @@ struct TaskDetailView: View {
                             }
                             .settingsCardStyle()
                         }
-                        
-                        // 4. STATUS Section
+
+                        // 4. ASSIGNEES Section (only show if user management is available or task has assignees)
+                        if appState.canManageUsers || !(task.assignees?.isEmpty ?? true) || task.createdBy != nil {
+                            settingsSection(
+                                title: "ASSIGNEES",
+                                isExpanded: $isAssigneeExpanded
+                            ) {
+                                TaskAssigneeView(
+                                    task: $task,
+                                    api: api,
+                                    canManageUsers: appState.canManageUsers,
+                                    isEditing: isEditing
+                                )
+                                .settingsCardStyle()
+                            }
+                        }
+
+                        // 5. STATUS Section
                         settingsSection(
                             title: "STATUS",
                             isExpanded: $isStatusExpanded
@@ -128,13 +147,22 @@ struct TaskDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(isEditing ? "Done" : "Edit") {
-                        if isEditing && hasChanges {
-                            Task { await saveChanges() }
-                        } else {
-                            isEditing.toggle()
-                            if isEditing {
-                                editedDescription = task.description ?? ""
+                    HStack {
+                        // Favorite button
+                        Button(action: toggleFavorite) {
+                            Image(systemName: task.isFavorite ? "star.fill" : "star")
+                                .foregroundColor(task.isFavorite ? .yellow : .gray)
+                        }
+                        .disabled(isUpdatingFavorite)
+
+                        Button(isEditing ? "Done" : "Edit") {
+                            if isEditing && hasChanges {
+                                Task { await saveChanges() }
+                            } else {
+                                isEditing.toggle()
+                                if isEditing {
+                                    editedDescription = task.description ?? ""
+                                }
                             }
                         }
                     }
@@ -584,6 +612,34 @@ struct TaskDetailView: View {
             availableLabels = try await api.fetchLabels()
         } catch {
             print("Failed to load labels: \(error)")
+        }
+    }
+
+    private func toggleFavorite() {
+        isUpdatingFavorite = true
+
+        Task {
+            do {
+                #if DEBUG
+                print("TaskDetailView: Toggling favorite for task \(task.id): \(task.title), current state: \(task.isFavorite)")
+                #endif
+                let updatedTask = try await api.toggleTaskFavorite(task: task)
+                await MainActor.run {
+                    #if DEBUG
+                    print("TaskDetailView: Task \(task.id) favorite status changed to: \(updatedTask.isFavorite)")
+                    #endif
+                    task = updatedTask
+                    isUpdatingFavorite = false
+                }
+            } catch {
+                await MainActor.run {
+                    #if DEBUG
+                    print("TaskDetailView: Error toggling favorite for task \(task.id): \(error)")
+                    #endif
+                    updateError = error.localizedDescription
+                    isUpdatingFavorite = false
+                }
+            }
         }
     }
 }

@@ -15,12 +15,10 @@ struct AboutView: View {
 
                 // Header card
                 VStack(spacing: 12) {
-                    Image("KunaLogoBlue")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 88, height: 88)
-                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        .shadow(radius: 4)
+                    AdaptiveLogo(.main)
+                        .logoSize(88)
+                        .logoCornerRadius(20)
+                        .logoShadow()
 
                     Text("Kuna")
                         .font(.largeTitle).bold()

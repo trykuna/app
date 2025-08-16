@@ -1,0 +1,89 @@
+// Features/Projects/NewProjectView.swift
+import SwiftUI
+
+struct NewProjectView: View {
+    @Binding var isPresented: Bool
+    let api: VikunjaAPI
+    
+    @State private var projectTitle = ""
+    @State private var projectDescription = ""
+    @State private var isCreating = false
+    @State private var error: String?
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    TextField("Project Name", text: $projectTitle)
+                        .textInputAutocapitalization(.words)
+                    
+                    TextField("Description (Optional)", text: $projectDescription, axis: .vertical)
+                        .lineLimit(3...6)
+                        .textInputAutocapitalization(.sentences)
+                } header: {
+                    Text("Project Details")
+                }
+                
+                if let error = error {
+                    Section {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .font(.callout)
+                    }
+                }
+            }
+            .navigationTitle("New Project")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                    .disabled(isCreating)
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Create") {
+                        createProject()
+                    }
+                    .disabled(projectTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isCreating)
+                }
+            }
+        }
+        .overlay {
+            if isCreating {
+                ProgressView("Creating...")
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+            }
+        }
+    }
+    
+    private func createProject() {
+        isCreating = true
+        error = nil
+        
+        Task {
+            do {
+                let _ = try await api.createProject(
+                    title: projectTitle.trimmingCharacters(in: .whitespacesAndNewlines),
+                    description: projectDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : projectDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+                )
+                isCreating = false
+                isPresented = false
+            } catch {
+                self.error = error.localizedDescription
+                isCreating = false
+            }
+        }
+    }
+}
+
+#Preview {
+    NewProjectView(
+        isPresented: .constant(true),
+        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+    )
+}
