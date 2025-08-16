@@ -3,13 +3,19 @@ import SwiftUI
 
 struct FavoritesView: View {
     let api: VikunjaAPI
+    @StateObject private var commentCountManager: CommentCountManager
     @State private var favoriteTasks: [VikunjaTask] = []
     @State private var projects: [Project] = []
     @State private var isLoading = false
     @State private var error: String?
     @State private var selectedTask: VikunjaTask?
     @State private var showingTaskDetail = false
-    
+
+    init(api: VikunjaAPI) {
+        self.api = api
+        _commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
+    }
+
     var body: some View {
         Group {
             if isLoading {
@@ -83,7 +89,8 @@ struct FavoritesView: View {
                 FavoriteTaskRow(
                     task: task,
                     api: api,
-                    projects: projects
+                    projects: projects,
+                    commentCountManager: commentCountManager
                 ) { updatedTask in
                     if let index = favoriteTasks.firstIndex(where: { $0.id == updatedTask.id }) {
                         if updatedTask.isFavorite {
@@ -95,6 +102,13 @@ struct FavoritesView: View {
                 } onTap: {
                     selectedTask = task
                     showingTaskDetail = true
+                }
+                .onAppear {
+                    // Load comment count when task appears (only if comment counts are enabled)
+                    let settings = AppSettings.shared
+                    if settings.showCommentCounts {
+                        commentCountManager.loadCommentCount(for: task.id)
+                    }
                 }
                 .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
             }
@@ -135,10 +149,12 @@ struct FavoriteTaskRow: View {
     let task: VikunjaTask
     let api: VikunjaAPI
     let projects: [Project]
+    let commentCountManager: CommentCountManager
     let onTaskUpdated: (VikunjaTask) -> Void
     let onTap: () -> Void
 
     @State private var isUpdatingFavorite = false
+    @StateObject private var settings = AppSettings.shared
 
     private var project: Project? {
         guard let projectId = task.projectId else { return nil }
@@ -158,10 +174,26 @@ struct FavoriteTaskRow: View {
                 .buttonStyle(.plain)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(task.title)
-                        .font(.body)
-                        .foregroundColor(task.done ? .secondary : .primary)
-                        .strikethrough(task.done)
+                    HStack(spacing: 6) {
+                        Text(task.title)
+                            .font(.body)
+                            .foregroundColor(task.done ? .secondary : .primary)
+                            .strikethrough(task.done)
+
+                        // Paperclip icon for tasks with attachments
+                        if settings.showAttachmentIcons && task.hasAttachments {
+                            Image(systemName: "paperclip")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        // Comment count badge
+                        if settings.showCommentCounts, let commentCount = commentCountManager.getCommentCount(for: task.id), commentCount > 0 {
+                            CommentBadge(commentCount: commentCount)
+                        }
+
+                        Spacer()
+                    }
 
                     if let project = project {
                         HStack(spacing: 4) {
