@@ -23,6 +23,7 @@ struct TaskDetailView: View {
     @State private var isOrganizationExpanded = true
     @State private var isAssigneeExpanded = true
     @State private var isStatusExpanded = true
+    @State private var isAttachmentsExpanded = true
     
     // Date picker states
     @State private var showStartDatePicker = false
@@ -129,7 +130,16 @@ struct TaskDetailView: View {
                             }
                             .settingsCardStyle()
                         }
-                        
+
+                        // 6. ATTACHMENTS Section
+                        settingsSection(
+                            title: "ATTACHMENTS",
+                            isExpanded: $isAttachmentsExpanded
+                        ) {
+                            TaskAttachmentView(task: task, api: api)
+                                .settingsCardStyle()
+                        }
+
                         // Bottom padding for save bar
                         Spacer(minLength: 100)
                     }

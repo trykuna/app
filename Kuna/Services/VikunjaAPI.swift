@@ -548,6 +548,52 @@ final class VikunjaAPI {
         return try JSONDecoder.vikunja.decode([VikunjaUser].self, from: data)
     }
 
+    // MARK: - Attachments
+    /// Upload a file attachment for the given task.
+    ///
+    /// - Parameters:
+    ///   - taskId: The task identifier.
+    ///   - fileName: Name of the file as it should appear on the server.
+    ///   - data: Raw file data to upload.
+    ///   - mimeType: MIME type describing the data. Defaults to `application/octet-stream`.
+    func uploadAttachment(taskId: Int, fileName: String, data: Data, mimeType: String = "application/octet-stream") async throws {
+        let endpoint = Endpoint(method: "PUT", pathComponents: ["tasks", "\(taskId)", "attachments"])
+        let url = try url(for: endpoint)
+
+        var req = URLRequest(url: url)
+        req.httpMethod = endpoint.method
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        if let t = tokenProvider() {
+            req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization")
+        }
+
+        // Build multipart body
+        let boundary = UUID().uuidString
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        let boundaryPrefix = "--\(boundary)\r\n"
+        body.append(boundaryPrefix.data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: \(mimeType)\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        req.httpBody = body
+
+        let (respData, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse else {
+            throw APIError.other("No HTTP response")
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            let message = extractErrorMessage(from: respData)
+            if let message, !message.isEmpty {
+                throw APIError.other(message)
+            } else {
+                throw APIError.http(http.statusCode)
+            }
+        }
+    }
+
     // MARK: - Favorites
     func getFavoriteTasks() async throws -> [VikunjaTask] {
         // First try with filter parameter
