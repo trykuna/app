@@ -10,19 +10,21 @@ struct AttachmentsView: View {
     @State private var error: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if isLoading {
-                ProgressView()
-            }
-
+        VStack(spacing: 0) {
             if attachments.isEmpty && !isLoading {
-                Text("No attachments")
-                    .foregroundColor(.secondary)
+                HStack {
+                    Text("No attachments")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
             } else {
-                ForEach(attachments) { attachment in
+                ForEach(Array(attachments.enumerated()), id: \.element.id) { index, attachment in
                     HStack {
                         Text(attachment.fileName)
                             .lineLimit(1)
+                            .foregroundColor(.primary)
                         Spacer()
                         Button(role: .destructive) {
                             Task { await deleteAttachment(attachment) }
@@ -30,8 +32,29 @@ struct AttachmentsView: View {
                             Image(systemName: "trash")
                         }
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+
+                    if index < attachments.count - 1 {
+                        Divider()
+                            .padding(.leading, 16)
+                    }
+                }
+
+                if isLoading {
+                    Divider()
+                        .padding(.leading, 16)
+                    HStack {
+                        ProgressView()
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
                 }
             }
+
+            Divider()
+                .padding(.leading, 16)
 
             TaskAttachmentView(task: task, api: api) {
                 Task { await loadAttachments() }

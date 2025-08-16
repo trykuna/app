@@ -579,15 +579,16 @@ final class VikunjaAPI {
         req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         var body = Data()
-        let boundaryPrefix = "--\(boundary)\r\n"
-        body.append(boundaryPrefix.data(using: .utf8)!)
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
         body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
         body.append("Content-Type: \(mimeType)\r\n\r\n".data(using: .utf8)!)
         body.append(data)
-        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-        req.httpBody = body
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
-        let (respData, resp) = try await session.data(for: req)
+        req.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
+
+        let (respData, resp) = try await session.upload(for: req, from: body)
         guard let http = resp as? HTTPURLResponse else {
             throw APIError.other("No HTTP response")
         }

@@ -16,10 +16,18 @@ struct TaskAttachmentView: View {
     @State private var uploadError: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Button("Add Attachment") {
-                showingSourceDialog = true
+        VStack(spacing: 0) {
+            Button(action: { showingSourceDialog = true }) {
+                HStack {
+                    Text("Add Attachment")
+                    Spacer()
+                    Image(systemName: "paperclip")
+                        .foregroundColor(.secondary)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
             }
+            .buttonStyle(.plain)
             .confirmationDialog("Add Attachment", isPresented: $showingSourceDialog) {
                 Button("Photo Library") { showPhotoPicker = true }
                 Button("Files") { showFileImporter = true }
@@ -28,13 +36,27 @@ struct TaskAttachmentView: View {
             .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], onCompletion: handleFileSelection)
 
             if isUploading {
-                ProgressView()
+                Divider()
+                    .padding(.leading, 16)
+                HStack {
+                    ProgressView()
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
             }
 
             if let uploadError {
-                Text(uploadError)
-                    .font(.footnote)
-                    .foregroundColor(.red)
+                Divider()
+                    .padding(.leading, 16)
+                HStack {
+                    Text(uploadError)
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
             }
         }
         .onChange(of: selectedPhoto) { _, newValue in
