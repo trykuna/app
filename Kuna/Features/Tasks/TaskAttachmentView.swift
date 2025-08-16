@@ -15,6 +15,13 @@ struct TaskAttachmentView: View {
     @State private var isUploading = false
     @State private var uploadError: String?
 
+    // Filename customization
+    @State private var showingFilenameDialog = false
+    @State private var customFilename = ""
+    @State private var pendingUploadData: Data?
+    @State private var pendingUploadMimeType = ""
+    @State private var pendingUploadOriginalName = ""
+
     var body: some View {
         VStack(spacing: 0) {
             Button(action: { showingSourceDialog = true }) {
@@ -34,6 +41,18 @@ struct TaskAttachmentView: View {
             }
             .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhoto, matching: .images)
             .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], onCompletion: handleFileSelection)
+            .alert("Set Filename", isPresented: $showingFilenameDialog) {
+                TextField("Filename", text: $customFilename)
+                    .autocorrectionDisabled()
+                Button("Upload") {
+                    performUpload()
+                }
+                Button("Cancel", role: .cancel) {
+                    clearPendingUpload()
+                }
+            } message: {
+                Text("Enter a custom name for '\(pendingUploadOriginalName)'")
+            }
 
             if isUploading {
                 Divider()
@@ -68,17 +87,36 @@ struct TaskAttachmentView: View {
 
     private func handlePhoto(_ item: PhotosPickerItem) async {
         do {
-            isUploading = true
-            defer { isUploading = false }
+            #if DEBUG
+            print("TaskAttachmentView: Loading photo data for task \(task.id)")
+            #endif
 
             guard let data = try await item.loadTransferable(type: Data.self) else {
-                uploadError = "Missing photo data"
+                await MainActor.run {
+                    uploadError = "Missing photo data"
+                }
                 return
             }
-            try await api.uploadAttachment(taskId: task.id, fileName: "photo.jpg", data: data, mimeType: "image/jpeg")
-            onUpload?()
+
+            #if DEBUG
+            print("TaskAttachmentView: Loaded photo data, size: \(data.count) bytes")
+            #endif
+
+            await MainActor.run {
+                // Store the data and show filename dialog
+                pendingUploadData = data
+                pendingUploadMimeType = "image/jpeg"
+                pendingUploadOriginalName = "photo.jpg"
+                customFilename = "photo.jpg"
+                showingFilenameDialog = true
+            }
         } catch {
-            uploadError = error.localizedDescription
+            #if DEBUG
+            print("TaskAttachmentView: Photo loading error: \(error)")
+            #endif
+            await MainActor.run {
+                uploadError = error.localizedDescription
+            }
         }
     }
 
@@ -87,18 +125,116 @@ struct TaskAttachmentView: View {
         case .success(let url):
             Task {
                 do {
-                    isUploading = true
-                    defer { isUploading = false }
+                    #if DEBUG
+                    print("TaskAttachmentView: Loading file data for task \(task.id)")
+                    print("TaskAttachmentView: File URL: \(url)")
+                    #endif
+
                     let data = try Data(contentsOf: url)
                     let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
-                    try await api.uploadAttachment(taskId: task.id, fileName: url.lastPathComponent, data: data, mimeType: mime)
-                    onUpload?()
+
+                    #if DEBUG
+                    print("TaskAttachmentView: File data loaded, size: \(data.count) bytes")
+                    print("TaskAttachmentView: File name: \(url.lastPathComponent), MIME: \(mime)")
+                    #endif
+
+                    await MainActor.run {
+                        // Store the data and show filename dialog
+                        pendingUploadData = data
+                        pendingUploadMimeType = mime
+                        pendingUploadOriginalName = url.lastPathComponent
+                        customFilename = url.lastPathComponent
+                        showingFilenameDialog = true
+                    }
                 } catch {
-                    uploadError = error.localizedDescription
+                    #if DEBUG
+                    print("TaskAttachmentView: File loading error: \(error)")
+                    #endif
+                    await MainActor.run {
+                        uploadError = error.localizedDescription
+                    }
                 }
             }
         case .failure(let error):
             uploadError = error.localizedDescription
+        }
+    }
+
+    private func performUpload() {
+        guard let data = pendingUploadData else {
+            uploadError = "No file data available"
+            return
+        }
+
+        // Ensure filename has an extension
+        let finalFilename = ensureFileExtension(customFilename, mimeType: pendingUploadMimeType, originalName: pendingUploadOriginalName)
+
+        Task {
+            do {
+                isUploading = true
+                defer {
+                    isUploading = false
+                    clearPendingUpload()
+                }
+
+                #if DEBUG
+                print("TaskAttachmentView: Starting upload with custom filename: \(finalFilename)")
+                #endif
+
+                try await api.uploadAttachment(taskId: task.id, fileName: finalFilename, data: data, mimeType: pendingUploadMimeType)
+
+                #if DEBUG
+                print("TaskAttachmentView: Upload completed successfully")
+                #endif
+
+                await MainActor.run {
+                    onUpload?()
+                }
+            } catch {
+                #if DEBUG
+                print("TaskAttachmentView: Upload error: \(error)")
+                #endif
+                await MainActor.run {
+                    uploadError = error.localizedDescription
+                }
+            }
+        }
+    }
+
+    private func clearPendingUpload() {
+        pendingUploadData = nil
+        pendingUploadMimeType = ""
+        pendingUploadOriginalName = ""
+        customFilename = ""
+    }
+
+    private func ensureFileExtension(_ filename: String, mimeType: String, originalName: String) -> String {
+        // If filename already has an extension, use it as-is
+        if filename.contains(".") {
+            return filename
+        }
+
+        // Try to get extension from original filename
+        if let originalExtension = originalName.split(separator: ".").last {
+            return "\(filename).\(originalExtension)"
+        }
+
+        // Fallback: guess extension from MIME type
+        let fileExtension = extensionFromMimeType(mimeType)
+        return "\(filename).\(fileExtension)"
+    }
+
+    private func extensionFromMimeType(_ mimeType: String) -> String {
+        switch mimeType {
+        case "image/jpeg": return "jpg"
+        case "image/png": return "png"
+        case "image/gif": return "gif"
+        case "image/webp": return "webp"
+        case "text/plain": return "txt"
+        case "application/pdf": return "pdf"
+        case "application/json": return "json"
+        case "application/zip": return "zip"
+        default: return "bin"
         }
     }
 }
