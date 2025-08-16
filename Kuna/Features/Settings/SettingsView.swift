@@ -1,12 +1,18 @@
 // Features/Settings/SettingsView.swift
 import SwiftUI
+import EventKit
 
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var settings = AppSettings.shared
     @StateObject private var iconManager = AppIconManager.shared
+    @StateObject private var calendarSync = CalendarSyncService.shared
     @Environment(\.dismiss) private var dismiss
     @State private var showingAppIcons = false
+    @State private var showingCalendarPicker = false
+    @State private var isRequestingCalendarAccess = false
+    @State private var showingCalendarError = false
+    @State private var calendarErrorMessage = ""
     
     var body: some View {
         NavigationView {
@@ -73,7 +79,133 @@ struct SettingsView: View {
                         .pickerStyle(.menu)
                     }
                 } header: { Text("Task List") }
-                
+
+                // Calendar Sync Section
+                Section {
+                    HStack {
+                        Image(systemName: "calendar.badge.plus")
+                            .foregroundColor(.green)
+                            .font(.body)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Calendar Sync").font(.body)
+                            Text("Sync tasks with your calendar app")
+                                .font(.caption).foregroundColor(.secondary)
+
+                            // Debug: Show current authorization status
+                            Text("Status: \(authorizationStatusText)")
+                                .font(.caption2)
+                                .foregroundColor(.orange)
+                        }
+
+                        Spacer()
+
+                        if isRequestingCalendarAccess {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        } else {
+                            Toggle("", isOn: $settings.calendarSyncEnabled).labelsHidden()
+                        }
+                    }
+
+                    if settings.calendarSyncEnabled {
+                        Button(action: { showingCalendarPicker = true }) {
+                            HStack {
+                                Image(systemName: "calendar")
+                                    .foregroundColor(.blue)
+                                    .font(.body)
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Calendar").font(.body).foregroundColor(.primary)
+                                    Text(calendarSync.selectedCalendar?.title ?? "Select Calendar")
+                                        .font(.caption).foregroundColor(.secondary)
+                                }
+
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary.opacity(0.6))
+                                    .font(.caption)
+                            }
+                        }
+
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundColor(.orange)
+                                .font(.body)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Auto-sync New Tasks").font(.body)
+                                Text("Automatically sync new tasks to calendar")
+                                    .font(.caption).foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+                            Toggle("", isOn: $settings.autoSyncNewTasks).labelsHidden()
+                        }
+
+                        HStack {
+                            Image(systemName: "calendar.badge.clock")
+                                .foregroundColor(.purple)
+                                .font(.body)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Sync Tasks with Dates Only").font(.body)
+                                Text("Only sync tasks that have start, due, or end dates")
+                                    .font(.caption).foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+                            Toggle("", isOn: $settings.syncTasksWithDatesOnly).labelsHidden()
+                        }
+
+                        NavigationLink(destination: CalendarSyncStatusView()) {
+                            HStack {
+                                Image(systemName: "chart.bar.doc.horizontal")
+                                    .foregroundColor(.blue)
+                                    .font(.body)
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Sync Status").font(.body).foregroundColor(.primary)
+                                    Text("View sync status and resolve conflicts")
+                                        .font(.caption).foregroundColor(.secondary)
+                                }
+
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary.opacity(0.6))
+                                    .font(.caption)
+                            }
+                        }
+
+                        // Debug: Manual access request button
+                        if calendarSync.authorizationStatus == .notDetermined || calendarSync.authorizationStatus == .denied {
+                            Button("Request Calendar Access") {
+                                isRequestingCalendarAccess = true
+                                Task {
+                                    let granted = await calendarSync.requestCalendarAccess()
+                                    await MainActor.run {
+                                        isRequestingCalendarAccess = false
+                                        if !granted {
+                                            if let lastError = calendarSync.syncErrors.last {
+                                                calendarErrorMessage = lastError
+                                                showingCalendarError = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(isRequestingCalendarAccess)
+                        }
+                    }
+                } header: { Text("Calendar Integration") } footer: {
+                    if settings.calendarSyncEnabled {
+                        Text("Tasks will be synced to your selected calendar. Calendar access permission is required.")
+                    } else {
+                        Text("Enable calendar sync to integrate your tasks with the Calendar app.")
+                    }
+                }
+
                 Section {
                     // SERVER
                     HStack(alignment: .center, spacing: 12) {
@@ -253,7 +385,62 @@ struct SettingsView: View {
                 }
             }
             .sheet(isPresented: $showingAppIcons) { AppIconView() }
-            .onAppear { iconManager.updateCurrentIcon() }
+            .sheet(isPresented: $showingCalendarPicker) {
+                CalendarPickerView()
+            }
+            .onAppear {
+                iconManager.updateCurrentIcon()
+            }
+            .onChange(of: settings.calendarSyncEnabled) { oldValue, newValue in
+                if newValue && !oldValue {
+                    isRequestingCalendarAccess = true
+                    Task {
+                        let granted = await calendarSync.requestCalendarAccess()
+                        await MainActor.run {
+                            isRequestingCalendarAccess = false
+                            if !granted {
+                                settings.calendarSyncEnabled = false
+                                // Show error message if there are sync errors
+                                if let lastError = calendarSync.syncErrors.last {
+                                    calendarErrorMessage = lastError
+                                    showingCalendarError = true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .alert("Calendar Access Required", isPresented: $showingCalendarError) {
+                Button("Settings") {
+                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsUrl)
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text(calendarErrorMessage)
+            }
+        }
+    }
+
+    // MARK: - Computed Properties
+
+    private var authorizationStatusText: String {
+        switch calendarSync.authorizationStatus {
+        case .notDetermined:
+            return "Not Requested"
+        case .restricted:
+            return "Restricted"
+        case .denied:
+            return "Denied"
+        case .authorized:
+            return "Authorized (Legacy)"
+        case .fullAccess:
+            return "Full Access"
+        case .writeOnly:
+            return "Write Only"
+        @unknown default:
+            return "Unknown"
         }
     }
 }

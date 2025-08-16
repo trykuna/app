@@ -1,5 +1,6 @@
 // Features/Tasks/TaskListView.swift
 import SwiftUI
+import EventKit
 
 // MARK: - View Extensions
 
@@ -156,6 +157,17 @@ final class TaskListVM: ObservableObject {
             let newTask = try await api.createTask(projectId: projectId, title: title, description: description)
             tasks.insert(newTask, at: 0)
             isAddingTask = false
+
+            // Auto-sync to calendar if enabled
+            let settings = AppSettings.shared
+            let calendarSync = CalendarSyncService.shared
+            if settings.calendarSyncEnabled && settings.autoSyncNewTasks {
+                let hasRequiredDates = newTask.startDate != nil || newTask.dueDate != nil || newTask.endDate != nil
+                if hasRequiredDates || !settings.syncTasksWithDatesOnly {
+                    await calendarSync.syncTaskToCalendar(newTask)
+                }
+            }
+
             // Update widget cache after creating new task
             WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
         } catch {
@@ -169,6 +181,7 @@ struct TaskListView: View {
     let api: VikunjaAPI
     @StateObject private var vm: TaskListVM
     @StateObject private var settings = AppSettings.shared
+    @StateObject private var calendarSync = CalendarSyncService.shared
     @State private var newTaskTitle = ""
     @State private var newTaskDescription = ""
 
@@ -741,6 +754,22 @@ struct TaskListView: View {
                         .background(Color.blue.opacity(0.1))
                         .cornerRadius(3)
                     }
+
+                    // Calendar sync indicator
+                    if settings.calendarSyncEnabled && isTaskSyncedToCalendar(t) {
+                        HStack(spacing: 2) {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                            Text("Synced")
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 1)
+                        .background(Color.green.opacity(0.1))
+                        .cornerRadius(3)
+                    }
                 }
 
                 Spacer()
@@ -782,5 +811,23 @@ struct TaskListView: View {
         let now = Date()
         let timeDifference = reminderDate.timeIntervalSince(now)
         return timeDifference <= 3600 && timeDifference > 0 // Within 1 hour from now
+    }
+
+    private func isTaskSyncedToCalendar(_ task: VikunjaTask) -> Bool {
+        guard (calendarSync.authorizationStatus == .fullAccess || calendarSync.authorizationStatus == .authorized),
+              let calendar = calendarSync.selectedCalendar else {
+            return false
+        }
+
+        let predicate = calendarSync.eventStore.predicateForEvents(
+            withStart: Date().addingTimeInterval(-30 * 24 * 60 * 60), // 30 days ago
+            end: Date().addingTimeInterval(30 * 24 * 60 * 60), // 30 days from now
+            calendars: [calendar]
+        )
+
+        let events = calendarSync.eventStore.events(matching: predicate)
+        return events.contains { event in
+            event.url?.absoluteString == "kuna://task/\(task.id)"
+        }
     }
 }

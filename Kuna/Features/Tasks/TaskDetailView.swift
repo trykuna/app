@@ -1,11 +1,14 @@
 // Features/Tasks/TaskDetailView.swift
 import SwiftUI
+import EventKit
 
 struct TaskDetailView: View {
     @State private var task: VikunjaTask
     let api: VikunjaAPI
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
+    @StateObject private var calendarSync = CalendarSyncService.shared
+    @StateObject private var settings = AppSettings.shared
     @State private var isEditing = false
     @State private var hasChanges = false
     @State private var isUpdating = false
@@ -17,12 +20,17 @@ struct TaskDetailView: View {
     @State private var availableLabels: [Label] = []
     @State private var showingLabelPicker = false
     
+    // Calendar sync state
+    @State private var isTaskSyncedToCalendar = false
+    @State private var isSyncingToCalendar = false
+
     // Section collapse states
     @State private var isTaskInfoExpanded = true
     @State private var isSchedulingExpanded = true
     @State private var isOrganizationExpanded = true
     @State private var isAssigneeExpanded = true
     @State private var isStatusExpanded = true
+    @State private var isCalendarSyncExpanded = true
     
     // Date picker states
     @State private var showStartDatePicker = false
@@ -129,7 +137,18 @@ struct TaskDetailView: View {
                             }
                             .settingsCardStyle()
                         }
-                        
+
+                        // 6. CALENDAR SYNC Section (only show if calendar sync is enabled)
+                        if settings.calendarSyncEnabled {
+                            settingsSection(
+                                title: "CALENDAR SYNC",
+                                isExpanded: $isCalendarSyncExpanded
+                            ) {
+                                calendarSyncSection
+                                    .settingsCardStyle()
+                            }
+                        }
+
                         // Bottom padding for save bar
                         Spacer(minLength: 100)
                     }
@@ -167,6 +186,18 @@ struct TaskDetailView: View {
                         }
                     }
                 }
+            }
+        }
+        .onAppear {
+            checkCalendarSyncStatus()
+        }
+        .alert("Calendar Sync", isPresented: .constant(calendarSync.syncSuccessMessage != nil)) {
+            Button("OK") {
+                calendarSync.clearSuccessMessage()
+            }
+        } message: {
+            if let message = calendarSync.syncSuccessMessage {
+                Text(message)
             }
         }
     }
@@ -514,7 +545,123 @@ struct TaskDetailView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
+    // MARK: - Calendar Sync Section
+
+    private var calendarSyncSection: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Image(systemName: "calendar.badge.plus")
+                    .foregroundColor(.green)
+                    .font(.body)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Sync to Calendar")
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundColor(.primary)
+
+                    if calendarSync.authorizationStatus != .fullAccess && calendarSync.authorizationStatus != .authorized {
+                        Text("Calendar access required")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    } else if calendarSync.selectedCalendar == nil {
+                        Text("Select a calendar in Settings")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    } else if !hasTaskDates {
+                        Text("Task needs dates to sync")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text(isTaskSyncedToCalendar ? "Synced to calendar" : "Not synced")
+                            .font(.caption)
+                            .foregroundColor(isTaskSyncedToCalendar ? .green : .secondary)
+                    }
+                }
+
+                Spacer()
+
+                if isSyncingToCalendar {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                } else {
+                    Button(action: toggleCalendarSync) {
+                        Image(systemName: isTaskSyncedToCalendar ? "calendar.badge.minus" : "calendar.badge.plus")
+                            .foregroundColor(isTaskSyncedToCalendar ? .red : .green)
+                            .font(.body)
+                    }
+                    .disabled(!canSyncToCalendar)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+    }
+
+    // MARK: - Calendar Sync Helpers
+
+    private var hasTaskDates: Bool {
+        task.startDate != nil || task.dueDate != nil || task.endDate != nil
+    }
+
+    private var canSyncToCalendar: Bool {
+        settings.calendarSyncEnabled &&
+        (calendarSync.authorizationStatus == .fullAccess || calendarSync.authorizationStatus == .authorized) &&
+        calendarSync.selectedCalendar != nil &&
+        (hasTaskDates || !settings.syncTasksWithDatesOnly)
+    }
+
+    private func toggleCalendarSync() {
+        guard !isSyncingToCalendar else { return }
+
+        isSyncingToCalendar = true
+
+        Task {
+            let success: Bool
+            if isTaskSyncedToCalendar {
+                success = await calendarSync.removeTaskFromCalendar(task)
+            } else {
+                success = await calendarSync.syncTaskToCalendar(task)
+            }
+
+            await MainActor.run {
+                if success {
+                    isTaskSyncedToCalendar.toggle()
+                }
+                isSyncingToCalendar = false
+            }
+        }
+    }
+
+    private func checkCalendarSyncStatus() {
+        guard settings.calendarSyncEnabled,
+              (calendarSync.authorizationStatus == .fullAccess || calendarSync.authorizationStatus == .authorized),
+              let calendar = calendarSync.selectedCalendar else {
+            isTaskSyncedToCalendar = false
+            return
+        }
+
+        // Check if task has a corresponding calendar event
+        Task {
+            let eventStore = calendarSync.eventStore
+            let predicate = eventStore.predicateForEvents(
+                withStart: Date().addingTimeInterval(-365 * 24 * 60 * 60), // 1 year ago
+                end: Date().addingTimeInterval(365 * 24 * 60 * 60), // 1 year from now
+                calendars: [calendar]
+            )
+
+            let events = eventStore.events(matching: predicate)
+            let hasEvent = events.contains { event in
+                event.url?.absoluteString == "kuna://task/\(task.id)"
+            }
+
+            await MainActor.run {
+                isTaskSyncedToCalendar = hasEvent
+            }
+        }
+    }
+
     // MARK: - Save Bar
     
     private var saveBar: some View {
