@@ -20,96 +20,23 @@ struct SettingsView: View {
             List {
                 // Display
                 Section {
-                    // Task Colors
-                    HStack {
-                        Image(systemName: "circle.fill")
-                            .foregroundColor(.blue)
-                            .font(.caption)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Task Colors").font(.body)
-                            Text("Display color indicators for all tasks")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                        Toggle("", isOn: $settings.showTaskColors).labelsHidden()
-                    }
-
-                    // Default Color Balls (sub-option of Task Colors)
-                    if settings.showTaskColors {
+                    NavigationLink(destination: TaskDisplayOptionsView()) {
                         HStack {
-                            Image(systemName: "circle")
-                                .foregroundColor(.blue)
-                                .font(.caption)
-
+                            Image(systemName: "eye")
+                                .foregroundColor(.blue).font(.body)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Show Default Color Balls").font(.body)
-                                Text("Display color indicators for tasks using the default blue color")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                Text("Display Options").font(.body)
+                                Text("Customize what appears on task lists")
+                                    .font(.caption).foregroundColor(.secondary)
                             }
-
                             Spacer()
-                            Toggle("", isOn: $settings.showDefaultColorBalls).labelsHidden()
                         }
-                        .padding(.leading, 20)
-                    }
-
-                    // Attachment Icons
-                    HStack {
-                        Image(systemName: "paperclip")
-                            .foregroundColor(.gray)
-                            .font(.caption)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Attachment Icons").font(.body)
-                            Text("Show paperclip icons for tasks with attachments")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                        Toggle("", isOn: $settings.showAttachmentIcons).labelsHidden()
-                    }
-
-                    // Comment Counts
-                    HStack {
-                        Image(systemName: "bubble.left.and.bubble.right")
-                            .foregroundColor(.blue)
-                            .font(.caption)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Comment Counts").font(.body)
-                            Text("Show comment count badges on tasks")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                        Toggle("", isOn: $settings.showCommentCounts).labelsHidden()
-                    }
-
-                    // Priority Indicators
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.orange)
-                            .font(.caption)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Priority Indicators").font(.body)
-                            Text("Show priority indicators on tasks")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                        Toggle("", isOn: $settings.showPriorityIndicators).labelsHidden()
                     }
                 } header: { Text("Display Options") } footer: {
                     Text("Control which elements are displayed in task lists. Changes apply to all task views.")
                 }
+
+                // Preview moved into Display Options screen to live alongside the toggles
 
                 // Appearance
                 Section {
@@ -182,8 +109,6 @@ struct SettingsView: View {
                                         .font(.caption).foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary.opacity(0.6)).font(.caption)
                             }
                         }
 
@@ -222,8 +147,6 @@ struct SettingsView: View {
                                         .font(.caption).foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary.opacity(0.6)).font(.caption)
                             }
                         }
 
@@ -463,5 +386,85 @@ private struct StatusIcon: View {
             .foregroundColor(color)
             .frame(width: 24, height: 24)
             .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Preview Row
+private struct PreviewTaskRow: View {
+    @ObservedObject var settings: AppSettings
+    var body: some View {
+        HStack(spacing: 12) {
+            // Done toggle dot (static)
+            Image(systemName: "circle")
+                .foregroundColor(.gray)
+                .frame(width: 20)
+
+            // Optional color ball
+            if settings.showTaskColors && settings.showDefaultColorBalls {
+                Circle()
+                    .fill(Color(hex: "007AFF"))
+                    .frame(width: 12, height: 12)
+                    .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 0.5))
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
+                    Text("Sample task title")
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    if settings.showPriorityIndicators {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.caption)
+                    }
+                    Spacer()
+                }
+
+                HStack(spacing: 8) {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                    Text("Today, 12:00")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    if settings.showAttachmentIcons {
+                        Image(systemName: "paperclip")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                    }
+                    if settings.showCommentCounts {
+                        HStack(spacing: 3) {
+                            Image(systemName: "bubble.left.and.bubble.right")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                            Text("3")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.vertical, 6)
+    }
+}
+
+
+// MARK: - Previews
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        // Minimal preview harness with mock AppState and sample services
+        let appState = AppState()
+        // Provide a placeholder API so views relying on appState.api won’t crash in preview
+        appState.api = VikunjaAPI(config: .init(baseURL: URL(string: "https://preview.example.com/api/v1")!), tokenProvider: { nil })
+        appState.authenticationMethod = .personalToken
+        AppSettings.shared.defaultSortOption = .dueDate
+
+        return NavigationView {
+            SettingsView()
+                .environmentObject(appState)
+        }
+        .previewDisplayName("Settings")
     }
 }

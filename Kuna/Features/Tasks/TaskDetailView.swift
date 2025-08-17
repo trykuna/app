@@ -39,12 +39,17 @@ struct TaskDetailView: View {
     @State private var startHasTime = false
     @State private var dueHasTime = false
     @State private var endHasTime = false
-        
+
     // Other picker states
     @State private var showPriorityPicker = false
     @State private var showProgressSlider = false
-    
-        private let presetColors = [
+
+    // Sheets/editors
+    @State private var showingRemindersEditor = false
+    @State private var showingRepeatEditor = false
+    @State private var selectedLabelIds: Set<Int> = []
+
+    private let presetColors = [
         Color.red, Color.orange, Color.yellow, Color.green,
         Color.blue, Color.purple, Color.pink, Color.gray
     ]
@@ -194,6 +199,58 @@ struct TaskDetailView: View {
             dueHasTime   = !(task.isAllDay) && hasTime(task.dueDate)
             endHasTime   = hasTime(task.endDate)
         }
+        // Labels picker
+        .sheet(isPresented: $showingLabelPicker) {
+            LabelPickerSheet(
+                availableLabels: availableLabels,
+                initialSelected: Set(task.labels?.map { $0.id } ?? []),
+                onCommit: { newSelected in
+                    Task {
+                        // Compute diffs
+                        let current = Set(task.labels?.map { $0.id } ?? [])
+                        let toAdd = newSelected.subtracting(current)
+                        let toRemove = current.subtracting(newSelected)
+                        do {
+                            for id in toAdd {
+                                task = try await api.addLabelToTask(taskId: task.id, labelId: id)
+                            }
+                            for id in toRemove {
+                                task = try await api.removeLabelFromTask(taskId: task.id, labelId: id)
+                            }
+                        } catch {
+                            updateError = error.localizedDescription
+                        }
+                        showingLabelPicker = false
+                    }
+                },
+                onCancel: { showingLabelPicker = false }
+            )
+        }
+        // Reminders editor
+        .sheet(isPresented: $showingRemindersEditor) {
+            RemindersEditorSheet(
+                task: task,
+                api: api,
+                onUpdated: { updated in
+                    task = updated
+                },
+                onClose: { showingRemindersEditor = false }
+            )
+        }
+        // Repeat editor
+        .sheet(isPresented: $showingRepeatEditor) {
+            RepeatEditorSheet(
+                repeatAfter: task.repeatAfter,
+                repeatMode: task.repeatMode,
+                onCommit: { newAfter, newMode in
+                    task.repeatAfter = newAfter
+                    task.repeatMode = newMode
+                    hasChanges = true
+                    showingRepeatEditor = false
+                },
+                onCancel: { showingRepeatEditor = false }
+            )
+        }
     }
 
     // MARK: - Rows
@@ -267,10 +324,8 @@ struct TaskDetailView: View {
             onChange: { newDate in
                 if let d = newDate {
                     if dueHasTime {
-                        task.isAllDay = false
                         task.dueDate = d
                     } else {
-                        task.isAllDay = true
                         task.dueDate = d.startOfDayLocal
                     }
                 } else {
@@ -419,6 +474,12 @@ struct TaskDetailView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isEditing {
+                showingRemindersEditor = true
+            }
+        }
     }
 
     private var repeatRow: some View {
@@ -440,6 +501,10 @@ struct TaskDetailView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isEditing { showingRepeatEditor = true }
+        }
     }
 
     private var labelsRow: some View {
@@ -587,6 +652,39 @@ struct TaskDetailView: View {
         .padding(.vertical, 12)
     }
 
+    private var saveBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+                .padding(.leading, 16)
+            HStack {
+                Button("Cancel") {
+                    Task {
+                        await reloadTask()
+                        isEditing = false
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(isUpdating)
+
+                Spacer()
+
+                Button {
+                    Task { await saveChanges() }
+                } label: {
+                    HStack(spacing: 8) {
+                        if isUpdating { ProgressView().scaleEffect(0.8) }
+                        Text("Save").fontWeight(.semibold)
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(isUpdating)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.ultraThinMaterial)
+        }
+    }
+
     // MARK: - Save / API
 
     private var hasTaskDates: Bool {
@@ -604,9 +702,9 @@ struct TaskDetailView: View {
             hasChanges = false
             isEditing = false
 
-            // ✅ Trigger calendar sync automatically
+            // ✅ Trigger calendar sync automatically (fire-and-forget to avoid blocking UI)
             if settings.calendarSyncEnabled {
-                await engine.syncNow(mode: .twoWay)
+                Task { await engine.syncNow(mode: .twoWay) }
             }
         } catch {
             updateError = error.localizedDescription
@@ -652,6 +750,169 @@ struct TaskDetailView: View {
             }
         }
     }
+
+
+// MARK: - Sheets
+private struct LabelPickerSheet: View {
+    let availableLabels: [Label]
+    @State var selected: Set<Int>
+    let onCommit: (Set<Int>) -> Void
+    let onCancel: () -> Void
+
+    init(availableLabels: [Label], initialSelected: Set<Int>, onCommit: @escaping (Set<Int>) -> Void, onCancel: @escaping () -> Void) {
+        self.availableLabels = availableLabels
+        self._selected = State(initialValue: initialSelected)
+        self.onCommit = onCommit
+        self.onCancel = onCancel
+    }
+
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(availableLabels) { label in
+                    HStack {
+                        Circle().fill(label.color).frame(width: 12, height: 12)
+                        Text(label.title)
+                        Spacer()
+                        if selected.contains(label.id) { Image(systemName: "checkmark").foregroundColor(.accentColor) }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if selected.contains(label.id) { selected.remove(label.id) } else { selected.insert(label.id) }
+                    }
+                }
+            }
+            .navigationTitle("Select Labels")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel", action: onCancel) }
+                ToolbarItem(placement: .confirmationAction) { Button("Done") { onCommit(selected) } }
+            }
+        }
+    }
+}
+
+private struct RemindersEditorSheet: View {
+    @State var task: VikunjaTask
+    let api: VikunjaAPI
+    let onUpdated: (VikunjaTask) -> Void
+    let onClose: () -> Void
+    @State private var error: String?
+    @State private var newReminderDate: Date = Date()
+
+    var body: some View {
+        NavigationView {
+            List {
+                // Existing reminders
+                if let reminders = task.reminders, !reminders.isEmpty {
+                    ForEach(reminders) { r in
+                        HStack {
+                            Image(systemName: "bell.fill").foregroundColor(.orange)
+                            Text(r.reminder.formatted(date: .abbreviated, time: .shortened))
+                            Spacer()
+                            Button(role: .destructive) { remove(r) } label: {
+                                Image(systemName: "trash")
+                            }
+                        }
+                    }
+                } else {
+                    Text("No reminders").foregroundColor(.secondary)
+                }
+
+                // Add new reminder
+                Text("Add").font(.footnote).foregroundStyle(.secondary)
+                DatePicker("Reminder", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                    .datePickerStyle(.graphical)
+                Button {
+                    addReminder(date: newReminderDate)
+                } label: {
+                    SwiftUI.Label("Add Reminder", systemImage: "plus.circle.fill")
+                }
+            }
+            .navigationTitle("Reminders")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Close", action: onClose) }
+            }
+            .alert("Error", isPresented: .constant(error != nil)) {
+                Button("OK") { error = nil }
+            } message: {
+                if let error { Text(error) }
+            }
+        }
+    }
+
+    private func addReminder(date: Date) {
+        Task {
+            do {
+                let updated = try await api.addReminderToTask(taskId: task.id, reminderDate: date)
+                await MainActor.run {
+                    task = updated
+                    onUpdated(updated)
+                }
+            } catch {
+                await MainActor.run { self.error = error.localizedDescription }
+            }
+        }
+    }
+
+    private func remove(_ reminder: Reminder) {
+        guard let id = reminder.id else { return }
+        Task {
+            do {
+                let updated = try await api.removeReminderFromTask(taskId: task.id, reminderId: id)
+                await MainActor.run {
+                    task = updated
+                    onUpdated(updated)
+                }
+            } catch {
+                await MainActor.run { self.error = error.localizedDescription }
+            }
+        }
+    }
+}
+
+private struct RepeatEditorSheet: View {
+    @State var repeatAfterText: String
+    @State var mode: RepeatMode
+    let onCommit: (Int?, RepeatMode) -> Void
+    let onCancel: () -> Void
+
+    init(repeatAfter: Int?, repeatMode: RepeatMode, onCommit: @escaping (Int?, RepeatMode) -> Void, onCancel: @escaping () -> Void) {
+        self._repeatAfterText = State(initialValue: repeatAfter.map(String.init) ?? "")
+        self._mode = State(initialValue: repeatMode)
+        self.onCommit = onCommit
+        self.onCancel = onCancel
+    }
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section("Mode") {
+                    Picker("Repeat Mode", selection: $mode) {
+                        ForEach(RepeatMode.allCases) { m in
+                            Text(m.displayName).tag(m)
+                        }
+                    }
+                }
+                Section("Interval (seconds)") {
+                    TextField("e.g. 86400 for daily", text: $repeatAfterText)
+                        .keyboardType(.numberPad)
+                }
+            }
+            .navigationTitle("Repeat")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel", action: onCancel) }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        let val = Int(repeatAfterText)
+                        onCommit(val, mode)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
     // MARK: - Section wrapper
 
@@ -702,3 +963,4 @@ private func hasTime(_ date: Date?) -> Bool {
 private func dateOrToday(_ date: Date?) -> Date? {
     date ?? Date().startOfDayLocal
 }
+

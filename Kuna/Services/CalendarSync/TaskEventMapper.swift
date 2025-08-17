@@ -13,9 +13,11 @@ struct TaskEventMapper {
         if let due = task.dueDate {
             if task.isAllDay {
                 event.isAllDay = true
-                let start = due.startOfDayLocal
+                let cal = Calendar.current
+                let start = cal.startOfDay(for: due)
+                let end = cal.date(byAdding: .day, value: 1, to: start) ?? start.addingTimeInterval(24*60*60)
                 event.startDate = start
-                event.endDate   = start.addingTimeInterval(24*60*60) // FIX: full-day span
+                event.endDate = end // end is exclusive; next midnight ensures single-day span
             } else {
                 event.isAllDay = false
                 event.endDate   = due

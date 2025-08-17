@@ -32,7 +32,18 @@ struct FavoritesView: View {
         }
         .navigationTitle("Favorites")
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { loadFavorites() }
+        .onAppear {
+            loadFavorites()
+            // preload comment counts for already-fetched favorites
+            if AppSettings.shared.showCommentCounts {
+                commentCountManager.loadCommentCounts(for: favoriteTasks.map { $0.id })
+            }
+        }
+        .onChange(of: favoriteTasks.map { $0.id }) { _, newIds in
+            if AppSettings.shared.showCommentCounts {
+                commentCountManager.loadCommentCounts(for: newIds)
+            }
+        }
         .alert("Error",
                isPresented: Binding(
                 get: { error != nil },
@@ -187,9 +198,10 @@ struct FavoriteTaskRow: View {
                                 .foregroundColor(.secondary)
                         }
 
-                        // Comment count badge
-                        if settings.showCommentCounts, let commentCount = commentCountManager.getCommentCount(for: task.id), commentCount > 0 {
-                            CommentBadge(commentCount: commentCount)
+                        // Comment count badge (always show, using 0 until loaded)
+                        if settings.showCommentCounts {
+                            let count = commentCountManager.getCommentCount(for: task.id) ?? 0
+                            CommentBadge(commentCount: count)
                         }
 
                         Spacer()

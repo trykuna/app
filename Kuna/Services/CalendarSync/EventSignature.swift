@@ -27,7 +27,7 @@ struct EventSignature {
             (notes ?? "").trimmedWithoutSignature()
         ]
         
-        return sha256(parts.joined(separator: "|")).prefix(16)
+        return String(sha256(parts.joined(separator: "|")).prefix(16))
     }
     
     static func make(from event: EKEvent) -> String {
@@ -60,10 +60,3 @@ private func sha256(_ input: String) -> String {
     return hashed.compactMap { String(format: "%02x", $0) }.joined()
 }
 
-// MARK: - String Extension
-
-private extension String {
-    func prefix(_ maxLength: Int) -> String {
-        return String(self.prefix(maxLength))
-    }
-}

@@ -60,7 +60,26 @@ final class AppSettings: ObservableObject {
             UserDefaults.standard.set(showTaskColors, forKey: "showTaskColors")
         }
     }
-    
+
+    // Celebration
+    @Published var celebrateCompletionConfetti: Bool {
+        didSet { UserDefaults.standard.set(celebrateCompletionConfetti, forKey: "celebrateCompletionConfetti") }
+    }
+
+    // Task Dates display options
+    @Published var showStartDate: Bool {
+        didSet { UserDefaults.standard.set(showStartDate, forKey: "showStartDate") }
+    }
+    @Published var showDueDate: Bool {
+        didSet { UserDefaults.standard.set(showDueDate, forKey: "showDueDate") }
+    }
+    @Published var showEndDate: Bool {
+        didSet { UserDefaults.standard.set(showEndDate, forKey: "showEndDate") }
+    }
+    @Published var showSyncStatus: Bool {
+        didSet { UserDefaults.standard.set(showSyncStatus, forKey: "showSyncStatus") }
+    }
+
     private init() {
         self.showDefaultColorBalls = UserDefaults.standard.object(forKey: "showDefaultColorBalls") as? Bool ?? true
 
@@ -77,8 +96,15 @@ final class AppSettings: ObservableObject {
         self.showCommentCounts = UserDefaults.standard.object(forKey: "showCommentCounts") as? Bool ?? true
         self.showPriorityIndicators = UserDefaults.standard.object(forKey: "showPriorityIndicators") as? Bool ?? true
         self.showTaskColors = UserDefaults.standard.object(forKey: "showTaskColors") as? Bool ?? true
+        // Task Dates defaults
+        self.showStartDate = UserDefaults.standard.object(forKey: "showStartDate") as? Bool ?? true
+        self.showDueDate = UserDefaults.standard.object(forKey: "showDueDate") as? Bool ?? true
+        self.showEndDate = UserDefaults.standard.object(forKey: "showEndDate") as? Bool ?? true
+        self.showSyncStatus = UserDefaults.standard.object(forKey: "showSyncStatus") as? Bool ?? true
+        // Celebration defaults (off)
+        self.celebrateCompletionConfetti = UserDefaults.standard.object(forKey: "celebrateCompletionConfetti") as? Bool ?? false
     }
-    
+
     // Static method to get default sort option without requiring main actor
     static func getDefaultSortOption() -> TaskSortOption {
         let sortOptionString = UserDefaults.standard.string(forKey: "defaultSortOption") ?? TaskSortOption.serverOrder.rawValue

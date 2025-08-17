@@ -1,10 +1,11 @@
 // Services/CommentCountManager.swift
 import Foundation
+import Combine
 
 @MainActor
 class CommentCountManager: ObservableObject {
     private let api: VikunjaAPI
-    private var commentCounts: [Int: Int] = [:] // taskId -> commentCount
+    @Published private(set) var commentCounts: [Int: Int] = [:] // taskId -> commentCount
     private var loadingTasks: Set<Int> = []
     
     init(api: VikunjaAPI) {
