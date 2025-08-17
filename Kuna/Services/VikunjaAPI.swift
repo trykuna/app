@@ -728,6 +728,30 @@ final class VikunjaAPI {
         return comments
     }
 
+    // MARK: - Relations
+    /// Get all relations for a task
+    func getTaskRelations(taskId: Int) async throws -> [TaskRelation] {
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "relations"])
+        let data = try await request(ep)
+        return try JSONDecoder.vikunja.decode([TaskRelation].self, from: data)
+    }
+
+    /// Add a relation between tasks
+    func addTaskRelation(taskId: Int, otherTaskId: Int, relationKind: TaskRelationKind) async throws {
+        struct RelationBody: Encodable { let other_task_id: Int; let relation_kind: String }
+        let body = RelationBody(other_task_id: otherTaskId, relation_kind: relationKind.rawValue)
+        let ep = Endpoint(method: "PUT", pathComponents: ["tasks", "\(taskId)", "relations"])
+        _ = try await request(ep, body: body)
+    }
+
+    /// Remove a relation between tasks
+    func removeTaskRelation(taskId: Int, otherTaskId: Int, relationKind: TaskRelationKind) async throws {
+        struct RelationBody: Encodable { let other_task_id: Int; let relation_kind: String }
+        let body = RelationBody(other_task_id: otherTaskId, relation_kind: relationKind.rawValue)
+        let ep = Endpoint(method: "DELETE", pathComponents: ["tasks", "\(taskId)", "relations"])
+        _ = try await request(ep, body: body)
+    }
+
     /// Get comment count for a task (lightweight version).
     func getTaskCommentCount(taskId: Int) async throws -> Int {
         #if DEBUG
@@ -840,6 +864,56 @@ final class VikunjaAPI {
             return favoriteTasks
         }
     }
+
+    // MARK: - Task Search
+    /// Search tasks across all projects
+    func searchTasks(query: String, page: Int = 1, perPage: Int = 25) async throws -> [VikunjaTask] {
+        // 1) Try native search param (?s=)
+        do {
+            let items = [
+                URLQueryItem(name: "s", value: query),
+                URLQueryItem(name: "page", value: String(page)),
+                URLQueryItem(name: "per_page", value: String(perPage))
+            ]
+            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"], queryItems: items)
+            let data = try await request(ep)
+            return try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+        } catch {
+            #if DEBUG
+            print("searchTasks: ?s= failed with error: \(error)")
+            #endif
+        }
+
+        // 2) Try filter syntax on server (title/description like)
+        do {
+            let escaped = query.replacingOccurrences(of: "\"", with: "\\\"")
+            let filterString = "title like \"%\(escaped)%\" || description like \"%\(escaped)%\""
+            let items = [
+                URLQueryItem(name: "filter", value: filterString),
+                URLQueryItem(name: "page", value: String(page)),
+                URLQueryItem(name: "per_page", value: String(perPage))
+            ]
+            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"], queryItems: items)
+            let data = try await request(ep)
+            return try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+        } catch {
+            #if DEBUG
+            print("searchTasks: filter fallback failed with error: \(error)")
+            #endif
+        }
+
+        // 3) Final fallback: fetch all tasks and filter locally (title/description contains)
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"])
+        let data = try await request(ep)
+        let all = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+        let q = query.lowercased()
+        return all.filter { t in
+            let inTitle = t.title.lowercased().contains(q)
+            let inDesc = (t.description ?? "").lowercased().contains(q)
+            return inTitle || inDesc
+        }
+    }
+
 
     func toggleTaskFavorite(task: VikunjaTask) async throws -> VikunjaTask {
         // Create a copy with toggled favorite status

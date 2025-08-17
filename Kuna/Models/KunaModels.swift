@@ -77,17 +77,17 @@ struct Project: Identifiable, Codable {
 struct Reminder: Identifiable, Decodable, Encodable {
     let id: Int?
     var reminder: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case id, reminder
     }
-    
+
     // Custom decoder to handle date
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         id = try container.decodeIfPresent(Int.self, forKey: .id)
-        
+
         // Handle reminder date
         if let reminderString = try container.decodeIfPresent(String.self, forKey: .reminder) {
             let formatter = ISO8601DateFormatter()
@@ -96,17 +96,17 @@ struct Reminder: Identifiable, Decodable, Encodable {
             reminder = Date()
         }
     }
-    
+
     // Custom encoder
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         try container.encodeIfPresent(id, forKey: .id)
-        
+
         let formatter = ISO8601DateFormatter()
         try container.encode(formatter.string(from: reminder), forKey: .reminder)
     }
-    
+
     // Convenience initializer for creating new reminders
     init(reminder: Date) {
         self.id = nil
@@ -118,9 +118,9 @@ enum RepeatMode: Int, CaseIterable, Identifiable {
     case afterAmount = 0    // Repeats after the amount specified in repeat_after
     case monthly = 1        // Repeats all dates each month (ignoring repeat_after)
     case fromCurrentDate = 2 // Repeats from current date rather than last set date
-    
+
     var id: Int { rawValue }
-    
+
     var displayName: String {
         switch self {
         case .afterAmount: return "After Specified Time"
@@ -128,7 +128,7 @@ enum RepeatMode: Int, CaseIterable, Identifiable {
         case .fromCurrentDate: return "From Current Date"
         }
     }
-    
+
     var description: String {
         switch self {
         case .afterAmount: return "Repeats after the time period you specify"
@@ -136,7 +136,7 @@ enum RepeatMode: Int, CaseIterable, Identifiable {
         case .fromCurrentDate: return "Repeats from the current completion date"
         }
     }
-    
+
     var systemImage: String {
         switch self {
         case .afterAmount: return "clock.arrow.circlepath"
@@ -151,11 +151,11 @@ struct Label: Identifiable, Decodable, Encodable {
     let title: String
     let hexColor: String?
     let description: String?
-    
+
     var color: Color {
         Color(hex: hexColor ?? "007AFF") // Default to blue
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id, title, description
         case hexColor = "hex_color"
@@ -163,15 +163,15 @@ struct Label: Identifiable, Decodable, Encodable {
         case createdBy = "created_by"
         case created, updated
     }
-    
+
     // Custom decoder to handle missing fields gracefully
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         id = try container.decode(Int.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
         description = try container.decodeIfPresent(String.self, forKey: .description)
-        
+
         // Handle hex_color more carefully - it might be missing or null
         if let colorString = try container.decodeIfPresent(String.self, forKey: .hexColor),
            !colorString.isEmpty {
@@ -207,20 +207,20 @@ enum TaskPriority: Int, CaseIterable, Identifiable, Codable {
     case high = 3
     case urgent = 4
     case doNow = 5
-    
+
     var id: Int { rawValue }
-    
+
     var displayName: String {
         switch self {
         case .unset: return "No Priority"
         case .low: return "Low"
-        case .medium: return "Medium" 
+        case .medium: return "Medium"
         case .high: return "High"
         case .urgent: return "Urgent"
         case .doNow: return "Do Now!"
         }
     }
-    
+
     var color: Color {
         switch self {
         case .unset: return .gray
@@ -231,7 +231,7 @@ enum TaskPriority: Int, CaseIterable, Identifiable, Codable {
         case .doNow: return .purple
         }
     }
-    
+
     var systemImage: String {
         switch self {
         case .unset: return "minus"
@@ -263,13 +263,15 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     var createdBy: VikunjaUser? // User who created the task
     var isFavorite: Bool // Whether this task is favorited by the current user
     var projectId: Int? // The ID of the project this task belongs to
+    var updatedAt: Date? // When the task was last updated (for sync)
     var attachments: [TaskAttachment]? // Attachments for this task
     var commentCount: Int? // Number of comments on this task
-    
+    var relations: [TaskRelation]? // Relations to other tasks (from GET /tasks/{id})
+
     var color: Color {
         Color(hex: hexColor ?? "007AFF") // Default to blue if no color set
     }
-    
+
     var hasCustomColor: Bool {
         hexColor != nil
     }
@@ -283,7 +285,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         guard let commentCount = commentCount else { return false }
         return commentCount > 0
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id, title, description, done, labels, reminders, priority, assignees, attachments
         case dueDate = "due_date"
@@ -296,21 +298,24 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         case createdBy = "created_by"
         case isFavorite = "is_favorite"
         case projectId = "project_id"
+        case updatedAt = "updated_at"
         case commentCount = "comment_count"
+        case relations
+        case relatedTasks = "related_tasks"
     }
-    
+
     // Custom decoder to handle missing fields gracefully
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         id = try container.decode(Int.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
         description = try container.decodeIfPresent(String.self, forKey: .description)
         done = try container.decodeIfPresent(Bool.self, forKey: .done) ?? false
-        
+
         // Handle dates more carefully - Vikunja uses "0001-01-01T00:00:00Z" for "no date"
         let formatter = ISO8601DateFormatter()
-        
+
         // Due date
         if let dueDateString = try container.decodeIfPresent(String.self, forKey: .dueDate),
            !dueDateString.isEmpty,
@@ -319,7 +324,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         } else {
             dueDate = nil
         }
-        
+
         // Start date
         if let startDateString = try container.decodeIfPresent(String.self, forKey: .startDate),
            !startDateString.isEmpty,
@@ -328,7 +333,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         } else {
             startDate = nil
         }
-        
+
         // End date
         if let endDateString = try container.decodeIfPresent(String.self, forKey: .endDate),
            !endDateString.isEmpty,
@@ -337,23 +342,23 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         } else {
             endDate = nil
         }
-        
+
         labels = try container.decodeIfPresent([Label].self, forKey: .labels)
         reminders = try container.decodeIfPresent([Reminder].self, forKey: .reminders)
-        
+
         // Handle priority - default to unset if missing
         let priorityValue = try container.decodeIfPresent(Int.self, forKey: .priority) ?? 0
         priority = TaskPriority(rawValue: priorityValue) ?? .unset
-        
+
         // Handle progress - default to 0.0 if missing, ensure it's between 0.0 and 1.0
         let progressValue = try container.decodeIfPresent(Double.self, forKey: .percentDone) ?? 0.0
         percentDone = max(0.0, min(1.0, progressValue))
-        
+
         // Handle repeat settings
         repeatAfter = try container.decodeIfPresent(Int.self, forKey: .repeatAfter)
         let repeatModeValue = try container.decodeIfPresent(Int.self, forKey: .repeatMode) ?? 0
         repeatMode = RepeatMode(rawValue: repeatModeValue) ?? .afterAmount
-        
+
         // Handle color - can be missing or null
         if let colorString = try container.decodeIfPresent(String.self, forKey: .hexColor),
            !colorString.isEmpty {
@@ -372,11 +377,27 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         // Handle favorite status
         isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
 
+        // Handle updated at timestamp
+        updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
         // Handle attachments
         attachments = try container.decodeIfPresent([TaskAttachment].self, forKey: .attachments)
 
         // Handle comment count
         commentCount = try container.decodeIfPresent(Int.self, forKey: .commentCount)
+
+        // Handle relations (flatten grouped related_tasks map)
+        if let groups = try container.decodeIfPresent([String: [VikunjaTask]].self, forKey: .relatedTasks) {
+            var all: [TaskRelation] = []
+            for (kindKey, tasks) in groups {
+                let kind = TaskRelationKind(rawValue: kindKey.lowercased()) ?? .unknown
+                for t in tasks {
+                    all.append(TaskRelation(kind: kind, otherTaskId: t.id, otherTask: t))
+                }
+            }
+            relations = all.isEmpty ? nil : all
+        } else {
+            relations = nil
+        }
 
         #if DEBUG
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
@@ -393,8 +414,30 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         #endif
     }
 
-    // Manual initializer for testing/previews
-    init(id: Int, title: String, description: String? = nil, done: Bool = false, dueDate: Date? = nil, startDate: Date? = nil, endDate: Date? = nil, labels: [Label]? = nil, reminders: [Reminder]? = nil, priority: TaskPriority = .unset, percentDone: Double = 0.0, hexColor: String? = nil, repeatAfter: Int? = nil, repeatMode: RepeatMode = .afterAmount, assignees: [VikunjaUser]? = nil, createdBy: VikunjaUser? = nil, projectId: Int? = nil, isFavorite: Bool = false, attachments: [TaskAttachment]? = nil, commentCount: Int? = nil) {
+    init(
+        id: Int,
+        title: String,
+        description: String? = nil,
+        done: Bool = false,
+        dueDate: Date? = nil,
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        labels: [Label]? = nil,
+        reminders: [Reminder]? = nil,
+        priority: TaskPriority = .unset,
+        percentDone: Double = 0.0,
+        hexColor: String? = nil,
+        repeatAfter: Int? = nil,
+        repeatMode: RepeatMode = .afterAmount,
+        assignees: [VikunjaUser]? = nil,
+        createdBy: VikunjaUser? = nil,
+        projectId: Int? = nil,
+        isFavorite: Bool = false,
+        attachments: [TaskAttachment]? = nil,
+        commentCount: Int? = nil,
+        updatedAt: Date? = nil,
+        relations: [TaskRelation]? = nil
+    ) {
         self.id = id
         self.title = title
         self.description = description
@@ -413,14 +456,19 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         self.createdBy = createdBy
         self.projectId = projectId
         self.isFavorite = isFavorite
+
+        // new bits
         self.attachments = attachments
         self.commentCount = commentCount
+        self.updatedAt = updatedAt
+        self.relations = relations
     }
-    
+
+
     // Custom encoder
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         try container.encode(id, forKey: .id)
         try container.encode(title, forKey: .title)
         try container.encodeIfPresent(description, forKey: .description)
@@ -430,22 +478,22 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         try container.encodeIfPresent(hexColor, forKey: .hexColor)
         try container.encodeIfPresent(repeatAfter, forKey: .repeatAfter)
         try container.encode(repeatMode.rawValue, forKey: .repeatMode)
-        
+
         // Handle date encoding
         let formatter = ISO8601DateFormatter()
-        
+
         if let dueDate = dueDate {
             try container.encode(formatter.string(from: dueDate), forKey: .dueDate)
         }
-        
+
         if let startDate = startDate {
             try container.encode(formatter.string(from: startDate), forKey: .startDate)
         }
-        
+
         if let endDate = endDate {
             try container.encode(formatter.string(from: endDate), forKey: .endDate)
         }
-        
+
         try container.encodeIfPresent(labels, forKey: .labels)
         try container.encodeIfPresent(reminders, forKey: .reminders)
         try container.encodeIfPresent(assignees, forKey: .assignees)
@@ -539,6 +587,120 @@ struct TaskAttachment: Identifiable, Decodable {
         }
     }
 }
+
+
+// MARK: - Task Relations
+enum TaskRelationKind: String, CaseIterable, Codable, Identifiable {
+    case unknown
+    case subtask
+    case parenttask
+    case related
+    case duplicateof
+    case duplicates
+    case blocking
+    case blocked
+    case precedes
+    case follows
+    case copiedfrom
+    case copiedto
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .subtask: return "Subtask"
+        case .parenttask: return "Parent Task"
+        case .related: return "Related"
+        case .duplicateof: return "Duplicate Of"
+        case .duplicates: return "Duplicates"
+        case .blocking: return "Blocking"
+        case .blocked: return "Blocked By"
+        case .precedes: return "Precedes"
+        case .follows: return "Follows"
+        case .copiedfrom: return "Copied From"
+        case .copiedto: return "Copied To"
+        case .unknown: return "Unknown"
+        }
+    }
+
+    // Be robust to unknown/synonym values
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let raw = (try? container.decode(String.self))?.lowercased() ?? "unknown"
+        switch raw {
+        case "subtask", "child", "childtask": self = .subtask
+        case "parenttask", "parent": self = .parenttask
+        case "related": self = .related
+        case "duplicateof", "duplicate_of", "duplicate-of": self = .duplicateof
+        case "duplicates": self = .duplicates
+        case "blocking", "blocks": self = .blocking
+        case "blocked", "is_blocked_by": self = .blocked
+        case "precedes", "before": self = .precedes
+        case "follows", "after": self = .follows
+        case "copiedfrom", "copied_from": self = .copiedfrom
+        case "copiedto", "copied_to": self = .copiedto
+        default: self = .unknown
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self.rawValue)
+    }
+}
+
+struct TaskRelation: Identifiable, Decodable {
+    // No explicit id in API; synthesize from kind+otherTaskId
+    var id: String { "\(relationKind.rawValue)#\(otherTaskId)" }
+    let relationKind: TaskRelationKind
+    let otherTaskId: Int
+    let otherTask: VikunjaTask?
+
+    enum CodingKeys: String, CodingKey {
+        case relationKind = "relation_kind"
+        case otherTaskId = "other_task_id"
+        case otherTask = "other_task"
+        case kind // alternative key some servers might use
+        case otherTaskIdCamel = "otherTaskId"
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        // Try multiple keys for kind
+        if let k = try? c.decode(TaskRelationKind.self, forKey: .relationKind) {
+            relationKind = k
+        } else if let k = try? c.decode(TaskRelationKind.self, forKey: .kind) {
+            relationKind = k
+        } else {
+            relationKind = .unknown
+        }
+        // Try multiple keys for id
+        if let id = try? c.decode(Int.self, forKey: .otherTaskId) {
+            otherTaskId = id
+        } else if let id = try? c.decode(Int.self, forKey: .otherTaskIdCamel) {
+            otherTaskId = id
+        } else {
+            // As a last resort, try to decode nested other_task.id
+            if let nested = try? c.decodeIfPresent(VikunjaTask.self, forKey: .otherTask) {
+                otherTaskId = nested.id
+                otherTask = nested
+                return
+            }
+            otherTaskId = -1
+        }
+        otherTask = try? c.decodeIfPresent(VikunjaTask.self, forKey: .otherTask)
+    }
+}
+
+// Convenience init for grouped related_tasks -> relations
+extension TaskRelation {
+    init(kind: TaskRelationKind, otherTaskId: Int, otherTask: VikunjaTask?) {
+        self.relationKind = kind
+        self.otherTaskId = otherTaskId
+        self.otherTask = otherTask
+    }
+}
+
 
 // MARK: - Color Extension
 extension Color {

@@ -1,5 +1,8 @@
 // Features/Tasks/TaskListView.swift
 import SwiftUI
+import UIKit
+import EventKit
+import ConfettiSwiftUI
 
 // MARK: - View Extensions
 
@@ -193,6 +196,17 @@ final class TaskListVM: ObservableObject {
             let newTask = try await api.createTask(projectId: projectId, title: title, description: description)
             tasks.insert(newTask, at: 0)
             isAddingTask = false
+
+            // Auto-sync to calendar if enabled
+            let settings = AppSettings.shared
+            let calendarSync = CalendarSyncService.shared
+            if settings.calendarSyncEnabled && settings.autoSyncNewTasks {
+                let hasRequiredDates = newTask.startDate != nil || newTask.dueDate != nil || newTask.endDate != nil
+                if hasRequiredDates || !settings.syncTasksWithDatesOnly {
+                    let _ = await calendarSync.syncTaskToCalendar(newTask)
+                }
+            }
+
             // Update widget cache after creating new task
             WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
         } catch {
@@ -206,9 +220,12 @@ struct TaskListView: View {
     let api: VikunjaAPI
     @StateObject private var vm: TaskListVM
     @StateObject private var settings = AppSettings.shared
+    @StateObject private var calendarSync = CalendarSyncService.shared
     @StateObject private var commentCountManager: CommentCountManager
     @State private var newTaskTitle = ""
     @State private var newTaskDescription = ""
+    // Confetti trigger key
+    @State private var confettiTrigger: Bool = false
 
     // Filter and Sort state
     @State private var currentFilter = TaskFilter()
@@ -629,25 +646,56 @@ struct TaskListView: View {
             Task {
                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
                 await vm.load(queryItems: query, resetPagination: true)
+                if settings.showCommentCounts {
+                    // proactively load counts for visible tasks
+                    commentCountManager.loadCommentCounts(for: vm.tasks.map { $0.id })
+                }
             }
         }
         .onChange(of: currentFilter) { _, _ in
             Task {
                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
                 await vm.load(queryItems: query, resetPagination: true)
+                if settings.showCommentCounts {
+                    commentCountManager.clearCache()
+                    commentCountManager.loadCommentCounts(for: vm.tasks.map { $0.id })
+                }
             }
         }
         .onChange(of: settings.defaultSortOption) { _, newSortOption in
             currentSort = newSortOption
         }
+        // Confetti overlay on the whole list view
+        .overlay(ConfettiOverlay(trigger: $confettiTrigger).allowsHitTesting(false))
         }
+
+    // Lightweight confetti host to keep type-checking simple
+    private struct ConfettiOverlay: View {
+        @Binding var trigger: Bool
+        var body: some View {
+            GeometryReader { proxy in
+                Color.clear
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .confettiCannon(trigger: $trigger,
+                                    num: 30,
+                                    confettis: [.text("🎉"), .text("🎊"), .text("⭐️")],
+                                    confettiSize: 12)
+            }
+        }
+    }
 
     @ViewBuilder
     private func taskRow(for t: VikunjaTask) -> some View {
         NavigationLink(destination: TaskDetailView(task: t, api: api)) {
             HStack {
                 Button(action: {
-                    Task { await vm.toggle(t) }
+                    let willMarkDone = !t.done
+                    Task {
+                        await vm.toggle(t)
+                        if willMarkDone && settings.celebrateCompletionConfetti {
+                            if !UIAccessibility.isReduceMotionEnabled { confettiTrigger.toggle() }
+                        }
+                    }
                 }) {
                     Image(systemName: t.done ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(t.done ? .green : .gray)
@@ -686,9 +734,10 @@ struct TaskListView: View {
                                 .foregroundColor(.secondary)
                         }
 
-                        // Comment count badge
-                        if settings.showCommentCounts, let commentCount = commentCountManager.getCommentCount(for: t.id), commentCount > 0 {
-                            CommentBadge(commentCount: commentCount)
+                        // Comment count badge (always show, using 0 until loaded)
+                        if settings.showCommentCounts {
+                            let count = commentCountManager.getCommentCount(for: t.id) ?? 0
+                            CommentBadge(commentCount: count)
                         }
 
                         Spacer()
@@ -710,10 +759,12 @@ struct TaskListView: View {
                         }
                     }
 
-                    // Date indicators
-                    if t.startDate != nil || t.dueDate != nil || t.endDate != nil {
+                    // Date indicators (respect display toggles)
+                    if (settings.showStartDate && t.startDate != nil) ||
+                       (settings.showDueDate && t.dueDate != nil) ||
+                       (settings.showEndDate && t.endDate != nil) {
                         HStack(spacing: 4) {
-                            if let startDate = t.startDate {
+                            if settings.showStartDate, let startDate = t.startDate {
                                 HStack(spacing: 2) {
                                     Image(systemName: "play.circle.fill")
                                         .font(.caption2)
@@ -733,7 +784,7 @@ struct TaskListView: View {
                                 .cornerRadius(3)
                             }
 
-                            if let dueDate = t.dueDate {
+                            if settings.showDueDate, let dueDate = t.dueDate {
                                 HStack(spacing: 2) {
                                     Image(systemName: "clock.fill")
                                         .font(.caption2)
@@ -753,7 +804,7 @@ struct TaskListView: View {
                                 .cornerRadius(3)
                             }
 
-                            if let endDate = t.endDate {
+                            if settings.showEndDate, let endDate = t.endDate {
                                 HStack(spacing: 2) {
                                     Image(systemName: "checkmark.circle.fill")
                                         .font(.caption2)
@@ -822,6 +873,22 @@ struct TaskListView: View {
                         .background(Color.blue.opacity(0.1))
                         .cornerRadius(3)
                     }
+
+                    // Calendar sync indicator (respect display toggle)
+                    if settings.calendarSyncEnabled && settings.showSyncStatus && isTaskSyncedToCalendar(t) {
+                        HStack(spacing: 2) {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                            Text("Synced")
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 1)
+                        .background(Color.green.opacity(0.1))
+                        .cornerRadius(3)
+                    }
                 }
 
                 Spacer()
@@ -829,7 +896,13 @@ struct TaskListView: View {
         }
         .swipeActions(edge: .leading) {
             Button {
-                Task { await vm.toggle(t) }
+                let willMarkDone = !t.done
+                Task {
+                    await vm.toggle(t)
+                    if willMarkDone && settings.celebrateCompletionConfetti {
+                        if !UIAccessibility.isReduceMotionEnabled { confettiTrigger.toggle() }
+                    }
+                }
             } label: {
                 Image(systemName: t.done ? "arrow.uturn.backward" : "checkmark")
             }
@@ -869,5 +942,30 @@ struct TaskListView: View {
         let now = Date()
         let timeDifference = reminderDate.timeIntervalSince(now)
         return timeDifference <= 3600 && timeDifference > 0 // Within 1 hour from now
+    }
+
+    private func isTaskSyncedToCalendar(_ task: VikunjaTask) -> Bool {
+        let hasAccess: Bool
+        if #available(iOS 17.0, *) {
+            hasAccess = calendarSync.authorizationStatus == .fullAccess
+        } else {
+            hasAccess = calendarSync.authorizationStatus == .authorized
+        }
+
+        guard hasAccess,
+              let calendar = calendarSync.selectedCalendar else {
+            return false
+        }
+
+        let predicate = calendarSync.eventStore.predicateForEvents(
+            withStart: Date().addingTimeInterval(-30 * 24 * 60 * 60), // 30 days ago
+            end: Date().addingTimeInterval(30 * 24 * 60 * 60), // 30 days from now
+            calendars: [calendar]
+        )
+
+        let events = calendarSync.eventStore.events(matching: predicate)
+        return events.contains { event in
+            event.url?.absoluteString == "kuna://task/\(task.id)"
+        }
     }
 }
