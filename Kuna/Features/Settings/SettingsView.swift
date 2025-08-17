@@ -20,20 +20,95 @@ struct SettingsView: View {
             List {
                 // Display
                 Section {
+                    // Task Colors
                     HStack {
                         Image(systemName: "circle.fill")
                             .foregroundColor(.blue)
                             .font(.caption)
+
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Show Default Color Balls").font(.body)
-                            Text("Display color indicators for tasks using the default blue color")
-                                .font(.caption).foregroundColor(.secondary)
+                            Text("Task Colors").font(.body)
+                            Text("Display color indicators for all tasks")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
+
                         Spacer()
-                        Toggle("", isOn: $settings.showDefaultColorBalls).labelsHidden()
+                        Toggle("", isOn: $settings.showTaskColors).labelsHidden()
                     }
-                } header: { Text("Display") } footer: {
-                    Text("When disabled, only tasks with custom colors will show color balls in the task list.")
+
+                    // Default Color Balls (sub-option of Task Colors)
+                    if settings.showTaskColors {
+                        HStack {
+                            Image(systemName: "circle")
+                                .foregroundColor(.blue)
+                                .font(.caption)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Show Default Color Balls").font(.body)
+                                Text("Display color indicators for tasks using the default blue color")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+                            Toggle("", isOn: $settings.showDefaultColorBalls).labelsHidden()
+                        }
+                        .padding(.leading, 20)
+                    }
+
+                    // Attachment Icons
+                    HStack {
+                        Image(systemName: "paperclip")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Attachment Icons").font(.body)
+                            Text("Show paperclip icons for tasks with attachments")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+                        Toggle("", isOn: $settings.showAttachmentIcons).labelsHidden()
+                    }
+
+                    // Comment Counts
+                    HStack {
+                        Image(systemName: "bubble.left.and.bubble.right")
+                            .foregroundColor(.blue)
+                            .font(.caption)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Comment Counts").font(.body)
+                            Text("Show comment count badges on tasks")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+                        Toggle("", isOn: $settings.showCommentCounts).labelsHidden()
+                    }
+
+                    // Priority Indicators
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                            .font(.caption)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Priority Indicators").font(.body)
+                            Text("Show priority indicators on tasks")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+                        Toggle("", isOn: $settings.showPriorityIndicators).labelsHidden()
+                    }
+                } header: { Text("Display Options") } footer: {
+                    Text("Control which elements are displayed in task lists. Changes apply to all task views.")
                 }
 
                 // Appearance

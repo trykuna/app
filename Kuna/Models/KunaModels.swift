@@ -264,6 +264,8 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     var isFavorite: Bool // Whether this task is favorited by the current user
     var projectId: Int? // The ID of the project this task belongs to
     var updatedAt: Date? // When the task was last updated (for sync)
+    var attachments: [TaskAttachment]? // Attachments for this task
+    var commentCount: Int? // Number of comments on this task
     
     var color: Color {
         Color(hex: hexColor ?? "007AFF") // Default to blue if no color set
@@ -272,9 +274,19 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     var hasCustomColor: Bool {
         hexColor != nil
     }
+
+    var hasAttachments: Bool {
+        guard let attachments = attachments else { return false }
+        return !attachments.isEmpty
+    }
+
+    var hasComments: Bool {
+        guard let commentCount = commentCount else { return false }
+        return commentCount > 0
+    }
     
     enum CodingKeys: String, CodingKey {
-        case id, title, description, done, labels, reminders, priority, assignees
+        case id, title, description, done, labels, reminders, priority, assignees, attachments
         case dueDate = "due_date"
         case startDate = "start_date"
         case endDate = "end_date"
@@ -286,6 +298,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         case isFavorite = "is_favorite"
         case projectId = "project_id"
         case updatedAt = "updated_at"
+        case commentCount = "comment_count"
     }
     
     // Custom decoder to handle missing fields gracefully
@@ -363,6 +376,11 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
 
         // Handle updated at timestamp
         updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
+        // Handle attachments
+        attachments = try container.decodeIfPresent([TaskAttachment].self, forKey: .attachments)
+
+        // Handle comment count
+        commentCount = try container.decodeIfPresent(Int.self, forKey: .commentCount)
 
         #if DEBUG
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
@@ -379,8 +397,29 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         #endif
     }
 
-    // Manual initializer for testing/previews
-    init(id: Int, title: String, description: String? = nil, done: Bool = false, dueDate: Date? = nil, startDate: Date? = nil, endDate: Date? = nil, labels: [Label]? = nil, reminders: [Reminder]? = nil, priority: TaskPriority = .unset, percentDone: Double = 0.0, hexColor: String? = nil, repeatAfter: Int? = nil, repeatMode: RepeatMode = .afterAmount, assignees: [VikunjaUser]? = nil, createdBy: VikunjaUser? = nil, projectId: Int? = nil, isFavorite: Bool = false, updatedAt: Date? = nil) {
+    init(
+        id: Int,
+        title: String,
+        description: String? = nil,
+        done: Bool = false,
+        dueDate: Date? = nil,
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        labels: [Label]? = nil,
+        reminders: [Reminder]? = nil,
+        priority: TaskPriority = .unset,
+        percentDone: Double = 0.0,
+        hexColor: String? = nil,
+        repeatAfter: Int? = nil,
+        repeatMode: RepeatMode = .afterAmount,
+        assignees: [VikunjaUser]? = nil,
+        createdBy: VikunjaUser? = nil,
+        projectId: Int? = nil,
+        isFavorite: Bool = false,
+        attachments: [TaskAttachment]? = nil,
+        commentCount: Int? = nil,
+        updatedAt: Date? = nil
+    ) {
         self.id = id
         self.title = title
         self.description = description
@@ -399,8 +438,13 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         self.createdBy = createdBy
         self.projectId = projectId
         self.isFavorite = isFavorite
+
+        // new bits
+        self.attachments = attachments
+        self.commentCount = commentCount
         self.updatedAt = updatedAt
     }
+
     
     // Custom encoder
     func encode(to encoder: Encoder) throws {
@@ -437,6 +481,91 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         try container.encodeIfPresent(createdBy, forKey: .createdBy)
         try container.encodeIfPresent(projectId, forKey: .projectId)
         try container.encode(isFavorite, forKey: .isFavorite)
+        // Note: attachments are read-only from API, not encoded when updating tasks
+    }
+}
+
+struct TasksResponse {
+    let tasks: [VikunjaTask]
+    let hasMore: Bool
+    let currentPage: Int
+    let totalPages: Int?
+
+    init(tasks: [VikunjaTask], hasMore: Bool, currentPage: Int, totalPages: Int? = nil) {
+        self.tasks = tasks
+        self.hasMore = hasMore
+        self.currentPage = currentPage
+        self.totalPages = totalPages
+    }
+}
+
+struct TaskComment: Identifiable, Decodable {
+    let id: Int
+    let comment: String
+    let author: VikunjaUser
+    let created: Date
+    let updated: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case id, comment, author, created, updated
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        comment = try container.decode(String.self, forKey: .comment)
+        author = try container.decode(VikunjaUser.self, forKey: .author)
+
+        // Handle date decoding
+        let dateFormatter = ISO8601DateFormatter()
+
+        if let createdString = try? container.decode(String.self, forKey: .created),
+           let createdDate = dateFormatter.date(from: createdString) {
+            created = createdDate
+        } else {
+            created = Date()
+        }
+
+        if let updatedString = try? container.decode(String.self, forKey: .updated),
+           let updatedDate = dateFormatter.date(from: updatedString) {
+            updated = updatedDate
+        } else {
+            updated = nil
+        }
+    }
+}
+
+struct TaskAttachment: Identifiable, Decodable {
+    let id: Int
+    let fileName: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case fileName = "file_name"
+        case file
+    }
+
+    struct FileInfo: Decodable {
+        let fileName: String?
+        let name: String?
+
+        enum CodingKeys: String, CodingKey {
+            case fileName = "file_name"
+            case name
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+
+        if let direct = try container.decodeIfPresent(String.self, forKey: .fileName) {
+            fileName = direct
+        } else if let file = try container.decodeIfPresent(FileInfo.self, forKey: .file) {
+            fileName = file.fileName ?? file.name ?? ""
+        } else {
+            fileName = ""
+        }
     }
 }
 

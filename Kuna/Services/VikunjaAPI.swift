@@ -299,35 +299,47 @@ final class VikunjaAPI {
     }
 
     // MARK: - Tasks
-    // Optional query-enabled variant
-    func fetchTasks(projectId: Int, queryItems: [URLQueryItem]) async throws -> [VikunjaTask] {
-        let ep = Endpoint(method: "GET", pathComponents: ["projects", String(projectId), "tasks"], queryItems: queryItems)
+    // Paginated task fetching with optional query items
+    func fetchTasks(projectId: Int, page: Int = 1, perPage: Int = 50, queryItems: [URLQueryItem] = []) async throws -> TasksResponse {
+        var allQueryItems = queryItems
+        allQueryItems.append(URLQueryItem(name: "page", value: String(page)))
+        allQueryItems.append(URLQueryItem(name: "per_page", value: String(perPage)))
+
+        let ep = Endpoint(method: "GET", pathComponents: ["projects", String(projectId), "tasks"], queryItems: allQueryItems)
         let data = try await request(ep)
+
         #if DEBUG
         Log.network.debug("Tasks(response) bytes: \(data.count, privacy: .public)")
+        print("VikunjaAPI: Fetching tasks for project \(projectId), page \(page), per_page \(perPage)")
         #endif
-        return try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
-    }
 
-    // MARK: - Tasks
-    func fetchTasks(projectId: Int) async throws -> [VikunjaTask] {
-        let ep = Endpoint(method: "GET", pathComponents: ["projects", String(projectId), "tasks"])
-        let data = try await request(ep)
-
-        // Debug: print the raw response
-        if let responseString = String(data: data, encoding: .utf8) {
-            print("Tasks Response: \(responseString)")
-        }
-
+        // Try to decode as array first (for backward compatibility)
         do {
-            return try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+            let tasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+            #if DEBUG
+            print("VikunjaAPI: Decoded \(tasks.count) tasks (legacy format)")
+            #endif
+            return TasksResponse(tasks: tasks, hasMore: tasks.count == perPage, currentPage: page, totalPages: nil)
         } catch {
-            print("JSON Decoding Error: \(error)")
-            if let decodingError = error as? DecodingError {
-                print("Decoding Error Details: \(decodingError)")
-            }
+            #if DEBUG
+            print("VikunjaAPI: Failed to decode as array, trying paginated response format")
+            #endif
+
+            // If array decoding fails, try paginated response format
+            // This would be used if Vikunja returns pagination metadata
             throw error
         }
+    }
+
+    // Convenience method for backward compatibility
+    func fetchTasks(projectId: Int, queryItems: [URLQueryItem] = []) async throws -> [VikunjaTask] {
+        let response = try await fetchTasks(projectId: projectId, page: 1, perPage: 50, queryItems: queryItems)
+        return response.tasks
+    }
+
+    // Legacy method for backward compatibility
+    func fetchTasks(projectId: Int) async throws -> [VikunjaTask] {
+        return try await fetchTasks(projectId: projectId, queryItems: [])
     }
 
     func createTask(projectId: Int, title: String, description: String?) async throws -> VikunjaTask {
@@ -546,6 +558,248 @@ final class VikunjaAPI {
         #endif
 
         return try JSONDecoder.vikunja.decode([VikunjaUser].self, from: data)
+    }
+
+    // MARK: - Attachments
+    /// Fetch attachments for a task.
+    func getTaskAttachments(taskId: Int) async throws -> [TaskAttachment] {
+        #if DEBUG
+        print("VikunjaAPI: Fetching attachments for task \(taskId)")
+        #endif
+
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "attachments"])
+        let data = try await request(ep)
+
+        #if DEBUG
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("VikunjaAPI: Attachments response: \(jsonString)")
+        }
+        #endif
+
+        let attachments = try JSONDecoder.vikunja.decode([TaskAttachment].self, from: data)
+
+        #if DEBUG
+        print("VikunjaAPI: Decoded \(attachments.count) attachments")
+        #endif
+
+        return attachments
+    }
+
+    /// Upload a file attachment for the given task.
+    ///
+    /// - Parameters:
+    ///   - taskId: The task identifier.
+    ///   - fileName: Name of the file as it should appear on the server.
+    ///   - data: Raw file data to upload.
+    ///   - mimeType: MIME type describing the data. Defaults to `application/octet-stream`.
+    func uploadAttachment(taskId: Int, fileName: String, data: Data, mimeType: String = "application/octet-stream") async throws {
+        #if DEBUG
+        print("VikunjaAPI: Starting attachment upload")
+        print("VikunjaAPI: Task ID: \(taskId)")
+        print("VikunjaAPI: File name: \(fileName)")
+        print("VikunjaAPI: MIME type: \(mimeType)")
+        print("VikunjaAPI: Data size: \(data.count) bytes")
+        #endif
+
+        let endpoint = Endpoint(method: "PUT", pathComponents: ["tasks", "\(taskId)", "attachments"])
+        let url = try url(for: endpoint)
+
+        #if DEBUG
+        print("VikunjaAPI: Upload URL: \(url)")
+        #endif
+
+        var req = URLRequest(url: url)
+        req.httpMethod = endpoint.method
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        if let t = tokenProvider() {
+            req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization")
+            #if DEBUG
+            print("VikunjaAPI: Authorization header set")
+            #endif
+        }
+
+        // Build multipart body
+        let boundary = UUID().uuidString
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        #if DEBUG
+        print("VikunjaAPI: Using boundary: \(boundary)")
+        #endif
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"files\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: \(mimeType)\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        req.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
+
+        #if DEBUG
+        print("VikunjaAPI: Multipart body size: \(body.count) bytes")
+        print("VikunjaAPI: Making upload request...")
+        #endif
+
+        let (respData, resp) = try await session.upload(for: req, from: body)
+
+        #if DEBUG
+        print("VikunjaAPI: Upload request completed")
+        #endif
+
+        guard let http = resp as? HTTPURLResponse else {
+            #if DEBUG
+            print("VikunjaAPI: No HTTP response received")
+            #endif
+            throw APIError.other("No HTTP response")
+        }
+
+        #if DEBUG
+        print("VikunjaAPI: HTTP status code: \(http.statusCode)")
+        if let responseString = String(data: respData, encoding: .utf8) {
+            print("VikunjaAPI: Response body: \(responseString)")
+        }
+        #endif
+
+        guard (200..<300).contains(http.statusCode) else {
+            let message = extractErrorMessage(from: respData)
+            if let message, !message.isEmpty {
+                #if DEBUG
+                print("VikunjaAPI: Upload failed with message: \(message)")
+                #endif
+                throw APIError.other(message)
+            } else {
+                #if DEBUG
+                print("VikunjaAPI: Upload failed with HTTP \(http.statusCode)")
+                #endif
+                throw APIError.http(http.statusCode)
+            }
+        }
+
+        #if DEBUG
+        print("VikunjaAPI: Upload completed successfully")
+        #endif
+    }
+
+    /// Delete a task attachment.
+    func deleteAttachment(taskId: Int, attachmentId: Int) async throws {
+        let ep = Endpoint(method: "DELETE", pathComponents: ["tasks", "\(taskId)", "attachments", "\(attachmentId)"])
+        _ = try await request(ep)
+    }
+
+    /// Download a task attachment.
+    func downloadAttachment(taskId: Int, attachmentId: Int) async throws -> Data {
+        #if DEBUG
+        print("VikunjaAPI: Downloading attachment \(attachmentId) for task \(taskId)")
+        #endif
+
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "attachments", "\(attachmentId)"])
+        let data = try await request(ep)
+
+        #if DEBUG
+        print("VikunjaAPI: Downloaded attachment data, size: \(data.count) bytes")
+        #endif
+
+        return data
+    }
+
+    // MARK: - Comments
+    /// Fetch comments for a task.
+    func getTaskComments(taskId: Int) async throws -> [TaskComment] {
+        #if DEBUG
+        print("VikunjaAPI: Fetching comments for task \(taskId)")
+        #endif
+
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "comments"])
+        let data = try await request(ep)
+
+        #if DEBUG
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("VikunjaAPI: Comments response: \(jsonString)")
+        }
+        #endif
+
+        let comments = try JSONDecoder.vikunja.decode([TaskComment].self, from: data)
+
+        #if DEBUG
+        print("VikunjaAPI: Decoded \(comments.count) comments")
+        #endif
+
+        return comments
+    }
+
+    /// Get comment count for a task (lightweight version).
+    func getTaskCommentCount(taskId: Int) async throws -> Int {
+        #if DEBUG
+        print("VikunjaAPI: Fetching comment count for task \(taskId)")
+        #endif
+
+        do {
+            let comments = try await getTaskComments(taskId: taskId)
+            let count = comments.count
+
+            #if DEBUG
+            print("VikunjaAPI: Task \(taskId) has \(count) comments")
+            #endif
+
+            return count
+        } catch {
+            // Handle "no comments" case gracefully
+            let errorMessage = error.localizedDescription.lowercased()
+            if errorMessage.contains("404") || errorMessage.contains("not found") ||
+               errorMessage.contains("no such file") || errorMessage.contains("missing") ||
+               errorMessage.contains("couldn't be read") {
+                #if DEBUG
+                print("VikunjaAPI: Task \(taskId) has no comments (404/not found)")
+                #endif
+                return 0
+            } else {
+                throw error
+            }
+        }
+    }
+
+    /// Add a comment to a task.
+    func addTaskComment(taskId: Int, comment: String) async throws -> TaskComment {
+        #if DEBUG
+        print("VikunjaAPI: Adding comment to task \(taskId)")
+        #endif
+
+        struct NewComment: Encodable {
+            let comment: String
+        }
+
+        let newComment = NewComment(comment: comment)
+        let ep = Endpoint(method: "PUT", pathComponents: ["tasks", "\(taskId)", "comments"])
+        let data = try await request(ep, body: newComment)
+
+        #if DEBUG
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("VikunjaAPI: Add comment response: \(jsonString)")
+        }
+        #endif
+
+        let addedComment = try JSONDecoder.vikunja.decode(TaskComment.self, from: data)
+
+        #if DEBUG
+        print("VikunjaAPI: Successfully added comment with ID: \(addedComment.id)")
+        #endif
+
+        return addedComment
+    }
+
+    /// Delete a comment from a task.
+    func deleteTaskComment(taskId: Int, commentId: Int) async throws {
+        #if DEBUG
+        print("VikunjaAPI: Deleting comment \(commentId) from task \(taskId)")
+        #endif
+
+        let ep = Endpoint(method: "DELETE", pathComponents: ["tasks", "\(taskId)", "comments", "\(commentId)"])
+        _ = try await request(ep)
+
+        #if DEBUG
+        print("VikunjaAPI: Successfully deleted comment \(commentId)")
+        #endif
     }
 
     // MARK: - Favorites

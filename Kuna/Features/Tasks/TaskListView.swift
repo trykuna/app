@@ -94,29 +94,66 @@ extension Color {
 final class TaskListVM: ObservableObject {
     @Published var tasks: [VikunjaTask] = []
     @Published var loading = false
+    @Published var loadingMore = false
     @Published var error: String?
     @Published var isAddingTask = false
+    @Published var hasMoreTasks = true
     private let api: VikunjaAPI
     private let projectId: Int
+    private var currentPage = 1
+    private let tasksPerPage = 50
 
     init(api: VikunjaAPI, projectId: Int) {
         self.api = api; self.projectId = projectId
     }
 
-    func load(queryItems: [URLQueryItem] = []) async {
-        loading = true; defer { loading = false }
-        do {
-            if queryItems.isEmpty {
-                tasks = try await api.fetchTasks(projectId: projectId)
-            } else {
-                tasks = try await api.fetchTasks(projectId: projectId, queryItems: queryItems)
-            }
-            // Write widget cache after successful load
-            WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
-            // Also write to shared file for watch
-            SharedFileManager.shared.writeTasks(tasks, for: projectId)
+    func load(queryItems: [URLQueryItem] = [], resetPagination: Bool = true) async {
+        if resetPagination {
+            loading = true
+            currentPage = 1
+            tasks = []
+            hasMoreTasks = true
+        } else {
+            loadingMore = true
         }
-        catch { self.error = error.localizedDescription }
+
+        defer {
+            loading = false
+            loadingMore = false
+        }
+
+        do {
+            let response = try await api.fetchTasks(
+                projectId: projectId,
+                page: currentPage,
+                perPage: tasksPerPage,
+                queryItems: queryItems
+            )
+
+            if resetPagination {
+                tasks = response.tasks
+            } else {
+                tasks.append(contentsOf: response.tasks)
+            }
+
+            hasMoreTasks = response.hasMore
+            currentPage += 1
+
+            // Write widget cache after successful load (only for first page)
+            if resetPagination {
+                WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
+                // Also write to shared file for watch
+                SharedFileManager.shared.writeTasks(tasks, for: projectId)
+            }
+        }
+        catch {
+            self.error = error.localizedDescription
+        }
+    }
+
+    func loadMoreTasks(queryItems: [URLQueryItem] = []) async {
+        guard hasMoreTasks && !loadingMore else { return }
+        await load(queryItems: queryItems, resetPagination: false)
     }
 
     func toggle(_ task: VikunjaTask) async {
@@ -182,6 +219,7 @@ struct TaskListView: View {
     @StateObject private var vm: TaskListVM
     @StateObject private var settings = AppSettings.shared
     @StateObject private var calendarSync = CalendarSyncService.shared
+    @StateObject private var commentCountManager: CommentCountManager
     @State private var newTaskTitle = ""
     @State private var newTaskDescription = ""
 
@@ -196,6 +234,7 @@ struct TaskListView: View {
         self.api = api
         _vm = StateObject(wrappedValue: TaskListVM(api: api, projectId: project.id))
         _currentSort = State(initialValue: AppSettings.getDefaultSortOption())
+        _commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
     }
 
     var filteredTasks: [VikunjaTask] {
@@ -521,6 +560,36 @@ struct TaskListView: View {
                             }
                         }
                     }
+
+                    // Load More button
+                    if vm.hasMoreTasks && !vm.tasks.isEmpty {
+                        Section {
+                            Button(action: {
+                                Task {
+                                    let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
+                                    await vm.loadMoreTasks(queryItems: query)
+                                }
+                            }) {
+                                HStack {
+                                    if vm.loadingMore {
+                                        ProgressView()
+                                            .scaleEffect(0.8)
+                                        Text("Loading more tasks...")
+                                            .foregroundColor(.secondary)
+                                    } else {
+                                        Image(systemName: "arrow.down.circle")
+                                            .foregroundColor(.blue)
+                                        Text("Load More Tasks")
+                                            .foregroundColor(.blue)
+                                    }
+                                    Spacer()
+                                }
+                                .padding(.vertical, 8)
+                            }
+                            .disabled(vm.loadingMore)
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
             }
         }
@@ -572,13 +641,13 @@ struct TaskListView: View {
         .onAppear {
             Task {
                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
-                await vm.load(queryItems: query)
+                await vm.load(queryItems: query, resetPagination: true)
             }
         }
         .onChange(of: currentFilter) { _, _ in
             Task {
                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
-                await vm.load(queryItems: query)
+                await vm.load(queryItems: query, resetPagination: true)
             }
         }
         .onChange(of: settings.defaultSortOption) { _, newSortOption in
@@ -598,8 +667,8 @@ struct TaskListView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
 
-                // Color ball - only show if task has custom color OR setting allows default colors
-                if t.hasCustomColor || settings.showDefaultColorBalls {
+                // Color ball - only show if task colors are enabled AND (task has custom color OR setting allows default colors)
+                if settings.showTaskColors && (t.hasCustomColor || settings.showDefaultColorBalls) {
                     Circle()
                         .fill(t.color)
                         .frame(width: 12, height: 12)
@@ -609,8 +678,8 @@ struct TaskListView: View {
                         )
                 }
 
-                // Priority icon - only show if not unset
-                if t.priority != .unset {
+                // Priority icon - only show if enabled and not unset
+                if settings.showPriorityIndicators && t.priority != .unset {
                     Image(systemName: t.priority.systemImage)
                         .foregroundColor(t.priority.color)
                         .font(.body)
@@ -622,6 +691,18 @@ struct TaskListView: View {
                         Text(t.title)
                             .strikethrough(t.done)
                             .foregroundColor(.primary)
+
+                        // Paperclip icon for tasks with attachments
+                        if settings.showAttachmentIcons && t.hasAttachments {
+                            Image(systemName: "paperclip")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        // Comment count badge
+                        if settings.showCommentCounts, let commentCount = commentCountManager.getCommentCount(for: t.id), commentCount > 0 {
+                            CommentBadge(commentCount: commentCount)
+                        }
 
                         Spacer()
                     }
@@ -795,7 +876,7 @@ struct TaskListView: View {
                 Task {
                     do {
                         try await api.deleteTask(taskId: t.id)
-                        await vm.load(queryItems: currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []) // Refresh the task list
+                        await vm.load(queryItems: currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : [], resetPagination: true) // Refresh the task list
                     } catch {
                         vm.error = error.localizedDescription
                     }
@@ -804,6 +885,12 @@ struct TaskListView: View {
                 Image(systemName: "trash")
             }
             .tint(.red)
+        }
+        .onAppear {
+            // Load comment count when task appears (only if comment counts are enabled)
+            if settings.showCommentCounts {
+                commentCountManager.loadCommentCount(for: t.id)
+            }
         }
     }
 

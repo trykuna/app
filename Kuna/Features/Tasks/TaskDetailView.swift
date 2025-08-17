@@ -5,7 +5,7 @@ import EventKit
 struct TaskDetailView: View {
     @State private var task: VikunjaTask
     let api: VikunjaAPI
-
+    @StateObject private var commentCountManager: CommentCountManager
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
 
@@ -30,14 +30,21 @@ struct TaskDetailView: View {
     @State private var isOrganizationExpanded = true
     @State private var isAssigneeExpanded = true
     @State private var isStatusExpanded = true
+
     @State private var isCalendarSyncExpanded = true
+    @State private var isAttachmentsExpanded = true
+    @State private var isCommentsExpanded = true
 
     // “Has time” toggles for each date field
     @State private var startHasTime = false
     @State private var dueHasTime = false
     @State private var endHasTime = false
-
-    private let presetColors = [
+        
+    // Other picker states
+    @State private var showPriorityPicker = false
+    @State private var showProgressSlider = false
+    
+        private let presetColors = [
         Color.red, Color.orange, Color.yellow, Color.green,
         Color.blue, Color.purple, Color.pink, Color.gray
     ]
@@ -46,6 +53,7 @@ struct TaskDetailView: View {
         self._task = State(initialValue: task)
         self.api = api
         self._editedDescription = State(initialValue: task.description ?? "")
+        self._commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
     }
 
     var body: some View {
@@ -120,6 +128,25 @@ struct TaskDetailView: View {
                             }
                         }
 
+                        // 6. ATTACHMENTS Section
+                        settingsSection(
+                            title: "ATTACHMENTS",
+                            isExpanded: $isAttachmentsExpanded
+                        ) {
+                            AttachmentsView(task: task, api: api)
+                                .settingsCardStyle()
+                        }
+
+                        // 7. COMMENTS Section
+                        settingsSection(
+                            title: "COMMENTS",
+                            isExpanded: $isCommentsExpanded
+                        ) {
+                            CommentsButtonView(task: task, api: api, commentCountManager: commentCountManager)
+                                .settingsCardStyle()
+                        }
+
+                        // Bottom padding for save bar
                         Spacer(minLength: 100)
                     }
                     .padding(.horizontal, 16)
