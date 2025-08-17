@@ -263,6 +263,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     var createdBy: VikunjaUser? // User who created the task
     var isFavorite: Bool // Whether this task is favorited by the current user
     var projectId: Int? // The ID of the project this task belongs to
+    var updatedAt: Date? // When the task was last updated (for sync)
     
     var color: Color {
         Color(hex: hexColor ?? "007AFF") // Default to blue if no color set
@@ -284,6 +285,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         case createdBy = "created_by"
         case isFavorite = "is_favorite"
         case projectId = "project_id"
+        case updatedAt = "updated_at"
     }
     
     // Custom decoder to handle missing fields gracefully
@@ -359,6 +361,9 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         // Handle favorite status
         isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
 
+        // Handle updated at timestamp
+        updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
+
         #if DEBUG
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
             print("Task \(id) (\(title)) decoded isFavorite: \(favoriteValue)")
@@ -375,7 +380,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     }
 
     // Manual initializer for testing/previews
-    init(id: Int, title: String, description: String? = nil, done: Bool = false, dueDate: Date? = nil, startDate: Date? = nil, endDate: Date? = nil, labels: [Label]? = nil, reminders: [Reminder]? = nil, priority: TaskPriority = .unset, percentDone: Double = 0.0, hexColor: String? = nil, repeatAfter: Int? = nil, repeatMode: RepeatMode = .afterAmount, assignees: [VikunjaUser]? = nil, createdBy: VikunjaUser? = nil, projectId: Int? = nil, isFavorite: Bool = false) {
+    init(id: Int, title: String, description: String? = nil, done: Bool = false, dueDate: Date? = nil, startDate: Date? = nil, endDate: Date? = nil, labels: [Label]? = nil, reminders: [Reminder]? = nil, priority: TaskPriority = .unset, percentDone: Double = 0.0, hexColor: String? = nil, repeatAfter: Int? = nil, repeatMode: RepeatMode = .afterAmount, assignees: [VikunjaUser]? = nil, createdBy: VikunjaUser? = nil, projectId: Int? = nil, isFavorite: Bool = false, updatedAt: Date? = nil) {
         self.id = id
         self.title = title
         self.description = description
@@ -394,6 +399,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         self.createdBy = createdBy
         self.projectId = projectId
         self.isFavorite = isFavorite
+        self.updatedAt = updatedAt
     }
     
     // Custom encoder

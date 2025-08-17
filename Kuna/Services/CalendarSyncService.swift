@@ -6,20 +6,31 @@ import SwiftUI
 @MainActor
 final class CalendarSyncService: ObservableObject {
     static let shared = CalendarSyncService()
-    
+
+    // MARK: - New Engine Integration
+    private let syncEngine = CalendarSyncEngine()
+
+    // MARK: - Legacy Properties (for backward compatibility)
     let eventStore = EKEventStore()
     @Published var authorizationStatus: EKAuthorizationStatus = .notDetermined
     @Published var isCalendarSyncEnabled: Bool = false
     @Published var selectedCalendar: EKCalendar?
     @Published var syncErrors: [String] = []
     @Published var syncSuccessMessage: String?
-    
+
     // Track synced events to avoid duplicates
     private var syncedEventIdentifiers: Set<String> = []
-    
+
     private init() {
         updateAuthorizationStatus()
         loadSettings()
+        setupEngineBinding()
+    }
+
+    private func setupEngineBinding() {
+        // Bind engine state to legacy properties
+        syncEngine.$isEnabled.assign(to: &$isCalendarSyncEnabled)
+        syncEngine.$syncErrors.assign(to: &$syncErrors)
     }
     
     // MARK: - Authorization
@@ -113,7 +124,11 @@ final class CalendarSyncService: ObservableObject {
     // MARK: - Calendar Management
     
     func getAvailableCalendars() -> [EKCalendar] {
-        guard authorizationStatus == .fullAccess || authorizationStatus == .authorized else { return [] }
+        if #available(iOS 17.0, *) {
+            guard authorizationStatus == .fullAccess else { return [] }
+        } else {
+            guard authorizationStatus == .authorized else { return [] }
+        }
         return eventStore.calendars(for: .event).filter { $0.allowsContentModifications }
     }
     
@@ -125,8 +140,15 @@ final class CalendarSyncService: ObservableObject {
     // MARK: - Sync Operations
     
     func syncTaskToCalendar(_ task: VikunjaTask) async -> Bool {
+        let hasAccess: Bool
+        if #available(iOS 17.0, *) {
+            hasAccess = authorizationStatus == .fullAccess
+        } else {
+            hasAccess = authorizationStatus == .authorized
+        }
+
         guard isCalendarSyncEnabled,
-              (authorizationStatus == .fullAccess || authorizationStatus == .authorized),
+              hasAccess,
               let calendar = selectedCalendar else {
             print("📅 Sync failed - Enabled: \(isCalendarSyncEnabled), Auth: \(authorizationStatus), Calendar: \(selectedCalendar?.title ?? "none")")
             return false
@@ -149,7 +171,13 @@ final class CalendarSyncService: ObservableObject {
     }
     
     func removeTaskFromCalendar(_ task: VikunjaTask) async -> Bool {
-        guard authorizationStatus == .fullAccess || authorizationStatus == .authorized else { return false }
+        let hasAccess: Bool
+        if #available(iOS 17.0, *) {
+            hasAccess = authorizationStatus == .fullAccess
+        } else {
+            hasAccess = authorizationStatus == .authorized
+        }
+        guard hasAccess else { return false }
         
         if let existingEvent = findExistingEvent(for: task) {
             do {
@@ -300,8 +328,15 @@ final class CalendarSyncService: ObservableObject {
     // MARK: - Bidirectional Sync
 
     func syncCalendarChangesToTasks(api: VikunjaAPI) async -> [VikunjaTask] {
+        let hasAccess: Bool
+        if #available(iOS 17.0, *) {
+            hasAccess = authorizationStatus == .fullAccess
+        } else {
+            hasAccess = authorizationStatus == .authorized
+        }
+
         guard isCalendarSyncEnabled,
-              (authorizationStatus == .fullAccess || authorizationStatus == .authorized),
+              hasAccess,
               let calendar = selectedCalendar else {
             return []
         }
@@ -416,7 +451,7 @@ final class CalendarSyncService: ObservableObject {
         case .preferTask:
             return await updateCalendarEvent(event, with: task)
         case .preferCalendar:
-            if let updatedTask = updateTaskFromEvent(task, event: event) {
+            if updateTaskFromEvent(task, event: event) != nil {
                 // This would need to be handled by the caller since we don't have API access here
                 return true
             }
@@ -435,5 +470,37 @@ final class CalendarSyncService: ObservableObject {
 
     func clearSuccessMessage() {
         syncSuccessMessage = nil
+    }
+
+    // MARK: - New Engine Methods
+
+    func setAPI(_ api: VikunjaAPI) {
+        syncEngine.setAPI(api)
+    }
+
+    func enableNewSync() async throws {
+        try await syncEngine.enable()
+        isCalendarSyncEnabled = syncEngine.isEnabled
+    }
+
+    func disableNewSync() {
+        syncEngine.disable()
+        isCalendarSyncEnabled = syncEngine.isEnabled
+    }
+
+    func performFullSync() async {
+        await syncEngine.syncNow(mode: .pullOnly)
+    }
+
+    func performTwoWaySync() async {
+        await syncEngine.syncNow(mode: .twoWay)
+    }
+
+    func setReadWriteEnabled(_ enabled: Bool) {
+        syncEngine.setReadWriteEnabled(enabled)
+    }
+
+    func setEnabledLists(_ listIDs: [String]) {
+        syncEngine.setEnabledLists(listIDs)
     }
 }

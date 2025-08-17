@@ -5,24 +5,24 @@ import EventKit
 struct TaskDetailView: View {
     @State private var task: VikunjaTask
     let api: VikunjaAPI
+
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
-    @StateObject private var calendarSync = CalendarSyncService.shared
+
     @StateObject private var settings = AppSettings.shared
+    @StateObject private var calendarSync = CalendarSyncService.shared
+    @StateObject private var engine = CalendarSyncEngine()   // ✅ new sync engine
+
     @State private var isEditing = false
     @State private var hasChanges = false
     @State private var isUpdating = false
     @State private var updateError: String?
     @State private var isUpdatingFavorite = false
-    
+
     // Editing state
     @State private var editedDescription = ""
     @State private var availableLabels: [Label] = []
     @State private var showingLabelPicker = false
-    
-    // Calendar sync state
-    @State private var isTaskSyncedToCalendar = false
-    @State private var isSyncingToCalendar = false
 
     // Section collapse states
     @State private var isTaskInfoExpanded = true
@@ -31,89 +31,67 @@ struct TaskDetailView: View {
     @State private var isAssigneeExpanded = true
     @State private var isStatusExpanded = true
     @State private var isCalendarSyncExpanded = true
-    
-    // Date picker states
-    @State private var showStartDatePicker = false
-    @State private var showDueDatePicker = false
-    @State private var showEndDatePicker = false
-    
-    // Other picker states
-    @State private var showPriorityPicker = false
-    @State private var showProgressSlider = false
-    
+
+    // “Has time” toggles for each date field
+    @State private var startHasTime = false
+    @State private var dueHasTime = false
+    @State private var endHasTime = false
+
     private let presetColors = [
         Color.red, Color.orange, Color.yellow, Color.green,
         Color.blue, Color.purple, Color.pink, Color.gray
     ]
-    
+
     init(task: VikunjaTask, api: VikunjaAPI) {
         self._task = State(initialValue: task)
         self.api = api
         self._editedDescription = State(initialValue: task.description ?? "")
     }
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 ScrollView {
                     LazyVStack(spacing: 20) {
-                        // 1. TASK INFO Section
-                        settingsSection(
-                            title: "TASK INFO",
-                            isExpanded: $isTaskInfoExpanded
-                        ) {
+                        // 1. TASK INFO
+                        settingsSection(title: "TASK INFO", isExpanded: $isTaskInfoExpanded) {
                             VStack(spacing: 0) {
                                 titleRow
-                                Divider()
-                                    .padding(.leading, 16)
+                                Divider().padding(.leading, 16)
                                 descriptionRow
                             }
                             .settingsCardStyle()
                         }
-                        
-                        // 2. SCHEDULING Section
-                        settingsSection(
-                            title: "SCHEDULING",
-                            isExpanded: $isSchedulingExpanded
-                        ) {
+
+                        // 2. SCHEDULING
+                        settingsSection(title: "SCHEDULING", isExpanded: $isSchedulingExpanded) {
                             VStack(spacing: 0) {
                                 startDateRow
-                                Divider()
-                                    .padding(.leading, 50)
+                                Divider().padding(.leading, 50)
                                 dueDateRow
-                                Divider()
-                                    .padding(.leading, 50)
+                                Divider().padding(.leading, 50)
                                 endDateRow
-                                Divider()
-                                    .padding(.leading, 16)
+                                Divider().padding(.leading, 16)
                                 remindersRow
-                                Divider()
-                                    .padding(.leading, 16)
+                                Divider().padding(.leading, 16)
                                 repeatRow
                             }
                             .settingsCardStyle()
                         }
-                        
-                        // 3. ORGANIZATION Section
-                        settingsSection(
-                            title: "ORGANIZATION",
-                            isExpanded: $isOrganizationExpanded
-                        ) {
+
+                        // 3. ORGANIZATION
+                        settingsSection(title: "ORGANIZATION", isExpanded: $isOrganizationExpanded) {
                             VStack(spacing: 0) {
                                 labelsRow
-                                Divider()
-                                    .padding(.leading, 16)
+                                Divider().padding(.leading, 16)
                                 colorRow
                             }
                             .settingsCardStyle()
                         }
 
-                        // 4. ASSIGNEES Section (only show if user management is available or task has assignees)
+                        // 4. ASSIGNEES
                         if appState.canManageUsers || !(task.assignees?.isEmpty ?? true) || task.createdBy != nil {
-                            settingsSection(
-                                title: "ASSIGNEES",
-                                isExpanded: $isAssigneeExpanded
-                            ) {
+                            settingsSection(title: "ASSIGNEES", isExpanded: $isAssigneeExpanded) {
                                 TaskAssigneeView(
                                     task: $task,
                                     api: api,
@@ -124,40 +102,32 @@ struct TaskDetailView: View {
                             }
                         }
 
-                        // 5. STATUS Section
-                        settingsSection(
-                            title: "STATUS",
-                            isExpanded: $isStatusExpanded
-                        ) {
+                        // 5. STATUS
+                        settingsSection(title: "STATUS", isExpanded: $isStatusExpanded) {
                             VStack(spacing: 0) {
                                 priorityRow
-                                Divider()
-                                    .padding(.leading, 16)
+                                Divider().padding(.leading, 16)
                                 progressRow
                             }
                             .settingsCardStyle()
                         }
 
-                        // 6. CALENDAR SYNC Section (only show if calendar sync is enabled)
+                        // 6. CALENDAR SYNC (status-only; saves auto-sync now)
                         if settings.calendarSyncEnabled {
-                            settingsSection(
-                                title: "CALENDAR SYNC",
-                                isExpanded: $isCalendarSyncExpanded
-                            ) {
-                                calendarSyncSection
+                            settingsSection(title: "CALENDAR SYNC", isExpanded: $isCalendarSyncExpanded) {
+                                calendarSyncStatusRow
                                     .settingsCardStyle()
                             }
                         }
 
-                        // Bottom padding for save bar
                         Spacer(minLength: 100)
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
                 }
                 .background(Color(UIColor.systemGroupedBackground))
-                
-                // Single Save/Cancel Bar at bottom
+
+                // Save/Cancel Bar
                 if isEditing && hasChanges {
                     saveBar
                 }
@@ -167,7 +137,6 @@ struct TaskDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
-                        // Favorite button
                         Button(action: toggleFavorite) {
                             Image(systemName: task.isFavorite ? "star.fill" : "star")
                                 .foregroundColor(task.isFavorite ? .yellow : .gray)
@@ -189,37 +158,30 @@ struct TaskDetailView: View {
             }
         }
         .onAppear {
-            checkCalendarSyncStatus()
-        }
-        .alert("Calendar Sync", isPresented: .constant(calendarSync.syncSuccessMessage != nil)) {
-            Button("OK") {
-                calendarSync.clearSuccessMessage()
+            // init calendar engine
+            if let api = appState.api as? CalendarSyncAPI {
+                engine.setAPI(api)
             }
-        } message: {
-            if let message = calendarSync.syncSuccessMessage {
-                Text(message)
-            }
+            // seed “hasTime” flags from existing dates
+            startHasTime = hasTime(task.startDate)
+            dueHasTime   = !(task.isAllDay) && hasTime(task.dueDate)
+            endHasTime   = hasTime(task.endDate)
         }
     }
-    
-    // MARK: - Settings-Style Rows
-    
+
+    // MARK: - Rows
+
     private var titleRow: some View {
         HStack {
             Text("Title")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
             Spacer()
-            
             if isEditing {
                 TextField("Task title", text: $task.title)
                     .multilineTextAlignment(.trailing)
                     .foregroundColor(.secondary)
-                    .onChange(of: task.title) { _, _ in
-                        hasChanges = true
-                    }
+                    .onChange(of: task.title) { _, _ in hasChanges = true }
             } else {
                 Text(task.title)
                     .foregroundColor(.secondary)
@@ -229,24 +191,19 @@ struct TaskDetailView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
     private var descriptionRow: some View {
         HStack(alignment: .top) {
             Text("Description")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
             Spacer()
-            
             if isEditing {
                 TextField("Enter description...", text: $editedDescription, axis: .vertical)
                     .multilineTextAlignment(.trailing)
                     .foregroundColor(.secondary)
                     .lineLimit(1...4)
-                    .onChange(of: editedDescription) { _, _ in
-                        hasChanges = true
-                    }
+                    .onChange(of: editedDescription) { _, _ in hasChanges = true }
             } else {
                 Text(task.description ?? "No description")
                     .foregroundColor(task.description == nil ? .secondary.opacity(0.6) : .secondary)
@@ -256,104 +213,177 @@ struct TaskDetailView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
+    // --- Scheduling rows with Date-only / Date & Time support ---
+
     private var startDateRow: some View {
-        dateRow(
+        editableDateRow(
             title: "Start Date",
             date: task.startDate,
-            systemImage: "calendar"
-        ) { newDate in
-            task.startDate = newDate
-            hasChanges = true
-        }
+            hasTime: $startHasTime,
+            onChange: { newDate in
+                if let d = newDate {
+                    task.startDate = startHasTime ? d : d.startOfDayLocal
+                } else {
+                    task.startDate = nil
+                }
+                hasChanges = true
+            }
+        )
     }
-    
+
     private var dueDateRow: some View {
-        dateRow(
+        editableDateRow(
             title: "Due Date",
             date: task.dueDate,
-            systemImage: "calendar"
-        ) { newDate in
-            task.dueDate = newDate
-            hasChanges = true
-        }
+            hasTime: $dueHasTime,
+            onChange: { newDate in
+                if let d = newDate {
+                    if dueHasTime {
+                        task.isAllDay = false
+                        task.dueDate = d
+                    } else {
+                        task.isAllDay = true
+                        task.dueDate = d.startOfDayLocal
+                    }
+                } else {
+                    task.dueDate = nil
+                }
+                hasChanges = true
+            }
+        )
     }
-    
+
     private var endDateRow: some View {
-        dateRow(
+        editableDateRow(
             title: "End Date",
             date: task.endDate,
-            systemImage: "calendar"
-        ) { newDate in
-            task.endDate = newDate
-            hasChanges = true
-        }
+            hasTime: $endHasTime,
+            onChange: { newDate in
+                if let d = newDate {
+                    task.endDate = endHasTime ? d : d.startOfDayLocal
+                } else {
+                    task.endDate = nil
+                }
+                hasChanges = true
+            }
+        )
     }
-    
-    private func dateRow(
+
+    /// A date editor that:
+    /// - shows an "Add <title>" button when date is nil (no auto-fill to 'now')
+    /// - supports Date-only vs Date&Time via a segmented control
+    private func editableDateRow(
         title: String,
         date: Date?,
-        systemImage: String,
-        onDateChange: @escaping (Date?) -> Void
+        hasTime: Binding<Bool>,
+        onChange: @escaping (Date?) -> Void
     ) -> some View {
-        HStack {
-            Image(systemName: systemImage)
-                .foregroundColor(.accentColor)
-                .font(.body)
-                .frame(width: 20)
-            
-            Text(title)
-                .font(.body)
-                .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
-            Spacer()
-            
-            if isEditing {
-                DatePicker("", selection: Binding(
-                    get: { date ?? Date() },
-                    set: { onDateChange($0) }
-                ), displayedComponents: [.date, .hourAndMinute])
-                .labelsHidden()
-                
-                if date != nil {
-                    Button(action: { onDateChange(nil) }) {
+        VStack(spacing: 8) {
+            HStack {
+                Image(systemName: "calendar")
+                    .foregroundColor(.accentColor)
+                    .font(.body)
+                    .frame(width: 20)
+                Text(title)
+                    .font(.body)
+                    .fontWeight(.medium)
+                Spacer()
+                if isEditing, date != nil {
+                    Button {
+                        onChange(nil)
+                    } label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.secondary)
                             .font(.caption)
                     }
                 }
-            } else {
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
+
+            if isEditing {
                 if let date = date {
-                    Text(date, style: .date)
-                        .foregroundColor(.secondary)
+                    // Mode picker
+                    Picker("", selection: hasTime) {
+                        Text("Date").tag(false)
+                        Text("Date & Time").tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal, 16)
+                    .onChange(of: hasTime.wrappedValue) { _, includeTime in
+                        if var d = dateOrToday(date) {
+                            if !includeTime { d = d.startOfDayLocal }
+                            onChange(d)
+                        }
+                    }
+
+                    // Actual picker
+                    DatePicker(
+                        "",
+                        selection: Binding(
+                            get: { date },
+                            set: { newVal in
+                                var v = newVal
+                                if !hasTime.wrappedValue { v = newVal.startOfDayLocal }
+                                onChange(v)
+                            }
+                        ),
+                        displayedComponents: hasTime.wrappedValue ? [.date, .hourAndMinute] : [.date]
+                    )
+                    .labelsHidden()
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
                 } else {
-                    Text("Not set")
-                        .foregroundColor(.secondary.opacity(0.6))
+                    // No date yet: let user add one (default to midnight today)
+                    Button {
+                        hasTime.wrappedValue = false
+                        onChange(Date().startOfDayLocal)
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.accentColor)
+                            Text("Add \(title)")
+                                .foregroundColor(.accentColor)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                    }
+                    .buttonStyle(.plain)
                 }
+            } else {
+                HStack {
+                    Spacer()
+                    if let d = date {
+                        if hasTime.wrappedValue {
+                            Text(d.formatted(date: .abbreviated, time: .shortened))
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text(d.formatted(date: .abbreviated, time: .omitted))
+                                .foregroundColor(.secondary)
+                        }
+                    } else {
+                        Text("Not set").foregroundColor(.secondary.opacity(0.6))
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
     }
-    
+
     private var remindersRow: some View {
         HStack {
             Text("Reminders")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
             Spacer()
-            
             if let reminders = task.reminders, !reminders.isEmpty {
-                Text("\(reminders.count)")
-                    .foregroundColor(.secondary)
+                Text("\(reminders.count)").foregroundColor(.secondary)
             } else {
-                Text("None")
-                    .foregroundColor(.secondary.opacity(0.6))
+                Text("None").foregroundColor(.secondary.opacity(0.6))
             }
-            
             if isEditing {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.secondary.opacity(0.6))
@@ -363,24 +393,18 @@ struct TaskDetailView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
     private var repeatRow: some View {
         HStack {
             Text("Repeat")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
             Spacer()
-            
             if let repeatAfter = task.repeatAfter, repeatAfter > 0 {
-                Text(task.repeatMode.displayName)
-                    .foregroundColor(.secondary)
+                Text(task.repeatMode.displayName).foregroundColor(.secondary)
             } else {
-                Text("Never")
-                    .foregroundColor(.secondary.opacity(0.6))
+                Text("Never").foregroundColor(.secondary.opacity(0.6))
             }
-            
             if isEditing {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.secondary.opacity(0.6))
@@ -390,16 +414,13 @@ struct TaskDetailView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
     private var labelsRow: some View {
         HStack(alignment: .center) {
             Text("Labels")
                 .font(.body)
                 .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
             Spacer()
-            
             if let labels = task.labels, !labels.isEmpty {
                 HStack(spacing: 4) {
                     ForEach(labels.prefix(3)) { label in
@@ -418,10 +439,8 @@ struct TaskDetailView: View {
                     }
                 }
             } else {
-                Text("None")
-                    .foregroundColor(.secondary.opacity(0.6))
+                Text("None").foregroundColor(.secondary.opacity(0.6))
             }
-            
             if isEditing {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.secondary.opacity(0.6))
@@ -438,16 +457,11 @@ struct TaskDetailView: View {
             }
         }
     }
-    
+
     private var colorRow: some View {
         HStack {
-            Text("Color")
-                .font(.body)
-                .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
+            Text("Color").font(.body).fontWeight(.medium)
             Spacer()
-            
             if isEditing {
                 HStack(spacing: 8) {
                     ForEach(presetColors, id: \.self) { color in
@@ -468,225 +482,152 @@ struct TaskDetailView: View {
                 Circle()
                     .fill(task.color)
                     .frame(width: 24, height: 24)
-                    .overlay(
-                        Circle()
-                            .stroke(Color.primary.opacity(0.2), lineWidth: 1)
-                    )
+                    .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 1))
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
     private var priorityRow: some View {
         HStack {
-            Text("Priority")
-                .font(.body)
-                .fontWeight(.medium)
-                .foregroundColor(.primary)
-            
+            Text("Priority").font(.body).fontWeight(.medium)
             Spacer()
-            
             if isEditing {
                 Picker("Priority", selection: $task.priority) {
-                    ForEach(TaskPriority.allCases) { priority in
+                    ForEach(TaskPriority.allCases) { p in
                         HStack {
-                            Image(systemName: priority.systemImage)
-                                .foregroundColor(priority.color)
-                            Text(priority.displayName)
+                            Image(systemName: p.systemImage).foregroundColor(p.color)
+                            Text(p.displayName)
                         }
-                        .tag(priority)
+                        .tag(p)
                     }
                 }
                 .pickerStyle(.menu)
-                .onChange(of: task.priority) { _, _ in
-                    hasChanges = true
-                }
+                .onChange(of: task.priority) { _, _ in hasChanges = true }
             } else {
                 HStack(spacing: 6) {
                     Image(systemName: task.priority.systemImage)
                         .foregroundColor(task.priority.color)
                         .font(.body)
-                    
-                    Text(task.priority.displayName)
-                        .foregroundColor(.secondary)
+                    Text(task.priority.displayName).foregroundColor(.secondary)
                 }
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-    
+
     private var progressRow: some View {
         VStack(spacing: 8) {
             HStack {
-                Text("Progress")
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
-                
+                Text("Progress").font(.body).fontWeight(.medium)
                 Spacer()
-                
-                Text("\(Int(task.percentDone * 100))%")
-                    .foregroundColor(.secondary)
+                Text("\(Int(task.percentDone * 100))%").foregroundColor(.secondary)
             }
-            
             if isEditing {
                 Slider(value: Binding(
                     get: { task.percentDone },
-                    set: { newValue in
-                        task.percentDone = newValue
-                        hasChanges = true
-                    }
+                    set: { v in task.percentDone = v; hasChanges = true }
                 ), in: 0...1, step: 0.05)
-                .accentColor(.accentColor)
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
 
-    // MARK: - Calendar Sync Section
+    // MARK: - Calendar sync status row
 
-    private var calendarSyncSection: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Image(systemName: "calendar.badge.plus")
-                    .foregroundColor(.green)
-                    .font(.body)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Sync to Calendar")
-                        .font(.body)
-                        .fontWeight(.medium)
-                        .foregroundColor(.primary)
-
-                    if calendarSync.authorizationStatus != .fullAccess && calendarSync.authorizationStatus != .authorized {
-                        Text("Calendar access required")
-                            .font(.caption)
-                            .foregroundColor(.orange)
-                    } else if calendarSync.selectedCalendar == nil {
-                        Text("Select a calendar in Settings")
-                            .font(.caption)
-                            .foregroundColor(.orange)
-                    } else if !hasTaskDates {
-                        Text("Task needs dates to sync")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text(isTaskSyncedToCalendar ? "Synced to calendar" : "Not synced")
-                            .font(.caption)
-                            .foregroundColor(isTaskSyncedToCalendar ? .green : .secondary)
-                    }
-                }
-
-                Spacer()
-
-                if isSyncingToCalendar {
-                    ProgressView()
-                        .scaleEffect(0.8)
+    private var calendarSyncStatusRow: some View {
+        HStack {
+            Image(systemName: "calendar").foregroundColor(.blue)
+            VStack(alignment: .leading, spacing: 2) {
+                if hasTaskDates {
+                    Text("This task will sync automatically on save")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 } else {
-                    Button(action: toggleCalendarSync) {
-                        Image(systemName: isTaskSyncedToCalendar ? "calendar.badge.minus" : "calendar.badge.plus")
-                            .foregroundColor(isTaskSyncedToCalendar ? .red : .green)
-                            .font(.body)
-                    }
-                    .disabled(!canSyncToCalendar)
+                    Text("Task has no dates to sync")
+                        .font(.caption)
+                        .foregroundColor(.orange)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            Spacer()
+            Image(systemName: hasTaskDates ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                .foregroundColor(hasTaskDates ? .green : .orange)
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 
-    // MARK: - Calendar Sync Helpers
+    // MARK: - Save / API
 
     private var hasTaskDates: Bool {
         task.startDate != nil || task.dueDate != nil || task.endDate != nil
     }
 
-    private var canSyncToCalendar: Bool {
-        settings.calendarSyncEnabled &&
-        (calendarSync.authorizationStatus == .fullAccess || calendarSync.authorizationStatus == .authorized) &&
-        calendarSync.selectedCalendar != nil &&
-        (hasTaskDates || !settings.syncTasksWithDatesOnly)
+    private func saveChanges() async {
+        isUpdating = true
+        defer { isUpdating = false }
+
+        task.description = editedDescription.isEmpty ? nil : editedDescription
+
+        do {
+            task = try await api.updateTask(task)
+            hasChanges = false
+            isEditing = false
+
+            // ✅ Trigger calendar sync automatically
+            if settings.calendarSyncEnabled {
+                await engine.syncNow(mode: .twoWay)
+            }
+        } catch {
+            updateError = error.localizedDescription
+        }
     }
 
-    private func toggleCalendarSync() {
-        guard !isSyncingToCalendar else { return }
+    private func reloadTask() async {
+        do {
+            task = try await api.getTask(taskId: task.id)
+            editedDescription = task.description ?? ""
+            hasChanges = false
+            // refresh hasTime flags
+            startHasTime = hasTime(task.startDate)
+            dueHasTime   = !(task.isAllDay) && hasTime(task.dueDate)
+            endHasTime   = hasTime(task.endDate)
+        } catch {
+            updateError = error.localizedDescription
+        }
+    }
 
-        isSyncingToCalendar = true
+    private func loadAvailableLabels() async {
+        do {
+            availableLabels = try await api.fetchLabels()
+        } catch {
+            print("Failed to load labels: \(error)")
+        }
+    }
 
+    private func toggleFavorite() {
+        isUpdatingFavorite = true
         Task {
-            let success: Bool
-            if isTaskSyncedToCalendar {
-                success = await calendarSync.removeTaskFromCalendar(task)
-            } else {
-                success = await calendarSync.syncTaskToCalendar(task)
-            }
-
-            await MainActor.run {
-                if success {
-                    isTaskSyncedToCalendar.toggle()
+            do {
+                let updatedTask = try await api.toggleTaskFavorite(task: task)
+                await MainActor.run {
+                    task = updatedTask
+                    isUpdatingFavorite = false
                 }
-                isSyncingToCalendar = false
+            } catch {
+                await MainActor.run {
+                    updateError = error.localizedDescription
+                    isUpdatingFavorite = false
+                }
             }
         }
     }
 
-    private func checkCalendarSyncStatus() {
-        guard settings.calendarSyncEnabled,
-              (calendarSync.authorizationStatus == .fullAccess || calendarSync.authorizationStatus == .authorized),
-              let calendar = calendarSync.selectedCalendar else {
-            isTaskSyncedToCalendar = false
-            return
-        }
+    // MARK: - Section wrapper
 
-        // Check if task has a corresponding calendar event
-        Task {
-            let eventStore = calendarSync.eventStore
-            let predicate = eventStore.predicateForEvents(
-                withStart: Date().addingTimeInterval(-365 * 24 * 60 * 60), // 1 year ago
-                end: Date().addingTimeInterval(365 * 24 * 60 * 60), // 1 year from now
-                calendars: [calendar]
-            )
-
-            let events = eventStore.events(matching: predicate)
-            let hasEvent = events.contains { event in
-                event.url?.absoluteString == "kuna://task/\(task.id)"
-            }
-
-            await MainActor.run {
-                isTaskSyncedToCalendar = hasEvent
-            }
-        }
-    }
-
-    // MARK: - Save Bar
-    
-    private var saveBar: some View {
-        HStack(spacing: 16) {
-            Button("Cancel") {
-                // Revert changes
-                Task { await reloadTask() }
-                isEditing = false
-            }
-            .buttonStyle(.bordered)
-            
-            Spacer()
-            
-            Button("Save Changes") {
-                Task { await saveChanges() }
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(isUpdating)
-        }
-        .padding()
-        .background(.regularMaterial)
-    }
-    
-    // MARK: - Helper Functions
-    
     @ViewBuilder
     private func settingsSection<Content: View>(
         title: String,
@@ -694,7 +635,6 @@ struct TaskDetailView: View {
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Settings-style section header
             Button(action: {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isExpanded.wrappedValue.toggle()
@@ -706,9 +646,7 @@ struct TaskDetailView: View {
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                         .textCase(.uppercase)
-                    
                     Spacer()
-                    
                     Image(systemName: "chevron.right")
                         .foregroundColor(.secondary)
                         .font(.caption)
@@ -718,77 +656,22 @@ struct TaskDetailView: View {
                 .padding(.horizontal, 16)
             }
             .buttonStyle(.plain)
-            
-            // Section Content
+
             if isExpanded.wrappedValue {
                 content()
             }
         }
     }
-    
-    // MARK: - API Functions
-    
-    private func saveChanges() async {
-        isUpdating = true
-        defer { isUpdating = false }
-        
-        // Update description
-        task.description = editedDescription.isEmpty ? nil : editedDescription
-        
-        do {
-            task = try await api.updateTask(task)
-            hasChanges = false
-            isEditing = false
-        } catch {
-            updateError = error.localizedDescription
-        }
-    }
-    
-    private func reloadTask() async {
-        do {
-            task = try await api.getTask(taskId: task.id)
-            editedDescription = task.description ?? ""
-            hasChanges = false
-        } catch {
-            updateError = error.localizedDescription
-        }
-    }
-    
-    private func loadAvailableLabels() async {
-        do {
-            availableLabels = try await api.fetchLabels()
-        } catch {
-            print("Failed to load labels: \(error)")
-        }
-    }
-
-    private func toggleFavorite() {
-        isUpdatingFavorite = true
-
-        Task {
-            do {
-                #if DEBUG
-                print("TaskDetailView: Toggling favorite for task \(task.id): \(task.title), current state: \(task.isFavorite)")
-                #endif
-                let updatedTask = try await api.toggleTaskFavorite(task: task)
-                await MainActor.run {
-                    #if DEBUG
-                    print("TaskDetailView: Task \(task.id) favorite status changed to: \(updatedTask.isFavorite)")
-                    #endif
-                    task = updatedTask
-                    isUpdatingFavorite = false
-                }
-            } catch {
-                await MainActor.run {
-                    #if DEBUG
-                    print("TaskDetailView: Error toggling favorite for task \(task.id): \(error)")
-                    #endif
-                    updateError = error.localizedDescription
-                    isUpdatingFavorite = false
-                }
-            }
-        }
-    }
 }
 
-// Extensions are defined in TaskListView.swift
+// MARK: - Small helpers
+
+private func hasTime(_ date: Date?) -> Bool {
+    guard let d = date else { return false }
+    let comps = Calendar.current.dateComponents([.hour, .minute, .second], from: d)
+    return (comps.hour ?? 0) != 0 || (comps.minute ?? 0) != 0 || (comps.second ?? 0) != 0
+}
+
+private func dateOrToday(_ date: Date?) -> Date? {
+    date ?? Date().startOfDayLocal
+}

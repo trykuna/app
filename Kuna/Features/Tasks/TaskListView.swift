@@ -164,7 +164,7 @@ final class TaskListVM: ObservableObject {
             if settings.calendarSyncEnabled && settings.autoSyncNewTasks {
                 let hasRequiredDates = newTask.startDate != nil || newTask.dueDate != nil || newTask.endDate != nil
                 if hasRequiredDates || !settings.syncTasksWithDatesOnly {
-                    await calendarSync.syncTaskToCalendar(newTask)
+                    let _ = await calendarSync.syncTaskToCalendar(newTask)
                 }
             }
 
@@ -814,7 +814,14 @@ struct TaskListView: View {
     }
 
     private func isTaskSyncedToCalendar(_ task: VikunjaTask) -> Bool {
-        guard (calendarSync.authorizationStatus == .fullAccess || calendarSync.authorizationStatus == .authorized),
+        let hasAccess: Bool
+        if #available(iOS 17.0, *) {
+            hasAccess = calendarSync.authorizationStatus == .fullAccess
+        } else {
+            hasAccess = calendarSync.authorizationStatus == .authorized
+        }
+
+        guard hasAccess,
               let calendar = calendarSync.selectedCalendar else {
             return false
         }

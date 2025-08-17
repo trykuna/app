@@ -33,7 +33,7 @@ final class CalendarSyncManager: ObservableObject {
             await syncTasksToCalendar(tasks)
             
             // Step 3: Check for calendar changes and sync back to tasks (bidirectional)
-            let updatedTasks = await calendarSync.syncCalendarChangesToTasks(api: api)
+            let _ = await calendarSync.syncCalendarChangesToTasks(api: api)
             
             // Step 4: Handle any conflicts
             await detectAndHandleConflicts(tasks: tasks, api: api)
