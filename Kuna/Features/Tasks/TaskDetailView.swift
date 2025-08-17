@@ -142,6 +142,16 @@ struct TaskDetailView: View {
                                 .settingsCardStyle()
                         }
 
+
+                        // 7. RELATED TASKS
+                        settingsSection(
+                            title: "RELATED TASKS",
+                            isExpanded: .constant(true)
+                        ) {
+                            RelatedTasksButtonView(task: $task, api: api)
+                                .settingsCardStyle()
+                        }
+
                         // 7. COMMENTS Section
                         settingsSection(
                             title: "COMMENTS",
