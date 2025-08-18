@@ -739,7 +739,7 @@ struct TaskDetailView: View {
         do {
             availableLabels = try await api.fetchLabels()
         } catch {
-            print("Failed to load labels: \(error)")
+            Log.app.error("Failed to load labels: \(String(describing: error), privacy: .public)")
         }
     }
 

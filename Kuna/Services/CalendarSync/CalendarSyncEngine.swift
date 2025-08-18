@@ -143,7 +143,7 @@ final class CalendarSyncEngine: ObservableObject {
             )
         }
 
-        print("📅 Pull sync completed for window: \(window), processed \(tasks.count) tasks")
+        Log.app.debug("📅 Pull sync completed for window: \(String(describing: window), privacy: .public), processed \(tasks.count, privacy: .public) tasks")
     }
 
     private func performPush(calendar: EKCalendar) async throws {
@@ -166,7 +166,7 @@ final class CalendarSyncEngine: ObservableObject {
         }
 
         syncState.lastLocalScanAt = Date()
-        print("📅 Push sync completed, processed \(patches.count) changes")
+        Log.app.debug("📅 Push sync completed, processed \(patches.count, privacy: .public) changes")
     }
 
     // MARK: - Event Operations
@@ -228,7 +228,7 @@ final class CalendarSyncEngine: ObservableObject {
             try calendarManager.save(event)
         }
 
-        print("📅 Processed patch for task \(patch.id)")
+        Log.app.debug("📅 Processed patch for task \(patch.id, privacy: .public)")
     }
 
     // MARK: - Event Store Notifications

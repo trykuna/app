@@ -400,16 +400,20 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         }
 
         #if DEBUG
+        let idVal = id
+        let titleVal = title
+        let projectIdVal = projectId
+
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
-            print("Task \(id) (\(title)) decoded isFavorite: \(favoriteValue)")
+            Log.app.debug("Decoded isFavorite for task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public): \(favoriteValue, privacy: .public)")
         } else {
-            print("Task \(id) (\(title)) has no isFavorite field, defaulting to false")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no isFavorite field, defaulting to false")
         }
 
-        if let projectIdValue = projectId {
-            print("Task \(id) (\(title)) belongs to project ID: \(projectIdValue)")
+        if let projectIdValue = projectIdVal {
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) belongs to project ID: \(projectIdValue, privacy: .public)")
         } else {
-            print("Task \(id) (\(title)) has no project ID")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no project ID")
         }
         #endif
     }

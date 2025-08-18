@@ -160,7 +160,7 @@ struct CommentsView: View {
                     // Task has no comments - this is normal, not an error
                     comments = []
                     #if DEBUG
-                    print("CommentsView: Task \(task.id) has no comments (404/not found)")
+                    Log.app.debug("CommentsView: Task id=\(task.id, privacy: .public) has no comments (404/not found)")
                     #endif
                 } else {
                     // This is a real error that should be shown to the user

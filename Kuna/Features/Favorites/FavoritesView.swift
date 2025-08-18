@@ -18,7 +18,7 @@ struct FavoritesView: View {
 
     var body: some View {
         Group {
-            if isLoading {
+            if isLoading && favoriteTasks.isEmpty {
                 VStack(spacing: 16) {
                     ProgressView().scaleEffect(1.2)
                     Text("Loading favorites…").foregroundColor(.secondary)
@@ -34,7 +34,6 @@ struct FavoritesView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             loadFavorites()
-            // preload comment counts for already-fetched favorites
             if AppSettings.shared.showCommentCounts {
                 commentCountManager.loadCommentCounts(for: favoriteTasks.map { $0.id })
             }
@@ -82,11 +81,6 @@ struct FavoritesView: View {
                     Text("Tap the star icon on any task to add it to favorites")
                         .font(.caption).foregroundColor(.secondary)
                 }
-                HStack(spacing: 8) {
-                    Image(systemName: "heart.fill").foregroundColor(.red)
-                    Text("Favorite tasks sync across all your devices")
-                        .font(.caption).foregroundColor(.secondary)
-                }
             }
             .padding(.top, 8)
         }
@@ -115,7 +109,6 @@ struct FavoritesView: View {
                     showingTaskDetail = true
                 }
                 .onAppear {
-                    // Load comment count when task appears (only if comment counts are enabled)
                     let settings = AppSettings.shared
                     if settings.showCommentCounts {
                         commentCountManager.loadCommentCount(for: task.id)
@@ -133,25 +126,44 @@ struct FavoritesView: View {
     private func loadFavorites() {
         isLoading = true
         error = nil
+
         Task {
+            let t0 = Date()
+            var outcome = "success"
+
             do {
                 async let favoritesTask = api.getFavoriteTasks()
                 async let projectsTask = api.fetchProjects()
                 let (tasks, allProjects) = try await (favoritesTask, projectsTask)
+
                 await MainActor.run {
                     projects = allProjects
                     favoriteTasks = tasks.sorted { a, b in
-                        if a.done != b.done { return !a.done && b.done }
+                        if a.done != b.done { return !a.done && b.done } // undone first
                         return a.title.localizedCaseInsensitiveCompare(b.title) == .orderedAscending
                     }
                     isLoading = false
                 }
+            } catch is CancellationError {
+                outcome = "cancelled"
+                await MainActor.run { isLoading = false }
             } catch {
+                outcome = "failure"
                 await MainActor.run {
                     self.error = error.localizedDescription
                     isLoading = false
                 }
             }
+
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.track(
+                "Favorites.Fetch.View",
+                parameters: [
+                    "duration_ms": String(Int(ms)),
+                    "outcome": outcome
+                ],
+                floatValue: ms
+            )
         }
     }
 }
@@ -173,82 +185,79 @@ struct FavoriteTaskRow: View {
     }
     
     var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 12) {
-                Button(action: {
-                    // TODO: Implement task completion toggle
-                }) {
-                    Image(systemName: task.done ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(task.done ? .green : .gray)
-                        .font(.title3)
-                }
-                .buttonStyle(.plain)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Text(task.title)
-                            .font(.body)
-                            .foregroundColor(task.done ? .secondary : .primary)
-                            .strikethrough(task.done)
-
-                        // Paperclip icon for tasks with attachments
-                        if settings.showAttachmentIcons && task.hasAttachments {
-                            Image(systemName: "paperclip")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        // Comment count badge (always show, using 0 until loaded)
-                        if settings.showCommentCounts {
-                            let count = commentCountManager.getCommentCount(for: task.id) ?? 0
-                            CommentBadge(commentCount: count)
-                        }
-
-                        Spacer()
-                    }
-
-                    if let project = project {
-                        HStack(spacing: 4) {
-                            Image(systemName: "folder").font(.caption2)
-                            Text(project.title).font(.caption)
-                        }
-                        .foregroundColor(.secondary)
-                    }
-
-                    HStack(spacing: 8) {
-                        if let dueDate = task.dueDate {
-                            HStack(spacing: 4) {
-                                Image(systemName: "calendar")
-                                Text(dueDate, style: .date)
-                            }
-                            .font(.caption2)
-                            .foregroundColor(dueDate < Date() ? .red : .orange)
-                        }
-                        if let assignees = task.assignees, !assignees.isEmpty {
-                            HStack(spacing: 4) {
-                                Image(systemName: "person.2.fill")
-                                Text("\(assignees.count)")
-                            }
-                            .font(.caption2)
-                            .foregroundColor(.blue)
-                        }
-                    }
-                }
-                
-                Spacer()
-                
-                Button(action: toggleFavorite) {
-                    Image(systemName: task.isFavorite ? "star.fill" : "star")
-                        .foregroundColor(task.isFavorite ? .yellow : .gray)
-                        .font(.title3)
-                }
-                .buttonStyle(.plain)
-                .disabled(isUpdatingFavorite)
-                .opacity(isUpdatingFavorite ? 0.6 : 1.0)
+        HStack(spacing: 12) {
+            Button(action: {
+                // TODO: Implement task completion toggle
+            }) {
+                Image(systemName: task.done ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(task.done ? .green : .gray)
+                    .font(.title3)
             }
-            .padding(.vertical, 4)
+            .buttonStyle(.plain)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
+                    Text(task.title)
+                        .font(.body)
+                        .foregroundColor(task.done ? .secondary : .primary)
+                        .strikethrough(task.done)
+
+                    if settings.showAttachmentIcons && task.hasAttachments {
+                        Image(systemName: "paperclip")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    if settings.showCommentCounts {
+                        let count = commentCountManager.getCommentCount(for: task.id) ?? 0
+                        CommentBadge(commentCount: count)
+                    }
+
+                    Spacer()
+                }
+
+                if let project = project {
+                    HStack(spacing: 4) {
+                        Image(systemName: "folder").font(.caption2)
+                        Text(project.title).font(.caption)
+                    }
+                    .foregroundColor(.secondary)
+                }
+
+                HStack(spacing: 8) {
+                    if let dueDate = task.dueDate {
+                        HStack(spacing: 4) {
+                            Image(systemName: "calendar")
+                            Text(dueDate, style: .date)
+                        }
+                        .font(.caption2)
+                        .foregroundColor(dueDate < Date() ? .red : .orange)
+                    }
+                    if let assignees = task.assignees, !assignees.isEmpty {
+                        HStack(spacing: 4) {
+                            Image(systemName: "person.2.fill")
+                            Text("\(assignees.count)")
+                        }
+                        .font(.caption2)
+                        .foregroundColor(.blue)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            Button(action: toggleFavorite) {
+                Image(systemName: task.isFavorite ? "star.fill" : "star")
+                    .foregroundColor(task.isFavorite ? .yellow : .gray)
+                    .font(.title3)
+            }
+            .buttonStyle(.plain)
+            .disabled(isUpdatingFavorite)
+            .opacity(isUpdatingFavorite ? 0.6 : 1.0)
         }
-        .buttonStyle(.plain)
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
     }
     
     private func toggleFavorite() {
@@ -256,12 +265,12 @@ struct FavoriteTaskRow: View {
         Task {
             do {
                 #if DEBUG
-                print("FavoritesView: Toggling favorite for task \(task.id): \(task.title)")
+                Log.app.debug("FavoritesView: Toggling favorite for task id=\(task.id, privacy: .public) title=\(task.title, privacy: .public)")
                 #endif
                 let updated = try await api.toggleTaskFavorite(task: task)
                 await MainActor.run {
                     #if DEBUG
-                    print("FavoritesView: Task \(task.id) favorite status changed to: \(updated.isFavorite)")
+                    Log.app.debug("FavoritesView: Task id=\(task.id, privacy: .public) favorite -> \(updated.isFavorite, privacy: .public)")
                     #endif
                     onTaskUpdated(updated)
                     isUpdatingFavorite = false
@@ -269,7 +278,7 @@ struct FavoriteTaskRow: View {
             } catch {
                 await MainActor.run {
                     #if DEBUG
-                    print("FavoritesView: Error toggling favorite for task \(task.id): \(error)")
+                    Log.app.error("FavoritesView: Error toggling favorite for task id=\(task.id, privacy: .public): \(String(describing: error), privacy: .public)")
                     #endif
                     isUpdatingFavorite = false
                 }
@@ -279,8 +288,10 @@ struct FavoriteTaskRow: View {
 }
 
 #Preview {
-    // Wrap in a NavigationStack only for the preview
     NavigationStack {
-        FavoritesView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }))
+        FavoritesView(api: VikunjaAPI(
+            config: .init(baseURL: URL(string: "https://example.com")!),
+            tokenProvider: { nil }
+        ))
     }
 }

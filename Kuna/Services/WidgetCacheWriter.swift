@@ -111,7 +111,7 @@ class WidgetCacheWriter {
             }
             
         } catch {
-            print("Main App: Failed to encode projects snapshot: \(error)")
+            Log.widget.error("Main App: Failed to encode projects snapshot: \(String(describing: error), privacy: .public)")
         }
     }
 }

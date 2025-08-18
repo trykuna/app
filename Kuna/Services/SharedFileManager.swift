@@ -34,21 +34,21 @@ class SharedFileManager {
     func writeProjects(_ projects: [Project]) {
         do {
             let data = try JSONEncoder().encode(projects)
-            try data.write(to: projectsFile)
-            print("iOS: Successfully wrote projects to shared file: \(projectsFile.path)")
+            try data.write(to: self.projectsFile)
+            Log.app.debug("iOS: Wrote projects to shared file: \(self.projectsFile.path, privacy: .public)")
         } catch {
-            print("iOS: Failed to write projects to shared file: \(error)")
+            Log.app.error("iOS: Failed to write projects to shared file: \(String(describing: error), privacy: .public)")
         }
     }
 
     func readProjects() -> [Project]? {
         do {
-            let data = try Data(contentsOf: projectsFile)
+            let data = try Data(contentsOf: self.projectsFile)
             let projects = try JSONDecoder().decode([Project].self, from: data)
-            print("Watch: Successfully read \(projects.count) projects from shared file")
+            Log.watch.debug("Watch: Read \(projects.count, privacy: .public) projects from shared file")
             return projects
         } catch {
-            print("Watch: Failed to read projects from shared file: \(error)")
+            Log.watch.error("Watch: Failed to read projects from shared file: \(String(describing: error), privacy: .public)")
             return nil
         }
     }
@@ -78,7 +78,7 @@ class SharedFileManager {
         do {
             // Read existing tasks from other projects
             var allTasks: [SharedTask] = []
-            if let existingData = try? Data(contentsOf: tasksFile),
+            if let existingData = try? Data(contentsOf: self.tasksFile),
                let existingTasks = try? JSONDecoder().decode([SharedTask].self, from: existingData) {
                 // Keep tasks from other projects
                 allTasks = existingTasks.filter { $0.projectId != projectId }
@@ -88,10 +88,10 @@ class SharedFileManager {
             allTasks.append(contentsOf: sharedTasks)
 
             let data = try JSONEncoder().encode(allTasks)
-            try data.write(to: tasksFile)
-            print("iOS: Successfully wrote tasks to shared file: \(tasksFile.path)")
+            try data.write(to: self.tasksFile)
+            Log.app.debug("iOS: Wrote tasks to shared file: \(self.tasksFile.path, privacy: .public)")
         } catch {
-            print("iOS: Failed to write tasks to shared file: \(error)")
+            Log.app.error("iOS: Failed to write tasks to shared file: \(String(describing: error), privacy: .public)")
         }
     }
     // Provide a simplified tasks payload suitable for WC reply
@@ -106,7 +106,7 @@ class SharedFileManager {
             let projectId: Int
         }
         do {
-            let data = try Data(contentsOf: tasksFile)
+            let data = try Data(contentsOf: self.tasksFile)
             let all = try JSONDecoder().decode([SharedTask].self, from: data)
             let filtered = all.filter { $0.projectId == projectId }
             return filtered.map { t in
@@ -120,7 +120,7 @@ class SharedFileManager {
                 ]
             }
         } catch {
-            print("iOS: Failed to read tasks for WC reply: \(error)")
+            Log.watch.error("iOS: Failed to read tasks for WC reply: \(String(describing: error), privacy: .public)")
             return []
         }
     }

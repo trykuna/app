@@ -42,11 +42,11 @@ final class CalendarSyncService: ObservableObject {
     func requestCalendarAccess() async -> Bool {
         // Check current status first
         let currentStatus = EKEventStore.authorizationStatus(for: .event)
-        print("📅 Calendar access request - Current status: \(currentStatus)")
+        Log.app.debug("📅 Calendar access request - Current status: \(String(describing: currentStatus), privacy: .public)")
 
         switch currentStatus {
         case .fullAccess:
-            print("📅 Calendar access: Already have full access")
+            Log.app.debug("📅 Calendar access: Already have full access")
             await MainActor.run {
                 updateAuthorizationStatus()
             }
@@ -54,7 +54,7 @@ final class CalendarSyncService: ObservableObject {
 
         case .authorized:
             // For iOS versions before 17, .authorized is equivalent to full access
-            print("📅 Calendar access: Already authorized (legacy)")
+            Log.app.debug("📅 Calendar access: Already authorized (legacy)")
             await MainActor.run {
                 updateAuthorizationStatus()
             }
@@ -62,22 +62,22 @@ final class CalendarSyncService: ObservableObject {
 
         case .notDetermined:
             // Request permission
-            print("📅 Calendar access: Requesting permission...")
+            Log.app.debug("📅 Calendar access: Requesting permission…")
             do {
                 if #available(iOS 17.0, *) {
-                    print("📅 Using iOS 17+ requestFullAccessToEvents")
+                    Log.app.debug("📅 Using iOS 17+ requestFullAccessToEvents")
                     let granted = try await eventStore.requestFullAccessToEvents()
-                    print("📅 Permission result: \(granted)")
+                    Log.app.debug("📅 Permission result: \(granted, privacy: .public)")
                     await MainActor.run {
                         updateAuthorizationStatus()
                     }
                     return granted
                 } else {
                     // For iOS 16 and earlier
-                    print("📅 Using legacy requestAccess")
+                    Log.app.debug("📅 Using legacy requestAccess")
                     return await withCheckedContinuation { continuation in
                         eventStore.requestAccess(to: .event) { granted, error in
-                            print("📅 Legacy permission result: \(granted), error: \(String(describing: error))")
+                            Log.app.debug("📅 Legacy permission result: \(granted, privacy: .public), error: \(String(describing: error), privacy: .public)")
                             Task { @MainActor in
                                 self.updateAuthorizationStatus()
                                 if let error = error {
@@ -89,7 +89,7 @@ final class CalendarSyncService: ObservableObject {
                     }
                 }
             } catch {
-                print("📅 Calendar access request failed: \(error)")
+                Log.app.error("📅 Calendar access request failed: \(String(describing: error), privacy: .public)")
                 await MainActor.run {
                     syncErrors.append("Failed to request calendar access: \(error.localizedDescription)")
                     updateAuthorizationStatus()
@@ -98,7 +98,7 @@ final class CalendarSyncService: ObservableObject {
             }
 
         case .denied, .restricted:
-            print("📅 Calendar access: Denied or restricted")
+            Log.app.debug("📅 Calendar access: Denied or restricted")
             await MainActor.run {
                 syncErrors.append("Calendar access denied. Please enable in Settings > Privacy & Security > Calendars")
                 updateAuthorizationStatus()
@@ -150,17 +150,17 @@ final class CalendarSyncService: ObservableObject {
         guard isCalendarSyncEnabled,
               hasAccess,
               let calendar = selectedCalendar else {
-            print("📅 Sync failed - Enabled: \(isCalendarSyncEnabled), Auth: \(authorizationStatus), Calendar: \(selectedCalendar?.title ?? "none")")
+            Log.app.debug("📅 Sync failed - Enabled: \(self.isCalendarSyncEnabled, privacy: .public), Auth: \(String(describing: self.authorizationStatus), privacy: .public), Calendar: \(self.selectedCalendar?.title ?? "none", privacy: .public)")
             return false
         }
         
         // Check if task has any date information
         guard task.startDate != nil || task.dueDate != nil || task.endDate != nil else {
-            print("📅 Sync failed - Task '\(task.title)' has no dates")
+            Log.app.debug("📅 Sync failed - Task '\(task.title, privacy: .public)' has no dates")
             return false
         }
 
-        print("📅 Syncing task '\(task.title)' with due date: \(task.dueDate?.description ?? "none")")
+        Log.app.debug("📅 Syncing task '\(task.title, privacy: .public)' with due date: \(task.dueDate?.description ?? "none", privacy: .public)")
         
         // Check if event already exists
         if let existingEvent = findExistingEvent(for: task) {

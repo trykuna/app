@@ -4,14 +4,14 @@ import SwiftUI
 struct MainContainerView: View {
     let api: VikunjaAPI
     @EnvironmentObject var appState: AppState
-    
+
     @State private var selectedMenuItem: SideMenuView.MenuItem = .projects
     @State private var isMenuOpen = false
     @State private var showingNewProject = false
     @State private var showingSettings = false
-    
+
     private let menuWidth: CGFloat = 280
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -19,7 +19,7 @@ struct MainContainerView: View {
                 contentView
                     .offset(x: isMenuOpen ? menuWidth : 0)
                     .disabled(isMenuOpen)
-                
+
                 // Side menu
                 HStack {
                     SideMenuView(
@@ -29,10 +29,10 @@ struct MainContainerView: View {
                     )
                     .frame(width: menuWidth)
                     .offset(x: isMenuOpen ? 0 : -menuWidth)
-                    
+
                     Spacer()
                 }
-                
+
                 // Overlay to close menu when tapping outside
                 if isMenuOpen {
                     Color.black.opacity(0.3)
@@ -73,8 +73,29 @@ struct MainContainerView: View {
         .sheet(isPresented: $showingNewProject) {
             NewProjectView(isPresented: $showingNewProject, api: api)
         }
+        .onChange(of: appState.deepLinkTaskId) { _, newValue in
+            guard let id = newValue else { return }
+            Task {
+                do {
+                    let task = try await api.getTask(taskId: id)
+                    await MainActor.run {
+                        selectedMenuItem = .projects
+                    }
+                    // Present task detail by pushing into a temp navigation
+                    // We can route via a sheet for simplicity
+                    await MainActor.run {
+                        let taskView = TaskDetailView(task: task, api: api)
+                        let hosting = UIHostingController(rootView: taskView)
+                        UIApplication.shared.windows.first?.rootViewController?.present(hosting, animated: true)
+                    }
+                } catch {
+                    Log.app.error("DeepLink: Failed to open task id=\(id, privacy: .public): \(String(describing: error), privacy: .public)")
+                }
+                await MainActor.run { appState.deepLinkTaskId = nil }
+            }
+        }
     }
-    
+
     @ViewBuilder
     private var contentView: some View {
         switch selectedMenuItem {
@@ -103,7 +124,7 @@ struct MainContainerView: View {
             )
         }
     }
-    
+
     private func handleMenuSelection(_ menuItem: SideMenuView.MenuItem) {
         switch menuItem {
         case .favorites:
@@ -132,14 +153,14 @@ struct ProjectListViewWithMenu: View {
     @StateObject private var vm: ProjectListVM
     @Binding var isMenuOpen: Bool
     @Binding var showingNewProject: Bool
-    
+
     init(api: VikunjaAPI, isMenuOpen: Binding<Bool>, showingNewProject: Binding<Bool>) {
         self.api = api
         self._isMenuOpen = isMenuOpen
         self._showingNewProject = showingNewProject
         _vm = StateObject(wrappedValue: ProjectListVM(api: api))
     }
-    
+
     var body: some View {
         NavigationStack {
             List(vm.projects) { p in
@@ -157,7 +178,7 @@ struct ProjectListViewWithMenu: View {
                             .font(.system(size: 18, weight: .medium))
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingNewProject = true }) {
                         Image(systemName: "plus")

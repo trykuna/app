@@ -123,6 +123,9 @@ final class TaskListVM: ObservableObject {
             loading = false
             loadingMore = false
         }
+        
+        let t0 = Date()
+        let pageAtStart = currentPage
 
         do {
             let response = try await api.fetchTasks(
@@ -131,7 +134,16 @@ final class TaskListVM: ObservableObject {
                 perPage: tasksPerPage,
                 queryItems: queryItems
             )
-
+            
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.track("Task.Fetch.ListView", parameters: [
+                "duration_ms": String(Int(ms)),
+                "outcome": "success",
+                "first_page": resetPagination ? "true" : "false",
+                "page": String(pageAtStart)
+            ],
+            floatValue: ms)
+            
             if resetPagination {
                 tasks = response.tasks
             } else {
@@ -149,6 +161,14 @@ final class TaskListVM: ObservableObject {
             }
         }
         catch {
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.track("Task.Fetch.ListView", parameters: [
+                "duration_ms": String(Int(ms)),
+                "outcome": "failure",
+                "first_page": resetPagination ? "true" : "false",
+                "page": String(pageAtStart)
+            ],
+            floatValue: ms)
             self.error = error.localizedDescription
         }
     }
@@ -172,12 +192,12 @@ final class TaskListVM: ObservableObject {
     func toggleFavorite(_ task: VikunjaTask) async {
         do {
             #if DEBUG
-            print("TaskListView: Toggling favorite for task \(task.id): \(task.title), current state: \(task.isFavorite)")
+            Log.app.debug("TaskListView: Toggling favorite for task id=\(task.id, privacy: .public) title=\(task.title, privacy: .public) current=\(task.isFavorite, privacy: .public)")
             #endif
             let updated = try await api.toggleTaskFavorite(task: task)
             if let i = tasks.firstIndex(where: { $0.id == task.id }) {
                 #if DEBUG
-                print("TaskListView: Task \(task.id) favorite status changed to: \(updated.isFavorite)")
+                Log.app.debug("TaskListView: Task id=\(task.id, privacy: .public) favorite -> \(updated.isFavorite, privacy: .public)")
                 #endif
                 tasks[i] = updated
                 // Update widget cache after favorite change
@@ -185,7 +205,7 @@ final class TaskListVM: ObservableObject {
             }
         } catch {
             #if DEBUG
-            print("TaskListView: Error toggling favorite for task \(task.id): \(error)")
+            Log.app.error("TaskListView: Error toggling favorite for task id=\(task.id, privacy: .public): \(String(describing: error), privacy: .public)")
             #endif
             self.error = error.localizedDescription
         }

@@ -24,7 +24,7 @@ final class SyncStatePersistence {
             let data = try JSONEncoder().encode(state)
             userDefaults.set(data, forKey: syncStateKey)
         } catch {
-            print("Failed to save sync state: \(error)")
+            Log.app.error("Failed to save sync state: \(String(describing: error), privacy: .public)")
         }
     }
     
@@ -43,7 +43,7 @@ final class SyncStatePersistence {
             let data = try JSONEncoder().encode(idMap)
             userDefaults.set(data, forKey: idMapKey)
         } catch {
-            print("Failed to save ID map: \(error)")
+            Log.app.error("Failed to save ID map: \(String(describing: error), privacy: .public)")
         }
     }
     
