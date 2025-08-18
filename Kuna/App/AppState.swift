@@ -24,6 +24,8 @@ final class AppState: ObservableObject {
     @Published var api: VikunjaAPI?
     @Published var authenticationMethod: AuthenticationMethod?
     @Published var tokenExpirationDate: Date?
+    @Published var deepLinkTaskId: Int?
+
 
     init() {
         // Initialize all properties first
@@ -70,21 +72,21 @@ final class AppState: ObservableObject {
             Log.app.debug("No stored credentials found")
         }
     }
-    
-    private static func buildAPIURL(from serverURL: String) throws -> URL {
+
+    static func buildAPIURL(from serverURL: String) throws -> URL {
         // Clean up the URL - remove trailing slashes
         let cleanURL = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        
+
         // Ensure it has a scheme
-        let urlWithScheme = cleanURL.hasPrefix("http://") || cleanURL.hasPrefix("https://") 
-            ? cleanURL 
+        let urlWithScheme = cleanURL.hasPrefix("http://") || cleanURL.hasPrefix("https://")
+            ? cleanURL
             : "https://\(cleanURL)"
-        
+
         // Append /api/v1 to the base URL
         guard let apiURL = URL(string: "\(urlWithScheme)/api/v1") else {
             throw APIError.badURL
         }
-        
+
         return apiURL
     }
 
@@ -178,9 +180,9 @@ final class AppState: ObservableObject {
 
     func usePersonalToken(serverURL: String, token: String) throws {
         let apiURL = try Self.buildAPIURL(from: serverURL)
-        
+
         Log.app.debug("Saving API token (value not logged)")
-        
+
         // Save credentials
         try Keychain.saveToken(token)
         try Keychain.saveServerURL(serverURL)
@@ -218,6 +220,8 @@ final class AppState: ObservableObject {
 
     func logout() {
         Keychain.clearAll()
+        // Reset app preferences on sign out
+        AppSettings.shared.resetToDefaults()
         api = nil
         isAuthenticated = false
         authenticationMethod = nil

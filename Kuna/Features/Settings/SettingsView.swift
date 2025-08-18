@@ -18,6 +18,21 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
+                // Privacy & Analytics
+                Section(header: Text("Privacy")) {
+                    Toggle(isOn: analyticsBinding) {
+                        HStack {
+                            Image(systemName: "chart.bar.doc.horizontal")
+                                .foregroundColor(.purple).font(.body)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Anonymous Analytics").font(.body)
+                                Text("Help improve the app by sending anonymous usage data")
+                                    .font(.caption).foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+
                 // Display
                 Section {
                     NavigationLink(destination: TaskDisplayOptionsView()) {
@@ -178,6 +193,10 @@ struct SettingsView: View {
                         Text("Enable calendar sync to integrate your tasks with the Calendar app.")
                     }
                 }
+
+                BackgroundSyncSettingsSection(settings: settings)
+                    .environmentObject(appState)
+
 
                 // Connection
                 Section {
@@ -361,6 +380,17 @@ struct SettingsView: View {
         case .writeOnly: return "Write Only"
         @unknown default: return "Unknown"
         }
+    }
+
+    // Centralized binding to simplify type checking of Toggle
+    private var analyticsBinding: Binding<Bool> {
+        Binding(
+            get: { AppSettings.shared.analyticsEnabled },
+            set: { newValue in
+                Analytics.setEnabled(newValue)
+                AppSettings.shared.analyticsConsentDecision = newValue ? AnalyticsConsent.granted.rawValue : AnalyticsConsent.denied.rawValue
+                Analytics.track("analytics_consent_toggle", parameters: ["enabled": newValue ? "true" : "false"]) }
+        )
     }
 }
 
