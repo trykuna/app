@@ -15,7 +15,7 @@ enum AppIcon: String, CaseIterable, Identifiable {
     case transPride = "TransPride"
 
     var id: String { rawValue }
-    
+
     var displayName: String {
         switch self {
         case .default: return "Default"
@@ -45,7 +45,7 @@ enum AppIcon: String, CaseIterable, Identifiable {
         case .transPride: return "Trans pride colors"
         }
     }
-    
+
     var logoVariant: LogoVariant {
         switch self {
         case .default: return .main
@@ -65,7 +65,7 @@ enum AppIcon: String, CaseIterable, Identifiable {
         // Use the logo variant's light image as preview
         return logoVariant.lightImageName
     }
-    
+
     var alternateIconName: String? {
         switch self {
         case .default: return nil // nil means default icon
@@ -80,7 +80,7 @@ enum AppIcon: String, CaseIterable, Identifiable {
         case .transPride: return "AppIcon-TransPride"
         }
     }
-    
+
     var accentColor: Color {
         switch self {
         case .default: return .blue
@@ -100,50 +100,78 @@ enum AppIcon: String, CaseIterable, Identifiable {
 @MainActor
 final class AppIconManager: ObservableObject {
     static let shared = AppIconManager()
-    
+
     @Published var currentIcon: AppIcon = .default
     @Published var isChangingIcon = false
-    
+
     private init() {
         updateCurrentIcon()
     }
-    
+
     var supportsAlternateIcons: Bool {
-        UIApplication.shared.supportsAlternateIcons
+        if #available(iOS 10.3, *) {
+            // Prefer runtime check of Info.plist to avoid false negatives
+            if let icons = Bundle.main.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+               let alternates = icons["CFBundleAlternateIcons"] as? [String: Any],
+               !alternates.isEmpty {
+                return true
+            }
+            return UIApplication.shared.supportsAlternateIcons
+        } else {
+            return false
+        }
     }
-    
+
     func updateCurrentIcon() {
         let currentIconName = UIApplication.shared.alternateIconName
         currentIcon = AppIcon.allCases.first { $0.alternateIconName == currentIconName } ?? .default
     }
-    
+
+    private func declaredAlternateIconNames() -> [String] {
+        guard let icons = Bundle.main.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+              let alternates = icons["CFBundleAlternateIcons"] as? [String: Any] else { return [] }
+        return Array(alternates.keys)
+    }
+
     func setIcon(_ icon: AppIcon) async throws {
+        let previous = currentIcon
+
         guard supportsAlternateIcons else {
+            Analytics.trackIconChange(from: previous, to: icon, outcome: "unsupported", ms: 0)
             throw AppIconError.notSupported
         }
-        
-        guard icon != currentIcon else { return }
-        
+
+        guard icon != previous else {
+            // No change; still useful to know if users tap the same icon again
+            Analytics.trackIconChange(from: previous, to: icon, outcome: "noop", ms: 0)
+            return
+        }
+
         isChangingIcon = true
-        
+        let t0 = Date()
+        defer { isChangingIcon = false }
+
         do {
             try await UIApplication.shared.setAlternateIconName(icon.alternateIconName)
             currentIcon = icon
-            
-            // Save preference
             UserDefaults.standard.set(icon.rawValue, forKey: "selectedAppIcon")
-            
+
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.trackIconChange(from: previous, to: icon, outcome: "success", ms: ms)
+            if previous != .default { Analytics.trackIconState(previous, enabled: false) }
+            if icon != .default { Analytics.trackIconState(icon, enabled: true) }
         } catch {
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.trackIconChange(from: previous, to: icon, outcome: "failure", error: error.localizedDescription, ms: ms)
             throw AppIconError.changeFailed(error.localizedDescription)
         }
-        
-        isChangingIcon = false
     }
-    
+
     func restoreSelectedIcon() {
         if let savedIconName = UserDefaults.standard.string(forKey: "selectedAppIcon"),
            let savedIcon = AppIcon(rawValue: savedIconName) {
             Task {
+                // setIcon handles all analytics; if it fails we don't want to crash
                 try? await setIcon(savedIcon)
             }
         }
@@ -153,7 +181,7 @@ final class AppIconManager: ObservableObject {
 enum AppIconError: LocalizedError {
     case notSupported
     case changeFailed(String)
-    
+
     var errorDescription: String? {
         switch self {
         case .notSupported:
