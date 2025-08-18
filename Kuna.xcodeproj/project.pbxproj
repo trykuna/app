@@ -8,15 +8,30 @@
 
 /* Begin PBXBuildFile section */
 		79AE791D2E51F6D4001FCABD /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE791C2E51F6D4001FCABD /* ConfettiSwiftUI */; };
+		79AE7A7D2E533CF0001FCABD /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE7A7C2E533CF0001FCABD /* TelemetryClient */; };
+		79AE7A7F2E533CF0001FCABD /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE7A7E2E533CF0001FCABD /* TelemetryDeck */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7947454D2E4F6C1200C7A1D4 /* Kuna.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kuna.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7947454C2E4F6C1200C7A1D4 /* Kuna */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7947454F2E4F6C1200C7A1D4 /* Kuna */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */,
+			);
 			path = Kuna;
 			sourceTree = "<group>";
 		};
@@ -28,6 +43,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				79AE791D2E51F6D4001FCABD /* ConfettiSwiftUI in Frameworks */,
+				79AE7A7D2E533CF0001FCABD /* TelemetryClient in Frameworks */,
+				79AE7A7F2E533CF0001FCABD /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +88,8 @@
 			name = Kuna;
 			packageProductDependencies = (
 				79AE791C2E51F6D4001FCABD /* ConfettiSwiftUI */,
+				79AE7A7C2E533CF0001FCABD /* TelemetryClient */,
+				79AE7A7E2E533CF0001FCABD /* TelemetryDeck */,
 			);
 			productName = Kuna;
 			productReference = 7947454D2E4F6C1200C7A1D4 /* Kuna.app */;
@@ -102,6 +121,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				79AE791B2E51F6D4001FCABD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7947454E2E4F6C1200C7A1D4 /* Products */;
@@ -266,9 +286,14 @@
 				DEVELOPMENT_TEAM = 9NK92GW676;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kuna/Info.plist;
+				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = "$(PRODUCT_BUNDLE_IDENTIFIER).bg.refresh";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Kuna needs access to your calendar to sync tasks with calendar events, helping you manage your schedule in one place.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = fetch;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -277,7 +302,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.Kuna;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.kuna;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -296,9 +321,14 @@
 				DEVELOPMENT_TEAM = 9NK92GW676;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kuna/Info.plist;
+				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = "$(PRODUCT_BUNDLE_IDENTIFIER).bg.refresh";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Kuna needs access to your calendar to sync tasks with calendar events, helping you manage your schedule in one place.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = fetch;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -307,7 +337,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.Kuna;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.kuna;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -347,6 +377,14 @@
 				minimumVersion = 2.0.3;
 			};
 		};
+		79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -354,6 +392,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79AE791B2E51F6D4001FCABD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
 			productName = ConfettiSwiftUI;
+		};
+		79AE7A7C2E533CF0001FCABD /* TelemetryClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryClient;
+		};
+		79AE7A7E2E533CF0001FCABD /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
