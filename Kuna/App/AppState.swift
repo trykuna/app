@@ -71,6 +71,9 @@ final class AppState: ObservableObject {
         } else {
             Log.app.debug("No stored credentials found")
         }
+        
+        // Start memory monitoring after initialization
+        startMemoryMonitoring()
     }
 
     static func buildAPIURL(from serverURL: String) throws -> URL {
@@ -279,5 +282,108 @@ final class AppState: ObservableObject {
         #endif
 
         logout()
+    }
+    
+    // MARK: - Memory Management
+    private var memoryMonitorTimer: Timer?
+    private var memoryWarningCount = 0
+    private var lastCleanupTime: Date = Date.distantPast
+    private let criticalMemoryThreshold: UInt64 = 150 * 1024 * 1024 // 150MB - reasonable threshold
+    
+    private func startMemoryMonitoring() {
+        // Monitor memory usage every 30 seconds for debugging only
+        memoryMonitorTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.checkMemoryUsage()
+            }
+        }
+    }
+    
+    private func checkMemoryUsage() {
+        let resident = getMemoryUsage()
+        
+        // Only log memory usage periodically for debugging, don't trigger aggressive cleanup
+        Log.app.debug("Memory - Resident: \(resident / 1024 / 1024)MB")
+        
+        // Track peak memory usage for debugging
+        let currentPeak = UserDefaults.standard.object(forKey: "peakMemoryUsage") as? UInt64 ?? 0
+        if resident > currentPeak {
+            UserDefaults.standard.set(resident, forKey: "peakMemoryUsage")
+            Log.app.debug("New peak memory usage: \(resident / 1024 / 1024)MB")
+        }
+    }
+    
+    private func getMemoryUsage() -> UInt64 {
+        let (resident, _, _) = getDetailedMemoryUsage()
+        return resident // Only use resident memory - it's the most reliable
+    }
+    
+    private func getDetailedMemoryUsage() -> (resident: UInt64, dirty: UInt64, compressed: UInt64) {
+        var info = mach_task_basic_info()
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+        
+        let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+            }
+        }
+        
+        if kerr == KERN_SUCCESS {
+            // Just use the basic resident size - VM stats are giving wrong values
+            return (
+                resident: info.resident_size,
+                dirty: 0, // Don't calculate dirty pages - it's unreliable
+                compressed: 0 // Don't calculate compressed - it's unreliable
+            )
+        }
+        
+        return (resident: 0, dirty: 0, compressed: 0)
+    }
+    
+    private func performEmergencyMemoryCleanup() {
+        Log.app.warning("AppState: Performing emergency memory cleanup")
+        
+        // Clear our own cached data
+        deepLinkTaskId = nil
+        
+        // Trigger cleanup in all services
+        CommentCountManager.shared?.clearCache()
+        WidgetCacheWriter.performMemoryCleanup()
+        BackgroundTaskChangeDetector.shared.performMemoryCleanup()
+        
+        // More aggressive cleanup
+        URLCache.shared.removeAllCachedResponses()
+        
+        // Clear UserDefaults cache that might be holding data
+        UserDefaults.standard.synchronize()
+        
+        
+        // Multiple rounds of garbage collection
+        for _ in 0..<3 {
+            autoreleasepool {
+                // Create and release memory to trigger GC
+                let _ = Array(repeating: Data(count: 1024), count: 1000)
+            }
+        }
+        
+        Log.app.warning("AppState: Emergency cleanup completed")
+    }
+
+    // Clean up memory on memory warnings
+    func handleMemoryWarning() {
+        self.memoryWarningCount += 1
+        Log.app.warning("AppState: Handling memory warning #\(self.memoryWarningCount)")
+        
+        // Clear any cached data we might have
+        self.deepLinkTaskId = nil
+        
+        // If we've had multiple memory warnings, be more aggressive
+        if self.memoryWarningCount > 2 {
+            self.performEmergencyMemoryCleanup()
+        }
+    }
+    
+    deinit {
+        memoryMonitorTimer?.invalidate()
     }
 }

@@ -104,9 +104,26 @@ final class TaskListVM: ObservableObject {
     private let projectId: Int
     private var currentPage = 1
     private let tasksPerPage = 50
+    private let maxTasksInMemory = 200 // Reasonable limit for normal operation
 
     init(api: VikunjaAPI, projectId: Int) {
         self.api = api; self.projectId = projectId
+    }
+
+    // Clean up memory when view model is deallocated
+    deinit {
+        Log.app.debug("TaskListVM: Deallocating for project \(self.projectId)")
+        // Note: Cannot call async methods from deinit
+        // The system will handle memory cleanup when the object is deallocated
+    }
+
+    // Clean up tasks when switching projects or leaving view
+    func cleanup() {
+        Log.app.debug("TaskListVM: Cleaning up tasks for project \(self.projectId)")
+        tasks.removeAll()
+        currentPage = 1
+        hasMoreTasks = true
+        error = nil
     }
 
     func load(queryItems: [URLQueryItem] = [], resetPagination: Bool = true) async {
@@ -123,7 +140,7 @@ final class TaskListVM: ObservableObject {
             loading = false
             loadingMore = false
         }
-        
+
         let t0 = Date()
         let pageAtStart = currentPage
 
@@ -134,7 +151,7 @@ final class TaskListVM: ObservableObject {
                 perPage: tasksPerPage,
                 queryItems: queryItems
             )
-            
+
             let ms = Date().timeIntervalSince(t0) * 1000
             Analytics.track("Task.Fetch.ListView", parameters: [
                 "duration_ms": String(Int(ms)),
@@ -143,11 +160,17 @@ final class TaskListVM: ObservableObject {
                 "page": String(pageAtStart)
             ],
             floatValue: ms)
-            
+
             if resetPagination {
                 tasks = response.tasks
             } else {
                 tasks.append(contentsOf: response.tasks)
+                // Limit the number of tasks in memory to prevent unbounded growth
+                if tasks.count > maxTasksInMemory {
+                    let excessCount = tasks.count - maxTasksInMemory
+                    tasks.removeFirst(excessCount)
+                    Log.app.debug("TaskListVM: Trimmed \(excessCount) old tasks, keeping \(self.tasks.count)")
+                }
             }
 
             hasMoreTasks = response.hasMore
@@ -241,7 +264,7 @@ struct TaskListView: View {
     @StateObject private var vm: TaskListVM
     @StateObject private var settings = AppSettings.shared
     @StateObject private var calendarSync = CalendarSyncService.shared
-    @StateObject private var commentCountManager: CommentCountManager
+    @ObservedObject private var commentCountManager: CommentCountManager
     @State private var newTaskTitle = ""
     @State private var newTaskDescription = ""
     // Confetti trigger key
@@ -258,7 +281,8 @@ struct TaskListView: View {
         self.api = api
         _vm = StateObject(wrappedValue: TaskListVM(api: api, projectId: project.id))
         _currentSort = State(initialValue: AppSettings.getDefaultSortOption())
-        _commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
+        // Use shared instance to avoid creating multiple managers
+        self.commentCountManager = CommentCountManager.getShared(api: api)
     }
 
     var filteredTasks: [VikunjaTask] {
@@ -276,6 +300,7 @@ struct TaskListView: View {
         }
     }
 
+    // Reduce SwiftUI churn: use an Equatable row view below
     private func sortTasks(_ tasks: [VikunjaTask], by sortOption: TaskSortOption) -> [VikunjaTask] {
         switch sortOption {
         case .serverOrder:
@@ -384,238 +409,215 @@ struct TaskListView: View {
         }
     }
 
-    var body: some View {
-        VStack(spacing: 0) {
-            // Project title header
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(project.title)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
+    private var projectHeader: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(project.title)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
 
-                        if let description = project.description, !description.isEmpty {
-                            Text(description)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .lineLimit(2)
-                        }
-                    }
-
-                    Spacer()
-
-                    // Task count badge
-                    if !vm.tasks.isEmpty {
-                        VStack(spacing: 2) {
-                            Text("\(vm.tasks.count)")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.primary)
-                            Text(vm.tasks.count == 1 ? "task" : "tasks")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
+                    if let description = project.description, !description.isEmpty {
+                        Text(description)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .lineLimit(2)
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
-                .padding(.bottom, 12)
-            }
-            .background(Color(.systemBackground))
 
-            Divider()
+                Spacer()
 
-            // Task list or empty state
-            if vm.tasks.isEmpty && !vm.loading {
-                // Empty state
-                VStack(spacing: 20) {
-                    Spacer()
-
-                    Image(systemName: "checklist")
-                        .font(.system(size: 64))
-                        .foregroundColor(.secondary)
-
-                    VStack(spacing: 8) {
-                        Text("No Tasks Yet")
+                // Task count badge
+                if !vm.tasks.isEmpty {
+                    VStack(spacing: 2) {
+                        Text("\(vm.tasks.count)")
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
-
-                        Text("This project doesn't have any tasks yet. Create your first task to get started!")
-                            .font(.body)
+                        Text(vm.tasks.count == 1 ? "task" : "tasks")
+                            .font(.caption)
                             .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 32)
                     }
-
-                    Button(action: {
-                        vm.isAddingTask = true
-                    }) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Create First Task")
-                        }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .background(Color.accentColor)
-                        .cornerRadius(25)
-                    }
-                    .padding(.top, 8)
-
-                    Spacer()
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemGroupedBackground))
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+            .padding(.bottom, 12)
+        }
+        .background(Color(.systemBackground))
+    }
 
-                // Add new task overlay when in adding mode
-                if vm.isAddingTask {
-                    VStack {
-                        Spacer()
+    private var mainContent: some View {
+        Group {
+            if vm.tasks.isEmpty && !vm.loading {
+                emptyState
+            } else {
+                taskList
+            }
+        }
+    }
+    
+    private var emptyState: some View {
+        VStack(spacing: 20) {
+            Spacer()
 
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Create New Task")
-                                .font(.headline)
-                                .fontWeight(.semibold)
+            Image(systemName: "checklist")
+                .font(.system(size: 64))
+                .foregroundColor(.secondary)
 
-                            TextField("Task title", text: $newTaskTitle)
-                                .textFieldStyle(.roundedBorder)
+            VStack(spacing: 8) {
+                Text("No Tasks Yet")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
 
-                            TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
-                                .textFieldStyle(.roundedBorder)
-                                .lineLimit(2...4)
+                Text("This project doesn't have any tasks yet. Create your first task to get started!")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
 
-                            HStack(spacing: 12) {
-                                Button("Cancel") {
-                                    vm.isAddingTask = false
-                                    newTaskTitle = ""
-                                    newTaskDescription = ""
-                                }
-                                .buttonStyle(.bordered)
-                                .frame(maxWidth: .infinity)
+            Button(action: {
+                vm.isAddingTask = true
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Create First Task")
+                }
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(Color.accentColor)
+                .cornerRadius(25)
+            }
+            .padding(.top, 8)
 
-                                Button("Create Task") {
-                                    Task {
-                                        await vm.createTask(
-                                            title: newTaskTitle,
-                                            description: newTaskDescription.isEmpty ? nil : newTaskDescription
-                                        )
-                                        newTaskTitle = ""
-                                        newTaskDescription = ""
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .frame(maxWidth: .infinity)
-                                .disabled(newTaskTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                            }
-                        }
-                        .padding(20)
-                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
-                        .padding(.horizontal, 20)
-
-                        Spacer()
-                    }
-                    .background(Color.black.opacity(0.3))
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        // Dismiss when tapping outside
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGroupedBackground))
+        .overlay {
+            if vm.isAddingTask {
+                addTaskOverlay
+            }
+        }
+    }
+    
+    private var addTaskOverlay: some View {
+        VStack {
+            Spacer()
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Create New Task")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                TextField("Task title", text: $newTaskTitle)
+                    .textFieldStyle(.roundedBorder)
+                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .lineLimit(2...4)
+                HStack(spacing: 12) {
+                    Button("Cancel") {
                         vm.isAddingTask = false
                         newTaskTitle = ""
                         newTaskDescription = ""
                     }
+                    .buttonStyle(.bordered)
+                    .frame(maxWidth: .infinity)
+                    Button("Create Task") {
+                        Task {
+                            await vm.createTask(
+                                title: newTaskTitle,
+                                description: newTaskDescription.isEmpty ? nil : newTaskDescription
+                            )
+                            newTaskTitle = ""
+                            newTaskDescription = ""
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity)
+                    .disabled(newTaskTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-            } else {
-                // Task list with tasks
-                List {
-                    // Add new task section
-                    if vm.isAddingTask {
-                        Section {
-                            VStack(alignment: .leading, spacing: 8) {
-                                TextField("Task title", text: $newTaskTitle)
-                                    .textFieldStyle(.roundedBorder)
-
-                                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
-                                    .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
-
-                                HStack {
-                                    Button("Cancel") {
-                                        vm.isAddingTask = false
-                                        newTaskTitle = ""
-                                        newTaskDescription = ""
-                                    }
-                                    .buttonStyle(.bordered)
-
-                                    Button("Add Task") {
-                                        Task {
-                                            await vm.createTask(
-                                                title: newTaskTitle,
-                                                description: newTaskDescription.isEmpty ? nil : newTaskDescription
-                                            )
-                                            newTaskTitle = ""
-                                            newTaskDescription = ""
-                                        }
-                                    }
-                                    .buttonStyle(.borderedProminent)
-                                    .disabled(newTaskTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                                }
-                            }
-                            .padding(.vertical, 4)
+            }
+            .padding(20)
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+            .padding(.horizontal, 20)
+            Spacer()
+        }
+        .background(Color.black.opacity(0.3))
+        .ignoresSafeArea()
+        .onTapGesture {
+            vm.isAddingTask = false
+            newTaskTitle = ""
+            newTaskDescription = ""
+        }
+    }
+    
+    private var taskList: some View {
+        List {
+            if vm.isAddingTask {
+                addNewTaskSection
+            }
+            ForEach(sortedAndGroupedTasks, id: \.0) { sectionTitle, tasks in
+                if let sectionTitle = sectionTitle {
+                    Section(header: Text(sectionTitle)) {
+                        ForEach(tasks) { t in
+                            taskRow(for: t)
                         }
                     }
-
-                    // Existing tasks
-                    ForEach(sortedAndGroupedTasks, id: \.0) { sectionTitle, tasks in
-                        if let sectionTitle = sectionTitle {
-                            Section(header: Text(sectionTitle).font(.caption).fontWeight(.medium).foregroundColor(.secondary).textCase(.uppercase)) {
-                                ForEach(tasks) { t in
-                                    taskRow(for: t)
-                                }
-                            }
-                        } else {
-                            ForEach(tasks) { t in
-                                taskRow(for: t)
-                            }
-                        }
-                    }
-
-                    // Load More button
-                    if vm.hasMoreTasks && !vm.tasks.isEmpty {
-                        Section {
-                            Button(action: {
-                                Task {
-                                    let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
-                                    await vm.loadMoreTasks(queryItems: query)
-                                }
-                            }) {
-                                HStack {
-                                    if vm.loadingMore {
-                                        ProgressView()
-                                            .scaleEffect(0.8)
-                                        Text("Loading more tasks...")
-                                            .foregroundColor(.secondary)
-                                    } else {
-                                        Image(systemName: "arrow.down.circle")
-                                            .foregroundColor(.blue)
-                                        Text("Load More Tasks")
-                                            .foregroundColor(.blue)
-                                    }
-                                    Spacer()
-                                }
-                                .padding(.vertical, 8)
-                            }
-                            .disabled(vm.loadingMore)
-                            .buttonStyle(.plain)
-                        }
+                } else {
+                    ForEach(tasks) { t in
+                        taskRow(for: t)
                     }
                 }
             }
+        }
+    }
+    
+    private var addNewTaskSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 8) {
+                TextField("Task title", text: $newTaskTitle)
+                    .textFieldStyle(.roundedBorder)
+                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .lineLimit(2...4)
+                HStack {
+                    Button("Cancel") {
+                        vm.isAddingTask = false
+                        newTaskTitle = ""
+                        newTaskDescription = ""
+                    }
+                    .buttonStyle(.bordered)
+                    Button("Add Task") {
+                        Task {
+                            await vm.createTask(
+                                title: newTaskTitle,
+                                description: newTaskDescription.isEmpty ? nil : newTaskDescription
+                            )
+                            newTaskTitle = ""
+                            newTaskDescription = ""
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(newTaskTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+            }
+            .padding(.vertical, 4)
+        }
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            projectHeader
+            Divider()
+            mainContent
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -626,7 +628,6 @@ struct TaskListView: View {
                         Image(systemName: currentFilter.hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     }
                     .foregroundColor(currentFilter.hasActiveFilters ? .accentColor : .primary)
-
                     Button {
                         showingSort = true
                     } label: {
@@ -634,7 +635,6 @@ struct TaskListView: View {
                     }
                 }
             }
-
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     vm.isAddingTask = true
@@ -667,7 +667,6 @@ struct TaskListView: View {
                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
                 await vm.load(queryItems: query, resetPagination: true)
                 if settings.showCommentCounts {
-                    // proactively load counts for visible tasks
                     commentCountManager.loadCommentCounts(for: vm.tasks.map { $0.id })
                 }
             }
@@ -685,9 +684,17 @@ struct TaskListView: View {
         .onChange(of: settings.defaultSortOption) { _, newSortOption in
             currentSort = newSortOption
         }
-        // Confetti overlay on the whole list view
-        .overlay(ConfettiOverlay(trigger: $confettiTrigger).allowsHitTesting(false))
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)) { _ in
+            Log.app.warning("TaskListView: Received memory warning - reducing task list size")
+            if vm.tasks.count > 5 {
+                let keepCount = 5
+                vm.tasks = Array(vm.tasks.prefix(keepCount))
+                Log.app.debug("TaskListView: Trimmed to \(keepCount) tasks due to memory warning")
+            }
+            commentCountManager.clearCache()
         }
+        .overlay(ConfettiOverlay(trigger: $confettiTrigger).allowsHitTesting(false))
+    }
 
     // Lightweight confetti host to keep type-checking simple
     private struct ConfettiOverlay: View {
@@ -706,214 +713,31 @@ struct TaskListView: View {
 
     @ViewBuilder
     private func taskRow(for t: VikunjaTask) -> some View {
-        NavigationLink(destination: TaskDetailView(task: t, api: api)) {
-            HStack {
-                Button(action: {
-                    let willMarkDone = !t.done
-                    Task {
-                        await vm.toggle(t)
-                        if willMarkDone && settings.celebrateCompletionConfetti {
-                            if !UIAccessibility.isReduceMotionEnabled { confettiTrigger.toggle() }
-                        }
-                    }
-                }) {
-                    Image(systemName: t.done ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(t.done ? .green : .gray)
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                // Color ball - only show if task colors are enabled AND (task has custom color OR setting allows default colors)
-                if settings.showTaskColors && (t.hasCustomColor || settings.showDefaultColorBalls) {
-                    Circle()
-                        .fill(t.color)
-                        .frame(width: 12, height: 12)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.primary.opacity(0.2), lineWidth: 0.5)
-                        )
-                }
-
-                // Priority icon - only show if enabled and not unset
-                if settings.showPriorityIndicators && t.priority != .unset {
-                    Image(systemName: t.priority.systemImage)
-                        .foregroundColor(t.priority.color)
-                        .font(.body)
-                        .frame(width: 16, height: 16)
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Text(t.title)
-                            .strikethrough(t.done)
-                            .foregroundColor(.primary)
-
-                        // Paperclip icon for tasks with attachments
-                        if settings.showAttachmentIcons && t.hasAttachments {
-                            Image(systemName: "paperclip")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        // Comment count badge (always show, using 0 until loaded)
-                        if settings.showCommentCounts {
-                            let count = commentCountManager.getCommentCount(for: t.id) ?? 0
-                            CommentBadge(commentCount: count)
-                        }
-
-                        Spacer()
-                    }
-
-                    if let labels = t.labels, !labels.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 4) {
-                                ForEach(labels) { label in
-                                    Text(label.title)
-                                        .font(.caption2)
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(label.color.opacity(0.2))
-                                        .foregroundColor(label.color)
-                                        .cornerRadius(10)
-                                }
-                            }
-                        }
-                    }
-
-                    // Date indicators (respect display toggles)
-                    if (settings.showStartDate && t.startDate != nil) ||
-                       (settings.showDueDate && t.dueDate != nil) ||
-                       (settings.showEndDate && t.endDate != nil) {
-                        HStack(spacing: 4) {
-                            if settings.showStartDate, let startDate = t.startDate {
-                                HStack(spacing: 2) {
-                                    Image(systemName: "play.circle.fill")
-                                        .font(.caption2)
-                                        .foregroundColor(.green)
-                                    VStack(spacing: 0) {
-                                        Text(startDate, style: .date)
-                                            .font(.caption2)
-                                            .foregroundColor(.green)
-                                        Text(startDate, style: .time)
-                                            .font(.caption2)
-                                            .foregroundColor(.green.opacity(0.8))
-                                    }
-                                }
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 1)
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(3)
-                            }
-
-                            if settings.showDueDate, let dueDate = t.dueDate {
-                                HStack(spacing: 2) {
-                                    Image(systemName: "clock.fill")
-                                        .font(.caption2)
-                                        .foregroundColor(.orange)
-                                    VStack(spacing: 0) {
-                                        Text(dueDate, style: .date)
-                                            .font(.caption2)
-                                            .foregroundColor(.orange)
-                                        Text(dueDate, style: .time)
-                                            .font(.caption2)
-                                            .foregroundColor(.orange.opacity(0.8))
-                                    }
-                                }
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 1)
-                                .background(Color.orange.opacity(0.1))
-                                .cornerRadius(3)
-                            }
-
-                            if settings.showEndDate, let endDate = t.endDate {
-                                HStack(spacing: 2) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.caption2)
-                                        .foregroundColor(.blue)
-                                    VStack(spacing: 0) {
-                                        Text(endDate, style: .date)
-                                            .font(.caption2)
-                                            .foregroundColor(.blue)
-                                        Text(endDate, style: .time)
-                                            .font(.caption2)
-                                            .foregroundColor(.blue.opacity(0.8))
-                                    }
-                                }
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 1)
-                                .background(Color.blue.opacity(0.1))
-                                .cornerRadius(3)
-                            }
-                        }
-                    }
-
-                    // Repeat indicator
-                    if let repeatAfter = t.repeatAfter, repeatAfter > 0 {
-                        HStack(spacing: 2) {
-                            Image(systemName: "repeat")
-                                .font(.caption2)
-                                .foregroundColor(.purple)
-                            Text(t.repeatMode.displayName)
-                                .font(.caption2)
-                                .foregroundColor(.purple)
-                        }
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 1)
-                        .background(Color.purple.opacity(0.1))
-                        .cornerRadius(3)
-                    }
-
-                    // Reminders indicator
-                    if let reminders = t.reminders, !reminders.isEmpty {
-                        HStack(spacing: 2) {
-                            Image(systemName: reminders.contains(where: { isReminderSoon($0.reminder) }) ? "bell.fill" : "bell")
-                                .font(.caption2)
-                                .foregroundColor(reminders.contains(where: { isReminderSoon($0.reminder) }) ? .red : .gray)
-                            Text("\(reminders.count) reminder\(reminders.count == 1 ? "" : "s")")
-                                .font(.caption2)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 1)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(3)
-                    }
-
-                    // Assignees indicator
-                    if let assignees = t.assignees, !assignees.isEmpty {
-                        HStack(spacing: 2) {
-                            Image(systemName: "person.2.fill")
-                                .font(.caption2)
-                                .foregroundColor(.blue)
-                            Text("\(assignees.count) assignee\(assignees.count == 1 ? "" : "s")")
-                                .font(.caption2)
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 1)
-                        .background(Color.blue.opacity(0.1))
-                        .cornerRadius(3)
-                    }
-
-                    // Calendar sync indicator (respect display toggle)
-                    if settings.calendarSyncEnabled && settings.showSyncStatus && isTaskSyncedToCalendar(t) {
-                        HStack(spacing: 2) {
-                            Image(systemName: "calendar.badge.checkmark")
-                                .font(.caption2)
-                                .foregroundColor(.green)
-                            Text("Synced")
-                                .font(.caption2)
-                                .foregroundColor(.green)
-                        }
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 1)
-                        .background(Color.green.opacity(0.1))
-                        .cornerRadius(3)
+        TaskRowView(
+            props: TaskRowProps(
+                t: t,
+                showTaskColors: settings.showTaskColors,
+                showDefaultColorBalls: settings.showDefaultColorBalls,
+                showPriorityIndicators: settings.showPriorityIndicators,
+                showAttachmentIcons: settings.showAttachmentIcons,
+                showCommentCounts: settings.showCommentCounts,
+                showStartDate: settings.showStartDate,
+                showDueDate: settings.showDueDate,
+                showEndDate: settings.showEndDate,
+                commentCount: commentCountManager.getCommentCount(for: t.id)
+            ),
+            api: api,
+            onToggle: { task in
+                let willMarkDone = !task.done
+                Task {
+                    await vm.toggle(task)
+                    if willMarkDone && settings.celebrateCompletionConfetti {
+                        if !UIAccessibility.isReduceMotionEnabled { confettiTrigger.toggle() }
                     }
                 }
-
-                Spacer()
             }
-        }
+        )
+
         .swipeActions(edge: .leading) {
             Button {
                 let willMarkDone = !t.done
@@ -950,12 +774,8 @@ struct TaskListView: View {
             }
             .tint(.red)
         }
-        .onAppear {
-            // Load comment count when task appears (only if comment counts are enabled)
-            if settings.showCommentCounts {
-                commentCountManager.loadCommentCount(for: t.id)
-            }
-        }
+        // Remove individual onAppear to prevent overwhelming the comment API
+        // Comment counts are now loaded in batches in the main view's onAppear
     }
 
     private func isReminderSoon(_ reminderDate: Date) -> Bool {
@@ -967,23 +787,23 @@ struct TaskListView: View {
     private func isTaskSyncedToCalendar(_ task: VikunjaTask) -> Bool {
         let hasAccess: Bool
         if #available(iOS 17.0, *) {
-            hasAccess = calendarSync.authorizationStatus == .fullAccess
+            hasAccess = CalendarSyncService.shared.authorizationStatus == .fullAccess
         } else {
-            hasAccess = calendarSync.authorizationStatus == .authorized
+            hasAccess = CalendarSyncService.shared.authorizationStatus == .authorized
         }
 
         guard hasAccess,
-              let calendar = calendarSync.selectedCalendar else {
+              let calendar = CalendarSyncService.shared.selectedCalendar else {
             return false
         }
 
-        let predicate = calendarSync.eventStore.predicateForEvents(
+        let predicate = CalendarSyncService.shared.eventStore.predicateForEvents(
             withStart: Date().addingTimeInterval(-30 * 24 * 60 * 60), // 30 days ago
             end: Date().addingTimeInterval(30 * 24 * 60 * 60), // 30 days from now
             calendars: [calendar]
         )
 
-        let events = calendarSync.eventStore.events(matching: predicate)
+        let events = CalendarSyncService.shared.eventStore.events(matching: predicate)
         return events.contains { event in
             event.url?.absoluteString == "kuna://task/\(task.id)"
         }
