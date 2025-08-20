@@ -84,33 +84,48 @@ final class BackgroundSyncService: ObservableObject {
         Log.app.debug("BG: app refresh handler invoked")
         scheduleNext(after: AppSettings.shared.backgroundSyncFrequency)
 
+        let syncTask = Task {
+            await runSync()
+        }
+        
         task.expirationHandler = {
-            Log.app.error("BG: task expired")
+            Log.app.error("BG: task expired - cancelling sync")
+            syncTask.cancel()
+            task.setTaskCompleted(success: false)
         }
 
         Task {
-            defer { Log.app.debug("BG: runSync completed"); task.setTaskCompleted(success: true) }
-            await runSync()
+            await syncTask.value
+            Log.app.debug("BG: runSync completed successfully")
+            task.setTaskCompleted(success: true)
         }
-
-        }
+    }
 
     private func runSync() async {
         Log.app.debug("BG: runSync started")
+        // Save last sync attempt time for debugging
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "lastBackgroundSyncAttempt")
+        
         // Build an API instance from persisted server URL + token to avoid needing AppState
-        guard let server = Keychain.readServerURL(), let token = Keychain.readToken(), let apiBase = try? AppState.buildAPIURL(from: server) else { return }
+        guard let server = Keychain.readServerURL(), let _ = Keychain.readToken(), let apiBase = try? AppState.buildAPIURL(from: server) else { 
+            Log.app.error("BG: runSync failed - missing server URL or token")
+            return 
+        }
         let api = VikunjaAPI(config: .init(baseURL: apiBase), tokenProvider: { Keychain.readToken() })
         let settings = AppSettings.shared
         // Pagination window to avoid huge payloads
-        let pageSize = 200
+        let _ = 200 // pageSize - kept for documentation but not currently used
 
         guard settings.backgroundSyncEnabled else { Log.app.debug("BG: runSync aborted — background sync disabled"); return }
 
-        let detector = BackgroundTaskChangeDetector()
+        let detector = BackgroundTaskChangeDetector.shared
         // Determine current user ID from token (sub) if available
         var currentUserId: Int? = nil
         if let token = Keychain.readToken(), let payload = try? JWTDecoder.decode(token), let sub = payload.sub, let id = Int(sub) {
             currentUserId = id
+            Log.app.debug("BG: Current user ID: \(id)")
+        } else {
+            Log.app.warning("BG: Could not determine current user ID - assignment notifications won't work")
         }
 
         do {
@@ -124,23 +139,31 @@ final class BackgroundSyncService: ObservableObject {
             }
 
             if settings.notifyNewTasks {
+                Log.app.debug("BG: Sending \(summary.newTasks.count) new task notifications")
                 for t in summary.newTasks {
-                    await notifier.postImmediate(title: "New Task", body: t.title, thread: "tasks.new", userInfo: ["taskId": t.id])
+                    Log.app.debug("BG: New task notification - \(t.title)")
+                    notifier.postImmediate(title: "New Task", body: t.title, thread: "tasks.new", userInfo: ["taskId": t.id])
                 }
             }
             if settings.notifyUpdatedTasks {
+                Log.app.debug("BG: Sending \(summary.updatedTasks.count) updated task notifications")
                 for t in summary.updatedTasks {
-                    await notifier.postImmediate(title: "Task Updated", body: t.title, thread: "tasks.updated", userInfo: ["taskId": t.id])
+                    Log.app.debug("BG: Updated task notification - \(t.title)")
+                    notifier.postImmediate(title: "Task Updated", body: t.title, thread: "tasks.updated", userInfo: ["taskId": t.id])
                 }
             }
-            if settings.notifyAssignedToMe, let _ = currentUserId {
+            if settings.notifyAssignedToMe, let uid = currentUserId {
+                Log.app.debug("BG: Sending \(summary.assignedToMe.count) assignment notifications for user \(uid)")
                 for t in summary.assignedToMe {
-                    await notifier.postImmediate(title: "Assigned to You", body: t.title, thread: "tasks.assigned", userInfo: ["taskId": t.id])
+                    Log.app.debug("BG: Assignment notification - \(t.title)")
+                    notifier.postImmediate(title: "Assigned to You", body: t.title, thread: "tasks.assigned", userInfo: ["taskId": t.id])
                 }
             }
             if settings.notifyLabelsUpdated {
+                Log.app.debug("BG: Sending \(summary.labelWatched.count) label watch notifications")
                 for t in summary.labelWatched {
-                    await notifier.postImmediate(title: "Watched Label Updated", body: t.title, thread: "tasks.labels", userInfo: ["taskId": t.id])
+                    Log.app.debug("BG: Label watch notification - \(t.title)")
+                    notifier.postImmediate(title: "Watched Label Updated", body: t.title, thread: "tasks.labels", userInfo: ["taskId": t.id])
                 }
             }
 
@@ -149,9 +172,15 @@ final class BackgroundSyncService: ObservableObject {
                 let u = summary.updatedTasks.count
                 if n > 0 || u > 0 {
                     let body = "New: \(n), Updated: \(u)"
-                    await notifier.postImmediate(title: "Task Changes", body: body, thread: "tasks.summary")
+                    Log.app.debug("BG: Sending summary notification - \(body)")
+                    notifier.postImmediate(title: "Task Changes", body: body, thread: "tasks.summary")
+                } else {
+                    Log.app.debug("BG: No changes for summary notification")
                 }
             }
+            // Save successful sync time
+            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "lastBackgroundSyncSuccess")
+            Log.app.debug("BG: sync completed successfully")
         } catch {
             Log.app.error("BG: sync failed: \(String(describing: error), privacy: .public)")
         }

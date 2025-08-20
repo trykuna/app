@@ -93,6 +93,35 @@ struct BackgroundSyncSettingsSection: View {
                         }
                     }
                 }
+                
+                #if DEBUG
+                // Debug section to test background sync
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Debug Info")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    if let lastAttempt = UserDefaults.standard.object(forKey: "lastBackgroundSyncAttempt") as? TimeInterval {
+                        Text("Last Attempt: \(Date(timeIntervalSince1970: lastAttempt).formatted())")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    if let lastSuccess = UserDefaults.standard.object(forKey: "lastBackgroundSyncSuccess") as? TimeInterval {
+                        Text("Last Success: \(Date(timeIntervalSince1970: lastSuccess).formatted())")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Button("Run Sync Now (Debug)") {
+                        Task {
+                            await BackgroundSyncService.shared.runSyncNowForTesting()
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.orange)
+                }
+                #endif
             }
         } header: { Text("Background Sync & Notifications") } footer: {
             Text("iOS schedules background refresh based on system conditions. Frequency is a minimum interval.")

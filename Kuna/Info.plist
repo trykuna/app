@@ -9,8 +9,8 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
-		<string>processing</string>
+		<string>background-fetch</string>
+		<string>background-processing</string>
 	</array>
 
 	<!-- Alternate App Icons configuration -->
