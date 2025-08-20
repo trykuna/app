@@ -45,6 +45,12 @@ final class VikunjaAPI {
 
     // New Endpoint-based request
     private func request(_ endpoint: Endpoint, body: (some Encodable)? = Optional<String>.none) async throws -> Data {
+        let (data, _) = try await requestWithResponse(endpoint, body: body)
+        return data
+    }
+
+    // Variant that returns both data and HTTPURLResponse (needed to read pagination headers)
+    private func requestWithResponse(_ endpoint: Endpoint, body: (some Encodable)? = Optional<String>.none) async throws -> (Data, HTTPURLResponse) {
         let url = try url(for: endpoint)
         Log.network.debug("Request: \(endpoint.method, privacy: .public) \(url.absoluteString, privacy: .public)")
 
@@ -81,7 +87,7 @@ final class VikunjaAPI {
                 guard let http = resp as? HTTPURLResponse else { throw APIError.other("No HTTP response") }
                 Log.network.debug("Response: status=\(http.statusCode, privacy: .public) url=\(url.absoluteString, privacy: .public)")
                 if (200..<300).contains(http.statusCode) {
-                    return data
+                    return (data, http)
                 }
                 if isGet && (http.statusCode == 500 || http.statusCode == 502 || http.statusCode == 503 || http.statusCode == 504) && attempt < 3 {
                     let delay = UInt64(pow(2.0, Double(attempt - 1)) * 0.3 * 1_000_000_000)
@@ -114,6 +120,29 @@ final class VikunjaAPI {
         }
         throw lastError ?? APIError.other("Unknown error")
     }
+    // MARK: - Pagination helpers
+    private struct PaginationInfo {
+        let totalPages: Int?
+        let currentPage: Int?
+        let perPage: Int?
+        let resultCount: Int?
+        let totalCount: Int?
+    }
+
+    private func paginationInfo(from http: HTTPURLResponse) -> PaginationInfo {
+        func headerInt(_ name: String) -> Int? {
+            http.value(forHTTPHeaderField: name).flatMap { Int($0) }
+        }
+        // Vikunja docs use X-Pagination-* headers
+        let totalPages = headerInt("X-Pagination-Total-Pages")
+        let currentPage = headerInt("X-Pagination-Page")
+        let perPage = headerInt("X-Pagination-Per-Page")
+        let resultCount = headerInt("X-Pagination-Result-Count")
+        // Some setups may expose a total-count as well
+        let totalCount = headerInt("X-Pagination-Total-Count") ?? headerInt("X-Total-Count")
+        return PaginationInfo(totalPages: totalPages, currentPage: currentPage, perPage: perPage, resultCount: resultCount, totalCount: totalCount)
+    }
+
 
     private func url(for endpoint: Endpoint) throws -> URL {
         var url = config.baseURL
@@ -155,12 +184,24 @@ final class VikunjaAPI {
     private let tokenRefreshFailureHandler: (() async -> Void)?
 
 
-    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, tokenRefreshHandler: ((String) async throws -> Void)? = nil, tokenRefreshFailureHandler: (() async -> Void)? = nil, session: URLSession = .shared) {
+    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, tokenRefreshHandler: ((String) async throws -> Void)? = nil, tokenRefreshFailureHandler: (() async -> Void)? = nil, session: URLSession? = nil) {
         self.config = config
         self.tokenProvider = tokenProvider
         self.tokenRefreshHandler = tokenRefreshHandler
         self.tokenRefreshFailureHandler = tokenRefreshFailureHandler
-        self.session = session
+        
+        // Use memory-optimized session configuration for better memory management
+        if let customSession = session {
+            self.session = customSession
+        } else {
+            let config = URLSessionConfiguration.default
+            config.httpMaximumConnectionsPerHost = 4 // Limit concurrent connections
+            config.timeoutIntervalForRequest = 30 // Shorter timeout
+            config.timeoutIntervalForResource = 60
+            config.urlCache = URLCache(memoryCapacity: 2 * 1024 * 1024, diskCapacity: 0, diskPath: nil) // Small memory cache, no disk cache
+            config.requestCachePolicy = .reloadIgnoringLocalCacheData // Don't cache requests
+            self.session = URLSession(configuration: config)
+        }
     }
 
 
@@ -271,13 +312,41 @@ final class VikunjaAPI {
 
     // MARK: - Projects
     func fetchProjects() async throws -> [Project] {
-        let data = try await request(Endpoint(method: "GET", pathComponents: ["projects"]))
+        let t0 = Date()
+        var outcome = "success"
+        var bytes = 0
 
-        #if DEBUG
-        Log.network.debug("Projects response bytes: \(data.count, privacy: .public)")
-        #endif
+        defer {
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Task { @MainActor in
+                Analytics.track(
+                    "Projects.Fetch",
+                    parameters: [
+                        "duration_ms": String(Int(ms.rounded())),
+                        "outcome": outcome,
+                        "bytes": String(bytes)
+                    ],
+                    floatValue: ms
+                )
+            }
+        }
 
-        return try JSONDecoder.vikunja.decode([Project].self, from: data)
+        do {
+            let data = try await request(Endpoint(method: "GET", pathComponents: ["projects"]))
+            bytes = data.count
+
+            #if DEBUG
+            Log.network.debug("Projects response bytes: \(bytes, privacy: .public)")
+            #endif
+
+            return try JSONDecoder.vikunja.decode([Project].self, from: data)
+        } catch let error as DecodingError {
+            outcome = "decode_error"
+            throw error
+        } catch {
+            outcome = "network_error"
+            throw error
+        }
     }
 
     func createProject(title: String, description: String? = nil) async throws -> Project {
@@ -306,28 +375,51 @@ final class VikunjaAPI {
         allQueryItems.append(URLQueryItem(name: "per_page", value: String(perPage)))
 
         let ep = Endpoint(method: "GET", pathComponents: ["projects", String(projectId), "tasks"], queryItems: allQueryItems)
-        let data = try await request(ep)
+        let (data, http) = try await requestWithResponse(ep)
 
         #if DEBUG
         Log.network.debug("Tasks(response) bytes: \(data.count, privacy: .public)")
-        print("VikunjaAPI: Fetching tasks for project \(projectId), page \(page), per_page \(perPage)")
+        Log.network.debug("Fetching tasks for project \(projectId, privacy: .public), page \(page, privacy: .public), per_page \(perPage, privacy: .public)")
         #endif
 
-        // Try to decode as array first (for backward compatibility)
-        do {
-            let tasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+        // First try to decode as array (legacy, some endpoints still return a raw array)
+        if let tasks = try? JSONDecoder.vikunja.decode([VikunjaTask].self, from: data) {
             #if DEBUG
-            print("VikunjaAPI: Decoded \(tasks.count) tasks (legacy format)")
+            Log.network.debug("Decoded \(tasks.count, privacy: .public) tasks (raw array response)")
             #endif
-            return TasksResponse(tasks: tasks, hasMore: tasks.count == perPage, currentPage: page, totalPages: nil)
+            // Prefer pagination headers if present
+            let p = paginationInfo(from: http)
+            let totalPages = p.totalPages
+            let hasMore = totalPages.map { page < $0 } ?? (tasks.count == perPage)
+            return TasksResponse(tasks: tasks, hasMore: hasMore, currentPage: p.currentPage ?? page, totalPages: totalPages)
+        }
+
+        // Try paginated response body shape as a fallback
+        struct PaginatedTasksBody: Decodable {
+            let items: [VikunjaTask]?
+            let results: [VikunjaTask]?
+            let data: [VikunjaTask]?
+            let totalPages: Int?
+            let page: Int?
+
+            var tasks: [VikunjaTask] { items ?? results ?? data ?? [] }
+        }
+
+        do {
+            let body = try JSONDecoder.vikunja.decode(PaginatedTasksBody.self, from: data)
+            let p = paginationInfo(from: http)
+            let totalPages = body.totalPages ?? p.totalPages
+            let current = body.page ?? p.currentPage ?? page
+            let hasMore = totalPages.map { current < $0 } ?? (body.tasks.count == perPage)
+            return TasksResponse(tasks: body.tasks, hasMore: hasMore, currentPage: current, totalPages: totalPages)
         } catch {
             #if DEBUG
-            print("VikunjaAPI: Failed to decode as array, trying paginated response format")
+            Log.network.error("Failed to decode tasks response: \(String(describing: error), privacy: .public)")
+            if let s = String(data: data, encoding: .utf8) {
+                Log.network.debug("Tasks response body: \(s, privacy: .public)")
+            }
             #endif
-
-            // If array decoding fails, try paginated response format
-            // This would be used if Vikunja returns pagination metadata
-            throw error
+            throw APIError.decoding
         }
     }
 
@@ -385,7 +477,7 @@ final class VikunjaAPI {
         // Debug: print what we're sending
         if let jsonData = try? JSONEncoder.vikunja.encode(task),
            let jsonString = String(data: jsonData, encoding: .utf8) {
-            print("Updating task with body: \(jsonString)")
+            Log.network.debug("Updating task with body: \(jsonString, privacy: .public)")
         }
 
         // Use POST for updating tasks in Vikunja API
@@ -416,7 +508,39 @@ final class VikunjaAPI {
         Log.network.debug("Labels response bytes: \(data.count, privacy: .public)")
         #endif
 
-        return try JSONDecoder.vikunja.decode([Label].self, from: data)
+        // Some servers may return 204 No Content (empty body) when there are no labels
+        if data.isEmpty { return [] }
+        // Some setups erroneously return literal "null" or "{}" for empty; treat as empty list
+        if let s = String(data: data, encoding: .utf8) {
+            let t = s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            if t == "null" || t == "{}" { return [] }
+        }
+
+        // Primary: array of labels
+        if let labels = try? JSONDecoder.vikunja.decode([Label].self, from: data) {
+            return labels
+        }
+
+        // Fallback: object-wrapped lists
+        struct LabelListWrap: Decodable {
+            let labels: [Label]?
+            let items: [Label]?
+            let results: [Label]?
+            let data: [Label]?
+            var all: [Label] { labels ?? items ?? results ?? data ?? [] }
+        }
+        if let wrapped = try? JSONDecoder.vikunja.decode(LabelListWrap.self, from: data) {
+            return wrapped.all
+        }
+
+        #if DEBUG
+        if let raw = String(data: data, encoding: .utf8) {
+            Log.network.debug("fetchLabels: unexpected response shape ->\n\(raw, privacy: .public)")
+        }
+        #endif
+
+        // If we get here, decoding failed for an unexpected shape
+        throw APIError.decoding
     }
 
     func addLabelToTask(taskId: Int, labelId: Int) async throws -> VikunjaTask {
@@ -564,7 +688,7 @@ final class VikunjaAPI {
     /// Fetch attachments for a task.
     func getTaskAttachments(taskId: Int) async throws -> [TaskAttachment] {
         #if DEBUG
-        print("VikunjaAPI: Fetching attachments for task \(taskId)")
+        Log.network.debug("Fetching attachments for task \(taskId, privacy: .public)")
         #endif
 
         let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "attachments"])
@@ -572,14 +696,14 @@ final class VikunjaAPI {
 
         #if DEBUG
         if let jsonString = String(data: data, encoding: .utf8) {
-            print("VikunjaAPI: Attachments response: \(jsonString)")
+            Log.network.debug("Attachments response: \(jsonString, privacy: .public)")
         }
         #endif
 
         let attachments = try JSONDecoder.vikunja.decode([TaskAttachment].self, from: data)
 
         #if DEBUG
-        print("VikunjaAPI: Decoded \(attachments.count) attachments")
+        Log.network.debug("Decoded \(attachments.count, privacy: .public) attachments")
         #endif
 
         return attachments
@@ -594,18 +718,18 @@ final class VikunjaAPI {
     ///   - mimeType: MIME type describing the data. Defaults to `application/octet-stream`.
     func uploadAttachment(taskId: Int, fileName: String, data: Data, mimeType: String = "application/octet-stream") async throws {
         #if DEBUG
-        print("VikunjaAPI: Starting attachment upload")
-        print("VikunjaAPI: Task ID: \(taskId)")
-        print("VikunjaAPI: File name: \(fileName)")
-        print("VikunjaAPI: MIME type: \(mimeType)")
-        print("VikunjaAPI: Data size: \(data.count) bytes")
+        Log.network.debug("Starting attachment upload")
+        Log.network.debug("Task ID: \(taskId, privacy: .public)")
+        Log.network.debug("File name: \(fileName, privacy: .public)")
+        Log.network.debug("MIME type: \(mimeType, privacy: .public)")
+        Log.network.debug("Data size: \(data.count, privacy: .public) bytes")
         #endif
 
         let endpoint = Endpoint(method: "PUT", pathComponents: ["tasks", "\(taskId)", "attachments"])
         let url = try url(for: endpoint)
 
         #if DEBUG
-        print("VikunjaAPI: Upload URL: \(url)")
+        Log.network.debug("Upload URL: \(url.absoluteString, privacy: .public)")
         #endif
 
         var req = URLRequest(url: url)
@@ -614,7 +738,7 @@ final class VikunjaAPI {
         if let t = tokenProvider() {
             req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization")
             #if DEBUG
-            print("VikunjaAPI: Authorization header set")
+            Log.network.debug("Authorization header set")
             #endif
         }
 
@@ -623,7 +747,7 @@ final class VikunjaAPI {
         req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         #if DEBUG
-        print("VikunjaAPI: Using boundary: \(boundary)")
+        Log.network.debug("Using boundary: \(boundary, privacy: .public)")
         #endif
 
         var body = Data()
@@ -637,27 +761,27 @@ final class VikunjaAPI {
         req.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
 
         #if DEBUG
-        print("VikunjaAPI: Multipart body size: \(body.count) bytes")
-        print("VikunjaAPI: Making upload request...")
+        Log.network.debug("Multipart body size: \(body.count, privacy: .public) bytes")
+        Log.network.debug("Making upload request…")
         #endif
 
         let (respData, resp) = try await session.upload(for: req, from: body)
 
         #if DEBUG
-        print("VikunjaAPI: Upload request completed")
+        Log.network.debug("Upload request completed")
         #endif
 
         guard let http = resp as? HTTPURLResponse else {
             #if DEBUG
-            print("VikunjaAPI: No HTTP response received")
+            Log.network.error("No HTTP response received during upload")
             #endif
             throw APIError.other("No HTTP response")
         }
 
         #if DEBUG
-        print("VikunjaAPI: HTTP status code: \(http.statusCode)")
+        Log.network.debug("HTTP status code: \(http.statusCode, privacy: .public)")
         if let responseString = String(data: respData, encoding: .utf8) {
-            print("VikunjaAPI: Response body: \(responseString)")
+            Log.network.debug("Response body: \(responseString, privacy: .public)")
         }
         #endif
 
@@ -665,19 +789,19 @@ final class VikunjaAPI {
             let message = extractErrorMessage(from: respData)
             if let message, !message.isEmpty {
                 #if DEBUG
-                print("VikunjaAPI: Upload failed with message: \(message)")
+                Log.network.error("Upload failed with message: \(message, privacy: .public)")
                 #endif
                 throw APIError.other(message)
             } else {
                 #if DEBUG
-                print("VikunjaAPI: Upload failed with HTTP \(http.statusCode)")
+                Log.network.error("Upload failed with HTTP \(http.statusCode, privacy: .public)")
                 #endif
                 throw APIError.http(http.statusCode)
             }
         }
 
         #if DEBUG
-        print("VikunjaAPI: Upload completed successfully")
+        Log.network.debug("Upload completed successfully")
         #endif
     }
 
@@ -690,14 +814,14 @@ final class VikunjaAPI {
     /// Download a task attachment.
     func downloadAttachment(taskId: Int, attachmentId: Int) async throws -> Data {
         #if DEBUG
-        print("VikunjaAPI: Downloading attachment \(attachmentId) for task \(taskId)")
+        Log.network.debug("Downloading attachment \(attachmentId, privacy: .public) for task \(taskId, privacy: .public)")
         #endif
 
         let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "attachments", "\(attachmentId)"])
         let data = try await request(ep)
 
         #if DEBUG
-        print("VikunjaAPI: Downloaded attachment data, size: \(data.count) bytes")
+        Log.network.debug("Downloaded attachment data, size: \(data.count, privacy: .public) bytes")
         #endif
 
         return data
@@ -707,7 +831,7 @@ final class VikunjaAPI {
     /// Fetch comments for a task.
     func getTaskComments(taskId: Int) async throws -> [TaskComment] {
         #if DEBUG
-        print("VikunjaAPI: Fetching comments for task \(taskId)")
+        Log.network.debug("Fetching comments for task \(taskId, privacy: .public)")
         #endif
 
         let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "comments"])
@@ -715,14 +839,14 @@ final class VikunjaAPI {
 
         #if DEBUG
         if let jsonString = String(data: data, encoding: .utf8) {
-            print("VikunjaAPI: Comments response: \(jsonString)")
+            Log.network.debug("Comments response: \(jsonString, privacy: .public)")
         }
         #endif
 
         let comments = try JSONDecoder.vikunja.decode([TaskComment].self, from: data)
 
         #if DEBUG
-        print("VikunjaAPI: Decoded \(comments.count) comments")
+        Log.network.debug("Decoded \(comments.count, privacy: .public) comments")
         #endif
 
         return comments
@@ -755,7 +879,7 @@ final class VikunjaAPI {
     /// Get comment count for a task (lightweight version).
     func getTaskCommentCount(taskId: Int) async throws -> Int {
         #if DEBUG
-        print("VikunjaAPI: Fetching comment count for task \(taskId)")
+        Log.network.debug("Fetching comment count for task \(taskId, privacy: .public)")
         #endif
 
         do {
@@ -763,7 +887,7 @@ final class VikunjaAPI {
             let count = comments.count
 
             #if DEBUG
-            print("VikunjaAPI: Task \(taskId) has \(count) comments")
+            Log.network.debug("Task \(taskId, privacy: .public) has \(count, privacy: .public) comments")
             #endif
 
             return count
@@ -774,7 +898,7 @@ final class VikunjaAPI {
                errorMessage.contains("no such file") || errorMessage.contains("missing") ||
                errorMessage.contains("couldn't be read") {
                 #if DEBUG
-                print("VikunjaAPI: Task \(taskId) has no comments (404/not found)")
+                Log.network.debug("Task \(taskId, privacy: .public) has no comments (404/not found)")
                 #endif
                 return 0
             } else {
@@ -786,7 +910,7 @@ final class VikunjaAPI {
     /// Add a comment to a task.
     func addTaskComment(taskId: Int, comment: String) async throws -> TaskComment {
         #if DEBUG
-        print("VikunjaAPI: Adding comment to task \(taskId)")
+        Log.network.debug("Adding comment to task \(taskId, privacy: .public)")
         #endif
 
         struct NewComment: Encodable {
@@ -799,14 +923,14 @@ final class VikunjaAPI {
 
         #if DEBUG
         if let jsonString = String(data: data, encoding: .utf8) {
-            print("VikunjaAPI: Add comment response: \(jsonString)")
+            Log.network.debug("Add comment response: \(jsonString, privacy: .public)")
         }
         #endif
 
         let addedComment = try JSONDecoder.vikunja.decode(TaskComment.self, from: data)
 
         #if DEBUG
-        print("VikunjaAPI: Successfully added comment with ID: \(addedComment.id)")
+        Log.network.debug("Successfully added comment with ID: \(addedComment.id, privacy: .public)")
         #endif
 
         return addedComment
@@ -815,14 +939,14 @@ final class VikunjaAPI {
     /// Delete a comment from a task.
     func deleteTaskComment(taskId: Int, commentId: Int) async throws {
         #if DEBUG
-        print("VikunjaAPI: Deleting comment \(commentId) from task \(taskId)")
+        Log.network.debug("Deleting comment \(commentId, privacy: .public) from task \(taskId, privacy: .public)")
         #endif
 
         let ep = Endpoint(method: "DELETE", pathComponents: ["tasks", "\(taskId)", "comments", "\(commentId)"])
         _ = try await request(ep)
 
         #if DEBUG
-        print("VikunjaAPI: Successfully deleted comment \(commentId)")
+        Log.network.debug("Successfully deleted comment \(commentId, privacy: .public)")
         #endif
     }
 
@@ -842,13 +966,13 @@ final class VikunjaAPI {
             let favoriteTasks = tasks.filter { $0.isFavorite }
 
             #if DEBUG
-            print("Server returned \(tasks.count) tasks, \(favoriteTasks.count) are favorites")
+            Log.network.debug("Server returned \(tasks.count, privacy: .public) tasks, \(favoriteTasks.count, privacy: .public) are favorites")
             #endif
 
             return favoriteTasks
         } catch {
             #if DEBUG
-            print("Filter approach failed, falling back to fetching all tasks: \(error)")
+            Log.network.error("Favorite filter failed, falling back to all tasks: \(String(describing: error), privacy: .public)")
             #endif
 
             // Fallback: get all tasks and filter client-side
@@ -858,7 +982,7 @@ final class VikunjaAPI {
             let favoriteTasks = allTasks.filter { $0.isFavorite }
 
             #if DEBUG
-            print("Fallback: Got \(allTasks.count) total tasks, \(favoriteTasks.count) are favorites")
+            Log.network.debug("Fallback: Got \(allTasks.count, privacy: .public) total tasks, \(favoriteTasks.count, privacy: .public) favorites")
             #endif
 
             return favoriteTasks
@@ -880,7 +1004,7 @@ final class VikunjaAPI {
             return try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
         } catch {
             #if DEBUG
-            print("searchTasks: ?s= failed with error: \(error)")
+            Log.network.error("searchTasks: ?s= failed with error: \(String(describing: error), privacy: .public)")
             #endif
         }
 
@@ -898,7 +1022,7 @@ final class VikunjaAPI {
             return try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
         } catch {
             #if DEBUG
-            print("searchTasks: filter fallback failed with error: \(error)")
+            Log.network.error("searchTasks: filter fallback failed with error: \(String(describing: error), privacy: .public)")
             #endif
         }
 
@@ -921,13 +1045,7 @@ final class VikunjaAPI {
         updatedTask.isFavorite = !task.isFavorite
 
         #if DEBUG
-        print("Toggling favorite for task:")
-        print("- ID: \(task.id)")
-        print("- Title: \(task.title)")
-        print("- Current isFavorite: \(task.isFavorite)")
-        print("- New isFavorite: \(updatedTask.isFavorite)")
-        print("- createdBy: \(task.createdBy?.name ?? "nil")")
-        print("- assignees count: \(task.assignees?.count ?? 0)")
+        Log.network.debug("Toggling favorite for task: id=\(task.id, privacy: .public) title=\(task.title, privacy: .public) current=\(task.isFavorite, privacy: .public) new=\(updatedTask.isFavorite, privacy: .public) createdBy=\(task.createdBy?.name ?? "nil", privacy: .public) assignees=\(task.assignees?.count ?? 0, privacy: .public)")
         #endif
 
         // Send the complete task object to preserve all fields
@@ -936,19 +1054,14 @@ final class VikunjaAPI {
         #if DEBUG
         Log.network.debug("Toggle favorite response bytes: \(data.count, privacy: .public)")
         if let jsonString = String(data: data, encoding: .utf8) {
-            print("Toggle favorite API response: \(jsonString)")
+            Log.network.debug("Toggle favorite API response: \(jsonString, privacy: .public)")
         }
         #endif
 
         let finalTask = try JSONDecoder.vikunja.decode(VikunjaTask.self, from: data)
 
         #if DEBUG
-        print("Final task after favorite toggle:")
-        print("- ID: \(finalTask.id)")
-        print("- Title: \(finalTask.title)")
-        print("- isFavorite: \(finalTask.isFavorite)")
-        print("- createdBy: \(finalTask.createdBy?.name ?? "nil")")
-        print("- assignees count: \(finalTask.assignees?.count ?? 0)")
+        Log.network.debug("Final task after favorite toggle: id=\(finalTask.id, privacy: .public) title=\(finalTask.title, privacy: .public) isFavorite=\(finalTask.isFavorite, privacy: .public) createdBy=\(finalTask.createdBy?.name ?? "nil", privacy: .public) assignees=\(finalTask.assignees?.count ?? 0, privacy: .public)")
         #endif
 
         return finalTask
@@ -987,3 +1100,68 @@ struct AnyEncodable: Encodable {
     init<T: Encodable>(_ wrapped: T) { _encode = wrapped.encode }
     func encode(to encoder: Encoder) throws { try _encode(encoder) }
 }
+
+// MARK: - Background sync helpers
+extension VikunjaAPI {
+    /// Fetch all tasks updated since ISO8601 cursor across all projects.
+    /// This uses server filtering when available and falls back to client-side filtering.
+    func fetchAllTasksUpdatedSince(sinceISO8601: String?) async throws -> [VikunjaTask] {
+        // Try paginated server-side filtering first
+        var results: [VikunjaTask] = []
+        var page = 1
+        let perPage = 200
+        var usedServerFilter = false
+        if let sinceISO8601 {
+            usedServerFilter = true
+            while true {
+                let items = [
+                    URLQueryItem(name: "updated_since", value: sinceISO8601),
+                    URLQueryItem(name: "page", value: String(page)),
+                    URLQueryItem(name: "per_page", value: String(perPage))
+                ]
+                do {
+                    let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"], queryItems: items)
+                    let data = try await request(ep)
+                    let pageTasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+                    results += pageTasks
+                    if pageTasks.count < perPage { break }
+                    page += 1
+                } catch {
+                    #if DEBUG
+                    Log.network.error("fetchAllTasksUpdatedSince: server filter failed on page \(page, privacy: .public): \(String(describing: error), privacy: .public)")
+                    #endif
+                    usedServerFilter = false
+                    break
+                }
+            }
+        }
+        if usedServerFilter { return results }
+
+        // Fallback: fetch all (paginated) and filter locally
+        results.removeAll(keepingCapacity: true)
+        page = 1
+        while true {
+            let items = [
+                URLQueryItem(name: "page", value: String(page)),
+                URLQueryItem(name: "per_page", value: String(perPage))
+            ]
+            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"], queryItems: items)
+            let data = try await request(ep)
+            let pageTasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+            results += pageTasks
+            if pageTasks.count < perPage { break }
+            page += 1
+        }
+        guard let sinceISO8601 else { return results }
+        let iso = ISO8601DateFormatter()
+        let sinceDate = iso.date(from: sinceISO8601)
+        if let s = sinceDate {
+            return results.filter { t in
+                guard let u = t.updatedAt else { return true }
+                return u > s
+            }
+        }
+        return results
+    }
+}
+

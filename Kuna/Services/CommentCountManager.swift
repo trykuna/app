@@ -4,12 +4,25 @@ import Combine
 
 @MainActor
 class CommentCountManager: ObservableObject {
+    // Shared instance to avoid creating multiple managers
+    static var shared: CommentCountManager?
+    
     private let api: VikunjaAPI
     @Published private(set) var commentCounts: [Int: Int] = [:] // taskId -> commentCount
     private var loadingTasks: Set<Int> = []
+    private let maxCachedCounts = 100 // Reasonable limit for comment counts
     
     init(api: VikunjaAPI) {
         self.api = api
+    }
+    
+    static func getShared(api: VikunjaAPI) -> CommentCountManager {
+        if let existing = shared {
+            return existing
+        }
+        let new = CommentCountManager(api: api)
+        shared = new
+        return new
     }
     
     /// Get the cached comment count for a task, or nil if not loaded
@@ -32,6 +45,11 @@ class CommentCountManager: ObservableObject {
                 await MainActor.run {
                     self.commentCounts[taskId] = count
                     self.loadingTasks.remove(taskId)
+                    
+                    // Trim cache if it gets too large
+                    if self.commentCounts.count > self.maxCachedCounts {
+                        self.trimCache()
+                    }
                 }
             } catch {
                 await MainActor.run {
@@ -40,6 +58,18 @@ class CommentCountManager: ObservableObject {
                     self.loadingTasks.remove(taskId)
                 }
             }
+        }
+    }
+    
+    private func trimCache() {
+        // Keep only the most recent entries
+        let entriesToRemove = commentCounts.count - maxCachedCounts
+        if entriesToRemove > 0 {
+            let keysToRemove = commentCounts.keys.prefix(entriesToRemove)
+            for key in keysToRemove {
+                commentCounts.removeValue(forKey: key)
+            }
+            Log.app.debug("CommentCountManager: Trimmed cache, removed \(entriesToRemove) entries")
         }
     }
     

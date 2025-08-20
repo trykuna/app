@@ -88,7 +88,7 @@ struct TaskAttachmentView: View {
     private func handlePhoto(_ item: PhotosPickerItem) async {
         do {
             #if DEBUG
-            print("TaskAttachmentView: Loading photo data for task \(task.id)")
+            Log.app.debug("TaskAttachmentView: Loading photo data for task id=\(task.id, privacy: .public)")
             #endif
 
             guard let data = try await item.loadTransferable(type: Data.self) else {
@@ -99,7 +99,7 @@ struct TaskAttachmentView: View {
             }
 
             #if DEBUG
-            print("TaskAttachmentView: Loaded photo data, size: \(data.count) bytes")
+            Log.app.debug("TaskAttachmentView: Loaded photo data, size: \(data.count, privacy: .public) bytes")
             #endif
 
             await MainActor.run {
@@ -112,7 +112,7 @@ struct TaskAttachmentView: View {
             }
         } catch {
             #if DEBUG
-            print("TaskAttachmentView: Photo loading error: \(error)")
+            Log.app.error("TaskAttachmentView: Photo loading error: \(String(describing: error), privacy: .public)")
             #endif
             await MainActor.run {
                 uploadError = error.localizedDescription
@@ -126,16 +126,16 @@ struct TaskAttachmentView: View {
             Task {
                 do {
                     #if DEBUG
-                    print("TaskAttachmentView: Loading file data for task \(task.id)")
-                    print("TaskAttachmentView: File URL: \(url)")
+                    Log.app.debug("TaskAttachmentView: Loading file data for task id=\(task.id, privacy: .public)")
+                    Log.app.debug("TaskAttachmentView: File URL: \(url.absoluteString, privacy: .public)")
                     #endif
 
                     let data = try Data(contentsOf: url)
                     let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
 
                     #if DEBUG
-                    print("TaskAttachmentView: File data loaded, size: \(data.count) bytes")
-                    print("TaskAttachmentView: File name: \(url.lastPathComponent), MIME: \(mime)")
+                    Log.app.debug("TaskAttachmentView: File data loaded, size: \(data.count, privacy: .public) bytes")
+                    Log.app.debug("TaskAttachmentView: File name: \(url.lastPathComponent, privacy: .public), MIME: \(mime, privacy: .public)")
                     #endif
 
                     await MainActor.run {
@@ -148,7 +148,7 @@ struct TaskAttachmentView: View {
                     }
                 } catch {
                     #if DEBUG
-                    print("TaskAttachmentView: File loading error: \(error)")
+                    Log.app.error("TaskAttachmentView: File loading error: \(String(describing: error), privacy: .public)")
                     #endif
                     await MainActor.run {
                         uploadError = error.localizedDescription
@@ -178,13 +178,13 @@ struct TaskAttachmentView: View {
                 }
 
                 #if DEBUG
-                print("TaskAttachmentView: Starting upload with custom filename: \(finalFilename)")
+                Log.app.debug("TaskAttachmentView: Starting upload with custom filename: \(finalFilename, privacy: .public)")
                 #endif
 
                 try await api.uploadAttachment(taskId: task.id, fileName: finalFilename, data: data, mimeType: pendingUploadMimeType)
 
                 #if DEBUG
-                print("TaskAttachmentView: Upload completed successfully")
+                Log.app.debug("TaskAttachmentView: Upload completed successfully")
                 #endif
 
                 await MainActor.run {
@@ -192,7 +192,7 @@ struct TaskAttachmentView: View {
                 }
             } catch {
                 #if DEBUG
-                print("TaskAttachmentView: Upload error: \(error)")
+                Log.app.error("TaskAttachmentView: Upload error: \(String(describing: error), privacy: .public)")
                 #endif
                 await MainActor.run {
                     uploadError = error.localizedDescription

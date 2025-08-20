@@ -8,16 +8,77 @@
 
 /* Begin PBXBuildFile section */
 		79AE791D2E51F6D4001FCABD /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE791C2E51F6D4001FCABD /* ConfettiSwiftUI */; };
+		79AE7A7D2E533CF0001FCABD /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE7A7C2E533CF0001FCABD /* TelemetryClient */; };
+		79AE7A7F2E533CF0001FCABD /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE7A7E2E533CF0001FCABD /* TelemetryDeck */; };
+		79CC51262E553BA600ACDCC3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79CC51252E553BA600ACDCC3 /* WidgetKit.framework */; };
+		79CC51282E553BA600ACDCC3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79CC51272E553BA600ACDCC3 /* SwiftUI.framework */; };
+		79CC51362E553BA800ACDCC3 /* KunaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		79CC51332E553BA800ACDCC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 794745452E4F6C1200C7A1D4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 79CC51222E553BA600ACDCC3;
+			remoteInfo = KunaWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		79CC51352E553BA800ACDCC3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				79CC51362E553BA800ACDCC3 /* KunaWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7947454D2E4F6C1200C7A1D4 /* Kuna.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kuna.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KunaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		79CC51252E553BA600ACDCC3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		79CC51272E553BA600ACDCC3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		79CC513B2E553BC900ACDCC3 /* KunaWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KunaWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7947454C2E4F6C1200C7A1D4 /* Kuna */;
+		};
+		79CC513A2E553BA800ACDCC3 /* Exceptions for "KunaWidget" folder in "KunaWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 79CC51222E553BA600ACDCC3 /* KunaWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7947454F2E4F6C1200C7A1D4 /* Kuna */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */,
+			);
 			path = Kuna;
+			sourceTree = "<group>";
+		};
+		79CC51292E553BA600ACDCC3 /* KunaWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				79CC513A2E553BA800ACDCC3 /* Exceptions for "KunaWidget" folder in "KunaWidgetExtension" target */,
+			);
+			path = KunaWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -28,6 +89,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				79AE791D2E51F6D4001FCABD /* ConfettiSwiftUI in Frameworks */,
+				79AE7A7D2E533CF0001FCABD /* TelemetryClient in Frameworks */,
+				79AE7A7F2E533CF0001FCABD /* TelemetryDeck in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79CC51202E553BA600ACDCC3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79CC51282E553BA600ACDCC3 /* SwiftUI.framework in Frameworks */,
+				79CC51262E553BA600ACDCC3 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,7 +109,10 @@
 		794745442E4F6C1200C7A1D4 = {
 			isa = PBXGroup;
 			children = (
+				79CC513B2E553BC900ACDCC3 /* KunaWidgetExtension.entitlements */,
 				7947454F2E4F6C1200C7A1D4 /* Kuna */,
+				79CC51292E553BA600ACDCC3 /* KunaWidget */,
+				79CC51242E553BA600ACDCC3 /* Frameworks */,
 				7947454E2E4F6C1200C7A1D4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,8 +121,18 @@
 			isa = PBXGroup;
 			children = (
 				7947454D2E4F6C1200C7A1D4 /* Kuna.app */,
+				79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		79CC51242E553BA600ACDCC3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				79CC51252E553BA600ACDCC3 /* WidgetKit.framework */,
+				79CC51272E553BA600ACDCC3 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,10 +145,12 @@
 				794745492E4F6C1200C7A1D4 /* Sources */,
 				7947454A2E4F6C1200C7A1D4 /* Frameworks */,
 				7947454B2E4F6C1200C7A1D4 /* Resources */,
+				79CC51352E553BA800ACDCC3 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				79CC51342E553BA800ACDCC3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				7947454F2E4F6C1200C7A1D4 /* Kuna */,
@@ -71,10 +158,34 @@
 			name = Kuna;
 			packageProductDependencies = (
 				79AE791C2E51F6D4001FCABD /* ConfettiSwiftUI */,
+				79AE7A7C2E533CF0001FCABD /* TelemetryClient */,
+				79AE7A7E2E533CF0001FCABD /* TelemetryDeck */,
 			);
 			productName = Kuna;
 			productReference = 7947454D2E4F6C1200C7A1D4 /* Kuna.app */;
 			productType = "com.apple.product-type.application";
+		};
+		79CC51222E553BA600ACDCC3 /* KunaWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79CC51372E553BA800ACDCC3 /* Build configuration list for PBXNativeTarget "KunaWidgetExtension" */;
+			buildPhases = (
+				79CC511F2E553BA600ACDCC3 /* Sources */,
+				79CC51202E553BA600ACDCC3 /* Frameworks */,
+				79CC51212E553BA600ACDCC3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				79CC51292E553BA600ACDCC3 /* KunaWidget */,
+			);
+			name = KunaWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = KunaWidgetExtension;
+			productReference = 79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -87,6 +198,9 @@
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					7947454C2E4F6C1200C7A1D4 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					79CC51222E553BA600ACDCC3 = {
 						CreatedOnToolsVersion = 16.3;
 					};
 				};
@@ -102,6 +216,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				79AE791B2E51F6D4001FCABD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7947454E2E4F6C1200C7A1D4 /* Products */;
@@ -109,12 +224,20 @@
 			projectRoot = "";
 			targets = (
 				7947454C2E4F6C1200C7A1D4 /* Kuna */,
+				79CC51222E553BA600ACDCC3 /* KunaWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7947454B2E4F6C1200C7A1D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79CC51212E553BA600ACDCC3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -131,7 +254,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		79CC511F2E553BA600ACDCC3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		79CC51342E553BA800ACDCC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 79CC51222E553BA600ACDCC3 /* KunaWidgetExtension */;
+			targetProxy = 79CC51332E553BA800ACDCC3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		794745562E4F6C1400C7A1D4 /* Debug */ = {
@@ -266,9 +404,14 @@
 				DEVELOPMENT_TEAM = 9NK92GW676;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kuna/Info.plist;
+				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = "$(PRODUCT_BUNDLE_IDENTIFIER).bg.refresh";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Kuna needs access to your calendar to sync tasks with calendar events, helping you manage your schedule in one place.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = fetch;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -277,7 +420,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.Kuna;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.kuna;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -296,9 +439,14 @@
 				DEVELOPMENT_TEAM = 9NK92GW676;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kuna/Info.plist;
+				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = "$(PRODUCT_BUNDLE_IDENTIFIER).bg.refresh";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Kuna needs access to your calendar to sync tasks with calendar events, helping you manage your schedule in one place.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = fetch;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -307,8 +455,64 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.Kuna;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.kuna;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		79CC51382E553BA800ACDCC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = KunaWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9NK92GW676;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KunaWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KunaWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.kuna.KunaWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		79CC51392E553BA800ACDCC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = KunaWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9NK92GW676;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KunaWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KunaWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.kuna.KunaWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -336,6 +540,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		79CC51372E553BA800ACDCC3 /* Build configuration list for PBXNativeTarget "KunaWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79CC51382E553BA800ACDCC3 /* Debug */,
+				79CC51392E553BA800ACDCC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -347,6 +560,14 @@
 				minimumVersion = 2.0.3;
 			};
 		};
+		79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -354,6 +575,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79AE791B2E51F6D4001FCABD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
 			productName = ConfettiSwiftUI;
+		};
+		79AE7A7C2E533CF0001FCABD /* TelemetryClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryClient;
+		};
+		79AE7A7E2E533CF0001FCABD /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79AE7A7B2E533CF0001FCABD /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

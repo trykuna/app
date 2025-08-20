@@ -400,16 +400,20 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         }
 
         #if DEBUG
+        let idVal = id
+        let titleVal = title
+        let projectIdVal = projectId
+
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
-            print("Task \(id) (\(title)) decoded isFavorite: \(favoriteValue)")
+            Log.app.debug("Decoded isFavorite for task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public): \(favoriteValue, privacy: .public)")
         } else {
-            print("Task \(id) (\(title)) has no isFavorite field, defaulting to false")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no isFavorite field, defaulting to false")
         }
 
-        if let projectIdValue = projectId {
-            print("Task \(id) (\(title)) belongs to project ID: \(projectIdValue)")
+        if let projectIdValue = projectIdVal {
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) belongs to project ID: \(projectIdValue, privacy: .public)")
         } else {
-            print("Task \(id) (\(title)) has no project ID")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no project ID")
         }
         #endif
     }
@@ -702,14 +706,22 @@ extension TaskRelation {
 }
 
 
-// MARK: - Color Extension
+// MARK: - Color Extension (with simple cache for hex -> UIColor)
 extension Color {
+    private final class UIColorBox { let color: UIColor; init(_ c: UIColor) { color = c } }
+    private static let _hexCache = NSCache<NSString, UIColorBox>()
+
     init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let normalized = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted).uppercased() as NSString
+        if let cached = Self._hexCache.object(forKey: normalized) {
+            self = Color(cached.color)
+            return
+        }
+
         var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
+        Scanner(string: normalized as String).scanHexInt64(&int)
         let a, r, g, b: UInt64
-        switch hex.count {
+        switch (normalized as String).count {
         case 3: // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
         case 6: // RGB (24-bit)
@@ -720,12 +732,13 @@ extension Color {
             (a, r, g, b) = (1, 1, 1, 0)
         }
 
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue:  Double(b) / 255,
-            opacity: Double(a) / 255
+        let ui = UIColor(
+            red: CGFloat(Double(r) / 255),
+            green: CGFloat(Double(g) / 255),
+            blue: CGFloat(Double(b) / 255),
+            alpha: CGFloat(Double(a) / 255)
         )
+        Self._hexCache.setObject(UIColorBox(ui), forKey: normalized)
+        self = Color(ui)
     }
 }

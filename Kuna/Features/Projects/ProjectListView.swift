@@ -19,7 +19,7 @@ final class ProjectListVM: ObservableObject {
             #if DEBUG
             let filteredCount = allProjects.count - projects.count
             if filteredCount > 0 {
-                print("Filtered out \(filteredCount) project(s) named 'Favorites'")
+                Log.app.debug("Filtered out \(filteredCount, privacy: .public) project(s) named 'Favorites'")
             }
             #endif
 

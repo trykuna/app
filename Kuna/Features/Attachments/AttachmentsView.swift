@@ -93,7 +93,7 @@ struct AttachmentsView: View {
 
     private func loadAttachments() async {
         #if DEBUG
-        print("AttachmentsView: Loading attachments for task \(task.id)")
+        Log.app.debug("AttachmentsView: Loading attachments for task id=\(task.id, privacy: .public)")
         #endif
 
         do {
@@ -101,14 +101,14 @@ struct AttachmentsView: View {
             attachments = try await api.getTaskAttachments(taskId: task.id)
 
             #if DEBUG
-            print("AttachmentsView: Loaded \(attachments.count) attachments")
+            Log.app.debug("AttachmentsView: Loaded \(attachments.count, privacy: .public) attachments")
             for attachment in attachments {
-                print("AttachmentsView: - \(attachment.fileName) (ID: \(attachment.id))")
+                Log.app.debug("AttachmentsView: - \(attachment.fileName, privacy: .public) (ID: \(attachment.id, privacy: .public))")
             }
             #endif
         } catch {
             #if DEBUG
-            print("AttachmentsView: Error loading attachments: \(error)")
+            Log.app.error("AttachmentsView: Error loading attachments: \(String(describing: error), privacy: .public)")
             #endif
 
             // Handle common "no attachments" scenarios gracefully
@@ -119,7 +119,7 @@ struct AttachmentsView: View {
                 // Task has no attachments - this is normal, not an error
                 attachments = []
                 #if DEBUG
-                print("AttachmentsView: Task \(task.id) has no attachments (404/not found)")
+                Log.app.debug("AttachmentsView: Task id=\(task.id, privacy: .public) has no attachments (404/not found)")
                 #endif
             } else {
                 // This is a real error that should be shown to the user
@@ -154,13 +154,21 @@ struct AttachmentsView: View {
 
         do {
             #if DEBUG
-            print("AttachmentsView: Starting download of \(attachment.fileName)")
+            Log.app.debug("AttachmentsView: Starting download of \(attachment.fileName, privacy: .public)")
             #endif
 
+            // Check file size before downloading to avoid memory issues
+            // Files larger than 50MB should be streamed or downloaded differently
+            let maxSizeInMemory = 50 * 1024 * 1024 // 50MB
+            
             let data = try await api.downloadAttachment(taskId: task.id, attachmentId: attachment.id)
+            
+            if data.count > maxSizeInMemory {
+                Log.app.warning("AttachmentsView: Large attachment \(attachment.fileName), size: \(data.count) bytes")
+            }
 
             #if DEBUG
-            print("AttachmentsView: Downloaded \(attachment.fileName), size: \(data.count) bytes")
+            Log.app.debug("AttachmentsView: Downloaded \(attachment.fileName, privacy: .public), size: \(data.count, privacy: .public) bytes")
             #endif
 
             _ = await MainActor.run {
@@ -168,7 +176,7 @@ struct AttachmentsView: View {
             }
         } catch {
             #if DEBUG
-            print("AttachmentsView: Error downloading attachment: \(error)")
+            Log.app.error("AttachmentsView: Error downloading attachment: \(String(describing: error), privacy: .public)")
             #endif
             _ = await MainActor.run {
                 self.error = "Failed to download \(attachment.fileName): \(error.localizedDescription)"
