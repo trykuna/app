@@ -7,12 +7,13 @@ import BackgroundTasks
 final class AppSettings: ObservableObject {
     static let shared = AppSettings()
     private var isBootstrapping = true
+    private var analyticsDebounceTimer: Timer?
 
 
     @Published var showDefaultColorBalls: Bool {
         didSet {
             UserDefaults.standard.set(showDefaultColorBalls, forKey: "showDefaultColorBalls")
-            Analytics.trackSettingToggle("Settings.Task.DefaultColorBalls", enabled: showDefaultColorBalls)
+            trackSettingChangeDebounced("Settings.Task.DefaultColorBalls", enabled: showDefaultColorBalls)
         }
     }
 
@@ -250,5 +251,20 @@ final class AppSettings: ObservableObject {
         self.analyticsConsentDecision = nil
 
         CalendarSyncService.shared.setCalendarSyncEnabled(false)
+    }
+    
+    // Debounced analytics to reduce memory pressure from frequent setting changes
+    private func trackSettingChangeDebounced(_ name: String, enabled: Bool) {
+        // Skip analytics during bootstrapping to avoid overwhelming the system
+        guard !isBootstrapping else { return }
+        
+        analyticsDebounceTimer?.invalidate()
+        analyticsDebounceTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+            Analytics.trackSettingToggle(name, enabled: enabled)
+        }
+    }
+    
+    deinit {
+        analyticsDebounceTimer?.invalidate()
     }
 }

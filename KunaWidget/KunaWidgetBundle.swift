@@ -12,6 +12,6 @@ import SwiftUI
 struct KunaWidgetBundle: WidgetBundle {
     var body: some Widget {
         KunaWidget()
-        KunaWidgetControl()
+        KunaPriorityWidget()
     }
 }

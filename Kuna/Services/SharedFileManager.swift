@@ -42,14 +42,16 @@ class SharedFileManager {
     }
 
     func readProjects() -> [Project]? {
-        do {
-            let data = try Data(contentsOf: self.projectsFile)
-            let projects = try JSONDecoder().decode([Project].self, from: data)
-            Log.watch.debug("Watch: Read \(projects.count, privacy: .public) projects from shared file")
-            return projects
-        } catch {
-            Log.watch.error("Watch: Failed to read projects from shared file: \(String(describing: error), privacy: .public)")
-            return nil
+        return autoreleasepool {
+            do {
+                let data = try Data(contentsOf: self.projectsFile)
+                let projects = try JSONDecoder().decode([Project].self, from: data)
+                Log.watch.debug("Watch: Read \(projects.count, privacy: .public) projects from shared file")
+                return projects
+            } catch {
+                Log.watch.error("Watch: Failed to read projects from shared file: \(String(describing: error), privacy: .public)")
+                return nil
+            }
         }
     }
 

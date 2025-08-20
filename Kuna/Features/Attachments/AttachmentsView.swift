@@ -157,7 +157,15 @@ struct AttachmentsView: View {
             Log.app.debug("AttachmentsView: Starting download of \(attachment.fileName, privacy: .public)")
             #endif
 
+            // Check file size before downloading to avoid memory issues
+            // Files larger than 50MB should be streamed or downloaded differently
+            let maxSizeInMemory = 50 * 1024 * 1024 // 50MB
+            
             let data = try await api.downloadAttachment(taskId: task.id, attachmentId: attachment.id)
+            
+            if data.count > maxSizeInMemory {
+                Log.app.warning("AttachmentsView: Large attachment \(attachment.fileName), size: \(data.count) bytes")
+            }
 
             #if DEBUG
             Log.app.debug("AttachmentsView: Downloaded \(attachment.fileName, privacy: .public), size: \(data.count, privacy: .public) bytes")

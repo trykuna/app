@@ -184,12 +184,24 @@ final class VikunjaAPI {
     private let tokenRefreshFailureHandler: (() async -> Void)?
 
 
-    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, tokenRefreshHandler: ((String) async throws -> Void)? = nil, tokenRefreshFailureHandler: (() async -> Void)? = nil, session: URLSession = .shared) {
+    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, tokenRefreshHandler: ((String) async throws -> Void)? = nil, tokenRefreshFailureHandler: (() async -> Void)? = nil, session: URLSession? = nil) {
         self.config = config
         self.tokenProvider = tokenProvider
         self.tokenRefreshHandler = tokenRefreshHandler
         self.tokenRefreshFailureHandler = tokenRefreshFailureHandler
-        self.session = session
+        
+        // Use memory-optimized session configuration for better memory management
+        if let customSession = session {
+            self.session = customSession
+        } else {
+            let config = URLSessionConfiguration.default
+            config.httpMaximumConnectionsPerHost = 4 // Limit concurrent connections
+            config.timeoutIntervalForRequest = 30 // Shorter timeout
+            config.timeoutIntervalForResource = 60
+            config.urlCache = URLCache(memoryCapacity: 2 * 1024 * 1024, diskCapacity: 0, diskPath: nil) // Small memory cache, no disk cache
+            config.requestCachePolicy = .reloadIgnoringLocalCacheData // Don't cache requests
+            self.session = URLSession(configuration: config)
+        }
     }
 
 

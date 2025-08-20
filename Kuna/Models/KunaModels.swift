@@ -706,14 +706,22 @@ extension TaskRelation {
 }
 
 
-// MARK: - Color Extension
+// MARK: - Color Extension (with simple cache for hex -> UIColor)
 extension Color {
+    private final class UIColorBox { let color: UIColor; init(_ c: UIColor) { color = c } }
+    private static let _hexCache = NSCache<NSString, UIColorBox>()
+
     init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let normalized = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted).uppercased() as NSString
+        if let cached = Self._hexCache.object(forKey: normalized) {
+            self = Color(cached.color)
+            return
+        }
+
         var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
+        Scanner(string: normalized as String).scanHexInt64(&int)
         let a, r, g, b: UInt64
-        switch hex.count {
+        switch (normalized as String).count {
         case 3: // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
         case 6: // RGB (24-bit)
@@ -724,12 +732,13 @@ extension Color {
             (a, r, g, b) = (1, 1, 1, 0)
         }
 
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue:  Double(b) / 255,
-            opacity: Double(a) / 255
+        let ui = UIColor(
+            red: CGFloat(Double(r) / 255),
+            green: CGFloat(Double(g) / 255),
+            blue: CGFloat(Double(b) / 255),
+            alpha: CGFloat(Double(a) / 255)
         )
+        Self._hexCache.setObject(UIColorBox(ui), forKey: normalized)
+        self = Color(ui)
     }
 }

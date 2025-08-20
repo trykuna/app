@@ -86,7 +86,12 @@ struct MainContainerView: View {
                     await MainActor.run {
                         let taskView = TaskDetailView(task: task, api: api)
                         let hosting = UIHostingController(rootView: taskView)
-                        UIApplication.shared.windows.first?.rootViewController?.present(hosting, animated: true)
+                        
+                        // Use modern window scene API instead of deprecated UIApplication.shared.windows
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let window = windowScene.windows.first {
+                            window.rootViewController?.present(hosting, animated: true)
+                        }
                     }
                 } catch {
                     Log.app.error("DeepLink: Failed to open task id=\(id, privacy: .public): \(String(describing: error), privacy: .public)")
