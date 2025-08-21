@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "530D2962-2FDC-436B-BBBC-B3C01D54A0C0",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Kuna.xcodeproj",
+        "identifier" : "791F947F2E57821A004CC4E5",
+        "name" : "KunaUnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -56,6 +56,17 @@
                ReferencedContainer = "container:Kuna.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "791F947F2E57821A004CC4E5"
+               BuildableName = "KunaUnitTests.xctest"
+               BlueprintName = "KunaUnitTests"
+               ReferencedContainer = "container:Kuna.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

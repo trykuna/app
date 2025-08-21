@@ -28,8 +28,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      codeCoverageEnabled = "YES">
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -39,6 +38,15 @@
             ReferencedContainer = "container:Kuna.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:UnitTestPlan.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:TestPlan.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO"
@@ -48,6 +56,17 @@
                BlueprintIdentifier = "795F68CE2E5725850070814C"
                BuildableName = "KunaTests.xctest"
                BlueprintName = "KunaTests"
+               ReferencedContainer = "container:Kuna.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "791F947F2E57821A004CC4E5"
+               BuildableName = "KunaUnitTests.xctest"
+               BlueprintName = "KunaUnitTests"
                ReferencedContainer = "container:Kuna.xcodeproj">
             </BuildableReference>
          </TestableReference>
