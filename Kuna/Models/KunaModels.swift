@@ -187,7 +187,7 @@ struct Label: Identifiable, Decodable, Encodable {
     let description: String?
 
     var color: Color {
-        Color(hex: hexColor ?? "007AFF") // Default to blue
+        Color(hex: hexColor ?? "007AFF") ?? .blue // Default to blue
     }
 
     enum CodingKeys: String, CodingKey {
@@ -308,7 +308,7 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     var relations: [TaskRelation]? // Relations to other tasks (from GET /tasks/{id})
 
     var color: Color {
-        Color(hex: hexColor ?? "007AFF") // Default to blue if no color set
+        Color(hex: hexColor ?? "007AFF") ?? .blue // Default to blue if no color set
     }
 
     var hasCustomColor: Bool {
@@ -765,15 +765,30 @@ extension Color {
     private final class UIColorBox { let color: UIColor; init(_ c: UIColor) { color = c } }
     private static let _hexCache = NSCache<NSString, UIColorBox>()
 
-    init(hex: String) {
+    init?(hex: String) {
         let normalized = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted).uppercased() as NSString
+        
+        // Validate that the normalized string contains only hex characters
+        let hexCharacterSet = CharacterSet(charactersIn: "0123456789ABCDEF")
+        guard (normalized as String).unicodeScalars.allSatisfy({ hexCharacterSet.contains($0) }) else {
+            return nil
+        }
+        
+        // Check valid lengths
+        guard [3, 6, 8].contains((normalized as String).count) else {
+            return nil
+        }
+        
         if let cached = Self._hexCache.object(forKey: normalized) {
             self = Color(cached.color)
             return
         }
 
         var int: UInt64 = 0
-        Scanner(string: normalized as String).scanHexInt64(&int)
+        guard Scanner(string: normalized as String).scanHexInt64(&int) else {
+            return nil
+        }
+        
         let a, r, g, b: UInt64
         switch (normalized as String).count {
         case 3: // RGB (12-bit)
@@ -783,7 +798,7 @@ extension Color {
         case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
-            (a, r, g, b) = (1, 1, 1, 0)
+            return nil
         }
 
         let ui = UIColor(

@@ -200,7 +200,7 @@ private struct DisplayPreviewRow: View {
 
                 if settings.showTaskColors && settings.showDefaultColorBalls {
                     Circle()
-                        .fill(Color(hex: "007AFF"))
+                        .fill(Color(hex: "007AFF") ?? .blue)
                         .frame(width: 12, height: 12)
                         .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 0.5))
                 }

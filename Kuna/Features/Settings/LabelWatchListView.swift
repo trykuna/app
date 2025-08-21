@@ -17,7 +17,7 @@ struct LabelWatchListView: View {
                 let selected = settings.watchedLabelIDs.contains(label.id)
                 Button(action: { toggle(label.id) }) {
                     HStack {
-                        Circle().fill(Color(hex: label.hexColor ?? "#999999")).frame(width: 14, height: 14)
+                        Circle().fill(Color(hex: label.hexColor ?? "#999999") ?? .gray).frame(width: 14, height: 14)
                         Text(label.title)
                         Spacer()
                         if selected { Image(systemName: "checkmark").foregroundColor(.accentColor) }
