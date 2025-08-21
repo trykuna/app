@@ -133,13 +133,29 @@ final class VikunjaAPI {
         func headerInt(_ name: String) -> Int? {
             http.value(forHTTPHeaderField: name).flatMap { Int($0) }
         }
-        // Vikunja docs use X-Pagination-* headers
-        let totalPages = headerInt("X-Pagination-Total-Pages")
-        let currentPage = headerInt("X-Pagination-Page")
-        let perPage = headerInt("X-Pagination-Per-Page")
-        let resultCount = headerInt("X-Pagination-Result-Count")
-        // Some setups may expose a total-count as well
-        let totalCount = headerInt("X-Pagination-Total-Count") ?? headerInt("X-Total-Count")
+        func headerIntMulti(_ names: [String]) -> Int? {
+            for n in names {
+                if let v = headerInt(n) { return v }
+            }
+            return nil
+        }
+        // Vikunja docs use X-Pagination-* headers; some proxies/versions use alternatives
+        let totalPages = headerIntMulti(["X-Pagination-Total-Pages", "X-Total-Pages"])
+        let currentPage = headerIntMulti(["X-Pagination-Page", "X-Page"])
+        let perPage = headerIntMulti(["X-Pagination-Per-Page", "X-Per-Page"])
+        let resultCount = headerIntMulti(["X-Pagination-Result-Count", "X-Result-Count"])
+        // Common total count headers used across setups
+        var totalCount = headerIntMulti([
+            "X-Pagination-Total-Count",
+            "X-Total-Count",
+            "X-Total",
+            "X-Total-Items",
+            "Total-Count"
+        ])
+        // Derive totalCount if missing but totalPages & perPage are known
+        if totalCount == nil, let tp = totalPages, let pp = perPage {
+            totalCount = tp * pp
+        }
         return PaginationInfo(totalPages: totalPages, currentPage: currentPage, perPage: perPage, resultCount: resultCount, totalCount: totalCount)
     }
 
@@ -391,7 +407,7 @@ final class VikunjaAPI {
             let p = paginationInfo(from: http)
             let totalPages = p.totalPages
             let hasMore = totalPages.map { page < $0 } ?? (tasks.count == perPage)
-            return TasksResponse(tasks: tasks, hasMore: hasMore, currentPage: p.currentPage ?? page, totalPages: totalPages)
+            return TasksResponse(tasks: tasks, hasMore: hasMore, currentPage: p.currentPage ?? page, totalPages: totalPages, totalCount: p.totalCount)
         }
 
         // Try paginated response body shape as a fallback
@@ -411,7 +427,7 @@ final class VikunjaAPI {
             let totalPages = body.totalPages ?? p.totalPages
             let current = body.page ?? p.currentPage ?? page
             let hasMore = totalPages.map { current < $0 } ?? (body.tasks.count == perPage)
-            return TasksResponse(tasks: body.tasks, hasMore: hasMore, currentPage: current, totalPages: totalPages)
+            return TasksResponse(tasks: body.tasks, hasMore: hasMore, currentPage: current, totalPages: totalPages, totalCount: p.totalCount)
         } catch {
             #if DEBUG
             Log.network.error("Failed to decode tasks response: \(String(describing: error), privacy: .public)")
@@ -952,41 +968,22 @@ final class VikunjaAPI {
 
     // MARK: - Favorites
     func getFavoriteTasks() async throws -> [VikunjaTask] {
-        // First try with filter parameter
-        do {
-            let queryItems = [URLQueryItem(name: "filter", value: "is_favorite = true")]
-            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"], queryItems: queryItems)
-            let data = try await request(ep)
+        // Server-side filtering by favorites is not supported; fetch all and filter client-side
+        let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"])
+        let data = try await request(ep)
 
-            #if DEBUG
-            Log.network.debug("Favorite tasks response bytes: \(data.count, privacy: .public)")
-            #endif
+        #if DEBUG
+        Log.network.debug("Favorite tasks (client-side) response bytes: \(data.count, privacy: .public)")
+        #endif
 
-            let tasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
-            let favoriteTasks = tasks.filter { $0.isFavorite }
+        let allTasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
+        let favoriteTasks = allTasks.filter { $0.isFavorite }
 
-            #if DEBUG
-            Log.network.debug("Server returned \(tasks.count, privacy: .public) tasks, \(favoriteTasks.count, privacy: .public) are favorites")
-            #endif
+        #if DEBUG
+        Log.network.debug("Client-side: Got \(allTasks.count, privacy: .public) total tasks, \(favoriteTasks.count, privacy: .public) favorites")
+        #endif
 
-            return favoriteTasks
-        } catch {
-            #if DEBUG
-            Log.network.error("Favorite filter failed, falling back to all tasks: \(String(describing: error), privacy: .public)")
-            #endif
-
-            // Fallback: get all tasks and filter client-side
-            let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"])
-            let data = try await request(ep)
-            let allTasks = try JSONDecoder.vikunja.decode([VikunjaTask].self, from: data)
-            let favoriteTasks = allTasks.filter { $0.isFavorite }
-
-            #if DEBUG
-            Log.network.debug("Fallback: Got \(allTasks.count, privacy: .public) total tasks, \(favoriteTasks.count, privacy: .public) favorites")
-            #endif
-
-            return favoriteTasks
-        }
+        return favoriteTasks
     }
 
     // MARK: - Task Search

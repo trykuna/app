@@ -113,7 +113,7 @@ enum Keychain {
             let message = osStatusMessage(status)
             Log.app.error("Keychain delete failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)")
         }
-        cacheQueue.sync { cache.removeValue(forKey: account) }
+//        cacheQueue.sync { cache.removeValue(forKey: account) }
     }
     
     // Server URL storage

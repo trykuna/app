@@ -71,7 +71,11 @@ final class BackgroundSyncService: ObservableObject {
 
         BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: self.taskIdentifier)
         let request = BGAppRefreshTaskRequest(identifier: self.taskIdentifier)
-        request.earliestBeginDate = Date().addingTimeInterval(frequency.timeInterval)
+        let earliest = Date().addingTimeInterval(frequency.timeInterval)
+        request.earliestBeginDate = earliest
+        // Persist scheduling info for diagnostics
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "lastBackgroundSyncScheduledAt")
+        UserDefaults.standard.set(earliest.timeIntervalSince1970, forKey: "nextBackgroundSyncEarliest")
         #if DEBUG
         logBGEnvironment(prefix: "scheduleNext")
         #endif
@@ -87,7 +91,7 @@ final class BackgroundSyncService: ObservableObject {
         let syncTask = Task {
             await runSync()
         }
-        
+
         task.expirationHandler = {
             Log.app.error("BG: task expired - cancelling sync")
             syncTask.cancel()
@@ -105,11 +109,11 @@ final class BackgroundSyncService: ObservableObject {
         Log.app.debug("BG: runSync started")
         // Save last sync attempt time for debugging
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "lastBackgroundSyncAttempt")
-        
+
         // Build an API instance from persisted server URL + token to avoid needing AppState
-        guard let server = Keychain.readServerURL(), let _ = Keychain.readToken(), let apiBase = try? AppState.buildAPIURL(from: server) else { 
+        guard let server = Keychain.readServerURL(), let _ = Keychain.readToken(), let apiBase = try? AppState.buildAPIURL(from: server) else {
             Log.app.error("BG: runSync failed - missing server URL or token")
-            return 
+            return
         }
         let api = VikunjaAPI(config: .init(baseURL: apiBase), tokenProvider: { Keychain.readToken() })
         let settings = AppSettings.shared
@@ -184,6 +188,11 @@ final class BackgroundSyncService: ObservableObject {
         } catch {
             Log.app.error("BG: sync failed: \(String(describing: error), privacy: .public)")
         }
+    }
+
+    // Public on-demand runner (safe to call in foreground)
+    func runOnDemand() async {
+        await runSync()
     }
 
     #if DEBUG
