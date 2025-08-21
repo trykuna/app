@@ -123,7 +123,7 @@ struct BackgroundSyncSettingsSection: View {
                 }
                 #endif
             }
-        } header: { Text("Background Sync & Notifications") } footer: {
+        } header: { Text("Background Sync & Notifications (Beta)") } footer: {
             Text("iOS schedules background refresh based on system conditions. Frequency is a minimum interval.")
         }
         }
