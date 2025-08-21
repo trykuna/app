@@ -71,9 +71,11 @@ final class AppState: ObservableObject {
         } else {
             Log.app.debug("No stored credentials found")
         }
-        
-        // Start memory monitoring after initialization
+
+        // Start memory monitoring in debug builds only
+        #if DEBUG
         startMemoryMonitoring()
+        #endif
     }
 
     static func buildAPIURL(from serverURL: String) throws -> URL {
@@ -291,12 +293,14 @@ final class AppState: ObservableObject {
     private let criticalMemoryThreshold: UInt64 = 150 * 1024 * 1024 // 150MB - reasonable threshold
     
     private func startMemoryMonitoring() {
+        #if DEBUG
         // Monitor memory usage every 30 seconds for debugging only
         memoryMonitorTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.checkMemoryUsage()
             }
         }
+        #endif
     }
     
     private func checkMemoryUsage() {

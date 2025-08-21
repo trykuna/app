@@ -48,12 +48,17 @@ struct KunaApp: App {
                     appState.handleMemoryWarning()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                    Log.app.debug("App: Entered background - performing memory cleanup")
+                    Log.app.debug("App: Entered background - performing memory cleanup and scheduling background sync")
                     // Aggressive memory cleanup when app goes to background
                     appState.handleMemoryWarning()
                     CommentCountManager.shared?.clearCache()
                     WidgetCacheWriter.performMemoryCleanup()
                     BackgroundTaskChangeDetector.shared.performMemoryCleanup()
+                    // Re-schedule background refresh when moving to background (recommended)
+                    let settings = AppSettings.shared
+                    if settings.backgroundSyncEnabled {
+                        BackgroundSyncService.shared.scheduleNext(after: settings.backgroundSyncFrequency)
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     Log.app.debug("App: Entering foreground")
