@@ -97,14 +97,31 @@ final class TaskListVM: ObservableObject {
     @Published var tasks: [VikunjaTask] = []
     @Published var loading = false
     @Published var loadingMore = false
+    @Published var loadingOlder = false
     @Published var error: String?
     @Published var isAddingTask = false
-    @Published var hasMoreTasks = true
+    @Published var hasMoreTasks = true // whether there are more pages at the end
+    @Published var totalTaskCount: Int? = nil // total tasks on server (from headers)
+
     private let api: VikunjaAPI
     private let projectId: Int
-    private var currentPage = 1
+
+    // Pagination window tracking
+    private var currentPage = 1 // next page to fetch at the end (kept for compatibility)
+    private var firstLoadedPage = 1
+    private var lastLoadedPage = 0
+    private var totalPages: Int? = nil
+
+    // Debounce for auto-load triggers
+    private var lastTopTriggerTaskId: Int? = nil
+    private var lastBottomTriggerTaskId: Int? = nil
+
+    // Paging config and memory cap
     private let tasksPerPage = 50
     private let maxTasksInMemory = 200 // Reasonable limit for normal operation
+
+    // Whether we can load older pages at the top (i.e. earlier pages were dropped)
+    var canLoadPrevious: Bool { firstLoadedPage > 1 }
 
     init(api: VikunjaAPI, projectId: Int) {
         self.api = api; self.projectId = projectId
@@ -122,6 +139,9 @@ final class TaskListVM: ObservableObject {
         Log.app.debug("TaskListVM: Cleaning up tasks for project \(self.projectId)")
         tasks.removeAll()
         currentPage = 1
+        firstLoadedPage = 1
+        lastLoadedPage = 0
+        totalPages = nil
         hasMoreTasks = true
         error = nil
     }
@@ -130,6 +150,9 @@ final class TaskListVM: ObservableObject {
         if resetPagination {
             loading = true
             currentPage = 1
+            firstLoadedPage = 1
+            lastLoadedPage = 0
+            totalPages = nil
             tasks = []
             hasMoreTasks = true
         } else {
@@ -163,18 +186,38 @@ final class TaskListVM: ObservableObject {
 
             if resetPagination {
                 tasks = response.tasks
+                firstLoadedPage = response.currentPage
+                lastLoadedPage = response.currentPage
+                totalPages = response.totalPages
+                // Prefer totalCount; if missing, derive from headers, else estimate
+                if let count = response.totalCount {
+                    totalTaskCount = count
+                } else if let tp = response.totalPages {
+                    totalTaskCount = tp * tasksPerPage
+                } else {
+                    totalTaskCount = (response.hasMore ? tasksPerPage + 1 : response.tasks.count)
+                }
             } else {
                 tasks.append(contentsOf: response.tasks)
+                lastLoadedPage = response.currentPage
+                totalPages = response.totalPages ?? totalPages
+                totalTaskCount = response.totalCount ?? totalTaskCount
                 // Limit the number of tasks in memory to prevent unbounded growth
                 if tasks.count > maxTasksInMemory {
                     let excessCount = tasks.count - maxTasksInMemory
                     tasks.removeFirst(excessCount)
-                    Log.app.debug("TaskListVM: Trimmed \(excessCount) old tasks, keeping \(self.tasks.count)")
+                    // Adjust firstLoadedPage if we dropped a full page (or more)
+                    let pagesDropped = Int(ceil(Double(excessCount) / Double(tasksPerPage)))
+                    self.firstLoadedPage = max(self.firstLoadedPage + pagesDropped, 1)
+                    Log.app.debug("TaskListVM: Trimmed \(excessCount) old tasks, keeping \(self.tasks.count). Window pages=\(self.firstLoadedPage)-\(self.lastLoadedPage)")
                 }
             }
 
             hasMoreTasks = response.hasMore
-            currentPage += 1
+            currentPage = response.currentPage + 1
+            // Reset auto-load sentinels after a successful page fetch
+            lastTopTriggerTaskId = nil
+            lastBottomTriggerTaskId = nil
 
             // Write widget cache after successful load (only for first page)
             if resetPagination {
@@ -199,6 +242,62 @@ final class TaskListVM: ObservableObject {
     func loadMoreTasks(queryItems: [URLQueryItem] = []) async {
         guard hasMoreTasks && !loadingMore else { return }
         await load(queryItems: queryItems, resetPagination: false)
+    }
+
+    // Load the previous page (older index) when earlier pages were dropped
+    func loadPreviousTasks(queryItems: [URLQueryItem] = []) async {
+        guard !loadingOlder else { return }
+        guard firstLoadedPage > 1 else { return }
+        loadingOlder = true
+        defer { loadingOlder = false }
+
+        let targetPage = firstLoadedPage - 1
+        let t0 = Date()
+        do {
+            let response = try await api.fetchTasks(
+                projectId: projectId,
+                page: targetPage,
+                perPage: tasksPerPage,
+                queryItems: queryItems
+            )
+            // Prepend tasks
+            tasks.insert(contentsOf: response.tasks, at: 0)
+            firstLoadedPage = targetPage
+
+            // Enforce memory cap: if we exceed, drop from the end
+            if tasks.count > maxTasksInMemory {
+                let excess = tasks.count - maxTasksInMemory
+                tasks.removeLast(excess)
+                // If we dropped a full page from the end, adjust lastLoadedPage
+                let pagesDropped = Int(ceil(Double(excess) / Double(tasksPerPage)))
+                lastLoadedPage = max(lastLoadedPage - pagesDropped, firstLoadedPage)
+            }
+
+            // Update totals and hasMore flags
+            totalPages = response.totalPages ?? totalPages
+            totalTaskCount = response.totalCount ?? totalTaskCount
+            if let total = totalPages {
+                hasMoreTasks = lastLoadedPage < total
+            }
+            // Reset auto-load sentinels after a successful page fetch
+            lastTopTriggerTaskId = nil
+            lastBottomTriggerTaskId = nil
+
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.track("Task.Fetch.ListView.Previous", parameters: [
+                "duration_ms": String(Int(ms)),
+                "outcome": "success",
+                "page": String(targetPage)
+            ], floatValue: ms)
+        } catch {
+            let ms = Date().timeIntervalSince(t0) * 1000
+            Analytics.track("Task.Fetch.ListView.Previous", parameters: [
+                "duration_ms": String(Int(ms)),
+                "outcome": "failure",
+                "page": String(targetPage)
+            ], floatValue: ms)
+            self.error = error.localizedDescription
+        }
     }
 
     func toggle(_ task: VikunjaTask) async {
@@ -426,24 +525,7 @@ struct TaskListView: View {
                     }
                 }
 
-                Spacer()
 
-                // Task count badge
-                if !vm.tasks.isEmpty {
-                    VStack(spacing: 2) {
-                        Text("\(vm.tasks.count)")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.primary)
-                        Text(vm.tasks.count == 1 ? "task" : "tasks")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(12)
-                }
             }
             .padding(.horizontal, 16)
             .padding(.top, 8)
@@ -564,6 +646,28 @@ struct TaskListView: View {
             if vm.isAddingTask {
                 addNewTaskSection
             }
+            // Top explicit trigger at the very top of the list
+            if vm.canLoadPrevious || vm.loadingOlder {
+                Section(footer: EmptyView()) {
+                    if vm.loadingOlder {
+                        HStack { Spacer(); ProgressView().padding(.vertical, 10); Spacer() }
+                    } else if vm.canLoadPrevious {
+                        HStack {
+                            Spacer()
+                            Button("Load earlier") {
+                                Task {
+                                    let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
+                                    await vm.loadPreviousTasks(queryItems: query)
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            Spacer()
+                        }
+                    }
+                }
+            }
+
+            // Render sections and rows (no per-row onAppear to keep type-checking simple)
             ForEach(sortedAndGroupedTasks, id: \.0) { sectionTitle, tasks in
                 if let sectionTitle = sectionTitle {
                     Section(header: Text(sectionTitle)) {
@@ -574,6 +678,26 @@ struct TaskListView: View {
                 } else {
                     ForEach(tasks) { t in
                         taskRow(for: t)
+                    }
+                }
+            }
+
+            // Bottom explicit trigger for loading next pages
+            Section(footer: EmptyView()) {
+                if vm.loadingMore {
+                    HStack { Spacer(); ProgressView().padding(.vertical, 12); Spacer() }
+                } else if vm.hasMoreTasks {
+                    HStack {
+                        Spacer()
+                        Button("Load more") {
+                            Task {
+                                let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
+                                await vm.loadMoreTasks(queryItems: query)
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .padding(.vertical, 12)
+                        Spacer()
                     }
                 }
             }

@@ -201,7 +201,7 @@ struct TaskDetailView: View {
         }
         .onAppear {
             // init calendar engine
-            if let api = appState.api as? CalendarSyncAPI {
+            if let api = appState.api {
                 engine.setAPI(api)
             }
             // seed “hasTime” flags from existing dates
