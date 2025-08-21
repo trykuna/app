@@ -7,32 +7,32 @@ struct CalendarSyncView: View {
     @StateObject private var engine = CalendarSyncEngine()
 
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var appSettings: AppSettings
     @Environment(\.dismiss) private var dismiss
 
     @State private var showAdvanced = false
+    @State private var showOnboarding = false
+    @State private var showDisableOptions = false
 
     var body: some View {
         NavigationView {
             List {
-                statusSection
-                calendarSection
-                errorsSection
-                statisticsSection
-
-                // ADVANCED (optional)
-                Section {
-                    Toggle("Show Technical Details", isOn: $showAdvanced.animation())
-                }
-                if showAdvanced {
-                    Section("Technical Details") {
-                        DetailRow(label: "Calendar Name", value: SyncConst.calendarTitle)
-                        DetailRow(label: "URL Scheme", value: "\(SyncConst.scheme)://\(SyncConst.hostTask)/<id>")
-                        DetailRow(label: "Signature Marker", value: SyncConst.signatureMarker)
-                        DetailRow(label: "Pull Window", value: "8w back / 12m fwd")
-                        DetailRow(label: "Push Window", value: "6m back / 6m fwd")
-                        DetailRow(label: "Mode", value: "Two-way (on-demand)")
+                enableSection
+                if appSettings.calendarSyncPrefs.isEnabled {
+                    configurationSection
+                    statusSection
+                    errorsSection
+                    statisticsSection
+                    
+                    // ADVANCED (optional)
+                    Section {
+                        Toggle("Show Technical Details", isOn: $showAdvanced.animation())
                     }
-                    .font(.caption)
+                    if showAdvanced {
+                        technicalDetailsSection
+                    }
+                } else {
+                    introSection
                 }
             }
             .navigationTitle("Calendar Sync")
@@ -41,6 +41,12 @@ struct CalendarSyncView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
                 }
+            }
+            .sheet(isPresented: $showOnboarding) {
+                CalendarSyncOnboardingView()
+            }
+            .sheet(isPresented: $showDisableOptions) {
+                DisableCalendarSyncView(engine: engine)
             }
             .onAppear {
                 // Hand API to the engine
@@ -65,6 +71,115 @@ struct CalendarSyncView: View {
     }
 
     // MARK: - View Sections
+    
+    @ViewBuilder
+    private var enableSection: some View {
+        Section {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Calendar Sync")
+                        .font(.headline)
+                    Text(appSettings.calendarSyncPrefs.isEnabled ? "Enabled" : "Disabled")
+                        .font(.caption)
+                        .foregroundColor(appSettings.calendarSyncPrefs.isEnabled ? .green : .secondary)
+                }
+                
+                Spacer()
+                
+                Toggle("", isOn: .constant(false))
+                    .labelsHidden()
+                    .onTapGesture {
+                        if appSettings.calendarSyncPrefs.isEnabled {
+                            showDisableOptions = true
+                        } else {
+                            showOnboarding = true
+                        }
+                    }
+                    .disabled(engine.isSyncing)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var introSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundColor(.blue)
+                        .font(.title2)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Sync with Calendar")
+                            .font(.headline)
+                        Text("Keep your tasks in sync with your calendar app")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                Button("Set up Calendar Sync") {
+                    showOnboarding = true
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+    
+    @ViewBuilder
+    private var configurationSection: some View {
+        Section("Configuration") {
+            HStack {
+                Text("Mode")
+                Spacer()
+                Text(appSettings.calendarSyncPrefs.mode.displayName)
+                    .foregroundColor(.secondary)
+            }
+            
+            HStack {
+                Text("Projects")
+                Spacer()
+                Text("\(appSettings.calendarSyncPrefs.selectedProjectIDs.count) selected")
+                    .foregroundColor(.secondary)
+            }
+            
+            if appSettings.calendarSyncPrefs.mode == .single {
+                if let calendar = appSettings.calendarSyncPrefs.singleCalendar {
+                    HStack {
+                        Text("Calendar")
+                        Spacer()
+                        Text(calendar.name)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            } else {
+                HStack {
+                    Text("Calendars")
+                    Spacer()
+                    Text("\(appSettings.calendarSyncPrefs.projectCalendars.count) calendars")
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            Button("Reconfigure") {
+                showOnboarding = true
+            }
+            .foregroundColor(.blue)
+        }
+    }
+    
+    @ViewBuilder
+    private var technicalDetailsSection: some View {
+        Section("Technical Details") {
+            DetailRow(label: "URL Scheme", value: "kuna://task/<id>")
+            DetailRow(label: "Event Marker", value: "KUNA_EVENT:")
+            DetailRow(label: "Mode", value: appSettings.calendarSyncPrefs.mode.rawValue)
+            DetailRow(label: "Version", value: "\(appSettings.calendarSyncPrefs.version)")
+        }
+        .font(.caption)
+    }
     
     @ViewBuilder
     private var statusSection: some View {
@@ -97,7 +212,7 @@ struct CalendarSyncView: View {
             }
 
             Button("Sync Now") {
-                Task { await engine.syncNow(mode: .twoWay) }
+                Task { await engine.resyncNow() }
             }
             .buttonStyle(.borderedProminent)
             .frame(maxWidth: .infinity)

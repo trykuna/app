@@ -760,6 +760,93 @@ extension TaskRelation {
 }
 
 
+// MARK: - Calendar Sync Models
+enum CalendarSyncMode: String, Codable, CaseIterable {
+    case single = "single"
+    case perProject = "perProject"
+    
+    var displayName: String {
+        switch self {
+        case .single: return "Single Calendar"
+        case .perProject: return "Calendar per Project"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .single: return "All tasks in one \"Kuna\" calendar"
+        case .perProject: return "Separate calendar for each project"
+        }
+    }
+}
+
+struct KunaCalendarRef: Codable, Hashable {
+    var name: String
+    var identifier: String
+    
+    init(name: String, identifier: String) {
+        self.name = name
+        self.identifier = identifier
+    }
+}
+
+struct CalendarSyncPrefs: Codable, Equatable {
+    var isEnabled: Bool
+    var mode: CalendarSyncMode
+    var selectedProjectIDs: Set<String>
+    var singleCalendar: KunaCalendarRef?
+    var projectCalendars: [String: KunaCalendarRef]
+    var version: Int
+    
+    init(
+        isEnabled: Bool = false,
+        mode: CalendarSyncMode = .single,
+        selectedProjectIDs: Set<String> = [],
+        singleCalendar: KunaCalendarRef? = nil,
+        projectCalendars: [String: KunaCalendarRef] = [:],
+        version: Int = 1
+    ) {
+        self.isEnabled = isEnabled
+        self.mode = mode
+        self.selectedProjectIDs = selectedProjectIDs
+        self.singleCalendar = singleCalendar
+        self.projectCalendars = projectCalendars
+        self.version = version
+    }
+    
+    var isValid: Bool {
+        switch mode {
+        case .single:
+            return singleCalendar != nil
+        case .perProject:
+            return !selectedProjectIDs.isEmpty && 
+                   selectedProjectIDs.allSatisfy { projectCalendars.keys.contains($0) }
+        }
+    }
+}
+
+enum DisableDisposition: CaseIterable {
+    case keepEverything
+    case removeKunaEvents
+    case archiveCalendars
+    
+    var displayName: String {
+        switch self {
+        case .keepEverything: return "Keep Everything"
+        case .removeKunaEvents: return "Remove Kuna Events"
+        case .archiveCalendars: return "Archive Calendars"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .keepEverything: return "Keep calendars and events (recommended)"
+        case .removeKunaEvents: return "Remove Kuna events only, keep calendars"
+        case .archiveCalendars: return "Rename calendars to archived and stop syncing"
+        }
+    }
+}
+
 // MARK: - Color Extension (with simple cache for hex -> UIColor)
 extension Color {
     private final class UIColorBox { let color: UIColor; init(_ c: UIColor) { color = c } }

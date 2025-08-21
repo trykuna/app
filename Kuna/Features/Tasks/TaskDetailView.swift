@@ -714,7 +714,7 @@ struct TaskDetailView: View {
 
             // ✅ Trigger calendar sync automatically (fire-and-forget to avoid blocking UI)
             if settings.calendarSyncEnabled {
-                Task { await engine.syncNow(mode: .twoWay) }
+                Task { await engine.resyncNow() }
             }
         } catch {
             updateError = error.localizedDescription

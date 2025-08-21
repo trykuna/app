@@ -1,304 +1,559 @@
 import Foundation
 import EventKit
 
+// MARK: - CalendarSyncEngineType Protocol
+
+protocol CalendarSyncEngineType: AnyObject {
+    func onboardingBegin() async
+    func onboardingComplete(mode: CalendarSyncMode, selectedProjectIDs: Set<String>) async throws
+    func enableSync() async throws
+    func disableSync(disposition: DisableDisposition) async throws
+    func resyncNow() async
+    func handleEventStoreChanged() async
+}
+
 @MainActor
-final class CalendarSyncEngine: ObservableObject {
+final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
 
     // MARK: - Dependencies
 
-    private let calendarManager = CalendarManager()
-    private let persistence = SyncStatePersistence()
-    private let debouncer = Debouncer()
-    private var api: CalendarSyncAPI?
+    private let eventKitClient: EventKitClient
+    private var api: VikunjaAPI?
 
     // MARK: - State (UI)
     @Published var isEnabled: Bool = false
     @Published var isSyncing: Bool = false
     @Published var lastSyncDate: Date?
     @Published var syncErrors: [String] = []
-    @Published var readWriteEnabled: Bool = false
 
     // MARK: - Internal state
-    private var syncState: CalendarSyncState
-    private var idMap: IdMap
-    private var kunaCalendar: EKCalendar?
-    private var projectMap: ProjectCalendarMap
+    private var currentPrefs: CalendarSyncPrefs
+    private var resolvedCalendars: [String: EKCalendar] = [:]
 
-    // Settings
-    private var enabledListIDs: [String] = []      // Which projects to sync (list IDs)
-    private var perProjectEnabled: Bool = false    // Advanced toggle
-
-    // Counters for “event count” summary
+    // Counters for sync summary
     private var createdCount = 0
     private var updatedCount = 0
     private var removedCount = 0
 
     // MARK: - Initialization
 
-    init() {
-        self.syncState = persistence.loadSyncState()
-        self.idMap = persistence.loadIdMap()
-        self.projectMap = persistence.loadProjectCalendarMap()
-        self.lastSyncDate = syncState.lastLocalScanAt
+    init(eventKitClient: EventKitClient = EventKitClientLive()) {
+        self.eventKitClient = eventKitClient
+        self.currentPrefs = AppSettings.shared.calendarSyncPrefs
+        self.isEnabled = currentPrefs.isEnabled
+        self.lastSyncDate = UserDefaults.standard.object(forKey: "calendarSync.lastSyncDate") as? Date
 
-        loadSettings()
         setupEventStoreNotifications()
     }
 
     // MARK: - Configuration
 
-    func setAPI(_ api: CalendarSyncAPI) {
+    func setAPI(_ api: VikunjaAPI) {
         self.api = api
     }
 
-    // MARK: - Public Interface
+    // MARK: - CalendarSyncEngineType Implementation
 
-    func enable() async throws {
-        guard !isEnabled else { return }
+    func onboardingBegin() async {
+        // Reset any existing state
+        resolvedCalendars.removeAll()
+        syncErrors.removeAll()
+    }
 
-        let hasAccess = try await calendarManager.requestAccess()
-        guard hasAccess else { throw CalendarError.accessDenied }
+    func onboardingComplete(mode: CalendarSyncMode, selectedProjectIDs: Set<String>) async throws {
+        // Request calendar access
+        try await eventKitClient.requestAccess()
 
-        if !perProjectEnabled {
-            kunaCalendar = try calendarManager.ensureKunaCalendar()
+        // Get writable source
+        guard let source = eventKitClient.writableSource() else {
+            throw EventKitError.calendarCreationFailed
         }
-        isEnabled = true
-        saveSettings()
 
+        // Store old state for mode switching
+        let oldMode = currentPrefs.mode
+        let oldCalendars = resolvedCalendars
+
+        // Create new preferences
+        var newPrefs = CalendarSyncPrefs(
+            isEnabled: true,
+            mode: mode,
+            selectedProjectIDs: selectedProjectIDs
+        )
+
+        // Resolve/create calendars based on mode
+        try await resolveCalendars(for: newPrefs, source: source)
+
+        // Update preferences with calendar references
+        updatePreferencesWithResolvedCalendars(&newPrefs)
+
+        // Handle mode switching if this is a reconfiguration
+        if currentPrefs.isEnabled && oldMode != mode {
+            try await switchMode(from: oldMode, to: mode, oldCalendars: oldCalendars, newCalendars: resolvedCalendars)
+        }
+
+        // Save preferences
+        currentPrefs = newPrefs
+        isEnabled = true
+
+        // Perform initial sync
         await performInitialSync()
     }
 
-    /// Turn off sync and **remove** Kuna-tagged calendar entries (all Kuna calendars).
-    func disable() {
-        Task {
-            await CalendarSyncService.shared.tidyUpAllKunaCalendars()
+    func enableSync() async throws {
+        guard !isEnabled else { return }
+
+        try await eventKitClient.requestAccess()
+        
+        guard currentPrefs.isValid else {
+            throw EventKitError.calendarNotFound
         }
-        isEnabled = false
-        kunaCalendar = nil
-        saveSettings()
-        persistence.clearAllData()
-        projectMap = ProjectCalendarMap()
+
+        isEnabled = true
+        await performInitialSync()
     }
 
-    func setPerProjectEnabled(_ enabled: Bool) {
-        perProjectEnabled = enabled
-        persistence.savePerProjectEnabled(enabled)
-    }
-
-    func setReadWriteEnabled(_ enabled: Bool) {
-        readWriteEnabled = enabled
-        saveSettings()
-    }
-
-    func setEnabledLists(_ listIDs: [String]) {
-        enabledListIDs = listIDs
-        persistence.saveEnabledListIDs(listIDs)
-        saveSettings()
-    }
-
-    func syncNow(mode: SyncMode = .pullOnly) async {
-        guard isEnabled, !isSyncing else { return }
-
-        isSyncing = true
-        createdCount = 0; updatedCount = 0; removedCount = 0
-        defer { isSyncing = false }
-
-        do {
-            try await performSync(mode: mode)
-            lastSyncDate = Date()
-            Log.app.debug("📅 Sync summary — created: \(self.createdCount) • updated: \(self.updatedCount) • removed: \(self.removedCount)")
-        } catch {
-            syncErrors.append("Sync failed: \(error.localizedDescription)")
+    func disableSync(disposition: DisableDisposition) async throws {
+        switch disposition {
+        case .keepEverything:
+            // Just disable sync, keep everything
+            isEnabled = false
+            
+        case .removeKunaEvents:
+            // Remove only Kuna events, keep calendars
+            try await removeKunaEvents()
+            isEnabled = false
+            
+        case .archiveCalendars:
+            // Rename calendars and disable
+            try await archiveCalendars()
+            isEnabled = false
         }
+
+        // Clear resolved calendars and reset prefs
+        resolvedCalendars.removeAll()
+        currentPrefs = CalendarSyncPrefs()
+    }
+
+    func resyncNow() async {
+        await performSync()
+    }
+
+    func handleEventStoreChanged() async {
+        guard isEnabled else { return }
+        
+        // Debounce event store changes
+        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+        await performSync()
     }
 
     // MARK: - Sync Implementation
 
     private func performInitialSync() async {
-        syncState = CalendarSyncState()
-        idMap = IdMap()
-        await syncNow(mode: .pullOnly)
+        await performSync()
     }
 
-    private func performSync(mode: SyncMode) async throws {
-        let window = SyncConst.rollingWindow()
+    private func performSync() async {
+        guard isEnabled, !isSyncing, let api = api else { return }
 
-        if perProjectEnabled {
-            try await performPullPerProject(window: window)
-        } else {
-            let calendar: EKCalendar
-            if let existingCalendar = kunaCalendar {
-                calendar = existingCalendar
-            } else {
-                let newCalendar = try calendarManager.ensureKunaCalendar()
-                kunaCalendar = newCalendar
-                calendar = newCalendar
-            }
-            try await performPull(calendar: calendar, window: window)
+        isSyncing = true
+        createdCount = 0
+        updatedCount = 0
+        removedCount = 0
+        defer { isSyncing = false }
+
+        do {
+            // Refresh resolved calendars from current preferences
+            try await refreshResolvedCalendars()
+
+            // Fetch tasks from selected projects
+            let tasks = try await fetchFilteredTasks(api: api)
+
+            // Build desired event set
+            let desiredEvents = buildDesiredEvents(from: tasks)
+
+            // Fetch existing Kuna events
+            let existingEvents = fetchExistingKunaEvents()
+
+            // Perform diff and sync
+            try await performDiffSync(desired: desiredEvents, existing: existingEvents)
+
+            // Update last sync date
+            lastSyncDate = Date()
+            UserDefaults.standard.set(lastSyncDate, forKey: "calendarSync.lastSyncDate")
+
+            Log.app.debug("📅 Sync completed — created: \(self.createdCount) • updated: \(self.updatedCount) • removed: \(self.removedCount)")
+
+        } catch {
+            syncErrors.append("Sync failed: \(error.localizedDescription)")
+            Log.app.error("📅 Sync error: \(error)")
         }
-
-        if mode == .twoWay && readWriteEnabled {
-            // Two-way push is only supported for a single calendar (for now).
-            if !perProjectEnabled, let cal = kunaCalendar {
-                try await performPush(calendar: cal)
-            }
-        }
-
-        persistence.saveSyncState(syncState)
-        persistence.saveIdMap(idMap)
-        persistence.saveProjectCalendarMap(projectMap)
     }
 
-    private func performPull(calendar: EKCalendar, window: DateInterval) async throws {
-        guard let api = api else { throw CalendarSyncError.apiError("API not configured") }
+    // MARK: - Calendar Resolution
 
-        let tasks = try await api.fetchTasks(
-            updatedSince: syncState.remoteCursorISO8601,
-            listIDs: enabledListIDs,
-            window: window
-        )
+    private func resolveCalendars(for prefs: CalendarSyncPrefs, source: EKSource) async throws {
+        switch prefs.mode {
+        case .single:
+            let calendar = try eventKitClient.ensureCalendar(named: "Kuna", in: source)
+            resolvedCalendars["single"] = calendar
+
+        case .perProject:
+            // Get project names from API or use project IDs
+            for projectID in prefs.selectedProjectIDs {
+                let projectName = await getProjectName(for: projectID) ?? "Project \(projectID)"
+                let calendarName = "Kuna – \(projectName)"
+                let calendar = try eventKitClient.ensureCalendar(named: calendarName, in: source)
+                resolvedCalendars[projectID] = calendar
+            }
+        }
+    }
+
+    private func refreshResolvedCalendars() async throws {
+        resolvedCalendars.removeAll()
+
+        switch currentPrefs.mode {
+        case .single:
+            if let calRef = currentPrefs.singleCalendar {
+                let calendars = eventKitClient.calendars(for: [calRef.identifier])
+                if let calendar = calendars.first {
+                    resolvedCalendars["single"] = calendar
+                } else {
+                    // Calendar no longer exists, try to recreate
+                    if let source = eventKitClient.writableSource() {
+                        let calendar = try eventKitClient.ensureCalendar(named: calRef.name, in: source)
+                        resolvedCalendars["single"] = calendar
+                    }
+                }
+            }
+
+        case .perProject:
+            for (projectID, calRef) in currentPrefs.projectCalendars {
+                let calendars = eventKitClient.calendars(for: [calRef.identifier])
+                if let calendar = calendars.first {
+                    resolvedCalendars[projectID] = calendar
+                } else {
+                    // Calendar no longer exists, try to recreate
+                    if let source = eventKitClient.writableSource() {
+                        let calendar = try eventKitClient.ensureCalendar(named: calRef.name, in: source)
+                        resolvedCalendars[projectID] = calendar
+                    }
+                }
+            }
+        }
+    }
+
+    private func updatePreferencesWithResolvedCalendars(_ prefs: inout CalendarSyncPrefs) {
+        switch prefs.mode {
+        case .single:
+            if let calendar = resolvedCalendars["single"] {
+                prefs.singleCalendar = KunaCalendarRef(
+                    name: calendar.title,
+                    identifier: calendar.calendarIdentifier
+                )
+            }
+
+        case .perProject:
+            prefs.projectCalendars.removeAll()
+            for (projectID, calendar) in resolvedCalendars {
+                prefs.projectCalendars[projectID] = KunaCalendarRef(
+                    name: calendar.title,
+                    identifier: calendar.calendarIdentifier
+                )
+            }
+        }
+    }
+
+    // MARK: - Task and Event Operations
+
+    private func fetchFilteredTasks(api: VikunjaAPI) async throws -> [VikunjaTask] {
+        // Fetch tasks from selected projects
+        var allTasks: [VikunjaTask] = []
+        
+        for projectIDString in currentPrefs.selectedProjectIDs {
+            guard let projectID = Int(projectIDString) else { continue }
+            let tasks = try await api.fetchTasks(projectId: projectID)
+            allTasks.append(contentsOf: tasks)
+        }
+        
+        return allTasks
+    }
+
+    private func buildDesiredEvents(from tasks: [VikunjaTask]) -> [String: DesiredEvent] {
+        var desired: [String: DesiredEvent] = [:]
 
         for task in tasks {
-            try await upsertEvent(for: task, in: calendar, window: window)
-            syncState.remoteCursorISO8601 = maxISO8601(syncState.remoteCursorISO8601, task.updatedAtISO8601)
+            guard let calendarKey = calendarKey(for: task) else { continue }
+            guard let calendar = resolvedCalendars[calendarKey] else { continue }
+
+            // Map task to event fields
+            if let desiredEvent = mapTaskToDesiredEvent(task: task, calendar: calendar) {
+                let eventKey = "task_\(task.id)"
+                desired[eventKey] = desiredEvent
+            }
         }
-        Log.app.debug("📅 Pull (single calendar) processed \(tasks.count) tasks")
+
+        return desired
     }
 
-    private func performPullPerProject(window: DateInterval) async throws {
-        guard let api = api else { throw CalendarSyncError.apiError("API not configured") }
+    private func fetchExistingKunaEvents() -> [EKEvent] {
+        let calendars = Array(resolvedCalendars.values)
+        guard !calendars.isEmpty else { return [] }
 
-        let tasks = try await api.fetchTasks(
-            updatedSince: syncState.remoteCursorISO8601,
-            listIDs: enabledListIDs,
-            window: window
-        )
+        // Wide time window for existing events
+        let start = Date().addingTimeInterval(-365 * 24 * 60 * 60) // 1 year back
+        let end = Date().addingTimeInterval(2 * 365 * 24 * 60 * 60) // 2 years forward
 
-        // Soft cap warning
-        let uniqueProjects = Set(tasks.map { $0.projectId })
-        if uniqueProjects.count > SyncConst.perProjectSoftCap {
-            syncErrors.append("Per‑project calendars exceed \(SyncConst.perProjectSoftCap). Consider using a single calendar for performance.")
+        let allEvents = eventKitClient.events(in: calendars, start: start, end: end)
+        return allEvents.filter { $0.isKunaEvent }
+    }
+
+    private func performDiffSync(desired: [String: DesiredEvent], existing: [EKEvent]) async throws {
+        // Create map of existing events by task ID
+        var existingByTaskID: [Int: EKEvent] = [:]
+        for event in existing {
+            if let taskInfo = event.extractTaskInfo() {
+                existingByTaskID[taskInfo.taskID] = event
+            }
         }
 
-        // Group by project
-        let grouped = Dictionary(grouping: tasks, by: { $0.projectId })
-        for (pid, items) in grouped {
-            let projTitle = items.first?.projectTitle ?? "Project \(pid)"
-            let calendar: EKCalendar
-            if let existingId = projectMap.calendarId(for: pid),
-               let existing = calendarManager.store.calendar(withIdentifier: existingId) {
-                calendar = existing
+        // Process desired events
+        for (_, desiredEvent) in desired {
+            if let existingEvent = existingByTaskID[desiredEvent.taskID] {
+                // Update existing event
+                if shouldUpdateEvent(existing: existingEvent, desired: desiredEvent) {
+                    updateEvent(existing: existingEvent, with: desiredEvent)
+                    try eventKitClient.save(event: existingEvent)
+                    updatedCount += 1
+                }
+                existingByTaskID.removeValue(forKey: desiredEvent.taskID)
             } else {
-                let cal = try calendarManager.ensureProjectCalendar(projectId: pid, projectTitle: projTitle)
-                projectMap.set(projectId: pid, calendarId: cal.calendarIdentifier)
-                calendar = cal
-            }
-            for task in items {
-                try await upsertEvent(for: task, in: calendar, window: window)
-                syncState.remoteCursorISO8601 = maxISO8601(syncState.remoteCursorISO8601, task.updatedAtISO8601)
+                // Create new event
+                let newEvent = createEvent(from: desiredEvent)
+                try eventKitClient.save(event: newEvent)
+                createdCount += 1
             }
         }
-        Log.app.debug("📅 Pull (per‑project) processed \(tasks.count) tasks across \(uniqueProjects.count) projects")
+
+        // Remove stale events
+        for (_, staleEvent) in existingByTaskID {
+            try eventKitClient.remove(event: staleEvent)
+            removedCount += 1
+        }
+
+        // Commit all changes
+        try eventKitClient.commit()
     }
 
-    private func performPush(calendar: EKCalendar) async throws {
-        let pushWindow = SyncConst.pushWindow()
-        let changedEvents = calendarManager.eventsChangedSince(syncState.lastLocalScanAt, in: calendar, within: pushWindow)
+    // MARK: - Event Mapping
 
-        var patches: [TaskPatch] = []
-        for event in changedEvents {
-            if let patch = TaskEventMapper.extractCalendarEdits(from: event) {
-                patches.append(patch)
+    private func calendarKey(for task: VikunjaTask) -> String? {
+        switch currentPrefs.mode {
+        case .single:
+            return "single"
+        case .perProject:
+            return task.projectId.map(String.init)
+        }
+    }
+
+    private func mapTaskToDesiredEvent(task: VikunjaTask, calendar: EKCalendar) -> DesiredEvent? {
+        // Determine dates based on task properties
+        let (startDate, endDate, isAllDay) = determineDatesForTask(task)
+        
+        guard let start = startDate, let end = endDate else {
+            return nil // Skip tasks without dates
+        }
+
+        return DesiredEvent(
+            taskID: task.id,
+            calendar: calendar,
+            title: task.title,
+            startDate: start,
+            endDate: end,
+            isAllDay: isAllDay,
+            notes: buildEventNotes(for: task),
+            url: URL(string: "kuna://task/\(task.id)?project=\(task.projectId ?? 0)")
+        )
+    }
+
+    private func determineDatesForTask(_ task: VikunjaTask) -> (start: Date?, end: Date?, isAllDay: Bool) {
+        // Implementation based on spec mapping rules
+        if let startDate = task.startDate, let dueDate = task.dueDate {
+            return (startDate, dueDate, false)
+        } else if let dueDate = task.dueDate {
+            if task.done {
+                // For done tasks, create all-day event on due date
+                return (dueDate, dueDate, true)
+            } else {
+                // Default 1-hour event ending at due date
+                let startDate = dueDate.addingTimeInterval(-3600) // 1 hour before
+                return (startDate, dueDate, false)
             }
+        } else if let startDate = task.startDate {
+            let endDate = startDate.addingTimeInterval(3600) // 1 hour duration
+            return (startDate, endDate, false)
         }
-        for patch in patches {
-            try await processPatch(patch, in: calendar, window: pushWindow)
+        
+        return (nil, nil, false)
+    }
+
+    private func buildEventNotes(for task: VikunjaTask) -> String {
+        var notes = "KUNA_EVENT: task=\(task.id) project=\(task.projectId ?? 0)"
+        
+        if let description = task.description, !description.isEmpty {
+            notes += "\n\n\(description)"
         }
-        syncState.lastLocalScanAt = Date()
-        Log.app.debug("📅 Push completed, processed \(patches.count) changes")
+        
+        return notes
     }
 
     // MARK: - Event Operations
 
-    private func upsertEvent(for task: CalendarSyncTask, in calendar: EKCalendar, window: DateInterval) async throws {
-        let existingEvent = calendarManager.findEvent(byTaskId: task.id, in: calendar, window: window, idMap: idMap)
-
-        if task.deleted {
-            if let event = existingEvent {
-                try calendarManager.remove(event)
-                removedCount += 1
-                idMap.removeMapping(taskId: task.id)
-            }
-            return
-        }
-
-        let event: EKEvent
-        let isCreate: Bool
-        if let existing = existingEvent {
-            event = existing
-            isCreate = false
-        } else {
-            event = EKEvent(eventStore: calendarManager.store)
-            event.calendar = calendar
-            isCreate = true
-        }
-
-        TaskEventMapper.apply(task: task, to: event)
-        guard event.startDate != nil && event.endDate != nil else { return }
-
-        try calendarManager.save(event)
-        if isCreate { createdCount += 1 } else { updatedCount += 1 }
-        idMap.addMapping(taskId: task.id, eventId: event.eventIdentifier)
+    private func shouldUpdateEvent(existing: EKEvent, desired: DesiredEvent) -> Bool {
+        return existing.title != desired.title ||
+               existing.startDate != desired.startDate ||
+               existing.endDate != desired.endDate ||
+               existing.isAllDay != desired.isAllDay ||
+               existing.notes != desired.notes
     }
 
-    private func processPatch(_ patch: TaskPatch, in calendar: EKCalendar, window: DateInterval) async throws {
-        guard let api = api else { throw CalendarSyncError.apiError("API not configured") }
-        let serverTask = try await api.patchTask(patch)
-        if let event = calendarManager.findEvent(byTaskId: serverTask.id, in: calendar, window: window, idMap: idMap) {
-            TaskEventMapper.apply(task: serverTask, to: event)
-            try calendarManager.save(event)
-            updatedCount += 1
-        }
-        Log.app.debug("📅 Processed patch for task \(patch.id)")
+    private func updateEvent(existing: EKEvent, with desired: DesiredEvent) {
+        existing.title = desired.title
+        existing.startDate = desired.startDate
+        existing.endDate = desired.endDate
+        existing.isAllDay = desired.isAllDay
+        existing.notes = desired.notes
+        existing.url = desired.url
     }
 
-    // MARK: - Event Store Notifications
+    private func createEvent(from desired: DesiredEvent) -> EKEvent {
+        let event = EKEvent(eventStore: eventKitClient.store)
+        event.calendar = desired.calendar
+        event.title = desired.title
+        event.startDate = desired.startDate
+        event.endDate = desired.endDate
+        event.isAllDay = desired.isAllDay
+        event.notes = desired.notes
+        event.url = desired.url
+        event.setKunaTaskInfo(taskID: desired.taskID, projectID: desired.taskID) // Simplified for now
+        return event
+    }
+
+    // MARK: - Mode Switching Logic
+
+    private func switchMode(from oldMode: CalendarSyncMode, to newMode: CalendarSyncMode, 
+                           oldCalendars: [String: EKCalendar], newCalendars: [String: EKCalendar]) async throws {
+        let existingEvents = fetchExistingKunaEvents()
+        
+        switch (oldMode, newMode) {
+        case (.single, .perProject):
+            // Move events from single calendar to per-project calendars
+            try await moveEventsFromSingleToPerProject(events: existingEvents, newCalendars: newCalendars)
+            
+        case (.perProject, .single):
+            // Move events from per-project calendars to single calendar
+            try await moveEventsFromPerProjectToSingle(events: existingEvents, singleCalendar: newCalendars["single"]!)
+            
+        case (.single, .single), (.perProject, .perProject):
+            // Same mode, but potentially different calendars or projects
+            // Re-sync with new configuration
+            break
+        }
+    }
+    
+    private func moveEventsFromSingleToPerProject(events: [EKEvent], newCalendars: [String: EKCalendar]) async throws {
+        for event in events {
+            guard let taskInfo = event.extractTaskInfo() else { continue }
+            
+            // Determine which calendar this event should go to
+            let projectKey = String(taskInfo.projectID)
+            guard let targetCalendar = newCalendars[projectKey] else { continue }
+            
+            // Create a copy in the target calendar
+            let newEvent = EKEvent(eventStore: eventKitClient.store)
+            newEvent.calendar = targetCalendar
+            newEvent.title = event.title
+            newEvent.startDate = event.startDate
+            newEvent.endDate = event.endDate
+            newEvent.isAllDay = event.isAllDay
+            newEvent.notes = event.notes
+            newEvent.url = event.url
+            
+            try eventKitClient.save(event: newEvent)
+            
+            // Remove the original event
+            try eventKitClient.remove(event: event)
+        }
+        
+        try eventKitClient.commit()
+    }
+    
+    private func moveEventsFromPerProjectToSingle(events: [EKEvent], singleCalendar: EKCalendar) async throws {
+        for event in events {
+            // Create a copy in the single calendar
+            let newEvent = EKEvent(eventStore: eventKitClient.store)
+            newEvent.calendar = singleCalendar
+            newEvent.title = event.title
+            newEvent.startDate = event.startDate
+            newEvent.endDate = event.endDate
+            newEvent.isAllDay = event.isAllDay
+            newEvent.notes = event.notes
+            newEvent.url = event.url
+            
+            try eventKitClient.save(event: newEvent)
+            
+            // Remove the original event
+            try eventKitClient.remove(event: event)
+        }
+        
+        try eventKitClient.commit()
+    }
+
+    // MARK: - Cleanup Operations
+
+    private func removeKunaEvents() async throws {
+        let existingEvents = fetchExistingKunaEvents()
+        for event in existingEvents {
+            try eventKitClient.remove(event: event)
+        }
+        try eventKitClient.commit()
+    }
+
+    private func archiveCalendars() async throws {
+        for calendar in resolvedCalendars.values {
+            calendar.title = "\(calendar.title) (Archive)"
+        }
+        try eventKitClient.commit()
+    }
+
+    // MARK: - Helper Methods
+
+    private func getProjectName(for projectID: String) async -> String? {
+        // For now, just return a simple project name
+        // TODO: Get actual project name from app state or API
+        return "Project \(projectID)"
+    }
 
     private func setupEventStoreNotifications() {
         NotificationCenter.default.addObserver(
             forName: .EKEventStoreChanged,
-            object: calendarManager.store,
+            object: eventKitClient.store,
             queue: nil
         ) { [weak self] _ in
             guard let self else { return }
-            Task { @MainActor in self.handleEventStoreChanged() }
+            Task { @MainActor in await self.handleEventStoreChanged() }
         }
     }
+}
 
-    private func handleEventStoreChanged() {
-        guard isEnabled, readWriteEnabled, !perProjectEnabled else { return }
-        debouncer.call(after: 2.0) { [weak self] in
-            Task { @MainActor in await self?.syncNow(mode: .twoWay) }
-        }
-    }
+// MARK: - Supporting Types
 
-    // MARK: - Settings
-
-    private func loadSettings() {
-        isEnabled = UserDefaults.standard.bool(forKey: "calendarSyncEnabled")
-        readWriteEnabled = UserDefaults.standard.bool(forKey: "calendarSyncReadWriteEnabled")
-        enabledListIDs = persistence.loadEnabledListIDs()
-        perProjectEnabled = persistence.loadPerProjectEnabled()
-    }
-
-    private func saveSettings() {
-        UserDefaults.standard.set(isEnabled, forKey: "calendarSyncEnabled")
-        UserDefaults.standard.set(readWriteEnabled, forKey: "calendarSyncReadWriteEnabled")
-        persistence.saveEnabledListIDs(enabledListIDs)
-        persistence.savePerProjectEnabled(perProjectEnabled)
-    }
-
-    // MARK: - Errors
-
-    func clearErrors() { syncErrors.removeAll() }
+private struct DesiredEvent {
+    let taskID: Int
+    let calendar: EKCalendar
+    let title: String
+    let startDate: Date
+    let endDate: Date
+    let isAllDay: Bool
+    let notes: String
+    let url: URL?
 }
