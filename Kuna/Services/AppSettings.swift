@@ -2,13 +2,11 @@
 import Foundation
 import BackgroundTasks
 
-
 @MainActor
 final class AppSettings: ObservableObject {
     static let shared = AppSettings()
     private var isBootstrapping = true
     private var analyticsDebounceTimer: Timer?
-
 
     @Published var showDefaultColorBalls: Bool {
         didSet {
@@ -42,6 +40,20 @@ final class AppSettings: ObservableObject {
         didSet {
             UserDefaults.standard.set(syncTasksWithDatesOnly, forKey: "syncTasksWithDatesOnly")
             Analytics.trackSettingToggle("Settings.General.SyncTasksWithDatesOnly", enabled: syncTasksWithDatesOnly)
+        }
+    }
+    
+    @Published var syncAllProjects: Bool {
+        didSet {
+            UserDefaults.standard.set(syncAllProjects, forKey: "syncAllProjects")
+            Analytics.trackSettingToggle("Settings.General.SyncAllProjects", enabled: syncAllProjects)
+        }
+    }
+    
+    @Published var selectedProjectsForSync: Set<String> {
+        didSet {
+            UserDefaults.standard.set(Array(selectedProjectsForSync), forKey: "selectedProjectsForSync")
+            Analytics.track("Settings.General.ProjectsForSync", parameters: ["count": "\(selectedProjectsForSync.count)"])
         }
     }
 
@@ -144,8 +156,6 @@ final class AppSettings: ObservableObject {
             }
         }
     }
-    // Stores raw consent decision so we know whether to re-prompt
-    // Values: "granted", "denied"; nil means not decided yet
     @Published var analyticsConsentDecision: String? {
         didSet {
             UserDefaults.standard.set(analyticsConsentDecision, forKey: "analyticsConsentDecision")
@@ -165,30 +175,29 @@ final class AppSettings: ObservableObject {
         self.calendarSyncEnabled = calendarSyncEnabled
         self.autoSyncNewTasks = UserDefaults.standard.object(forKey: "autoSyncNewTasks") as? Bool ?? true
         self.syncTasksWithDatesOnly = UserDefaults.standard.object(forKey: "syncTasksWithDatesOnly") as? Bool ?? true
+        self.syncAllProjects = UserDefaults.standard.object(forKey: "syncAllProjects") as? Bool ?? true
+        let projectArray = UserDefaults.standard.object(forKey: "selectedProjectsForSync") as? [String] ?? []
+        self.selectedProjectsForSync = Set(projectArray)
         CalendarSyncService.shared.setCalendarSyncEnabled(calendarSyncEnabled)
 
-        // Initialize display options (all default to true for existing users)
         self.showAttachmentIcons = UserDefaults.standard.object(forKey: "showAttachmentIcons") as? Bool ?? true
         self.showCommentCounts = UserDefaults.standard.object(forKey: "showCommentCounts") as? Bool ?? true
         self.showPriorityIndicators = UserDefaults.standard.object(forKey: "showPriorityIndicators") as? Bool ?? true
         self.showTaskColors = UserDefaults.standard.object(forKey: "showTaskColors") as? Bool ?? true
 
-        // Task Dates defaults
         self.showStartDate = UserDefaults.standard.object(forKey: "showStartDate") as? Bool ?? true
         self.showDueDate = UserDefaults.standard.object(forKey: "showDueDate") as? Bool ?? true
         self.showEndDate = UserDefaults.standard.object(forKey: "showEndDate") as? Bool ?? true
         self.showSyncStatus = UserDefaults.standard.object(forKey: "showSyncStatus") as? Bool ?? true
 
-        // Celebration defaults (off)
         self.celebrateCompletionConfetti = UserDefaults.standard.object(forKey: "celebrateCompletionConfetti") as? Bool ?? false
 
-        // Analytics defaults: disabled until user decides
         self.analyticsEnabled = UserDefaults.standard.object(forKey: "analyticsEnabled") as? Bool ?? false
         self.analyticsConsentDecision = UserDefaults.standard.string(forKey: "analyticsConsentDecision")
 
-        // Background Sync & Notifications defaults
         self.backgroundSyncEnabled = UserDefaults.standard.object(forKey: "backgroundSyncEnabled") as? Bool ?? false
-        if let raw = UserDefaults.standard.string(forKey: "backgroundSyncFrequency"), let f = BackgroundSyncService.Frequency(rawValue: raw) {
+        if let raw = UserDefaults.standard.string(forKey: "backgroundSyncFrequency"),
+           let f = BackgroundSyncService.Frequency(rawValue: raw) {
             self.backgroundSyncFrequency = f
         } else {
             self.backgroundSyncFrequency = .h6
@@ -203,13 +212,11 @@ final class AppSettings: ObservableObject {
         self.isBootstrapping = false
     }
 
-    // Static method to get default sort option without requiring main actor
     static func getDefaultSortOption() -> TaskSortOption {
         let sortOptionString = UserDefaults.standard.string(forKey: "defaultSortOption") ?? TaskSortOption.serverOrder.rawValue
         return TaskSortOption(rawValue: sortOptionString) ?? .serverOrder
     }
 
-    // Reset all user settings back to defaults (called on sign out)
     func resetToDefaults() {
         let defaults = UserDefaults.standard
         let keys = [
@@ -218,6 +225,8 @@ final class AppSettings: ObservableObject {
             "calendarSyncEnabled",
             "autoSyncNewTasks",
             "syncTasksWithDatesOnly",
+            "syncAllProjects",
+            "selectedProjectsForSync",
             "showAttachmentIcons",
             "showCommentCounts",
             "showPriorityIndicators",
@@ -232,12 +241,13 @@ final class AppSettings: ObservableObject {
         ]
         keys.forEach { defaults.removeObject(forKey: $0) }
 
-        // Reinitialize published properties to constructor defaults
         self.showDefaultColorBalls = true
         self.defaultSortOption = .serverOrder
         self.calendarSyncEnabled = false
         self.autoSyncNewTasks = true
         self.syncTasksWithDatesOnly = true
+        self.syncAllProjects = true
+        self.selectedProjectsForSync = Set()
         self.showAttachmentIcons = true
         self.showCommentCounts = true
         self.showPriorityIndicators = true
@@ -252,18 +262,21 @@ final class AppSettings: ObservableObject {
 
         CalendarSyncService.shared.setCalendarSyncEnabled(false)
     }
-    
-    // Debounced analytics to reduce memory pressure from frequent setting changes
+
+    // MARK: - Debounced Analytics
+
     private func trackSettingChangeDebounced(_ name: String, enabled: Bool) {
-        // Skip analytics during bootstrapping to avoid overwhelming the system
         guard !isBootstrapping else { return }
-        
+
         analyticsDebounceTimer?.invalidate()
         analyticsDebounceTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
-            Analytics.trackSettingToggle(name, enabled: enabled)
+            // Hop to MainActor explicitly for Swift 6
+            Task { @MainActor in
+                Analytics.trackSettingToggle(name, enabled: enabled)
+            }
         }
     }
-    
+
     deinit {
         analyticsDebounceTimer?.invalidate()
     }
