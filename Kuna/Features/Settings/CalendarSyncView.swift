@@ -14,87 +14,10 @@ struct CalendarSyncView: View {
     var body: some View {
         NavigationView {
             List {
-                // STATUS
-                Section("Status") {
-                    HStack {
-                        Image(systemName: statusIcon)
-                            .foregroundColor(statusColor)
-                            .font(.title2)
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(statusText).font(.headline)
-
-                            if let last = engine.lastSyncDate {
-                                Text("Last synced: \(last, style: .relative) ago")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            } else {
-                                Text("Never synced")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-
-                        Spacer()
-
-                        if engine.isSyncing {
-                            ProgressView().scaleEffect(0.8)
-                        }
-                    }
-
-                    Button("Sync Now") {
-                        Task { await engine.syncNow(mode: .twoWay) }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .frame(maxWidth: .infinity)
-                    .disabled(engine.isSyncing || !canPerformSync)
-                }
-
-                // CALENDAR
-                if let cal = calendarSync.selectedCalendar {
-                    Section("Calendar") {
-                        HStack {
-                            Circle()
-                                .fill(Color(cal.cgColor))
-                                .frame(width: 14, height: 14)
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(cal.title).font(.body)
-                                Text(cal.source.title)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-
-                            Spacer()
-                            Text(cal.allowsContentModifications ? "Writable" : "Read-only")
-                                .font(.caption)
-                                .foregroundColor(cal.allowsContentModifications ? .green : .orange)
-                        }
-                    }
-                }
-
-                // ERRORS
-                if !engine.syncErrors.isEmpty {
-                    Section("Errors") {
-                        ForEach(engine.syncErrors, id: \.self) { err in
-                            Text(err)
-                                .font(.caption)
-                                .foregroundColor(.red)
-                        }
-                        Button("Clear Errors") {
-                            engine.clearErrors()
-                        }
-                        .foregroundColor(.blue)
-                    }
-                }
-
-                // STATS (local calendar scan only)
-                Section("Statistics") {
-                    statRow(icon: "calendar.badge.plus", color: .green,
-                            label: "Synced Events", value: "\(syncedEventsCount)")
-                    statRow(icon: "xmark.circle", color: .red,
-                            label: "Errors", value: "\(engine.syncErrors.count)")
-                }
+                statusSection
+                calendarSection
+                errorsSection
+                statisticsSection
 
                 // ADVANCED (optional)
                 Section {
@@ -120,10 +43,12 @@ struct CalendarSyncView: View {
                 }
             }
             .onAppear {
-                // Inject API into the engine once the view appears
-                if let api = appState.api as? CalendarSyncAPI {
+                // Hand API to the engine
+                if let api = appState.api {
                     engine.setAPI(api)
                 }
+                // Refresh permission status in case it changed in Settings
+                calendarSync.refreshAuthorizationStatus()
             }
         }
     }
@@ -131,24 +56,148 @@ struct CalendarSyncView: View {
     // MARK: - Status
 
     private var canPerformSync: Bool {
-        calendarSync.authorizationStatus == .fullAccess ||
-        calendarSync.authorizationStatus == .authorized ||
-        calendarSync.authorizationStatus == .writeOnly
+        let status = calendarSync.authorizationStatus
+        if #available(iOS 17.0, *) {
+            return status == .fullAccess || status == .writeOnly
+        } else {
+            return status == .authorized || status == .fullAccess || status == .writeOnly
+        }
     }
 
+    // MARK: - View Sections
+    
+    @ViewBuilder
+    private var statusSection: some View {
+        Section("Status") {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: statusIcon)
+                    .foregroundColor(statusColor)
+                    .font(.title2)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(statusText)
+                        .font(.headline)
+
+                    if let last = engine.lastSyncDate {
+                        Text("Last synced: \(last, style: .relative) ago")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("Never synced")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                if engine.isSyncing {
+                    ProgressView().scaleEffect(0.8)
+                }
+            }
+
+            Button("Sync Now") {
+                Task { await engine.syncNow(mode: .twoWay) }
+            }
+            .buttonStyle(.borderedProminent)
+            .frame(maxWidth: .infinity)
+            .disabled(engine.isSyncing || !canPerformSync)
+        }
+    }
+    
+    @ViewBuilder
+    private var calendarSection: some View {
+        if let cal = calendarSync.selectedCalendar {
+            Section("Calendar") {
+                HStack {
+                    Circle()
+                        .fill(Color(cal.cgColor))
+                        .frame(width: 14, height: 14)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(cal.title).font(.body)
+                        Text(cal.source.title)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer()
+                    Text(cal.allowsContentModifications ? "Writable" : "Read-only")
+                        .font(.caption)
+                        .foregroundColor(cal.allowsContentModifications ? .green : .orange)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var errorsSection: some View {
+        if !engine.syncErrors.isEmpty || !calendarSync.syncErrors.isEmpty {
+            Section("Errors") {
+                ForEach(Array((engine.syncErrors + calendarSync.syncErrors).enumerated()), id: \.offset) { index, err in
+                    Text(err)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                }
+                Button("Clear Errors") {
+                    engine.syncErrors.removeAll()
+                    calendarSync.syncErrors.removeAll()
+                }
+                .foregroundColor(.blue)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var statisticsSection: some View {
+        Section("Statistics") {
+            statRow(icon: "calendar.badge.plus", color: .green,
+                    label: "Synced Events", value: "\(syncedEventsCount)")
+            statRow(icon: "xmark.circle", color: .red,
+                    label: "Errors", value: "\((engine.syncErrors + calendarSync.syncErrors).count)")
+        }
+    }
+    
     private var statusIcon: String {
         if engine.isSyncing { return "arrow.triangle.2.circlepath" }
-        return engine.syncErrors.isEmpty ? "checkmark.circle" : "xmark.circle"
+        if !(engine.syncErrors.isEmpty && calendarSync.syncErrors.isEmpty) { return "xmark.circle" }
+
+        switch calendarSync.authorizationStatus {
+        case .notDetermined: return "questionmark.circle"
+        case .denied, .restricted: return "exclamationmark.triangle"
+        case .writeOnly: return "pencil.circle"
+        case .authorized, .fullAccess: return "checkmark.circle"
+        @unknown default: return "questionmark.circle"
+        }
     }
 
     private var statusColor: Color {
         if engine.isSyncing { return .blue }
-        return engine.syncErrors.isEmpty ? .green : .red
+        if !(engine.syncErrors.isEmpty && calendarSync.syncErrors.isEmpty) { return .red }
+
+        switch calendarSync.authorizationStatus {
+        case .notDetermined: return .orange
+        case .denied, .restricted: return .orange
+        case .writeOnly: return .orange
+        case .authorized, .fullAccess: return .green
+        @unknown default: return .orange
+        }
     }
 
     private var statusText: String {
         if engine.isSyncing { return "Syncing..." }
-        return engine.syncErrors.isEmpty ? "Ready" : "Errors"
+        if !(engine.syncErrors.isEmpty && calendarSync.syncErrors.isEmpty) { return "Errors" }
+
+        switch calendarSync.authorizationStatus {
+        case .notDetermined: return "Not requested"
+        case .denied:        return "Denied"
+        case .restricted:    return "Restricted"
+        case .writeOnly:     return "Write‑only (needs full access)"
+        case .authorized, .fullAccess:
+            return "Ready"
+        @unknown default:
+            return "Unknown permission state"
+        }
     }
 
     // MARK: - Stats helpers
