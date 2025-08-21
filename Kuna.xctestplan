@@ -1,0 +1,44 @@
+{
+  "configurations" : [
+    {
+      "id" : "27921BF8-1AB7-45B3-9EEF-932A13AF842C",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:Kuna.xcodeproj",
+          "identifier" : "7947454C2E4F6C1200C7A1D4",
+          "name" : "Kuna"
+        }
+      ]
+    },
+    "environmentVariableEntries" : [
+      {
+        "key" : "CG_NUMERICS_SHOW_BACKTRACE",
+        "value" : "1"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Kuna.xcodeproj",
+      "identifier" : "7947454C2E4F6C1200C7A1D4",
+      "name" : "Kuna"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Kuna.xcodeproj",
+        "identifier" : "795F68CE2E5725850070814C",
+        "name" : "KunaTests"
+      }
+    }
+  ],
+  "version" : 1
+}
