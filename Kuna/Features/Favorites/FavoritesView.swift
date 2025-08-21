@@ -60,13 +60,13 @@ struct FavoritesView: View {
             }
         }
     }
-    
+
     private var emptyStateView: some View {
         VStack(spacing: 20) {
             Image(systemName: "star.slash")
                 .font(.system(size: 64))
                 .foregroundColor(.secondary)
-            
+
             VStack(spacing: 8) {
                 Text("No Favorite Tasks")
                     .font(.title2).fontWeight(.semibold)
@@ -87,7 +87,7 @@ struct FavoritesView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
     }
-    
+
     private var taskListView: some View {
         List {
             ForEach(favoriteTasks) { task in
@@ -122,7 +122,7 @@ struct FavoritesView: View {
         .background(Color(.systemBackground))
         .refreshable { loadFavorites() }
     }
-    
+
     private func loadFavorites() {
         isLoading = true
         error = nil
@@ -177,24 +177,25 @@ struct FavoriteTaskRow: View {
     let onTap: () -> Void
 
     @State private var isUpdatingFavorite = false
+    @State private var isUpdatingDone = false
     @StateObject private var settings = AppSettings.shared
 
     private var project: Project? {
         guard let projectId = task.projectId else { return nil }
         return projects.first { $0.id == projectId }
     }
-    
+
     var body: some View {
         HStack(spacing: 12) {
-            Button(action: {
-                // TODO: Implement task completion toggle
-            }) {
+            Button(action: toggleDone) {
                 Image(systemName: task.done ? "checkmark.circle.fill" : "circle")
                     .foregroundColor(task.done ? .green : .gray)
                     .font(.title3)
             }
             .buttonStyle(.plain)
-            
+            .disabled(isUpdatingDone)
+            .opacity(isUpdatingDone ? 0.6 : 1.0)
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
                     Text(task.title)
@@ -243,9 +244,9 @@ struct FavoriteTaskRow: View {
                     }
                 }
             }
-            
+
             Spacer()
-            
+
             Button(action: toggleFavorite) {
                 Image(systemName: task.isFavorite ? "star.fill" : "star")
                     .foregroundColor(task.isFavorite ? .yellow : .gray)
@@ -259,7 +260,7 @@ struct FavoriteTaskRow: View {
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
     }
-    
+
     private func toggleFavorite() {
         isUpdatingFavorite = true
         Task {
@@ -283,9 +284,25 @@ struct FavoriteTaskRow: View {
                     isUpdatingFavorite = false
                 }
             }
+    }
+    }
+
+    private func toggleDone() {
+        isUpdatingDone = true
+        Task {
+            do {
+                let updated = try await api.setTaskDone(task: task, done: !task.done)
+                await MainActor.run {
+                    onTaskUpdated(updated)
+                    isUpdatingDone = false
+                }
+            } catch {
+                await MainActor.run { isUpdatingDone = false }
+            }
         }
     }
 }
+
 
 #Preview {
     NavigationStack {

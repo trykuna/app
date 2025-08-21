@@ -12,28 +12,29 @@ struct RelatedTasksView: View {
     @State private var showingPicker = false
     @State private var selectedKind: TaskRelationKind = .related
 
-    // Navigation to a related task detail
-    @State private var pushTarget: VikunjaTask?
-    @State private var isPushing = false
+    // Modern navigation (iOS 16+)
+    @State private var navSelection: VikunjaTask?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
-                // Hidden NavigationLink to push TaskDetailView
-                NavigationLink(isActive: $isPushing) {
-                    if let t = pushTarget {
-                        TaskDetailView(task: t, api: api)
-                    } else { EmptyView() }
-                } label: { EmptyView() }
-
                 content
                 addBar
             }
             .navigationTitle("Related Tasks")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { Button("Done") { dismiss() } }
-                ToolbarItem(placement: .navigationBarTrailing) { Button { Task { await refresh() } } label: { Image(systemName: "arrow.clockwise") } }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Done") { dismiss() }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button { Task { await refresh() } } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                }
+            }
+            .navigationDestination(item: $navSelection) { t in
+                TaskDetailView(task: t, api: api)
             }
         }
         .onAppear { Task { await refresh() } }
@@ -89,7 +90,9 @@ struct RelatedTasksView: View {
                     .font(.body)
                     .foregroundColor(.primary)
                     .lineLimit(2)
-                if let due = rel.otherTask?.dueDate { Text(due, style: .date).font(.caption).foregroundColor(.secondary) }
+                if let due = rel.otherTask?.dueDate {
+                    Text(due, style: .date).font(.caption).foregroundColor(.secondary)
+                }
             }
             Spacer()
             Button(role: .destructive) {
@@ -132,6 +135,8 @@ struct RelatedTasksView: View {
         }
     }
 
+    // MARK: - Actions
+
     private func refresh() async {
         isRefreshing = true
         defer { isRefreshing = false }
@@ -163,9 +168,10 @@ struct RelatedTasksView: View {
 
     private func handleRowTap(_ rel: TaskRelation) {
         if let t = rel.otherTask {
-            pushTarget = t
-            isPushing = true
+            // We already have the full task
+            navSelection = t
         } else {
+            // Fetch it first, then navigate
             Task { await loadAndPush(rel) }
         }
     }
@@ -173,14 +179,13 @@ struct RelatedTasksView: View {
     private func loadAndPush(_ rel: TaskRelation) async {
         do {
             let full = try await api.getTask(taskId: rel.otherTaskId)
-            await MainActor.run {
-                self.pushTarget = full
-                self.isPushing = true
-            }
+            await MainActor.run { self.navSelection = full }
         } catch {
             await MainActor.run { self.error = error.localizedDescription }
         }
     }
+
+    // MARK: - Helpers
 
     private func icon(for kind: TaskRelationKind) -> String {
         switch kind {
@@ -197,4 +202,3 @@ struct RelatedTasksView: View {
         }
     }
 }
-

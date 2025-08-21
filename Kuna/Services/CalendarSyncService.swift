@@ -10,7 +10,7 @@ final class CalendarSyncService: ObservableObject {
     // MARK: - New Engine Integration
     private let syncEngine = CalendarSyncEngine()
 
-    // MARK: - Legacy Properties (for backward compatibility)
+    // MARK: - Legacy / Bridging Properties (kept for compatibility)
     let eventStore = EKEventStore()
     @Published var authorizationStatus: EKAuthorizationStatus = .notDetermined
     @Published var isCalendarSyncEnabled: Bool = false
@@ -18,7 +18,6 @@ final class CalendarSyncService: ObservableObject {
     @Published var syncErrors: [String] = []
     @Published var syncSuccessMessage: String?
 
-    // Track synced events to avoid duplicates
     private var syncedEventIdentifiers: Set<String> = []
 
     private init() {
@@ -28,68 +27,43 @@ final class CalendarSyncService: ObservableObject {
     }
 
     private func setupEngineBinding() {
-        // Bind engine state to legacy properties
+        // Keep manager screens in sync
         syncEngine.$isEnabled.assign(to: &$isCalendarSyncEnabled)
         syncEngine.$syncErrors.assign(to: &$syncErrors)
     }
-    
+
     // MARK: - Authorization
-    
+
     private func updateAuthorizationStatus() {
         authorizationStatus = EKEventStore.authorizationStatus(for: .event)
     }
-    
+
+    func refreshAuthorizationStatus() {
+        authorizationStatus = EKEventStore.authorizationStatus(for: .event)
+    }
+
     func requestCalendarAccess() async -> Bool {
-        // Check current status first
         let currentStatus = EKEventStore.authorizationStatus(for: .event)
-        Log.app.debug("📅 Calendar access request - Current status: \(String(describing: currentStatus), privacy: .public)")
-
         switch currentStatus {
-        case .fullAccess:
-            Log.app.debug("📅 Calendar access: Already have full access")
-            await MainActor.run {
-                updateAuthorizationStatus()
-            }
-            return true
-
-        case .authorized:
-            // For iOS versions before 17, .authorized is equivalent to full access
-            Log.app.debug("📅 Calendar access: Already authorized (legacy)")
-            await MainActor.run {
-                updateAuthorizationStatus()
-            }
+        case .fullAccess, .authorized:
+            await MainActor.run { updateAuthorizationStatus() }
             return true
 
         case .notDetermined:
-            // Request permission
-            Log.app.debug("📅 Calendar access: Requesting permission…")
             do {
                 if #available(iOS 17.0, *) {
-                    Log.app.debug("📅 Using iOS 17+ requestFullAccessToEvents")
                     let granted = try await eventStore.requestFullAccessToEvents()
-                    Log.app.debug("📅 Permission result: \(granted, privacy: .public)")
-                    await MainActor.run {
-                        updateAuthorizationStatus()
-                    }
+                    await MainActor.run { updateAuthorizationStatus() }
                     return granted
                 } else {
-                    // For iOS 16 and earlier
-                    Log.app.debug("📅 Using legacy requestAccess")
                     return await withCheckedContinuation { continuation in
-                        eventStore.requestAccess(to: .event) { granted, error in
-                            Log.app.debug("📅 Legacy permission result: \(granted, privacy: .public), error: \(String(describing: error), privacy: .public)")
-                            Task { @MainActor in
-                                self.updateAuthorizationStatus()
-                                if let error = error {
-                                    self.syncErrors.append("Calendar access error: \(error.localizedDescription)")
-                                }
-                            }
+                        eventStore.requestAccess(to: .event) { granted, _ in
+                            Task { @MainActor in self.updateAuthorizationStatus() }
                             continuation.resume(returning: granted)
                         }
                     }
                 }
             } catch {
-                Log.app.error("📅 Calendar access request failed: \(String(describing: error), privacy: .public)")
                 await MainActor.run {
                     syncErrors.append("Failed to request calendar access: \(error.localizedDescription)")
                     updateAuthorizationStatus()
@@ -97,17 +71,9 @@ final class CalendarSyncService: ObservableObject {
                 return false
             }
 
-        case .denied, .restricted:
-            Log.app.debug("📅 Calendar access: Denied or restricted")
+        case .denied, .restricted, .writeOnly:
             await MainActor.run {
-                syncErrors.append("Calendar access denied. Please enable in Settings > Privacy & Security > Calendars")
-                updateAuthorizationStatus()
-            }
-            return false
-
-        case .writeOnly:
-            await MainActor.run {
-                syncErrors.append("Calendar access is write-only. Full access required for sync.")
+                syncErrors.append("Calendar access not sufficient. Enable in Settings > Privacy & Security > Calendars.")
                 updateAuthorizationStatus()
             }
             return false
@@ -120,9 +86,9 @@ final class CalendarSyncService: ObservableObject {
             return false
         }
     }
-    
-    // MARK: - Calendar Management
-    
+
+    // MARK: - Calendar List (legacy picker)
+
     func getAvailableCalendars() -> [EKCalendar] {
         if #available(iOS 17.0, *) {
             guard authorizationStatus == .fullAccess else { return [] }
@@ -131,352 +97,351 @@ final class CalendarSyncService: ObservableObject {
         }
         return eventStore.calendars(for: .event).filter { $0.allowsContentModifications }
     }
-    
+
     func setSelectedCalendar(_ calendar: EKCalendar?) {
         selectedCalendar = calendar
         saveSettings()
     }
     
-    // MARK: - Sync Operations
+    // MARK: - Project Filtering
     
-    func syncTaskToCalendar(_ task: VikunjaTask) async -> Bool {
-        let hasAccess: Bool
-        if #available(iOS 17.0, *) {
-            hasAccess = authorizationStatus == .fullAccess
+    /// Check if a task should be synced based on project filter settings
+    private func shouldSyncTaskBasedOnProject(_ task: VikunjaTask) -> Bool {
+        let settings = AppSettings.shared
+        
+        // If syncing all projects, always sync
+        if settings.syncAllProjects {
+            return true
+        }
+        
+        // Check if the task's project is in the selected set
+        guard let projectId = task.projectId else { return false }
+        return settings.selectedProjectsForSync.contains(String(projectId))
+    }
+    
+    // MARK: - Default Calendar Management
+    
+    /// Creates or finds the default "Kuna Tasks" calendar
+    @MainActor
+    func getOrCreateDefaultCalendar() -> EKCalendar? {
+        // First check if we have calendar access
+        let hasAccess: Bool = {
+            if #available(iOS 17.0, *) { 
+                return authorizationStatus == .fullAccess || authorizationStatus == .writeOnly
+            } else { 
+                return authorizationStatus == .authorized 
+            }
+        }()
+        
+        guard hasAccess else { return nil }
+        
+        // Look for existing "Kuna Tasks" calendar
+        let existingCalendars = eventStore.calendars(for: .event)
+        if let kunaCalendar = existingCalendars.first(where: { $0.title == "Kuna Tasks" }) {
+            return kunaCalendar
+        }
+        
+        // Create new "Kuna Tasks" calendar
+        let newCalendar = EKCalendar(for: .event, eventStore: eventStore)
+        newCalendar.title = "Kuna Tasks"
+        
+        // Set a nice color for the calendar (purple/indigo)
+        newCalendar.cgColor = UIColor.systemIndigo.cgColor
+        
+        // Find the default calendar source (usually iCloud or Local)
+        if let defaultSource = eventStore.defaultCalendarForNewEvents?.source {
+            newCalendar.source = defaultSource
+        } else if let iCloudSource = eventStore.sources.first(where: { $0.sourceType == .calDAV }) {
+            newCalendar.source = iCloudSource
+        } else if let localSource = eventStore.sources.first(where: { $0.sourceType == .local }) {
+            newCalendar.source = localSource
         } else {
-            hasAccess = authorizationStatus == .authorized
-        }
-
-        guard isCalendarSyncEnabled,
-              hasAccess,
-              let calendar = selectedCalendar else {
-            Log.app.debug("📅 Sync failed - Enabled: \(self.isCalendarSyncEnabled, privacy: .public), Auth: \(String(describing: self.authorizationStatus), privacy: .public), Calendar: \(self.selectedCalendar?.title ?? "none", privacy: .public)")
-            return false
+            // Fallback to first available source
+            guard let firstSource = eventStore.sources.first else { return nil }
+            newCalendar.source = firstSource
         }
         
-        // Check if task has any date information
-        guard task.startDate != nil || task.dueDate != nil || task.endDate != nil else {
-            Log.app.debug("📅 Sync failed - Task '\(task.title, privacy: .public)' has no dates")
-            return false
+        do {
+            try eventStore.saveCalendar(newCalendar, commit: true)
+            return newCalendar
+        } catch {
+            syncErrors.append("Failed to create Kuna Tasks calendar: \(error.localizedDescription)")
+            return nil
         }
+    }
 
-        Log.app.debug("📅 Syncing task '\(task.title, privacy: .public)' with due date: \(task.dueDate?.description ?? "none", privacy: .public)")
+    // MARK: - Legacy Sync ops (used by CalendarSyncManager)
+
+    /// One‑off: push a single task into the currently selected calendar.
+    func syncTaskToCalendar(_ task: VikunjaTask) async -> Bool {
+        let hasAccess: Bool = {
+            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
+            else { return authorizationStatus == .authorized }
+        }()
+        guard isCalendarSyncEnabled, hasAccess, let calendar = selectedCalendar else { return false }
+
+        // Only sync tasks that actually have dates
+        guard task.startDate != nil || task.dueDate != nil || task.endDate != nil else { return false }
         
-        // Check if event already exists
-        if let existingEvent = findExistingEvent(for: task) {
+        // Check project filter settings
+        if !shouldSyncTaskBasedOnProject(task) { return false }
+
+        if let existingEvent = findExistingEvent(for: task, in: calendar) {
             return await updateCalendarEvent(existingEvent, with: task)
         } else {
             return await createCalendarEvent(for: task, in: calendar)
         }
     }
-    
+
     func removeTaskFromCalendar(_ task: VikunjaTask) async -> Bool {
-        let hasAccess: Bool
-        if #available(iOS 17.0, *) {
-            hasAccess = authorizationStatus == .fullAccess
-        } else {
-            hasAccess = authorizationStatus == .authorized
-        }
-        guard hasAccess else { return false }
-        
-        if let existingEvent = findExistingEvent(for: task) {
+        let hasAccess: Bool = {
+            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
+            else { return authorizationStatus == .authorized }
+        }()
+        guard hasAccess, let cal = selectedCalendar else { return false }
+
+        if let existingEvent = findExistingEvent(for: task, in: cal) {
             do {
                 try eventStore.remove(existingEvent, span: .thisEvent)
                 syncedEventIdentifiers.remove(existingEvent.eventIdentifier)
-                syncSuccessMessage = "Task '\(task.title)' removed from calendar"
+                syncSuccessMessage = "Removed ‘\(task.title)’ from calendar"
                 return true
             } catch {
-                syncErrors.append("Failed to remove task '\(task.title)' from calendar: \(error.localizedDescription)")
+                syncErrors.append("Remove failed: \(error.localizedDescription)")
                 return false
             }
         }
         return true
     }
-    
-    // MARK: - Private Methods
-    
+
+    // Exposed so conflict resolver can write the event
+    func updateCalendarEvent(_ event: EKEvent, with task: VikunjaTask) async -> Bool {
+        event.title = task.title
+        event.notes = task.description
+
+        let (startDate, endDate) = calculateEventDates(for: task)
+        event.startDate = startDate
+        event.endDate = endDate
+
+        if task.priority != .unset {
+            let priorityNote = "\n[Priority: \(task.priority.displayName)]"
+            event.notes = (event.notes ?? "") + priorityNote
+        }
+
+        if let reminders = task.reminders, !reminders.isEmpty {
+            event.alarms = reminders.map { EKAlarm(absoluteDate: $0.reminder) }
+        } else {
+            event.alarms = []
+        }
+
+        do {
+            try eventStore.save(event, span: .thisEvent)
+            syncSuccessMessage = "Updated calendar event for ‘\(task.title)’"
+            return true
+        } catch {
+            syncErrors.append("Update failed: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// Build a patched task from a calendar event (used by preferCalendar resolution).
+    func buildUpdatedTaskFromEvent(_ task: VikunjaTask, event: EKEvent) -> VikunjaTask? {
+        var updatedTask = task
+        var changed = false
+
+        if task.title != event.title { updatedTask.title = event.title; changed = true }
+        let eventNotes = event.notes ?? ""
+        if (task.description ?? "") != eventNotes {
+            updatedTask.description = eventNotes.isEmpty ? nil : eventNotes
+            changed = true
+        }
+        if task.startDate != event.startDate { updatedTask.startDate = event.startDate; changed = true }
+        if task.endDate != event.endDate { updatedTask.endDate = event.endDate; changed = true }
+        if event.startDate != event.endDate {
+            if task.dueDate != event.endDate { updatedTask.dueDate = event.endDate; changed = true }
+        }
+        let taskReminderDates = Set(task.reminders?.map { $0.reminder } ?? [])
+        let eventReminderDates = Set(event.alarms?.compactMap { $0.absoluteDate } ?? [])
+        if taskReminderDates != eventReminderDates {
+            updatedTask.reminders = eventReminderDates.map { Reminder(reminder: $0) }
+            changed = true
+        }
+
+        return changed ? updatedTask : nil
+    }
+
+    // For CalendarSyncManager conflict resolver
+    enum SyncConflictResolution {
+        case preferTask
+        case preferCalendar
+        case preferNewest
+        case manual
+    }
+
+    // Used by CalendarSyncManager to scan EK → API
+    func syncCalendarChangesToTasks(api: VikunjaAPI) async -> [VikunjaTask] {
+        let hasAccess: Bool = {
+            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
+            else { return authorizationStatus == .authorized }
+        }()
+        guard isCalendarSyncEnabled, hasAccess, let calendar = selectedCalendar else { return [] }
+
+        var updated: [VikunjaTask] = []
+        let start = Date().addingTimeInterval(-30*24*60*60)
+        let end   = Date().addingTimeInterval( 30*24*60*60)
+        let pred = eventStore.predicateForEvents(withStart: start, end: end, calendars: [calendar])
+        let events = eventStore.events(matching: pred).filter { $0.url?.absoluteString.hasPrefix("kuna://task/") == true }
+
+        for ev in events {
+            if let taskIdStr = ev.url?.absoluteString.replacingOccurrences(of: "kuna://task/", with: ""),
+               let taskId = Int(taskIdStr) {
+                do {
+                    let current = try await api.getTask(taskId: taskId)
+                    if let patched = buildUpdatedTaskFromEvent(current, event: ev) {
+                        let saved = try await api.updateTask(patched)
+                        updated.append(saved)
+                    }
+                } catch {
+                    syncErrors.append("Calendar→Task sync failed (\(taskId)): \(error.localizedDescription)")
+                }
+            }
+        }
+        return updated
+    }
+
+    // MARK: - Private helpers (legacy)
+
     private func createCalendarEvent(for task: VikunjaTask, in calendar: EKCalendar) async -> Bool {
         let event = EKEvent(eventStore: eventStore)
         event.calendar = calendar
         event.title = task.title
         event.notes = task.description
-        
-        // Set event dates based on task dates
+
         let (startDate, endDate) = calculateEventDates(for: task)
         event.startDate = startDate
         event.endDate = endDate
-        
-        // Add task ID to URL for identification
         event.url = URL(string: "kuna://task/\(task.id)")
-        
-        // Note: EKEvent doesn't have a priority property in EventKit
-        // Priority could be represented through calendar color or in the notes field
+
         if task.priority != .unset {
             let priorityNote = "\n[Priority: \(task.priority.displayName)]"
             event.notes = (event.notes ?? "") + priorityNote
         }
-        
-        // Add reminders
+
         if let reminders = task.reminders, !reminders.isEmpty {
-            event.alarms = reminders.compactMap { reminder in
-                EKAlarm(absoluteDate: reminder.reminder)
-            }
+            event.alarms = reminders.map { EKAlarm(absoluteDate: $0.reminder) }
         }
-        
+
         do {
             try eventStore.save(event, span: .thisEvent)
             syncedEventIdentifiers.insert(event.eventIdentifier)
-            syncSuccessMessage = "Task '\(task.title)' synced to calendar"
+            syncSuccessMessage = "Synced ‘\(task.title)’ to calendar"
             return true
         } catch {
-            syncErrors.append("Failed to create calendar event for task '\(task.title)': \(error.localizedDescription)")
+            syncErrors.append("Create failed: \(error.localizedDescription)")
             return false
         }
     }
-    
-    private func updateCalendarEvent(_ event: EKEvent, with task: VikunjaTask) async -> Bool {
-        event.title = task.title
-        event.notes = task.description
-        
-        let (startDate, endDate) = calculateEventDates(for: task)
-        event.startDate = startDate
-        event.endDate = endDate
-        
-        // Note: EKEvent doesn't have a priority property in EventKit
-        // Priority is included in the notes field
-        if task.priority != .unset {
-            let priorityNote = "\n[Priority: \(task.priority.displayName)]"
-            event.notes = (event.notes ?? "") + priorityNote
-        }
-        
-        // Update reminders
-        if let reminders = task.reminders, !reminders.isEmpty {
-            event.alarms = reminders.compactMap { reminder in
-                EKAlarm(absoluteDate: reminder.reminder)
-            }
-        } else {
-            event.alarms = []
-        }
-        
-        do {
-            try eventStore.save(event, span: .thisEvent)
-            syncSuccessMessage = "Task '\(task.title)' updated in calendar"
-            return true
-        } catch {
-            syncErrors.append("Failed to update calendar event for task '\(task.title)': \(error.localizedDescription)")
-            return false
-        }
+
+    private func findExistingEvent(for task: VikunjaTask, in calendar: EKCalendar) -> EKEvent? {
+        let window = DateInterval(start: Date().addingTimeInterval(-365*24*60*60),
+                                  end: Date().addingTimeInterval(365*24*60*60))
+        let pred = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: [calendar])
+        return eventStore.events(matching: pred).first { $0.url?.absoluteString == "kuna://task/\(task.id)" }
     }
-    
-    private func findExistingEvent(for task: VikunjaTask) -> EKEvent? {
-        guard let calendar = selectedCalendar else { return nil }
-        
-        // Search for events with our custom URL scheme
-        let predicate = eventStore.predicateForEvents(
-            withStart: Date().addingTimeInterval(-365 * 24 * 60 * 60), // 1 year ago
-            end: Date().addingTimeInterval(365 * 24 * 60 * 60), // 1 year from now
-            calendars: [calendar]
-        )
-        
-        let events = eventStore.events(matching: predicate)
-        return events.first { event in
-            event.url?.absoluteString == "kuna://task/\(task.id)"
-        }
-    }
-    
+
     private func calculateEventDates(for task: VikunjaTask) -> (start: Date, end: Date) {
         let now = Date()
-        
-        // Priority order: startDate -> dueDate -> endDate
         if let startDate = task.startDate {
-            let endDate = task.endDate ?? task.dueDate ?? startDate.addingTimeInterval(3600) // 1 hour default
+            let endDate = task.endDate ?? task.dueDate ?? startDate.addingTimeInterval(3600)
             return (startDate, endDate)
         } else if let dueDate = task.dueDate {
-            let startDate = task.startDate ?? dueDate.addingTimeInterval(-3600) // 1 hour before due
+            let startDate = task.startDate ?? dueDate.addingTimeInterval(-3600)
             return (startDate, dueDate)
         } else if let endDate = task.endDate {
-            let startDate = endDate.addingTimeInterval(-3600) // 1 hour before end
+            let startDate = endDate.addingTimeInterval(-3600)
             return (startDate, endDate)
         } else {
-            // Fallback to current time + 1 hour
             return (now, now.addingTimeInterval(3600))
         }
     }
-    
 
-    
-    // MARK: - Settings Persistence
-    
+    // MARK: - Settings Persistence (legacy bridge)
+
     private func loadSettings() {
         isCalendarSyncEnabled = UserDefaults.standard.bool(forKey: "calendarSyncEnabled")
-        
         if let calendarIdentifier = UserDefaults.standard.string(forKey: "selectedCalendarIdentifier") {
             selectedCalendar = eventStore.calendar(withIdentifier: calendarIdentifier)
         }
     }
-    
+
     private func saveSettings() {
         UserDefaults.standard.set(isCalendarSyncEnabled, forKey: "calendarSyncEnabled")
         UserDefaults.standard.set(selectedCalendar?.calendarIdentifier, forKey: "selectedCalendarIdentifier")
     }
-    
+
     func setCalendarSyncEnabled(_ enabled: Bool) {
         isCalendarSyncEnabled = enabled
         saveSettings()
     }
-    
-    // MARK: - Bidirectional Sync
 
-    func syncCalendarChangesToTasks(api: VikunjaAPI) async -> [VikunjaTask] {
-        let hasAccess: Bool
-        if #available(iOS 17.0, *) {
-            hasAccess = authorizationStatus == .fullAccess
-        } else {
-            hasAccess = authorizationStatus == .authorized
-        }
+    // MARK: - Cleanup
 
-        guard isCalendarSyncEnabled,
-              hasAccess,
-              let calendar = selectedCalendar else {
-            return []
-        }
+    /// Remove **all** Kuna-tagged events from any Kuna calendar(s); then try deleting empty Kuna calendars.
+    func tidyUpAllKunaCalendars() async {
+        let hasReadAccess: Bool = {
+            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
+            else { return authorizationStatus == .authorized }
+        }()
+        guard hasReadAccess else { return }
 
-        var updatedTasks: [VikunjaTask] = []
+        let all = eventStore.calendars(for: .event).filter { $0.allowsContentModifications }
+        let kunaCals = all.filter { $0.title == SyncConst.calendarTitle || $0.title.hasPrefix("Kuna: ") }
+        let target = kunaCals.isEmpty ? all : kunaCals
 
-        // Get events from the last 30 days to 30 days in the future
-        let startDate = Date().addingTimeInterval(-30 * 24 * 60 * 60)
-        let endDate = Date().addingTimeInterval(30 * 24 * 60 * 60)
+        let start = Date().addingTimeInterval(-10 * 365 * 24 * 60 * 60)
+        let end   = Date().addingTimeInterval( 10 * 365 * 24 * 60 * 60)
 
-        let predicate = eventStore.predicateForEvents(
-            withStart: startDate,
-            end: endDate,
-            calendars: [calendar]
-        )
-
-        let events = eventStore.events(matching: predicate)
-        let kunaEvents = events.filter { event in
-            event.url?.absoluteString.hasPrefix("kuna://task/") == true
-        }
-
-        for event in kunaEvents {
-            if let taskIdString = event.url?.absoluteString.replacingOccurrences(of: "kuna://task/", with: ""),
-               let taskId = Int(taskIdString) {
-
-                do {
-                    // Fetch the current task from the API
-                    let currentTask = try await api.getTask(taskId: taskId)
-
-                    // Check if the event has been modified since last sync
-                    if let updatedTask = updateTaskFromEvent(currentTask, event: event) {
-                        // Update the task via API
-                        let savedTask = try await api.updateTask(updatedTask)
-                        updatedTasks.append(savedTask)
-                    }
-                } catch {
-                    syncErrors.append("Failed to sync calendar changes for task \(taskId): \(error.localizedDescription)")
-                }
+        var removed = 0
+        for cal in target {
+            let pred = eventStore.predicateForEvents(withStart: start, end: end, calendars: [cal])
+            let events = eventStore.events(matching: pred).filter { $0.url?.scheme == SyncConst.scheme }
+            for ev in events {
+                do { try eventStore.remove(ev, span: .thisEvent); removed += 1 }
+                catch { syncErrors.append("Cleanup remove failed: \(error.localizedDescription)") }
             }
         }
-
-        return updatedTasks
-    }
-
-    private func updateTaskFromEvent(_ task: VikunjaTask, event: EKEvent) -> VikunjaTask? {
-        var updatedTask = task
-        var hasChanges = false
-
-        // Update title if different
-        if task.title != event.title {
-            updatedTask.title = event.title
-            hasChanges = true
+        if removed > 0 {
+            syncSuccessMessage = "Removed \(removed) calendar events created by Kuna"
         }
 
-        // Update description if different
-        let eventNotes = event.notes ?? ""
-        let taskDescription = task.description ?? ""
-        if taskDescription != eventNotes {
-            updatedTask.description = eventNotes.isEmpty ? nil : eventNotes
-            hasChanges = true
-        }
-
-        // Update dates if different
-        if task.startDate != event.startDate {
-            updatedTask.startDate = event.startDate
-            hasChanges = true
-        }
-
-        if task.endDate != event.endDate {
-            updatedTask.endDate = event.endDate
-            hasChanges = true
-        }
-
-        // For due date, use end date if it's different from start date
-        if event.startDate != event.endDate {
-            if task.dueDate != event.endDate {
-                updatedTask.dueDate = event.endDate
-                hasChanges = true
-            }
-        }
-
-        // Update reminders if different
-        let eventAlarms = event.alarms ?? []
-        let eventReminderDates = eventAlarms.compactMap { alarm in
-            alarm.absoluteDate
-        }
-
-        let taskReminderDates = task.reminders?.map { $0.reminder } ?? []
-
-        if Set(eventReminderDates) != Set(taskReminderDates) {
-            updatedTask.reminders = eventReminderDates.map { Reminder(reminder: $0) }
-            hasChanges = true
-        }
-
-        return hasChanges ? updatedTask : nil
-    }
-
-    // MARK: - Conflict Resolution
-
-    enum SyncConflictResolution {
-        case preferTask
-        case preferCalendar
-        case manual
-    }
-
-    func resolveSyncConflict(
-        task: VikunjaTask,
-        event: EKEvent,
-        resolution: SyncConflictResolution
-    ) async -> Bool {
-        switch resolution {
-        case .preferTask:
-            return await updateCalendarEvent(event, with: task)
-        case .preferCalendar:
-            if updateTaskFromEvent(task, event: event) != nil {
-                // This would need to be handled by the caller since we don't have API access here
-                return true
-            }
-            return false
-        case .manual:
-            // Manual resolution would be handled by the UI
-            return false
+        // Try to remove empty Kuna calendars
+        for cal in kunaCals {
+            let pred = eventStore.predicateForEvents(withStart: start, end: end, calendars: [cal])
+            let hasAny = eventStore.events(matching: pred).isEmpty == false
+            guard !hasAny else { continue }
+            do { try eventStore.removeCalendar(cal, commit: true) }
+            catch { /* some sources don't allow deletion; ignore */ }
         }
     }
 
-    // MARK: - Error Management
-
-    func clearErrors() {
-        syncErrors.removeAll()
+    /// Remove a single project's calendar (if per‑project mode) by its title.
+    func tidyUpProjectCalendar(projectTitle: String) async {
+        let name = "Kuna: \(projectTitle)"
+        let cals = eventStore.calendars(for: .event).filter { $0.title == name }
+        guard let cal = cals.first else { return }
+        let start = Date().addingTimeInterval(-5 * 365 * 24 * 60 * 60)
+        let end   = Date().addingTimeInterval( 5 * 365 * 24 * 60 * 60)
+        let pred = eventStore.predicateForEvents(withStart: start, end: end, calendars: [cal])
+        let events = eventStore.events(matching: pred).filter { $0.url?.scheme == SyncConst.scheme }
+        for ev in events {
+            do { try eventStore.remove(ev, span: .thisEvent) } catch { /* ignore */ }
+        }
+        do { try eventStore.removeCalendar(cal, commit: true) } catch { /* ignore */ }
     }
 
-    func clearSuccessMessage() {
-        syncSuccessMessage = nil
-    }
+    // MARK: - New Engine Methods (passthroughs)
 
-    // MARK: - New Engine Methods
-
-    func setAPI(_ api: VikunjaAPI) {
-        syncEngine.setAPI(api)
-    }
+    func setAPI(_ api: VikunjaAPI) { syncEngine.setAPI(api) }
 
     func enableNewSync() async throws {
         try await syncEngine.enable()
@@ -488,19 +453,16 @@ final class CalendarSyncService: ObservableObject {
         isCalendarSyncEnabled = syncEngine.isEnabled
     }
 
-    func performFullSync() async {
-        await syncEngine.syncNow(mode: .pullOnly)
-    }
+    func performFullSync() async { await syncEngine.syncNow(mode: .pullOnly) }
 
-    func performTwoWaySync() async {
-        await syncEngine.syncNow(mode: .twoWay)
-    }
+    func performTwoWaySync() async { await syncEngine.syncNow(mode: .twoWay) }
 
-    func setReadWriteEnabled(_ enabled: Bool) {
-        syncEngine.setReadWriteEnabled(enabled)
-    }
+    func setReadWriteEnabled(_ enabled: Bool) { syncEngine.setReadWriteEnabled(enabled) }
 
-    func setEnabledLists(_ listIDs: [String]) {
-        syncEngine.setEnabledLists(listIDs)
+    func setEnabledLists(_ listIDs: [String]) { syncEngine.setEnabledLists(listIDs) }
+
+    /// Toggle between single calendar and per‑project calendars (advanced).
+    func setPerProjectEnabled(_ enabled: Bool) {
+        syncEngine.setPerProjectEnabled(enabled)
     }
 }

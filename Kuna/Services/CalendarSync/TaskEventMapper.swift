@@ -1,11 +1,10 @@
-// Services/CalendarSync/TaskEventMapper.swift
 import Foundation
 import EventKit
 
 struct TaskEventMapper {
-    
+
     // MARK: - Task to Event Mapping
-    
+
     static func apply(task: CalendarSyncTask, to event: EKEvent) {
         event.title = task.title
 
@@ -17,30 +16,30 @@ struct TaskEventMapper {
                 let start = cal.startOfDay(for: due)
                 let end = cal.date(byAdding: .day, value: 1, to: start) ?? start.addingTimeInterval(24*60*60)
                 event.startDate = start
-                event.endDate = end // end is exclusive; next midnight ensures single-day span
+                event.endDate = end
             } else {
                 event.isAllDay = false
                 event.endDate   = due
-                event.startDate = due.addingTimeInterval(-3600)      // 1h block ending at due
+                event.startDate = due.addingTimeInterval(-3600) // 1h before due
             }
-        } else {
-            // No due date: skip (we now filter these out earlier anyway)
-            return
-        }
+        } else { return }
 
-        // Stable identity
-        event.url = URL(string: "kuna://task/\(task.id)")
+        // Stable identity (+ project id to aid migration)
+        var comps = URLComponents()
+            comps.scheme = SyncConst.scheme
+            comps.host = SyncConst.hostTask
+            comps.path = "/\(task.id)"
+            comps.queryItems = [URLQueryItem(name: "project", value: String(task.projectId))]
+            event.url = comps.url
+
 
         // --- Reminders ---
         event.alarms = task.reminders.map { r in
-            let offsetFromDue = r.relativeSeconds
-            let offsetFromStart = event.isAllDay
-                ? offsetFromDue            // all-day: start == due midnight
-                : offsetFromDue + 3600     // timed: start = due - 1h
+            let offsetFromStart = event.isAllDay ? r.relativeSeconds : (r.relativeSeconds + 3600)
             return EKAlarm(relativeOffset: offsetFromStart)
         }
 
-        // Signature stamping (leave your existing code here)
+        // Signature stamping
         let sig = EventSignature.make(
             title: event.title,
             start: event.startDate,
@@ -51,22 +50,14 @@ struct TaskEventMapper {
         )
         event.notes = appendSignature(to: task.notes, sig: sig)
     }
-    
+
     // MARK: - Event to Task Patch Extraction
-    
+
     static func extractCalendarEdits(from event: EKEvent) -> TaskPatch? {
         guard let taskId = extractTaskId(from: event) else { return nil }
-        
-        // Get existing signature from notes
         let existingSig = EventSignature.extractSignature(from: event.notes)
-        
-        // Compute new signature from current event state
         let newSig = EventSignature.make(from: event)
-        
-        // If signatures match, this is our own write - ignore
         guard newSig != existingSig else { return nil }
-        
-        // Extract edits
         return TaskPatch(
             id: taskId,
             title: event.title,
@@ -76,28 +67,26 @@ struct TaskEventMapper {
             reminders: extractReminders(from: event)
         )
     }
-    
+
     // MARK: - Helper Methods
-    
+
     private static func extractTaskId(from event: EKEvent) -> String? {
         guard let url = event.url,
               url.scheme == SyncConst.scheme,
-              url.host == SyncConst.hostTask else {
-            return nil
+              url.host == SyncConst.hostTask else { return nil }
+        let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        // path last component is the task id
+        if let last = url.path.split(separator: "/").last {
+            return String(last)
         }
         return url.lastPathComponent
     }
-    
+
     private static func extractDueDate(from event: EKEvent) -> Date? {
-        if event.isAllDay {
-            // For all-day events, use start date as due date
-            return event.startDate?.dateOnlyUTC
-        } else {
-            // For timed events, use end date as due date (following our 1h policy)
-            return event.endDate
-        }
+        if event.isAllDay { return event.startDate?.dateOnlyUTC }
+        return event.endDate
     }
-    
+
     private static func extractReminders(from event: EKEvent) -> [TimeInterval]? {
         guard let alarms = event.alarms, !alarms.isEmpty else { return nil }
         return alarms.compactMap { alarm in
@@ -106,15 +95,10 @@ struct TaskEventMapper {
     }
 }
 
-// MARK: - VikunjaTask Extension
-
 extension VikunjaTask {
     var isAllDay: Bool {
-        // Determine if this should be an all-day event
-        // This could be based on a task property or inferred from the due date
-        // For now, assume all-day if due date is at start of day
         guard let due = dueDate else { return false }
         let startOfDay = Calendar.current.startOfDay(for: due)
-        return abs(due.timeIntervalSince(startOfDay)) < 60 // Within 1 minute of start of day
+        return abs(due.timeIntervalSince(startOfDay)) < 60
     }
 }

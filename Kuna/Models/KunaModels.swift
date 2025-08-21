@@ -1,5 +1,24 @@
 // Models/VikunjaModels.swift
 import Foundation
+
+// Simple HTML helper
+extension String {
+    // Removes <p> and </p> that some APIs wrap around plain text.
+    // 1) If the whole string is a single <p>...</p>, unwrap it.
+    // 2) Otherwise, strip any occurrences of the tags and trim.
+    func strippingWrappedParagraphTags() -> String {
+        let trimmed = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.hasPrefix("<p>") && trimmed.hasSuffix("</p>") {
+            let start = trimmed.index(trimmed.startIndex, offsetBy: 3)
+            let end = trimmed.index(trimmed.endIndex, offsetBy: -4)
+            let inner = String(trimmed[start..<end]).trimmingCharacters(in: .whitespacesAndNewlines)
+            return inner
+        }
+        let replaced = trimmed.replacingOccurrences(of: "<p>", with: "").replacingOccurrences(of: "</p>", with: "")
+        return replaced.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
 import SwiftUI
 
 struct AuthResponse: Decodable {
@@ -72,6 +91,21 @@ struct Project: Identifiable, Codable {
     let id: Int
     let title: String
     let description: String?
+
+    enum CodingKeys: String, CodingKey { case id, title, description }
+
+    // Strip <p>...</p> wrappers which some backends include in descriptions
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(Int.self, forKey: .id)
+        title = try c.decode(String.self, forKey: .title)
+        if let raw = try c.decodeIfPresent(String.self, forKey: .description) {
+            let cleaned = raw.strippingWrappedParagraphTags()
+            description = cleaned.isEmpty ? nil : cleaned
+        } else {
+            description = nil
+        }
+    }
 }
 
 struct Reminder: Identifiable, Decodable, Encodable {
@@ -170,7 +204,12 @@ struct Label: Identifiable, Decodable, Encodable {
 
         id = try container.decode(Int.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
-        description = try container.decodeIfPresent(String.self, forKey: .description)
+        if let rawDesc = try container.decodeIfPresent(String.self, forKey: .description) {
+            let cleaned = rawDesc.strippingWrappedParagraphTags()
+            description = cleaned.isEmpty ? nil : cleaned
+        } else {
+            description = nil
+        }
 
         // Handle hex_color more carefully - it might be missing or null
         if let colorString = try container.decodeIfPresent(String.self, forKey: .hexColor),
@@ -310,7 +349,12 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
 
         id = try container.decode(Int.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
-        description = try container.decodeIfPresent(String.self, forKey: .description)
+        if let rawDesc = try container.decodeIfPresent(String.self, forKey: .description) {
+            let cleaned = rawDesc.strippingWrappedParagraphTags()
+            description = cleaned.isEmpty ? nil : cleaned
+        } else {
+            description = nil
+        }
         done = try container.decodeIfPresent(Bool.self, forKey: .done) ?? false
 
         // Handle dates more carefully - Vikunja uses "0001-01-01T00:00:00Z" for "no date"
@@ -508,17 +552,26 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
     }
 }
 
+// Make tasks usable as navigation values / selections.
+extension VikunjaTask: Hashable {
+    static func == (lhs: VikunjaTask, rhs: VikunjaTask) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+}
+
+
 struct TasksResponse {
     let tasks: [VikunjaTask]
     let hasMore: Bool
     let currentPage: Int
     let totalPages: Int?
+    let totalCount: Int?
 
-    init(tasks: [VikunjaTask], hasMore: Bool, currentPage: Int, totalPages: Int? = nil) {
+    init(tasks: [VikunjaTask], hasMore: Bool, currentPage: Int, totalPages: Int? = nil, totalCount: Int? = nil) {
         self.tasks = tasks
         self.hasMore = hasMore
         self.currentPage = currentPage
         self.totalPages = totalPages
+        self.totalCount = totalCount
     }
 }
 
@@ -536,7 +589,8 @@ struct TaskComment: Identifiable, Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)
-        comment = try container.decode(String.self, forKey: .comment)
+        let rawComment = try container.decode(String.self, forKey: .comment)
+        comment = rawComment.strippingWrappedParagraphTags()
         author = try container.decode(VikunjaUser.self, forKey: .author)
 
         // Handle date decoding
