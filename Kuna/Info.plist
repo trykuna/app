@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+		<!-- Calendar permissions (iOS 17+ requires separate strings) -->
+		<key>NSCalendarsFullAccessUsageDescription</key>
+		<string>Kuna needs access to your calendars to sync tasks as events.</string>
+		<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+		<string>Kuna needs write access to create and update calendar events.</string>
+		<!-- Backward compatibility (iOS 16 and earlier) -->
+		<key>NSCalendarsUsageDescription</key>
+		<string>Kuna needs access to your calendars to sync tasks as events.</string>
+
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>tech.systemsmystery.kuna.bg.refresh</string>
