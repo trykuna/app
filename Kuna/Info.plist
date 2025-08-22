@@ -100,8 +100,6 @@
 	<string>Kuna needs write access to create and update calendar events.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>background-fetch</string>
-		<string>background-processing</string>
 		<string>fetch</string>
 		<string>processing</string>
 	</array>
