@@ -2,63 +2,29 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-		<!-- Calendar permissions (iOS 17+ requires separate strings) -->
-		<key>NSCalendarsFullAccessUsageDescription</key>
-		<string>Kuna needs access to your calendars to sync tasks as events.</string>
-		<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-		<string>Kuna needs write access to create and update calendar events.</string>
-		<!-- Backward compatibility (iOS 16 and earlier) -->
-		<key>NSCalendarsUsageDescription</key>
-		<string>Kuna needs access to your calendars to sync tasks as events.</string>
-
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>tech.systemsmystery.kuna.bg.refresh</string>
 		<string>tech.systemsmystery.kuna.bg.processing</string>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>background-fetch</string>
-		<string>background-processing</string>
-	</array>
-
-	<!-- Alternate App Icons configuration -->
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
+			<key>AppIcon-AltPride</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIcon-AltPride</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<true/>
+			</dict>
 			<key>AppIcon-Gold</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>AppIcon-Gold</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<true/>
-			</dict>
-			<key>AppIcon-Orange</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIcon-Orange</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<true/>
-			</dict>
-			<key>AppIcon-Red</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIcon-Red</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<true/>
-			</dict>
-			<key>AppIcon-Yellow</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIcon-Yellow</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<true/>
@@ -72,11 +38,11 @@
 				<key>UIPrerenderedIcon</key>
 				<true/>
 			</dict>
-			<key>AppIcon-Silver</key>
+			<key>AppIcon-Orange</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>AppIcon-Silver</string>
+					<string>AppIcon-Orange</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<true/>
@@ -90,11 +56,20 @@
 				<key>UIPrerenderedIcon</key>
 				<true/>
 			</dict>
-			<key>AppIcon-AltPride</key>
+			<key>AppIcon-Red</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>AppIcon-AltPride</string>
+					<string>AppIcon-Red</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<true/>
+			</dict>
+			<key>AppIcon-Silver</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIcon-Silver</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<true/>
@@ -108,7 +83,27 @@
 				<key>UIPrerenderedIcon</key>
 				<true/>
 			</dict>
+			<key>AppIcon-Yellow</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIcon-Yellow</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Kuna needs access to your calendars to sync tasks as events.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>Kuna needs write access to create and update calendar events.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>background-fetch</string>
+		<string>background-processing</string>
+		<string>fetch</string>
+		<string>processing</string>
+	</array>
 </dict>
 </plist>
