@@ -86,16 +86,20 @@ struct CalendarSyncView: View {
                 
                 Spacer()
                 
-                Toggle("", isOn: .constant(false))
-                    .labelsHidden()
-                    .onTapGesture {
-                        if appSettings.calendarSyncPrefs.isEnabled {
-                            showDisableOptions = true
-                        } else {
+                Toggle("", isOn: Binding(
+                    get: { appSettings.calendarSyncPrefs.isEnabled },
+                    set: { newValue in
+                        if newValue {
+                            // Turning on - show onboarding
                             showOnboarding = true
+                        } else {
+                            // Turning off - show disable options
+                            showDisableOptions = true
                         }
                     }
-                    .disabled(engine.isSyncing)
+                ))
+                .labelsHidden()
+                .disabled(engine.isSyncing)
             }
         }
     }
@@ -357,5 +361,6 @@ struct DetailRow: View {
 #Preview {
     CalendarSyncView()
         .environmentObject(AppState())
+        .environmentObject(AppSettings.shared)
 }
 #endif

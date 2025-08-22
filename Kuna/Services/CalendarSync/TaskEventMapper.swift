@@ -74,7 +74,7 @@ struct TaskEventMapper {
         guard let url = event.url,
               url.scheme == SyncConst.scheme,
               url.host == SyncConst.hostTask else { return nil }
-        let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let _ = URLComponents(url: url, resolvingAgainstBaseURL: false)
         // path last component is the task id
         if let last = url.path.split(separator: "/").last {
             return String(last)

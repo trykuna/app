@@ -187,7 +187,7 @@ final class AppSettings: ObservableObject {
         self.syncAllProjects = UserDefaults.standard.object(forKey: "syncAllProjects") as? Bool ?? true
         let projectArray = UserDefaults.standard.object(forKey: "selectedProjectsForSync") as? [String] ?? []
         self.selectedProjectsForSync = Set(projectArray)
-        CalendarSyncService.shared.setCalendarSyncEnabled(calendarSyncEnabled)
+        // Note: Removed CalendarSyncService call to prevent circular dependency
 
         self.showAttachmentIcons = UserDefaults.standard.object(forKey: "showAttachmentIcons") as? Bool ?? true
         self.showCommentCounts = UserDefaults.standard.object(forKey: "showCommentCounts") as? Bool ?? true

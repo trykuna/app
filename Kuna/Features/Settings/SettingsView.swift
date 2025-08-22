@@ -49,7 +49,11 @@ struct SettingsView: View {
             }
         }
         .sheet(isPresented: $showingAppIcons) { AppIconView() }
-        .sheet(isPresented: $showingCalendarSync) { CalendarSyncView() }
+        .sheet(isPresented: $showingCalendarSync) { 
+            CalendarSyncView()
+                .environmentObject(appState)
+                .environmentObject(settings)
+        }
         .onAppear { 
             calendarSync.refreshAuthorizationStatus()
             iconManager.updateCurrentIcon()

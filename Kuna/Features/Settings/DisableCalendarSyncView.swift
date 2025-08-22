@@ -139,7 +139,7 @@ struct DispositionOptionCard: View {
                         }
                     }
                     
-                    Text(disposition.description)
+                    Text(disposition.detailDescription)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
@@ -148,6 +148,13 @@ struct DispositionOptionCard: View {
                         Text("⚠️ This will permanently delete all synced events")
                             .font(.caption)
                             .foregroundColor(.orange)
+                    }
+                    
+                    if disposition == .deleteEverything {
+                        Text("🚨 This will permanently delete all Kuna calendars and events")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .fontWeight(.semibold)
                     }
                 }
                 

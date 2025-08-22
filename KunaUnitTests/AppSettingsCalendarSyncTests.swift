@@ -9,7 +9,7 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
     var originalPrefs: CalendarSyncPrefs!
     
     override func setUp() async throws {
-        await super.setUp()
+        try await super.setUp()
         appSettings = AppSettings.shared
         
         // Save original preferences to restore later
@@ -19,7 +19,7 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
     override func tearDown() async throws {
         // Restore original preferences
         appSettings.calendarSyncPrefs = originalPrefs
-        await super.tearDown()
+        try await super.tearDown()
     }
     
     // MARK: - Persistence Tests
@@ -104,20 +104,17 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         let data = try encoder.encode(testPrefs)
         UserDefaults.standard.set(data, forKey: "calendarSync.prefs")
         
-        // Create new AppSettings instance to test loading
-        // Note: Since AppSettings is a singleton, we can't test this directly
-        // Instead, we test that the current instance has the expected values
-        
-        // Trigger a reload by setting a different value first
-        appSettings.calendarSyncPrefs = CalendarSyncPrefs()
-        
-        // Then read from UserDefaults manually to verify
+        // Test that we can decode the stored data correctly
         let storedData = UserDefaults.standard.data(forKey: "calendarSync.prefs")
         XCTAssertNotNil(storedData)
         
         let decoder = JSONDecoder()
         let loadedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: storedData!)
         XCTAssertEqual(loadedPrefs, testPrefs)
+        
+        // Test that setting the preferences through AppSettings works
+        appSettings.calendarSyncPrefs = testPrefs
+        XCTAssertEqual(appSettings.calendarSyncPrefs, testPrefs)
     }
     
     // MARK: - Integration Tests

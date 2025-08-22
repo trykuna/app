@@ -13,6 +13,7 @@ protocol EventKitClient {
     func events(in calendars: [EKCalendar], start: Date, end: Date) -> [EKEvent]
     func save(event: EKEvent) throws
     func remove(event: EKEvent) throws
+    func remove(calendar: EKCalendar) throws
     func commit() throws
     var store: EKEventStore { get }
 }
@@ -84,6 +85,10 @@ final class EventKitClientLive: EventKitClient {
     
     func remove(event: EKEvent) throws {
         try store.remove(event, span: .thisEvent, commit: false)
+    }
+    
+    func remove(calendar: EKCalendar) throws {
+        try store.removeCalendar(calendar, commit: false)
     }
     
     func commit() throws {
@@ -189,6 +194,21 @@ final class EventKitClientMock: EventKitClient {
         if let title = event.title {
             mockEvents.removeAll { $0.title == title }
         }
+    }
+    
+    func remove(calendar: EKCalendar) throws {
+        if let error = removeError {
+            throw error
+        }
+        
+        // Remove from mock calendars
+        let calendarId = calendar.calendarIdentifier
+        mockCalendars = mockCalendars.filter { _, mockCalendar in
+            mockCalendar.identifier != calendarId
+        }
+        
+        // Remove all events from this calendar
+        mockEvents.removeAll { $0.calendar == calendarId }
     }
     
     func commit() throws {

@@ -825,24 +825,31 @@ struct CalendarSyncPrefs: Codable, Equatable {
     }
 }
 
-enum DisableDisposition: CaseIterable {
+enum DisableDisposition: CaseIterable, CustomStringConvertible {
     case keepEverything
     case removeKunaEvents
     case archiveCalendars
+    case deleteEverything
     
     var displayName: String {
         switch self {
         case .keepEverything: return "Keep Everything"
-        case .removeKunaEvents: return "Remove Kuna Events"
+        case .removeKunaEvents: return "Remove Events Only"
         case .archiveCalendars: return "Archive Calendars"
+        case .deleteEverything: return "Delete Everything"
         }
     }
     
     var description: String {
+        return displayName
+    }
+    
+    var detailDescription: String {
         switch self {
         case .keepEverything: return "Keep calendars and events (recommended)"
-        case .removeKunaEvents: return "Remove Kuna events only, keep calendars"
-        case .archiveCalendars: return "Rename calendars to archived and stop syncing"
+        case .removeKunaEvents: return "Remove Kuna events only, keep empty calendars"
+        case .archiveCalendars: return "Rename calendars with '(Archive)' and stop syncing"
+        case .deleteEverything: return "Delete all Kuna calendars and events permanently"
         }
     }
 }

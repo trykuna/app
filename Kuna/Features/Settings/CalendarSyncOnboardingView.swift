@@ -13,10 +13,8 @@ struct CalendarSyncOnboardingView: View {
     @State private var selectedProjectIDs: Set<String> = []
     @State private var isProcessing = false
     @State private var errorMessage: String?
-    
-    private var projects: [Project] {
-        appState.projects ?? []
-    }
+    @State private var projects: [Project] = []
+    @State private var loadingProjects = false
     
     private var hasNextStep: Bool {
         switch currentStep {
@@ -62,6 +60,13 @@ struct CalendarSyncOnboardingView: View {
             } message: {
                 if let error = errorMessage {
                     Text(error)
+                }
+            }
+            .onAppear {
+                // Set up calendar sync engine with API and load projects
+                if let api = appState.api {
+                    calendarSyncEngine.setAPI(api)
+                    loadProjects(api: api)
                 }
             }
         }
@@ -310,27 +315,21 @@ struct CalendarSyncOnboardingView: View {
             }
             
             do {
-                // Create new preferences
-                var newPrefs = CalendarSyncPrefs(
-                    isEnabled: true,
-                    mode: selectedMode,
-                    selectedProjectIDs: selectedProjectIDs
-                )
-                
                 // Set up calendar sync engine with API
                 if let api = appState.api {
                     calendarSyncEngine.setAPI(api)
                 }
                 
                 // Complete onboarding through the engine
-                try await calendarSyncEngine.onboardingComplete(
+                // The engine will handle creating and saving preferences and return the resolved prefs
+                let resolvedPrefs = try await calendarSyncEngine.onboardingComplete(
                     mode: selectedMode,
                     selectedProjectIDs: selectedProjectIDs
                 )
                 
-                // Update preferences in app settings
+                // Update AppSettings directly with the resolved preferences
                 await MainActor.run {
-                    appSettings.calendarSyncPrefs = newPrefs
+                    appSettings.calendarSyncPrefs = resolvedPrefs
                     appSettings.calendarSyncEnabled = true
                     isProcessing = false
                     dismiss()
@@ -340,6 +339,31 @@ struct CalendarSyncOnboardingView: View {
                 await MainActor.run {
                     isProcessing = false
                     errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func loadProjects(api: VikunjaAPI) {
+        guard !loadingProjects else { return }
+        
+        Task {
+            await MainActor.run {
+                loadingProjects = true
+            }
+            
+            do {
+                let fetchedProjects = try await api.fetchProjects()
+                await MainActor.run {
+                    projects = fetchedProjects.filter { $0.title.lowercased() != "favorites" }
+                    loadingProjects = false
+                }
+            } catch {
+                await MainActor.run {
+                    loadingProjects = false
+                    errorMessage = "Failed to load projects: \(error.localizedDescription)"
                 }
             }
         }

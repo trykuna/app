@@ -5,7 +5,7 @@ import EventKit
 
 protocol CalendarSyncEngineType: AnyObject {
     func onboardingBegin() async
-    func onboardingComplete(mode: CalendarSyncMode, selectedProjectIDs: Set<String>) async throws
+    func onboardingComplete(mode: CalendarSyncMode, selectedProjectIDs: Set<String>) async throws -> CalendarSyncPrefs
     func enableSync() async throws
     func disableSync(disposition: DisableDisposition) async throws
     func resyncNow() async
@@ -39,17 +39,35 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
 
     init(eventKitClient: EventKitClient = EventKitClientLive()) {
         self.eventKitClient = eventKitClient
-        self.currentPrefs = AppSettings.shared.calendarSyncPrefs
-        self.isEnabled = currentPrefs.isEnabled
+        // Initialize with default prefs to avoid circular dependency
+        self.currentPrefs = CalendarSyncPrefs()
+        self.isEnabled = false
         self.lastSyncDate = UserDefaults.standard.object(forKey: "calendarSync.lastSyncDate") as? Date
 
         setupEventStoreNotifications()
+        
+        // Load actual preferences after initialization
+        loadCurrentPreferences()
     }
 
     // MARK: - Configuration
 
     func setAPI(_ api: VikunjaAPI) {
         self.api = api
+    }
+    
+    private func loadCurrentPreferences() {
+        // Safely load preferences without causing circular dependency
+        Task { @MainActor in
+            // Small delay to ensure AppSettings is fully initialized
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            
+            if let data = UserDefaults.standard.data(forKey: "calendarSync.prefs"),
+               let prefs = try? JSONDecoder().decode(CalendarSyncPrefs.self, from: data) {
+                self.currentPrefs = prefs
+                self.isEnabled = prefs.isEnabled
+            }
+        }
     }
 
     // MARK: - CalendarSyncEngineType Implementation
@@ -60,7 +78,7 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
         syncErrors.removeAll()
     }
 
-    func onboardingComplete(mode: CalendarSyncMode, selectedProjectIDs: Set<String>) async throws {
+    func onboardingComplete(mode: CalendarSyncMode, selectedProjectIDs: Set<String>) async throws -> CalendarSyncPrefs {
         // Request calendar access
         try await eventKitClient.requestAccess()
 
@@ -94,9 +112,15 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
         // Save preferences
         currentPrefs = newPrefs
         isEnabled = true
+        
+        // Update AppSettings with the resolved preferences
+        await updateAppSettings(with: newPrefs)
 
         // Perform initial sync
         await performInitialSync()
+        
+        // Return the resolved preferences for the caller to update AppSettings
+        return newPrefs
     }
 
     func enableSync() async throws {
@@ -113,25 +137,46 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
     }
 
     func disableSync(disposition: DisableDisposition) async throws {
+        Log.app.info("📅 Disabling sync with disposition: \(disposition)")
+        
+        // Ensure we have the current calendars loaded before performing cleanup
+        if currentPrefs.isEnabled && !self.resolvedCalendars.isEmpty {
+            Log.app.info("📅 Using existing resolved calendars (\(self.resolvedCalendars.count))")
+        } else if currentPrefs.isValid {
+            Log.app.info("📅 Refreshing resolved calendars before cleanup")
+            try await refreshResolvedCalendars()
+            Log.app.info("📅 Refreshed calendars, now have \(self.resolvedCalendars.count)")
+        } else {
+            Log.app.warning("📅 No valid preferences found, proceeding with cleanup anyway")
+        }
+        
         switch disposition {
         case .keepEverything:
-            // Just disable sync, keep everything
+            Log.app.info("📅 Keeping everything - just disabling sync")
             isEnabled = false
             
         case .removeKunaEvents:
-            // Remove only Kuna events, keep calendars
+            Log.app.info("📅 Removing Kuna events, keeping calendars")
             try await removeKunaEvents()
             isEnabled = false
             
         case .archiveCalendars:
-            // Rename calendars and disable
+            Log.app.info("📅 Archiving calendars")
             try await archiveCalendars()
+            isEnabled = false
+            
+        case .deleteEverything:
+            Log.app.info("📅 Deleting everything - events and calendars")
+            try await deleteKunaCalendars()
             isEnabled = false
         }
 
         // Clear resolved calendars and reset prefs
+        Log.app.info("📅 Clearing resolved calendars and resetting preferences")
         resolvedCalendars.removeAll()
         currentPrefs = CalendarSyncPrefs()
+        
+        Log.app.info("📅 Calendar sync disabled successfully")
     }
 
     func resyncNow() async {
@@ -512,25 +557,87 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
 
     private func removeKunaEvents() async throws {
         let existingEvents = fetchExistingKunaEvents()
+        
+        guard !existingEvents.isEmpty else {
+            Log.app.info("📅 No Kuna events found to remove")
+            return
+        }
+        
+        Log.app.info("📅 Removing \(existingEvents.count) Kuna event(s)")
+        
         for event in existingEvents {
+            Log.app.debug("📅 Removing event: '\(event.title ?? "Untitled")'")
             try eventKitClient.remove(event: event)
         }
+        
         try eventKitClient.commit()
+        Log.app.info("📅 Event removal committed")
     }
 
     private func archiveCalendars() async throws {
-        for calendar in resolvedCalendars.values {
-            calendar.title = "\(calendar.title) (Archive)"
+        guard !resolvedCalendars.isEmpty else {
+            Log.app.warning("📅 No resolved calendars found to archive")
+            return
         }
+        
+        Log.app.info("📅 Archiving \(self.resolvedCalendars.count) calendar(s)")
+        
+        for (_, calendar) in self.resolvedCalendars {
+            let originalTitle = calendar.title
+            if !originalTitle.hasSuffix(" (Archive)") {
+                calendar.title = "\(originalTitle) (Archive)"
+                Log.app.info("📅 Renamed calendar '\(originalTitle)' to '\(calendar.title)'")
+            } else {
+                Log.app.info("📅 Calendar '\(originalTitle)' already archived")
+            }
+        }
+        
         try eventKitClient.commit()
+        Log.app.info("📅 Calendar archiving committed")
+    }
+    
+    private func deleteKunaCalendars() async throws {
+        guard !self.resolvedCalendars.isEmpty else {
+            Log.app.warning("📅 No resolved calendars found to delete")
+            return
+        }
+        
+        Log.app.info("📅 Deleting \(self.resolvedCalendars.count) Kuna calendar(s)")
+        
+        for (_, calendar) in self.resolvedCalendars {
+            Log.app.info("📅 Deleting calendar: '\(calendar.title)'")
+            try eventKitClient.remove(calendar: calendar)
+        }
+        
+        try eventKitClient.commit()
+        Log.app.info("📅 Calendar deletion committed")
     }
 
     // MARK: - Helper Methods
+    
+    private func updateAppSettings(with prefs: CalendarSyncPrefs) async {
+        // Update UserDefaults directly to persist the preferences
+        if let data = try? JSONEncoder().encode(prefs) {
+            UserDefaults.standard.set(data, forKey: "calendarSync.prefs")
+            
+            // Also update the old calendarSyncEnabled setting for backwards compatibility
+            UserDefaults.standard.set(prefs.isEnabled, forKey: "calendarSyncEnabled")
+        }
+    }
 
     private func getProjectName(for projectID: String) async -> String? {
-        // For now, just return a simple project name
-        // TODO: Get actual project name from app state or API
-        return "Project \(projectID)"
+        guard let api = api, let projectIDInt = Int(projectID) else {
+            return nil
+        }
+        
+        do {
+            let projects = try await api.fetchProjects()
+            let project = projects.first { $0.id == projectIDInt }
+            return project?.title
+        } catch {
+            Log.app.error("📅 Failed to fetch project name for \(projectID): \(error)")
+            return nil
+        }
     }
 
     private func setupEventStoreNotifications() {
