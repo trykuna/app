@@ -29,6 +29,7 @@ struct MainContainerView: View {
                     )
                     .frame(width: menuWidth)
                     .offset(x: isMenuOpen ? 0 : -menuWidth)
+                    .accessibilityIdentifier("Sidebar")
 
                     Spacer()
                 }
@@ -182,6 +183,8 @@ struct ProjectListViewWithMenu: View {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 18, weight: .medium))
                     }
+                    .accessibilityIdentifier("MenuButton")
+                    .accessibilityLabel("Menu")
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -255,6 +258,8 @@ struct LabelsViewWithMenu: View {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 18, weight: .medium))
                     }
+                    .accessibilityIdentifier("MenuButton")
+                    .accessibilityLabel("Menu")
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {

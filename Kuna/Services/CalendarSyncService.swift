@@ -27,9 +27,22 @@ final class CalendarSyncService: ObservableObject {
     }
 
     private func setupEngineBinding() {
-        // Keep manager screens in sync
+        // Keep manager screens in sync with new engine
         syncEngine.$isEnabled.assign(to: &$isCalendarSyncEnabled)
         syncEngine.$syncErrors.assign(to: &$syncErrors)
+        
+        // Update enabled status based on preferences
+        isCalendarSyncEnabled = AppSettings.shared.calendarSyncPrefs.isEnabled
+    }
+    
+    // MARK: - Engine Delegation
+    
+    func setCalendarSyncEnabled(_ enabled: Bool) {
+        // This method is called by AppSettings when the toggle changes
+        // The actual logic is now handled by the new CalendarSyncEngine
+        if enabled != isCalendarSyncEnabled {
+            isCalendarSyncEnabled = enabled
+        }
     }
 
     // MARK: - Authorization
@@ -379,10 +392,6 @@ final class CalendarSyncService: ObservableObject {
         UserDefaults.standard.set(selectedCalendar?.calendarIdentifier, forKey: "selectedCalendarIdentifier")
     }
 
-    func setCalendarSyncEnabled(_ enabled: Bool) {
-        isCalendarSyncEnabled = enabled
-        saveSettings()
-    }
 
     // MARK: - Cleanup
 
@@ -444,25 +453,16 @@ final class CalendarSyncService: ObservableObject {
     func setAPI(_ api: VikunjaAPI) { syncEngine.setAPI(api) }
 
     func enableNewSync() async throws {
-        try await syncEngine.enable()
+        try await syncEngine.enableSync()
         isCalendarSyncEnabled = syncEngine.isEnabled
     }
 
-    func disableNewSync() {
-        syncEngine.disable()
+    func disableNewSync() async throws {
+        try await syncEngine.disableSync(disposition: .keepEverything)
         isCalendarSyncEnabled = syncEngine.isEnabled
     }
 
-    func performFullSync() async { await syncEngine.syncNow(mode: .pullOnly) }
+    func performFullSync() async { await syncEngine.resyncNow() }
 
-    func performTwoWaySync() async { await syncEngine.syncNow(mode: .twoWay) }
-
-    func setReadWriteEnabled(_ enabled: Bool) { syncEngine.setReadWriteEnabled(enabled) }
-
-    func setEnabledLists(_ listIDs: [String]) { syncEngine.setEnabledLists(listIDs) }
-
-    /// Toggle between single calendar and per‑project calendars (advanced).
-    func setPerProjectEnabled(_ enabled: Bool) {
-        syncEngine.setPerProjectEnabled(enabled)
-    }
+    func performTwoWaySync() async { await syncEngine.resyncNow() }
 }

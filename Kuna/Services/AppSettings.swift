@@ -146,6 +146,15 @@ final class AppSettings: ObservableObject {
     @Published var notifyLabelsUpdated: Bool { didSet { UserDefaults.standard.set(notifyLabelsUpdated, forKey: "notifyLabelsUpdated") } }
     @Published var watchedLabelIDs: [Int] { didSet { UserDefaults.standard.set(watchedLabelIDs, forKey: "watchedLabelIDs") } }
     @Published var notifyWithSummary: Bool { didSet { UserDefaults.standard.set(notifyWithSummary, forKey: "notifyWithSummary") } }
+    
+    // MARK: - Calendar Sync Preferences
+    @Published var calendarSyncPrefs: CalendarSyncPrefs {
+        didSet {
+            if let data = try? JSONEncoder().encode(calendarSyncPrefs) {
+                UserDefaults.standard.set(data, forKey: "calendarSync.prefs")
+            }
+        }
+    }
 
     // MARK: - Analytics Preference
     @Published var analyticsEnabled: Bool {
@@ -178,7 +187,7 @@ final class AppSettings: ObservableObject {
         self.syncAllProjects = UserDefaults.standard.object(forKey: "syncAllProjects") as? Bool ?? true
         let projectArray = UserDefaults.standard.object(forKey: "selectedProjectsForSync") as? [String] ?? []
         self.selectedProjectsForSync = Set(projectArray)
-        CalendarSyncService.shared.setCalendarSyncEnabled(calendarSyncEnabled)
+        // Note: Removed CalendarSyncService call to prevent circular dependency
 
         self.showAttachmentIcons = UserDefaults.standard.object(forKey: "showAttachmentIcons") as? Bool ?? true
         self.showCommentCounts = UserDefaults.standard.object(forKey: "showCommentCounts") as? Bool ?? true
@@ -208,6 +217,14 @@ final class AppSettings: ObservableObject {
         self.notifyLabelsUpdated = UserDefaults.standard.object(forKey: "notifyLabelsUpdated") as? Bool ?? false
         self.watchedLabelIDs = (UserDefaults.standard.array(forKey: "watchedLabelIDs") as? [Int]) ?? []
         self.notifyWithSummary = UserDefaults.standard.object(forKey: "notifyWithSummary") as? Bool ?? true
+
+        // Load calendar sync preferences
+        if let data = UserDefaults.standard.data(forKey: "calendarSync.prefs"),
+           let prefs = try? JSONDecoder().decode(CalendarSyncPrefs.self, from: data) {
+            self.calendarSyncPrefs = prefs
+        } else {
+            self.calendarSyncPrefs = CalendarSyncPrefs()
+        }
 
         self.isBootstrapping = false
     }

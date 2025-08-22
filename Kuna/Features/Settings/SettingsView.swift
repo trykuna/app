@@ -11,10 +11,7 @@ struct SettingsView: View {
 
     @State private var showingAppIcons = false
     @State private var showingCalendarPicker = false
-    @State private var isRequestingCalendarAccess = false
-    @State private var showingCalendarError = false
-    @State private var calendarErrorMessage = ""
-    @State private var showingCalendarCleanupConfirm = false
+    @State private var showingCalendarSync = false
 
 
     var body: some View {
@@ -52,60 +49,17 @@ struct SettingsView: View {
             }
         }
         .sheet(isPresented: $showingAppIcons) { AppIconView() }
-        .sheet(isPresented: $showingCalendarPicker) { CalendarPickerView() }
+        .sheet(isPresented: $showingCalendarSync) { 
+            CalendarSyncView()
+                .environmentObject(appState)
+                .environmentObject(settings)
+        }
         .onAppear { 
             calendarSync.refreshAuthorizationStatus()
             iconManager.updateCurrentIcon()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             calendarSync.refreshAuthorizationStatus()
-        }
-        .onChange(of: settings.calendarSyncEnabled) { oldValue, newValue in
-            if newValue && !oldValue {
-                isRequestingCalendarAccess = true
-                Task {
-                    let granted = await calendarSync.requestCalendarAccess()
-                    await MainActor.run {
-                        isRequestingCalendarAccess = false
-                        if granted {
-                            // Automatically create and select the default Kuna Tasks calendar
-                            if let defaultCalendar = calendarSync.getOrCreateDefaultCalendar() {
-                                calendarSync.setSelectedCalendar(defaultCalendar)
-                            }
-                        } else {
-                            settings.calendarSyncEnabled = false
-                            if let lastError = calendarSync.syncErrors.last {
-                                calendarErrorMessage = lastError
-                                showingCalendarError = true
-                            }
-                        }
-                    }
-                }
-            } else if oldValue && !newValue {
-                // Ask for confirmation before tidying up calendar events
-                showingCalendarCleanupConfirm = true
-            }
-        }
-        .alert("Turn Off Calendar Sync?", isPresented: $showingCalendarCleanupConfirm) {
-            Button("Turn Off & Remove Events", role: .destructive) {
-                Task { await calendarSync.tidyUpAllKunaCalendars() }
-            }
-            Button("Cancel", role: .cancel) {
-                // Re-enable toggle if user cancels
-                settings.calendarSyncEnabled = true
-            }
-        } message: {
-            Text("Turning this off will remove events created by Kuna from your selected calendar.")
-        }
-        .alert("Calendar Access Required", isPresented: $showingCalendarError) {
-            Button("Settings") {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
-                }
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text(calendarErrorMessage)
         }
     }
 
@@ -195,121 +149,35 @@ struct SettingsView: View {
     @ViewBuilder
     private var calendarIntegrationSection: some View {
         Section {
-            HStack {
-                Image(systemName: "calendar.badge.plus")
-                    .foregroundColor(.green).font(.body)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Calendar Sync").font(.body)
-                    Text("Sync tasks with your calendar app")
-                        .font(.caption).foregroundColor(.secondary)
-                    Text("Status: \(authorizationStatusText)")
-                        .font(.caption2).foregroundColor(.orange)
-                }
-                Spacer()
-                if isRequestingCalendarAccess {
-                    ProgressView().scaleEffect(0.8)
-                } else {
-                    Toggle("", isOn: $settings.calendarSyncEnabled).labelsHidden()
-                }
-            }
-
-            if settings.calendarSyncEnabled {
-                Button(action: { showingCalendarPicker = true }) {
-                    HStack {
-                        Image(systemName: "calendar")
-                            .foregroundColor(.blue).font(.body)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Calendar").font(.body)
-                            Text(calendarSync.selectedCalendar?.title ?? "Select Calendar")
-                                .font(.caption).foregroundColor(.secondary)
-                        }
-                        Spacer()
-                    }
-                }
-
+            Button(action: { showingCalendarSync = true }) {
                 HStack {
-                    Image(systemName: "clock.arrow.circlepath")
-                        .foregroundColor(.orange).font(.body)
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundColor(.green).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Auto-sync New Tasks").font(.body)
-                        Text("Automatically sync new tasks to calendar")
+                        Text("Calendar Sync").font(.body).foregroundColor(.primary)
+                        Text(settings.calendarSyncPrefs.isEnabled ? 
+                             "\(settings.calendarSyncPrefs.mode.displayName) • \(settings.calendarSyncPrefs.selectedProjectIDs.count) projects" :
+                             "Sync tasks with your calendar app")
                             .font(.caption).foregroundColor(.secondary)
                     }
                     Spacer()
-                    Toggle("", isOn: $settings.autoSyncNewTasks).labelsHidden()
-                }
-
-                HStack {
-                    Image(systemName: "calendar.badge.clock")
-                        .foregroundColor(.purple).font(.body)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Sync Tasks with Dates Only").font(.body)
-                        Text("Only sync tasks that have start, due, or end dates")
-                            .font(.caption).foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    Toggle("", isOn: $settings.syncTasksWithDatesOnly).labelsHidden()
-                }
-                
-                NavigationLink(destination: ProjectSyncSelectionView()) {
-                    HStack {
-                        Image(systemName: "folder.badge.gearshape")
-                            .foregroundColor(.orange).font(.body)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Project Selection").font(.body)
-                            if settings.syncAllProjects {
-                                Text("All projects syncing")
-                                    .font(.caption).foregroundColor(.secondary)
-                            } else {
-                                Text("\(settings.selectedProjectsForSync.count) projects selected")
-                                    .font(.caption).foregroundColor(.secondary)
-                            }
+                    HStack(spacing: 4) {
+                        if settings.calendarSyncPrefs.isEnabled {
+                            Text("Enabled")
+                                .font(.caption)
+                                .foregroundColor(.green)
                         }
-                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                }
-
-                NavigationLink(destination: CalendarSyncView()) {
-                    HStack {
-                        Image(systemName: "chart.bar.doc.horizontal")
-                            .foregroundColor(.blue).font(.body)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Sync Status").font(.body)
-                            Text("View sync status and resolve conflicts")
-                                .font(.caption).foregroundColor(.secondary)
-                        }
-                        Spacer()
-                    }
-                }
-
-                if calendarSync.authorizationStatus == .notDetermined ||
-                    calendarSync.authorizationStatus == .denied {
-                    Button("Request Calendar Access") {
-                        isRequestingCalendarAccess = true
-                        Task {
-                            let granted = await calendarSync.requestCalendarAccess()
-                            await MainActor.run {
-                                calendarSync.refreshAuthorizationStatus()
-                                isRequestingCalendarAccess = false
-                                if !granted {
-                                    if let lastError = calendarSync.syncErrors.last {
-                                        calendarErrorMessage = lastError
-                                        showingCalendarError = true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(isRequestingCalendarAccess)
                 }
             }
-        } header: { Text("Calendar Integration") } footer: {
-            if settings.calendarSyncEnabled {
-                Text("Tasks will be synced to your selected calendar. Calendar access permission is required.")
-            } else {
-                Text("Enable calendar sync to integrate your tasks with the Calendar app.")
-            }
+            .buttonStyle(.plain)
+        } header: { 
+            Text("Calendar Integration") 
+        } footer: {
+            Text("Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones.")
         }
     }
     

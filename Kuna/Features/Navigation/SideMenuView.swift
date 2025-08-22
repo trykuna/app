@@ -122,6 +122,7 @@ struct SideMenuView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+        .accessibilityIdentifier("Sidebar.\(item.rawValue)")
     }
 }
 

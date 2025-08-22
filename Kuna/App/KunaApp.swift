@@ -16,13 +16,21 @@ struct KunaApp: App {
         // Register background tasks as early as possible (Apple recommends during app launch)
         BackgroundSyncService.shared.register()
         
-        // Schedule initial background sync if enabled
-        let settings = AppSettings.shared
-        if settings.backgroundSyncEnabled {
-            BackgroundSyncService.shared.scheduleNext(after: settings.backgroundSyncFrequency)
+        // Schedule initial background sync if enabled (skip during screenshot generation)
+        if !isRunningForScreenshots {
+            let settings = AppSettings.shared
+            if settings.backgroundSyncEnabled {
+                BackgroundSyncService.shared.scheduleNext(after: settings.backgroundSyncFrequency)
+            }
         }
     }
     @StateObject private var appState = AppState()
+    
+    // Check if running for fastlane screenshots
+    private var isRunningForScreenshots: Bool {
+        UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") ||
+        ProcessInfo.processInfo.arguments.contains("-FASTLANE_SNAPSHOT")
+    }
 
     var body: some Scene {
         WindowGroup {

@@ -1,0 +1,39 @@
+# Kuna App Store Screenshots Configuration
+
+# A list of devices you want to take the screenshots from
+devices([
+  "iPhone 16 Pro Max",
+  "iPhone 16 Pro"
+])
+
+# Languages for screenshots
+languages([
+  "en-US"
+])
+
+# The name of the scheme which contains the UI Tests
+scheme("KunaUITests")
+
+# Where should the resulting screenshots be stored?
+output_directory("./fastlane/screenshots")
+
+# Clear all previously generated screenshots before creating new ones
+clear_previous_screenshots(true)
+
+# Set the status bar to 9:41 AM, and show full battery and reception
+override_status_bar(true)
+
+# Launch arguments to pass to the app
+launch_arguments([
+  "-FASTLANE_SNAPSHOT", 
+  "YES"
+])
+
+# Environment variables for test credentials
+# Set these in your shell before running fastlane snapshot:
+# export VIKUNJA_SERVER_URL="https://your-vikunja-server.com"
+# export VIKUNJA_USERNAME="your-username"
+# export VIKUNJA_PASSWORD="your-password"
+
+# For more information about all available options run
+# fastlane action snapshot
