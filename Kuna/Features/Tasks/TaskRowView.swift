@@ -63,6 +63,7 @@ struct TaskRowContent: View, Equatable {
                     .imageScale(.large)
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("task.row.toggle")
 
             // Color dot
             if props.showTaskColors && (props.t.hasCustomColor || props.showDefaultColorBalls) {
@@ -77,6 +78,7 @@ struct TaskRowContent: View, Equatable {
                 Image(systemName: props.t.priority.systemImage) // e.g. map enum -> symbol name
                     .foregroundColor(props.t.priority.color)    // e.g. map enum -> Color
                     .frame(width: 16, height: 16)
+                    .accessibilityIdentifier("task.row.priority")
             }
 
             VStack(alignment: .leading, spacing: 6) {
@@ -85,11 +87,13 @@ struct TaskRowContent: View, Equatable {
                     Text(props.t.title)
                         .strikethrough(props.t.done)
                         .foregroundColor(.primary)
+                        .accessibilityIdentifier("task.row.title")
 
                     if props.showAttachmentIcons && props.t.hasAttachments {
                         Image(systemName: "paperclip")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                            .accessibilityIdentifier("task.row.attachment")
                     }
 
                     if props.showCommentCounts, let count = props.commentCount, count > 0 {
@@ -100,6 +104,7 @@ struct TaskRowContent: View, Equatable {
                                 .font(.caption2)
                         }
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("task.row.comments")
                     }
 
                     Spacer(minLength: 0)
@@ -119,6 +124,7 @@ struct TaskRowContent: View, Equatable {
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                             }
                         }
+                        .accessibilityIdentifier("task.row.labels")
                     }
                 }
 
@@ -135,6 +141,7 @@ struct TaskRowContent: View, Equatable {
                                     Text(start, style: .time).font(.caption2)
                                 }
                             }
+                            .accessibilityIdentifier("task.row.startDate")
                         }
                         if props.showDueDate, let due = props.t.dueDate {
                             HStack(spacing: 4) {
@@ -144,6 +151,7 @@ struct TaskRowContent: View, Equatable {
                                     Text(due, style: .time).font(.caption2)
                                 }
                             }
+                            .accessibilityIdentifier("task.row.dueDate")
                         }
                         if props.showEndDate, let end = props.t.endDate {
                             HStack(spacing: 4) {
@@ -153,13 +161,14 @@ struct TaskRowContent: View, Equatable {
                                     Text(end, style: .time).font(.caption2)
                                 }
                             }
+                            .accessibilityIdentifier("task.row.endDate")
                         }
                     }
                     .foregroundStyle(.secondary)
                 }
             }
         }
-        .contentShape(Rectangle())
+        .contentShape(Rectangle()) // so tapping gaps still counts as a tap on the row
     }
 }
 
@@ -170,9 +179,20 @@ struct TaskRowView: View {
     let onToggle: (VikunjaTask) -> Void
 
     var body: some View {
+        // Keep the whole row tappable via NavigationLink...
         NavigationLink(destination: TaskDetailView(task: props.t, api: api)) {
-            // Important: use EquatableView(content:) so SwiftUI can skip updates
-            EquatableView(content: TaskRowContent(props: props, api: api, onToggle: onToggle))
+            HStack(spacing: 8) {
+                // Important: use EquatableView so SwiftUI can skip updates
+                EquatableView(content: TaskRowContent(props: props, api: api, onToggle: onToggle))
+                Spacer(minLength: 8)
+                // ...and also expose a visible chevron with a stable identifier for UITests.
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+                    .accessibilityIdentifier("task.row.disclosure")
+            }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain) // keep platform styling minimal, preserves tap area
+        .accessibilityIdentifier("task.row")
     }
 }
