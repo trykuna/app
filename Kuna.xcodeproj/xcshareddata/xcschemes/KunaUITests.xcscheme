@@ -38,10 +38,36 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7947454C2E4F6C1200C7A1D4"
+            BuildableName = "Kuna.app"
+            BlueprintName = "Kuna"
+            ReferencedContainer = "container:Kuna.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "VIKUNJA_USERNAME"
+            value = "$(VIKUNJA_USERNAME)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "VIKUNJA_PASSWORD"
+            value = "$(VIKUNJA_PASSWORD)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "VIKUNJA_SERVER_URL"
+            value = "$(VIKUNJA_SERVER_SCHEME)://$(VIKUNJA_SERVER_HOST)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <Testables>
          <TestableReference
             skipped = "NO"
@@ -51,6 +77,17 @@
                BlueprintIdentifier = "79F856D62E57C5710028165E"
                BuildableName = "KunaUITests.xctest"
                BlueprintName = "KunaUITests"
+               ReferencedContainer = "container:Kuna.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "79A68AFC2E5BBA4B00776E4A"
+               BuildableName = "KunaUITests2.xctest"
+               BlueprintName = "KunaUITests2"
                ReferencedContainer = "container:Kuna.xcodeproj">
             </BuildableReference>
          </TestableReference>
