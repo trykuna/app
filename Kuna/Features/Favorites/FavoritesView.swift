@@ -32,6 +32,7 @@ struct FavoritesView: View {
         }
         .navigationTitle("Favorites")
         .navigationBarTitleDisplayMode(.large)
+        .accessibilityIdentifier("screen.favorites")
         .onAppear {
             loadFavorites()
             if AppSettings.shared.showCommentCounts {
@@ -259,6 +260,7 @@ struct FavoriteTaskRow: View {
         .padding(.vertical, 4)
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
+        .accessibilityIdentifier("favorite.row")
     }
 
     private func toggleFavorite() {

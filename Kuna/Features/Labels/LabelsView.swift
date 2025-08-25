@@ -29,6 +29,7 @@ struct LabelsView: View {
             }
             .navigationTitle("Labels")
             .navigationBarTitleDisplayMode(.large)
+            .accessibilityIdentifier("screen.labels")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Done") {
@@ -40,6 +41,7 @@ struct LabelsView: View {
                     Button(action: { showingCreateLabel = true }) {
                         Image(systemName: "plus")
                     }
+                    .accessibilityIdentifier("button.addLabel")
                 }
             }
             .sheet(isPresented: $showingCreateLabel) {
@@ -170,6 +172,7 @@ struct LabelsView: View {
             }
         }
         .padding(.vertical, 4)
+        .accessibilityIdentifier("label.row")
     }
 }
 

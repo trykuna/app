@@ -743,6 +743,7 @@ struct TaskListView: View {
             Divider()
             mainContent
         }
+        .accessibilityIdentifier("screen.tasks")
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack(spacing: 8) {
@@ -752,11 +753,13 @@ struct TaskListView: View {
                         Image(systemName: currentFilter.hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     }
                     .foregroundColor(currentFilter.hasActiveFilters ? .accentColor : .primary)
+                    .accessibilityIdentifier("button.filter")
                     Button {
                         showingSort = true
                     } label: {
                         Image(systemName: "arrow.up.arrow.down")
                     }
+                    .accessibilityIdentifier("button.sort")
                 }
             }
             ToolbarItem(placement: .primaryAction) {
@@ -766,6 +769,7 @@ struct TaskListView: View {
                     Image(systemName: "plus")
                 }
                 .disabled(vm.isAddingTask)
+                .accessibilityIdentifier("button.addTask")
             }
         }
         .sheet(isPresented: $showingFilter) {

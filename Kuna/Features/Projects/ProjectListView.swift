@@ -59,7 +59,7 @@ struct ProjectListView: View {
     var body: some View {
         NavigationStack {
             List(vm.projects) { p in
-                NavigationLink(p.title) { TaskListView(project: p, api: api) }
+                NavigationLink(p.title) { TasksAdaptiveContainer(project: p, api: api) }
             }
             .navigationTitle("Projects")
             .toolbar { 

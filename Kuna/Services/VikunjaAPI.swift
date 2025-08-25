@@ -17,47 +17,120 @@ struct Endpoint {
     }
 }
 
-
 enum APIError: Error, LocalizedError {
-    case badURL, http(Int), decoding, missingToken, totpRequired, other(String)
+    case badURL
+    case http(Int)
+    case decoding
+    case missingToken
+    case totpRequired
+    case invalidCredentials
+    case invalidTOTP
+    case other(String)
+
     var errorDescription: String? {
         switch self {
-        case .badURL: return "Bad URL"
-        case .http(let code): return "HTTP \(code)"
-        case .decoding: return "Decoding failed"
-        case .missingToken: return "No auth token"
-        case .totpRequired: return "TOTP code required"
-        case .other(let s): return s
+        case .badURL:                return "Bad URL"
+        case .http(let code):        return "HTTP \(code)"
+        case .decoding:              return "Decoding failed"
+        case .missingToken:          return "No auth token"
+        case .totpRequired:          return "TOTP code required"
+        case .invalidCredentials:    return "Wrong username or password"
+        case .invalidTOTP:           return "Invalid TOTP passcode"
+        case .other(let s):          return s
         }
     }
 }
 
 final class VikunjaAPI {
-    // Build URL from Endpoint
+
+    // MARK: - URL building
+
+    private func url(for endpoint: Endpoint) throws -> URL {
+        var url = config.baseURL
+        for c in endpoint.pathComponents { url.appendPathComponent(c) }
+        if !endpoint.queryItems.isEmpty {
+            var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            comp?.queryItems = endpoint.queryItems
+            guard let u = comp?.url else { throw APIError.badURL }
+            url = u
+        }
+        return url
+    }
+
+    // MARK: - Request context (optional, kept for future use)
+
+    private struct RequestContext {
+        let isLogin: Bool
+        let sentTOTP: Bool
+    }
+
+    private enum AuthPrecondition {
+        case totpRequired
+        case invalidTOTP
+        case invalidCredentials
+        case unknown
+    }
+
+    private func classifyAuthPrecondition(message: String, context: RequestContext? = nil) -> AuthPrecondition {
+        let m = message.lowercased()
+
+        // Invalid username/password (code 1011)
+        if m.contains("wrong username or password") ||
+           m.contains("invalid username") || m.contains("invalid password") ||
+           (m.contains("authentication") && m.contains("failed")) {
+            return .invalidCredentials
+        }
+
+        // For "Invalid totp passcode" (code 1017), check if TOTP was actually sent
+        // If no TOTP was sent, this means TOTP is required
+        // If TOTP was sent, this means the TOTP was wrong
+        if m.contains("invalid totp") || m.contains("invalid totp passcode") ||
+           m.contains("totp passcode invalid") || m.contains("wrong totp") {
+            // If we have context about whether TOTP was sent, use it
+            if let sentTOTP = context?.sentTOTP {
+                return sentTOTP ? .invalidTOTP : .totpRequired
+            }
+            // Without context, we assume it means TOTP is required (safer default for UI)
+            return .totpRequired
+        }
+
+        // TOTP explicitly required / missing
+        if (m.contains("totp") && (m.contains("required") || m.contains("missing"))) ||
+           m.contains("two-factor") || m.contains("2fa") || m.contains("precondition failed: totp") {
+            return .totpRequired
+        }
+
+        return .unknown
+    }
+
+    // MARK: - Core request helpers
 
     // Backward-compatible string-path request kept for now
     @discardableResult
     private func request(_ path: String,
                          method: String = "GET",
                          body: (some Encodable)? = Optional<String>.none) async throws -> Data {
-        return try await request(Endpoint(method: method, pathComponents: path.split(separator: "/").map(String.init)), body: body)
+        return try await request(Endpoint(method: method, pathComponents: path.split(separator: "/").map(String.init)),
+                                 body: body)
     }
 
     // New Endpoint-based request
     private func request(_ endpoint: Endpoint, body: (some Encodable)? = Optional<String>.none) async throws -> Data {
-        let (data, _) = try await requestWithResponse(endpoint, body: body)
+        let (data, _) = try await requestWithResponse(endpoint, body: body, context: nil)
         return data
     }
 
     // Variant that returns both data and HTTPURLResponse (needed to read pagination headers)
-    private func requestWithResponse(_ endpoint: Endpoint, body: (some Encodable)? = Optional<String>.none) async throws -> (Data, HTTPURLResponse) {
+    private func requestWithResponse(_ endpoint: Endpoint,
+                                     body: (some Encodable)? = Optional<String>.none,
+                                     context: RequestContext? = nil) async throws -> (Data, HTTPURLResponse) {
         let url = try url(for: endpoint)
         Log.network.debug("Request: \(endpoint.method, privacy: .public) \(url.absoluteString, privacy: .public)")
 
         // Skip token validation for auth endpoints
         let isAuthEndpoint = endpoint.pathComponents.contains("login") ||
-                           endpoint.pathComponents.contains("token") ||
-                           endpoint.pathComponents.joined(separator: "/") == "user/token"
+                             endpoint.pathComponents.contains("token") ||
+                             endpoint.pathComponents.joined(separator: "/") == "user/token"
 
         if !isAuthEndpoint && tokenRefreshHandler != nil {
             try await ensureValidToken()
@@ -81,26 +154,119 @@ final class VikunjaAPI {
 
         let isGet = endpoint.method.uppercased() == "GET"
         var lastError: Error?
+
         for attempt in 1...3 {
             do {
                 let (data, resp) = try await session.data(for: req)
                 guard let http = resp as? HTTPURLResponse else { throw APIError.other("No HTTP response") }
                 Log.network.debug("Response: status=\(http.statusCode, privacy: .public) url=\(url.absoluteString, privacy: .public)")
+
                 if (200..<300).contains(http.statusCode) {
                     return (data, http)
                 }
+
                 if isGet && (http.statusCode == 500 || http.statusCode == 502 || http.statusCode == 503 || http.statusCode == 504) && attempt < 3 {
                     let delay = UInt64(pow(2.0, Double(attempt - 1)) * 0.3 * 1_000_000_000)
                     try? await Task.sleep(nanoseconds: delay)
                     continue
                 }
+
                 if LogConfig.verboseNetwork {
-                    Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public)")
+                    let serverMessage = extractErrorMessage(from: data) ?? ""
+                    if serverMessage.isEmpty {
+                        Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public)")
+                    } else {
+                        Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public) message=\(serverMessage, privacy: .public)")
+                    }
                 }
-                // Check for TOTP required (412 Precondition Failed)
+
+                // --- Auth-specific handling ---
+
                 if http.statusCode == 412 {
-                    throw APIError.totpRequired
+                    // Log the raw response for debugging 412 errors
+                    let rawResponse = String(data: data, encoding: .utf8) ?? "Unable to decode response as UTF-8"
+                    Log.network.error("HTTP 412 Precondition Failed - Raw response: \(rawResponse, privacy: .public)")
+                    
+                    let serverMessage = extractErrorMessage(from: data) ?? ""
+                    Log.network.error("HTTP 412 Precondition Failed - Extracted message: \(serverMessage.isEmpty ? "<empty>" : serverMessage, privacy: .public)")
+                    
+                    #if DEBUG
+                    Log.network.debug("HTTP 412 body(raw): \(rawResponse, privacy: .public)")
+                    #endif
+
+                    let isLogin = endpoint.pathComponents.contains("login")
+                    if isLogin {
+                        // STRICT rule for /login:
+                        // - If message explicitly says creds are wrong -> invalidCredentials
+                        // - If message says "Invalid totp passcode" WITH NO TOTP sent -> totpRequired
+                        // - If message says "Invalid totp passcode" WITH TOTP sent -> invalidTOTP
+                        // - Otherwise -> check context and decide
+                        let msg = serverMessage.lowercased()
+                        
+                        Log.network.info("HTTP 412 on /login endpoint - Message: '\(serverMessage, privacy: .public)'")
+
+                        // Check if credentials are wrong first (code 1011)
+                        if msg.contains("wrong username or password") ||
+                           msg.contains("invalid username") || msg.contains("invalid password") ||
+                           (msg.contains("authentication") && msg.contains("failed")) {
+                            Log.network.error("412(/login) -> INVALID_CREDENTIALS - matched: '\(serverMessage, privacy: .public)'")
+                            throw APIError.invalidCredentials
+                        }
+
+                        // For "Invalid totp passcode" (code 1017), we need to check context
+                        if msg.contains("invalid totp") || msg.contains("invalid totp passcode") ||
+                           msg.contains("totp passcode invalid") || msg.contains("wrong totp") {
+                            // Check if we actually sent a TOTP code in this request
+                            let sentTOTP = context?.sentTOTP ?? false
+                            
+                            if sentTOTP {
+                                // We sent a TOTP but it was wrong
+                                Log.network.error("412(/login) -> INVALID_TOTP - TOTP was sent but incorrect: '\(serverMessage, privacy: .public)'")
+                                throw APIError.invalidTOTP
+                            } else {
+                                // We didn't send a TOTP, so this means TOTP is required
+                                Log.network.info("412(/login) -> TOTP_REQUIRED - No TOTP sent, server requires it: '\(serverMessage, privacy: .public)'")
+                                throw APIError.totpRequired
+                            }
+                        }
+
+                        Log.network.info("412(/login) -> TOTP_REQUIRED (strict fallback) - message was: '\(serverMessage, privacy: .public)'")
+                        throw APIError.totpRequired
+                    }
+
+                    // Non-login endpoints: classify normally
+                    let meaning = classifyAuthPrecondition(message: serverMessage, context: context)
+                    Log.network.info("HTTP 412 on non-login endpoint - Classification: \(String(describing: meaning), privacy: .public), Message: '\(serverMessage, privacy: .public)'")
+                    
+                    switch meaning {
+                    case .invalidCredentials:
+                        Log.network.error("412 -> INVALID_CREDENTIALS (non-login) - message: '\(serverMessage, privacy: .public)'")
+                        throw APIError.invalidCredentials
+                    case .invalidTOTP:
+                        Log.network.error("412 -> INVALID_TOTP (non-login) - message: '\(serverMessage, privacy: .public)'")
+                        throw APIError.invalidTOTP
+                    case .totpRequired:
+                        Log.network.info("412 -> TOTP_REQUIRED (non-login) - message: '\(serverMessage, privacy: .public)'")
+                        throw APIError.totpRequired
+                    case .unknown:
+                        Log.network.warning("412 -> HTTP(412) (unknown, non-login) - message: '\(serverMessage, privacy: .public)'")
+                        if !serverMessage.isEmpty { throw APIError.other(serverMessage) }
+                        throw APIError.http(412)
+                    }
                 }
+
+                // Optional: 401 as invalid credentials on some setups
+                if http.statusCode == 401 {
+                    let serverMessage = extractErrorMessage(from: data) ?? ""
+                    if serverMessage.isEmpty {
+                        Log.network.debug("401 -> INVALID_CREDENTIALS")
+                        throw APIError.invalidCredentials
+                    } else {
+                        Log.network.debug("401 -> OTHER(\(serverMessage))")
+                        throw APIError.other(serverMessage)
+                    }
+                }
+
                 // Try to extract server error message
                 let message = extractErrorMessage(from: data)
                 if let message, !message.isEmpty {
@@ -120,7 +286,9 @@ final class VikunjaAPI {
         }
         throw lastError ?? APIError.other("Unknown error")
     }
+
     // MARK: - Pagination helpers
+
     private struct PaginationInfo {
         let totalPages: Int?
         let currentPage: Int?
@@ -159,18 +327,8 @@ final class VikunjaAPI {
         return PaginationInfo(totalPages: totalPages, currentPage: currentPage, perPage: perPage, resultCount: resultCount, totalCount: totalCount)
     }
 
+    // MARK: - Error payload extraction
 
-    private func url(for endpoint: Endpoint) throws -> URL {
-        var url = config.baseURL
-        for c in endpoint.pathComponents { url.appendPathComponent(c) }
-        if !endpoint.queryItems.isEmpty {
-            var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            comp?.queryItems = endpoint.queryItems
-            guard let u = comp?.url else { throw APIError.badURL }
-            url = u
-        }
-        return url
-    }
     // Try to extract a human-friendly error message from Vikunja error payloads
     private func extractErrorMessage(from data: Data) -> String? {
         // Common shape: {"message":"..."}
@@ -188,7 +346,7 @@ final class VikunjaAPI {
         return nil
     }
 
-
+    // MARK: - Deps
 
     private let config: VikunjaConfig
     /// Injected so this layer never touches Keychain directly.
@@ -199,13 +357,16 @@ final class VikunjaAPI {
     /// Handler for when token refresh fails
     private let tokenRefreshFailureHandler: (() async -> Void)?
 
-
-    init(config: VikunjaConfig, tokenProvider: @escaping () -> String?, tokenRefreshHandler: ((String) async throws -> Void)? = nil, tokenRefreshFailureHandler: (() async -> Void)? = nil, session: URLSession? = nil) {
+    init(config: VikunjaConfig,
+         tokenProvider: @escaping () -> String?,
+         tokenRefreshHandler: ((String) async throws -> Void)? = nil,
+         tokenRefreshFailureHandler: (() async -> Void)? = nil,
+         session: URLSession? = nil) {
         self.config = config
         self.tokenProvider = tokenProvider
         self.tokenRefreshHandler = tokenRefreshHandler
         self.tokenRefreshFailureHandler = tokenRefreshFailureHandler
-        
+
         // Use memory-optimized session configuration for better memory management
         if let customSession = session {
             self.session = customSession
@@ -220,45 +381,7 @@ final class VikunjaAPI {
         }
     }
 
-
-
-    // MARK: - Auth
-    func login(username: String, password: String) async throws -> String {
-        struct LoginBody: Encodable {
-            let username: String
-            let password: String
-            let long_token: Bool = true
-        }
-        let data = try await request("login", method: "POST", body: LoginBody(username: username, password: password))
-
-        // Optionally log response size in debug (avoid body content)
-        #if DEBUG
-        Log.network.debug("Login response bytes: \(data.count, privacy: .public)")
-        #endif
-
-        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
-        // Return token to caller (AppState) who will persist it to Keychain
-        return auth.token
-    }
-
-    func loginWithTOTP(username: String, password: String, totpCode: String) async throws -> String {
-        struct LoginBodyWithTOTP: Encodable {
-            let username: String
-            let password: String
-            let totp_passcode: String
-            let long_token: Bool = true
-        }
-        let data = try await request("login", method: "POST", body: LoginBodyWithTOTP(username: username, password: password, totp_passcode: totpCode))
-
-        // Optionally log response size in debug (avoid body content)
-        #if DEBUG
-        Log.network.debug("Login with TOTP response bytes: \(data.count, privacy: .public)")
-        #endif
-
-        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
-        // Return token to caller (AppState) who will persist it to Keychain
-        return auth.token
-    }
+    // MARK: - Token Management
 
     func refreshToken() async throws -> String {
         // Use the current token to get a new one
@@ -272,7 +395,6 @@ final class VikunjaAPI {
         return auth.token
     }
 
-    // MARK: - Token Management
     private func ensureValidToken() async throws {
         guard let currentToken = tokenProvider() else {
             throw APIError.missingToken
@@ -326,7 +448,53 @@ final class VikunjaAPI {
         }
     }
 
+    // MARK: - Auth
+
+    func login(username: String, password: String) async throws -> String {
+        struct LoginBody: Encodable {
+            let username: String
+            let password: String
+            let long_token: Bool = true
+        }
+        let ep = Endpoint(method: "POST", pathComponents: ["login"])
+        let (data, _) = try await requestWithResponse(
+            ep,
+            body: LoginBody(username: username, password: password),
+            context: RequestContext(isLogin: true, sentTOTP: false)
+        )
+
+        #if DEBUG
+        Log.network.debug("Login response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
+        return auth.token
+    }
+
+    func loginWithTOTP(username: String, password: String, totpCode: String) async throws -> String {
+        struct LoginBodyWithTOTP: Encodable {
+            let username: String
+            let password: String
+            let totp_passcode: String
+            let long_token: Bool = true
+        }
+        let ep = Endpoint(method: "POST", pathComponents: ["login"])
+        let (data, _) = try await requestWithResponse(
+            ep,
+            body: LoginBodyWithTOTP(username: username, password: password, totp_passcode: totpCode),
+            context: RequestContext(isLogin: true, sentTOTP: true)
+        )
+
+        #if DEBUG
+        Log.network.debug("Login with TOTP response bytes: \(data.count, privacy: .public)")
+        #endif
+
+        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
+        return auth.token
+    }
+
     // MARK: - Projects
+
     func fetchProjects() async throws -> [Project] {
         let t0 = Date()
         var outcome = "success"
@@ -384,6 +552,15 @@ final class VikunjaAPI {
     }
 
     // MARK: - Tasks
+
+    struct TasksResponse {
+        let tasks: [VikunjaTask]
+        let hasMore: Bool
+        let currentPage: Int
+        let totalPages: Int?
+        let totalCount: Int?
+    }
+
     // Paginated task fetching with optional query items
     func fetchTasks(projectId: Int, page: Int = 1, perPage: Int = 50, queryItems: [URLQueryItem] = []) async throws -> TasksResponse {
         var allQueryItems = queryItems
@@ -391,7 +568,7 @@ final class VikunjaAPI {
         allQueryItems.append(URLQueryItem(name: "per_page", value: String(perPage)))
 
         let ep = Endpoint(method: "GET", pathComponents: ["projects", String(projectId), "tasks"], queryItems: allQueryItems)
-        let (data, http) = try await requestWithResponse(ep)
+        let (data, http) = try await requestWithResponse(ep, body: Optional<String>.none, context: nil)
 
         #if DEBUG
         Log.network.debug("Tasks(response) bytes: \(data.count, privacy: .public)")
@@ -517,6 +694,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Labels
+
     func fetchLabels() async throws -> [Label] {
         let data = try await request("labels")
 
@@ -555,14 +733,13 @@ final class VikunjaAPI {
         }
         #endif
 
-        // If we get here, decoding failed for an unexpected shape
         throw APIError.decoding
     }
 
     func addLabelToTask(taskId: Int, labelId: Int) async throws -> VikunjaTask {
         struct LabelAssignment: Encodable { let label_id: Int }
-        let _ = try await request("tasks/\(taskId)/labels", method: "PUT",
-                                  body: LabelAssignment(label_id: labelId))
+        _ = try await request("tasks/\(taskId)/labels", method: "PUT",
+                              body: LabelAssignment(label_id: labelId))
 
         // The API just returns a confirmation, not the updated task
         // So we need to fetch the updated task separately
@@ -628,7 +805,7 @@ final class VikunjaAPI {
     }
 
     func deleteLabel(labelId: Int) async throws {
-        let _ = try await request("labels/\(labelId)", method: "DELETE")
+        _ = try await request("labels/\(labelId)", method: "DELETE")
 
         #if DEBUG
         Log.network.debug("Label deleted: \(labelId, privacy: .public)")
@@ -636,6 +813,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Reminders
+
     func addReminderToTask(taskId: Int, reminderDate: Date) async throws -> VikunjaTask {
         struct NewReminder: Encodable {
             let reminder: String
@@ -644,24 +822,25 @@ final class VikunjaAPI {
         let formatter = ISO8601DateFormatter()
         let newReminder = NewReminder(reminder: formatter.string(from: reminderDate))
 
-        let _ = try await request("tasks/\(taskId)/reminders", method: "PUT", body: newReminder)
+        _ = try await request("tasks/\(taskId)/reminders", method: "PUT", body: newReminder)
 
         // The API returns confirmation, fetch updated task
         return try await getTask(taskId: taskId)
     }
 
     func removeReminderFromTask(taskId: Int, reminderId: Int) async throws -> VikunjaTask {
-        let _ = try await request("tasks/\(taskId)/reminders/\(reminderId)", method: "DELETE")
+        _ = try await request("tasks/\(taskId)/reminders/\(reminderId)", method: "DELETE")
 
         // Fetch updated task
         return try await getTask(taskId: taskId)
     }
 
     func deleteTask(taskId: Int) async throws {
-        let _ = try await request("tasks/\(taskId)", method: "DELETE")
+        _ = try await request("tasks/\(taskId)", method: "DELETE")
     }
 
     // MARK: - Users (only available for username/password authentication)
+
     func searchUsers(query: String) async throws -> [VikunjaUser] {
         let queryItems = [URLQueryItem(name: "s", value: query)]
         let ep = Endpoint(method: "GET", pathComponents: ["users"], queryItems: queryItems)
@@ -676,15 +855,15 @@ final class VikunjaAPI {
 
     func assignUserToTask(taskId: Int, userId: Int) async throws -> VikunjaTask {
         struct UserAssignment: Encodable { let user_id: Int }
-        let _ = try await request("tasks/\(taskId)/assignees", method: "PUT",
-                                  body: UserAssignment(user_id: userId))
+        _ = try await request("tasks/\(taskId)/assignees", method: "PUT",
+                              body: UserAssignment(user_id: userId))
 
         // Fetch the updated task
         return try await getTask(taskId: taskId)
     }
 
     func removeUserFromTask(taskId: Int, userId: Int) async throws -> VikunjaTask {
-        let _ = try await request("tasks/\(taskId)/assignees/\(userId)", method: "DELETE")
+        _ = try await request("tasks/\(taskId)/assignees/\(userId)", method: "DELETE")
 
         // Fetch the updated task
         return try await getTask(taskId: taskId)
@@ -701,6 +880,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Attachments
+
     /// Fetch attachments for a task.
     func getTaskAttachments(taskId: Int) async throws -> [TaskAttachment] {
         #if DEBUG
@@ -844,6 +1024,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Comments
+
     /// Fetch comments for a task.
     func getTaskComments(taskId: Int) async throws -> [TaskComment] {
         #if DEBUG
@@ -869,6 +1050,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Relations
+
     /// Get all relations for a task
     func getTaskRelations(taskId: Int) async throws -> [TaskRelation] {
         let ep = Endpoint(method: "GET", pathComponents: ["tasks", "\(taskId)", "relations"])
@@ -967,6 +1149,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Favorites
+
     func getFavoriteTasks() async throws -> [VikunjaTask] {
         // Server-side filtering by favorites is not supported; fetch all and filter client-side
         let ep = Endpoint(method: "GET", pathComponents: ["tasks", "all"])
@@ -987,6 +1170,7 @@ final class VikunjaAPI {
     }
 
     // MARK: - Task Search
+
     /// Search tasks across all projects
     func searchTasks(query: String, page: Int = 1, perPage: Int = 25) async throws -> [VikunjaTask] {
         // 1) Try native search param (?s=)
@@ -1034,7 +1218,6 @@ final class VikunjaAPI {
             return inTitle || inDesc
         }
     }
-
 
     func toggleTaskFavorite(task: VikunjaTask) async throws -> VikunjaTask {
         // Create a copy with toggled favorite status
