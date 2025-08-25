@@ -26,7 +26,8 @@ struct TaskAttachmentView: View {
         VStack(spacing: 0) {
             Button(action: { showingSourceDialog = true }) {
                 HStack {
-                    Text("Add Attachment")
+                    // Text("Add Attachment")
+                    Text(String(localized: "add_attachment_title", comment: "Title for add attachment"))
                     Spacer()
                     Image(systemName: "paperclip")
                         .foregroundColor(.secondary)
@@ -51,6 +52,7 @@ struct TaskAttachmentView: View {
                     clearPendingUpload()
                 }
             } message: {
+                // TODO: Localize
                 Text("Enter a custom name for '\(pendingUploadOriginalName)'")
             }
 

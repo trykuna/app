@@ -15,14 +15,17 @@ struct AppIconTestView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
+                // TODO: Localize
                 Text("Current Icon: \(iconManager.currentIcon.displayName)")
                     .font(.headline)
                 
                 if iconManager.supportsAlternateIcons {
-                    Text("✅ Alternate icons are supported")
+                    // Text("✅ Alternate icons are supported")
+                    Text(String(localized: "app_icon_test_supported", comment: "Text for supported app icons"))
                         .foregroundColor(.green)
                 } else {
-                    Text("❌ Alternate icons are not supported")
+                    // Text("❌ Alternate icons are not supported")
+                    Text(String(localized: "app_icon_test_unsupported", comment: "Text for unsupported app icons"))
                         .foregroundColor(.red)
                 }
                 
@@ -75,7 +78,8 @@ struct AppIconTestView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Changing Icon...")
+                        // Text("Changing Icon...")
+                        Text(String(localized: "app_icon_test_changing_label", comment: "Label shown when changing app icon"))
                             .font(.headline)
                     }
                     .padding(24)

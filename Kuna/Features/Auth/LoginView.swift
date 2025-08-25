@@ -100,8 +100,10 @@ struct LoginView: View {
                                     .foregroundColor(.secondary)
                                     .font(.footnote)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("**Username & Password**: Full access to all features including user management and task assignment.")
-                                    Text("**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions.")
+                                    Text(String(localized: "exp_username_password", comment: "Explains what a username and password allows"))
+                                    Text(String(localized: "exp_api_token", comment: "Explains what an API token allows"))
+//                                    Text("**Username & Password**: Full access to all features including user management and task assignment.")
+//                                    Text("**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions.")
                                 }
                             }
                             .font(.footnote)
@@ -133,6 +135,7 @@ struct LoginView: View {
                                             .scaleEffect(0.8)
                                             .padding(.trailing, 4)
                                     }
+                                    // TODO: How does this get turned into a localization
                                     Text(isLoggingIn ? "Logging In..." : "Log In")
                                 }
                             }
@@ -144,7 +147,8 @@ struct LoginView: View {
                             HStack(alignment: .top, spacing: 6) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.secondary)
-                                Text("If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials.")
+                                Text(String(localized: "totp_info_label", comment: "Explains how to enter a two-factor code"))
+//                                Text("If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials.")
                             }
                             .font(.footnote)
                             .foregroundColor(.secondary)
@@ -166,7 +170,8 @@ struct LoginView: View {
                             HStack(alignment: .top, spacing: 6) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.secondary)
-                                Text("In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token.")
+                                Text(String(localized: "exp_token_creation_label", comment: "Explains how to create a API Token in Vikunja"))
+//                                Text("In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token.")
                             }
                             .font(.footnote)
                             .foregroundColor(.secondary)
@@ -244,7 +249,8 @@ private struct URLHelpSheet: View {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .font(.title2)
-                Text("Server URL Help")
+                Text(String(localized: "server_url_help_title", comment: "Title for server URL help sheet"))
+//                Text("Server URL Help")
                     .font(.headline)
                 Spacer()
                 Button("Done") { dismiss() }
@@ -252,7 +258,8 @@ private struct URLHelpSheet: View {
             }
             .padding(.bottom, 4)
 
-            Text("Enter your server address — you don’t need to add `/api/v1`; the app will do that for you.")
+            // Text("Enter your server address — you don’t need to add `/api/v1`; the app will do that for you.")
+            Text(String(localized: "server_url_help_text", comment: "Text for server URL help sheet"))
                 .fixedSize(horizontal: false, vertical: true)
 
             Spacer(minLength: 0)

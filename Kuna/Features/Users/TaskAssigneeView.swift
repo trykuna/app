@@ -16,7 +16,8 @@ struct TaskAssigneeView: View {
         VStack(spacing: 0) {
             // Top “Assignees” row (matches your other rows)
             HStack {
-                Text("Assignees")
+                // Text("Assignees")
+                Text(String(localized: "assignees_title", comment: "Title for assignees"))
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
@@ -24,7 +25,8 @@ struct TaskAssigneeView: View {
                 Spacer()
 
                 if assignees.isEmpty {
-                    Text("None")
+                    // Text("None")
+                    Text(String(localized: "none_title", comment: "Title for none"))
                         .foregroundColor(.secondary.opacity(0.6))
                 } else {
                     Text("\(assignees.count)")

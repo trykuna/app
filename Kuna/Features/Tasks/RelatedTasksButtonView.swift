@@ -13,7 +13,8 @@ struct RelatedTasksButtonView: View {
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Related Tasks")
+                    // Text("Related Tasks")
+                    Text(String(localized: "related_tasks_title", comment: "Title for related tasks"))
                         .font(.body)
                         .foregroundColor(.primary)
                     let count = (task.relations ?? []).count

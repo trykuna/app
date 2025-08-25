@@ -114,11 +114,13 @@ struct CalendarSyncOnboardingView: View {
                 .foregroundColor(.blue)
             
             VStack(spacing: 16) {
-                Text("Calendar Sync")
+                // Text("Calendar Sync")
+                Text(String(localized: "calendar_sync_title", comment: "Title for calendar sync"))
                     .font(.title)
                     .fontWeight(.bold)
                 
-                Text("Kuna creates its own calendars and never edits your existing ones.")
+                // Text("Kuna creates its own calendars and never edits your existing ones.")
+                Text(String(localized: "calendar_sync_subtitle", comment: "Subtitle for calendar sync"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
                 
@@ -135,11 +137,13 @@ struct CalendarSyncOnboardingView: View {
     private var modeSelectionView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                Text("Choose Sync Mode")
+                // Text("Choose Sync Mode")
+                Text(String(localized: "choose_sync_mode_title", comment: "Title for choose sync mode"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
-                Text("How would you like to organize your synced tasks?")
+                // Text("How would you like to organize your synced tasks?")
+                Text(String(localized: "choose_sync_mode_subtitle", comment: "Subtitle for choose sync mode"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
             }
@@ -163,10 +167,12 @@ struct CalendarSyncOnboardingView: View {
     private var projectSelectionView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                Text("Select Projects")
+                // Text("Select Projects")
+                Text(String(localized: "select_projects_title", comment: "Title for select projects"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
+                // TODO: Localize
                 Text(selectedMode == .single ? 
                      "Choose which projects to include in your Kuna calendar:" :
                      "Choose which projects to create calendars for:")
@@ -187,6 +193,7 @@ struct CalendarSyncOnboardingView: View {
                     
                     Spacer()
                     
+                    // TODO: Localize
                     Text("\(selectedProjectIDs.count) of \(projects.count) selected")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -218,15 +225,18 @@ struct CalendarSyncOnboardingView: View {
     private var confirmationView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                Text("Confirm Setup")
+                // Text("Confirm Setup")
+                Text(String(localized: "confirm_setup_title", comment: "Title for confirm setup"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
-                Text("Review your calendar sync configuration:")
+                // Text("Review your calendar sync configuration:")
+                Text(String(localized: "confirm_setup_subtitle", comment: "Subtitle for confirm setup"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
             }
             
+            // TODO: Localize
             VStack(spacing: 16) {
                 ConfirmationRow(
                     title: "Sync Mode",

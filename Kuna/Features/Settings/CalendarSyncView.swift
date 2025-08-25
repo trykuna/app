@@ -77,7 +77,8 @@ struct CalendarSyncView: View {
         Section {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Calendar Sync")
+                    // Text("Calendar Sync")
+                    Text(String(localized: "calendar_sync_title", comment: "Title for calendar sync"))
                         .font(.headline)
                     Text(appSettings.calendarSyncPrefs.isEnabled ? "Enabled" : "Disabled")
                         .font(.caption)
@@ -114,9 +115,11 @@ struct CalendarSyncView: View {
                         .font(.title2)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Sync with Calendar")
+                        // Text("Sync with Calendar")
+                        Text(String(localized: "sync_with_calendar_title", comment: "Title for sync with calendar"))
                             .font(.headline)
-                        Text("Keep your tasks in sync with your calendar app")
+                        // Text("Keep your tasks in sync with your calendar app")
+                        Text(String(localized: "sync_with_calendar_subtitle", comment: "Subtitle for sync with calendar"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -136,15 +139,18 @@ struct CalendarSyncView: View {
     private var configurationSection: some View {
         Section("Configuration") {
             HStack {
-                Text("Mode")
+                // Text("Mode")
+                Text(String(localized: "mode_title", comment: "Title for mode"))
                 Spacer()
                 Text(appSettings.calendarSyncPrefs.mode.displayName)
                     .foregroundColor(.secondary)
             }
             
             HStack {
-                Text("Projects")
+                // Text("Projects")
+                Text(String(localized: "projects_title", comment: "Title for projects"))
                 Spacer()
+                // TODO: Localize
                 Text("\(appSettings.calendarSyncPrefs.selectedProjectIDs.count) selected")
                     .foregroundColor(.secondary)
             }
@@ -152,7 +158,8 @@ struct CalendarSyncView: View {
             if appSettings.calendarSyncPrefs.mode == .single {
                 if let calendar = appSettings.calendarSyncPrefs.singleCalendar {
                     HStack {
-                        Text("Calendar")
+                        // Text("Calendar")
+                        Text(String(localized: "calendar_title", comment: "Title for calendar"))
                         Spacer()
                         Text(calendar.name)
                             .foregroundColor(.secondary)
@@ -160,8 +167,10 @@ struct CalendarSyncView: View {
                 }
             } else {
                 HStack {
-                    Text("Calendars")
+                    // Text("Calendars")
+                    Text(String(localized: "calendars_title", comment: "Title for calendars"))
                     Spacer()
+                    // TODO: Localize
                     Text("\(appSettings.calendarSyncPrefs.projectCalendars.count) calendars")
                         .foregroundColor(.secondary)
                 }
@@ -198,11 +207,13 @@ struct CalendarSyncView: View {
                         .font(.headline)
 
                     if let last = engine.lastSyncDate {
+                        // TODO: Localize
                         Text("Last synced: \(last, style: .relative) ago")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("Never synced")
+                        // Text("Never synced")
+                        Text(String(localized: "never_synced_title", comment: "Title for never synced"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

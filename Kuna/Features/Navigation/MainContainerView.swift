@@ -209,10 +209,12 @@ struct ProjectListViewWithMenu: View {
             }
             .overlay {
                 if vm.loading {
-                    ProgressView("Loading…")
+                    // Text("Loading…")
+                    ProgressView(String(localized: "projects_loading_label", comment: "Label shown when loading projects"))
                 } else if let error = vm.error {
                     VStack {
-                        Text("Error loading projects")
+                        // Text("Error loading projects")
+                        Text(String(localized: "projects_error_title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
@@ -303,6 +305,7 @@ struct LabelsViewWithMenu: View {
                 }
             } message: {
                 if let label = labelToDelete {
+                    // TODO: Localize
                     Text("Are you sure you want to delete '\(label.title)'? This action cannot be undone.")
                 }
             }
@@ -312,7 +315,8 @@ struct LabelsViewWithMenu: View {
             .overlay {
                 if let error = viewModel.error {
                     VStack {
-                        Text("Error")
+                        // Text("Error")
+                        Text(String(localized: "labels_error_title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
@@ -338,11 +342,13 @@ struct LabelsViewWithMenu: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary.opacity(0.6))
 
-            Text("No Labels")
+            // Text("No Labels")
+            Text(String(localized: "labels_empty_title", comment: "Title shown when there are no labels"))
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Create your first label to organize your tasks")
+            // Text("Create your first label to organize your tasks")
+            Text(String(localized: "labels_empty_subtitle", comment: "Subtitle shown when there are no labels"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

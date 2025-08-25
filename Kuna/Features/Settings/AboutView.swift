@@ -34,7 +34,8 @@ struct AboutView: View {
 
                 // Vikunja thanks
                 CardSection(title: "Vikunja") {
-                    Text("Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist.")
+                    // Text("Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist.")
+                    Text(String(localized: "about_vikunja_text", comment: "Text for about view"))
                         .fixedSize(horizontal: false, vertical: true)
                         .lineSpacing(2)
 
@@ -46,7 +47,8 @@ struct AboutView: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 22)
 
-                            Text("Learn more")
+                            // Text("Learn more")
+                            Text(String(localized: "about_vikunja_link", comment: "Link for about view"))
                                 .foregroundStyle(.primary)
 
                             Spacer()
@@ -69,6 +71,7 @@ struct AboutView: View {
                 }
 
                 // Special Thanks
+                // TODO: Localize
                 CardSection(title: "Special Thanks") {
                     Text("""
                     This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.
@@ -96,7 +99,8 @@ struct AboutView: View {
             }
             .padding(.bottom, 24)
         }
-        .navigationTitle("About")
+        // .navigationTitle("About")
+        .navigationTitle(String(localized: "about_title", comment: "Title for about view"))
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground))
     }

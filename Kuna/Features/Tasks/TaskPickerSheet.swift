@@ -43,9 +43,11 @@ struct TaskPickerSheet: View {
                 } else if !hasSearched {
                     VStack(spacing: 12) {
                         Image(systemName: "text.magnifyingglass").font(.system(size: 40)).foregroundColor(.secondary)
-                        Text("Search for tasks")
+                        // Text("Search for tasks")
+                        Text(String(localized: "search_for_tasks_title", comment: "Title for search for tasks"))
                             .font(.headline)
-                        Text("Type part of a title or description to find a task")
+                        // Text("Type part of a title or description to find a task")
+                        Text(String(localized: "type_part_of_a_title_or_description_to_find_a_task_title", comment: "Title for type part of a title or description to find a task"))
                             .foregroundColor(.secondary).multilineTextAlignment(.center)
                     }
                     .padding()

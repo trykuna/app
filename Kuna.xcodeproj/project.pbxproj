@@ -15,6 +15,7 @@
 		79CC51262E553BA600ACDCC3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79CC51252E553BA600ACDCC3 /* WidgetKit.framework */; };
 		79CC51282E553BA600ACDCC3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79CC51272E553BA600ACDCC3 /* SwiftUI.framework */; };
 		79CC51362E553BA800ACDCC3 /* KunaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		79F30FE62E5BE92000DC0500 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 79F30FE52E5BE92000DC0500 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		79CC51252E553BA600ACDCC3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		79CC51272E553BA600ACDCC3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		79CC513B2E553BC900ACDCC3 /* KunaWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KunaWidgetExtension.entitlements; sourceTree = "<group>"; };
+		79F30FE52E5BE92000DC0500 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		79F856D72E57C5710028165E /* KunaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KunaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -153,6 +155,7 @@
 		794745442E4F6C1200C7A1D4 = {
 			isa = PBXGroup;
 			children = (
+				79F30FE52E5BE92000DC0500 /* Localizable.xcstrings */,
 				791F94912E578264004CC4E5 /* UnitTestPlan.xctestplan */,
 				79CC513B2E553BC900ACDCC3 /* KunaWidgetExtension.entitlements */,
 				7947454F2E4F6C1200C7A1D4 /* Kuna */,
@@ -348,6 +351,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79F30FE62E5BE92000DC0500 /* Localizable.xcstrings in Resources */,
 				791AF2D52E591BB100FDBDB7 /* UITests.local.xcconfig in Resources */,
 				791F94922E578264004CC4E5 /* UnitTestPlan.xctestplan in Resources */,
 			);

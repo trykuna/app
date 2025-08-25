@@ -40,7 +40,8 @@ struct FilterView: View {
                     
                     if filter.filterByPriority {
                         HStack {
-                            Text("Min Priority")
+                            // Text("Min Priority")
+                            Text(String(localized: "min_priority_title", comment: "Title for min priority"))
                             Spacer()
                             Picker("Min", selection: $filter.minPriority) {
                                 ForEach(TaskPriority.allCases) { priority in
@@ -51,7 +52,8 @@ struct FilterView: View {
                         }
                         
                         HStack {
-                            Text("Max Priority")
+                            // Text("Max Priority")
+                            Text(String(localized: "max_priority_title", comment: "Title for max priority"))
                             Spacer()
                             Picker("Max", selection: $filter.maxPriority) {
                                 ForEach(TaskPriority.allCases) { priority in
@@ -62,7 +64,8 @@ struct FilterView: View {
                         }
                     }
                 } header: {
-                    Text("Priority")
+                    // Text("Priority")
+                    Text(String(localized: "priority_title", comment: "Title for priority"))
                 }
                 
                 // Progress Section
@@ -72,6 +75,7 @@ struct FilterView: View {
                     if filter.filterByProgress {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
+                                // TODO: Localize
                                 Text("Min: \(Int(filter.minProgress * 100))%")
                                 Spacer()
                                 Text("Max: \(Int(filter.maxProgress * 100))%")
@@ -84,7 +88,8 @@ struct FilterView: View {
                         }
                     }
                 } header: {
-                    Text("Progress")
+                    // Text("Progress")
+                    Text(String(localized: "progress_title", comment: "Title for progress"))
                 }
                 
                 // Due Date Section
@@ -109,7 +114,8 @@ struct FilterView: View {
                         .foregroundColor(.red)
                     }
                 } header: {
-                    Text("Due Date")
+                    // Text("Due Date")
+                    Text(String(localized: "due_date_title", comment: "Title for due date"))
                 }
                 
                 // Labels Section
@@ -136,7 +142,8 @@ struct FilterView: View {
                         }
                     }
                 } header: {
-                    Text("Labels")
+                    // Text("Labels")
+                    Text(String(localized: "labels_title", comment: "Title for labels"))
                 }
                 
                 // Reset Section

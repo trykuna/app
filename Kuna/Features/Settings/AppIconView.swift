@@ -24,7 +24,8 @@ struct AppIconView: View {
                         .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
                         
                         VStack(spacing: 4) {
-                            Text("Current Icon")
+                            // Text("Current Icon")
+                            Text(String(localized: "app_icon_current_title", comment: "Title for current app icon"))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
                             
@@ -54,11 +55,13 @@ struct AppIconView: View {
                         HStack {
                             Image(systemName: "info.circle")
                                 .foregroundColor(.blue)
-                            Text("About App Icons")
+                            // Text("About App Icons")
+                            Text(String(localized: "app_icon_info_title", comment: "Title for app icon info"))
                                 .font(.headline)
                         }
                         
-                        Text("Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches.")
+                        // Text("Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches.")
+                        Text(String(localized: "app_icon_info_text", comment: "Text for app icon info"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -94,7 +97,8 @@ struct AppIconView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Changing Icon...")
+                        // Text("Changing Icon...")
+                        Text(String(localized: "app_icon_changing_label", comment: "Label shown when changing app icon"))
                             .font(.headline)
                     }
                     .padding(24)

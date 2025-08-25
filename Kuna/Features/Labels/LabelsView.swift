@@ -19,7 +19,8 @@ struct LabelsView: View {
         NavigationView {
             Group {
                 if viewModel.loading {
-                    ProgressView("Loading labels...")
+                    // Text("Loading labels...")
+                    ProgressView(String(localized: "labels_loading_label", comment: "Label shown when loading labels"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.labels.isEmpty {
                     emptyStateView
@@ -27,7 +28,7 @@ struct LabelsView: View {
                     labelsList
                 }
             }
-            .navigationTitle("Labels")
+            .navigationTitle(String(localized: "labels_title", comment: "Title for labels view"))
             .navigationBarTitleDisplayMode(.large)
             .accessibilityIdentifier("screen.labels")
             .toolbar {
@@ -63,6 +64,7 @@ struct LabelsView: View {
                 }
             } message: {
                 if let label = labelToDelete {
+                    // TODO: Localize                    
                     Text("Are you sure you want to delete '\(label.title)'? This action cannot be undone.")
                 }
             }
@@ -72,7 +74,8 @@ struct LabelsView: View {
             .overlay {
                 if let error = viewModel.error {
                     VStack {
-                        Text("Error")
+                        // Text("Error")
+                        Text(String(localized: "labels_error_title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
@@ -98,11 +101,13 @@ struct LabelsView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary.opacity(0.6))
             
-            Text("No Labels")
+            // Text("No Labels")
+            Text(String(localized: "labels_empty_title", comment: "Title shown when there are no labels"))
                 .font(.title2)
                 .fontWeight(.semibold)
             
-            Text("Create your first label to organize your tasks")
+            // Text("Create your first label to organize your tasks")
+            Text(String(localized: "labels_empty_subtitle", comment: "Subtitle shown when there are no labels"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

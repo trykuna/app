@@ -21,7 +21,8 @@ struct NewProjectView: View {
                         .lineLimit(3...6)
                         .textInputAutocapitalization(.sentences)
                 } header: {
-                    Text("Project Details")
+                    // Text("Project Details")
+                    Text(String(localized: "new_project_title", comment: "Title for new project view"))
                 }
                 
                 if let error = error {
@@ -32,7 +33,8 @@ struct NewProjectView: View {
                     }
                 }
             }
-            .navigationTitle("New Project")
+            // .navigationTitle("New Project")
+            .navigationTitle(String(localized: "new_project_title", comment: "Title for new project view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

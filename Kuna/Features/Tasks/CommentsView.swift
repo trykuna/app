@@ -21,7 +21,8 @@ struct CommentsView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Loading comments...")
+                        // Text("Loading comments...")
+                        Text(String(localized: "loading_comments_label", comment: "Label shown when loading comments"))
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -68,11 +69,13 @@ struct CommentsView: View {
                 .foregroundColor(.secondary)
             
             VStack(spacing: 8) {
-                Text("No Comments Yet")
+                // Text("No Comments Yet")
+                Text(String(localized: "no_comments_yet_title", comment: "Title shown when there are no comments"))
                     .font(.title3)
                     .fontWeight(.semibold)
                 
-                Text("Start the conversation by adding the first comment.")
+                // Text("Start the conversation by adding the first comment.")
+                Text(String(localized: "start_conversation_by_adding_first_comment_title", comment: "Title shown when there are no comments"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -265,7 +268,7 @@ struct CommentRowView: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Are you sure you want to delete this comment?")
+            Text(String(localized: "are_you_sure_you_want_to_delete_this_comment_title", comment: "Title for are you sure you want to delete this comment"))
         }
     }
     
@@ -307,12 +310,14 @@ struct CommentsButtonView: View {
         }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Comments")
+                    // Text("Comments")
+                    Text(String(localized: "comments_title", comment: "Title for comments"))
                         .font(.body)
                         .foregroundColor(.primary)
 
                     if isLoadingCount {
-                        Text("Loading...")
+                        // Text("Loading...")
+                        Text(String(localized: "loading_label", comment: "Label shown when loading"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {

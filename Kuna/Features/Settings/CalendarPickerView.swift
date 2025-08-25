@@ -68,10 +68,12 @@ struct CalendarPickerView: View {
                         .frame(width: 14, height: 14)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Kuna Tasks")
+                        // Text("Kuna Tasks")
+                        Text(String(localized: "default_calendar_title", comment: "Title for default calendar"))
                             .font(.body)
                             .fontWeight(.medium)
-                        Text("Default calendar for all tasks")
+                        // Text("Default calendar for all tasks")
+                        Text(String(localized: "default_calendar_subtitle", comment: "Subtitle for default calendar"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -102,7 +104,8 @@ struct CalendarPickerView: View {
                             .font(.caption)
                             .frame(width: 20)
                         
-                        Text("Advanced Options")
+                        // Text("Advanced Options")
+                        Text(String(localized: "advanced_options_title", comment: "Title for advanced options"))
                             .font(.body)
                             .foregroundColor(.blue)
                         
@@ -112,9 +115,11 @@ struct CalendarPickerView: View {
             }
             .padding(.vertical, 4)
         } header: {
-            Text("Calendar Selection")
+            // Text("Calendar Selection")
+            Text(String(localized: "calendar_selection_title", comment: "Title for calendar selection"))
         } footer: {
-            Text("Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar.")
+            // Text("Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar.")
+            Text(String(localized: "calendar_selection_subtitle", comment: "Subtitle for calendar selection"))
         }
     }
 
@@ -126,11 +131,13 @@ struct CalendarPickerView: View {
                     .font(.system(size: 48))
                     .foregroundColor(.orange)
 
-                Text("Calendar Access Required")
+                // Text("Calendar Access Required")
+                Text(String(localized: "calendar_access_required_title", comment: "Title for calendar access required"))
                     .font(.headline)
                     .multilineTextAlignment(.center)
 
-                Text("To sync tasks with your calendar, please grant calendar access in Settings.")
+                // Text("To sync tasks with your calendar, please grant calendar access in Settings.")
+                Text(String(localized: "calendar_access_required_subtitle", comment: "Subtitle for calendar access required"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -157,9 +164,11 @@ struct CalendarPickerView: View {
                 }
             }
         } header: {
-            Text("Choose Different Calendar")
+            // Text("Choose Different Calendar")
+            Text(String(localized: "choose_different_calendar_title", comment: "Title for choose different calendar"))
         } footer: {
-            Text("Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown.")
+            // Text("Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown.")
+            Text(String(localized: "choose_different_calendar_subtitle", comment: "Subtitle for choose different calendar"))
         }
     }
 
@@ -175,7 +184,8 @@ struct CalendarPickerView: View {
                 calendarSync.syncErrors.removeAll()
             }
         } header: {
-            Text("Recent Errors")
+            // Text("Recent Errors")
+            Text(String(localized: "recent_errors_title", comment: "Title for recent errors"))
         }
     }
 
@@ -216,6 +226,7 @@ struct CalendarAlertModifier: ViewModifier {
                     pendingCalendarSelection = nil
                 }
             } message: { newCalendar in
+            // TODO: Localize
                 Text("Switch to '\(newCalendar.title)' for future syncs? Existing events will remain in the current calendar.")
             }
     }

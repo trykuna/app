@@ -267,7 +267,8 @@ struct TaskDetailView: View {
 
     private var titleRow: some View {
         HStack {
-            Text("Title")
+            // Text("Title")
+            Text(String(localized: "title_title", comment: "Title for title"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
@@ -288,7 +289,8 @@ struct TaskDetailView: View {
 
     private var descriptionRow: some View {
         HStack(alignment: .top) {
-            Text("Description")
+            // Text("Description")
+            Text(String(localized: "description_title", comment: "Title for description"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
@@ -435,6 +437,7 @@ struct TaskDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(.accentColor)
+                                // TODO: Localize
                             Text("Add \(title)")
                                 .foregroundColor(.accentColor)
                             Spacer()
@@ -467,7 +470,8 @@ struct TaskDetailView: View {
 
     private var remindersRow: some View {
         HStack {
-            Text("Reminders")
+            // Text("Reminders")
+            Text(String(localized: "reminders_title", comment: "Title for reminders"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
@@ -494,7 +498,8 @@ struct TaskDetailView: View {
 
     private var repeatRow: some View {
         HStack {
-            Text("Repeat")
+            // Text("Repeat")
+            Text(String(localized: "repeat_title", comment: "Title for repeat"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
@@ -519,7 +524,8 @@ struct TaskDetailView: View {
 
     private var labelsRow: some View {
         HStack(alignment: .center) {
-            Text("Labels")
+            // Text("Labels")
+            Text(String(localized: "labels_title", comment: "Title for labels"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
@@ -562,6 +568,8 @@ struct TaskDetailView: View {
 
     private var colorRow: some View {
         HStack {
+            // Text("Color").font(.body).fontWeight(.medium)
+            Text(String(localized: "colour_title", comment: "Title for colour")).font(.body).fontWeight(.medium)
             Text("Color").font(.body).fontWeight(.medium)
             Spacer()
             if isEditing {
@@ -645,11 +653,13 @@ struct TaskDetailView: View {
             Image(systemName: "calendar").foregroundColor(.blue)
             VStack(alignment: .leading, spacing: 2) {
                 if hasTaskDates {
-                    Text("This task will sync automatically on save")
+                    // Text("This task will sync automatically on save")
+                    Text(String(localized: "this_task_will_sync_automatically_on_save_title", comment: "Title for this task will sync automatically on save"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
-                    Text("Task has no dates to sync")
+                    // Text("Task has no dates to sync")
+                    Text(String(localized: "task_has_no_dates_to_sync_title", comment: "Title for task has no dates to sync"))
                         .font(.caption)
                         .foregroundColor(.orange)
                 }

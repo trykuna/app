@@ -61,7 +61,8 @@ struct UserSearchView: View {
                 if isSearching {
                     VStack(spacing: 16) {
                         ProgressView()
-                        Text("Searching users...")
+                        // Text("Searching users...")
+                        Text(String(localized: "searching_users_label", comment: "Label shown when searching users"))
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -71,10 +72,12 @@ struct UserSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        Text("No users found")
+                        // Text("No users found")
+                        Text(String(localized: "no_users_found_title", comment: "Title for no users found"))
                             .font(.headline)
                         
-                        Text("Try a different search term")
+                        // Text("Try a different search term")
+                        Text(String(localized: "try_a_different_search_term_title", comment: "Title for try a different search term"))
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -84,10 +87,12 @@ struct UserSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        Text("Search for Users")
+                        // Text("Search for Users")
+                        Text(String(localized: "search_for_users_title", comment: "Title for search for users"))
                             .font(.headline)
                         
-                        Text("Enter a username or name to find users you can assign to tasks")
+                        // Text("Enter a username or name to find users you can assign to tasks")
+                        Text(String(localized: "enter_a_username_or_name_to_find_users_you_can_assign_to_tasks_title", comment: "Title for enter a username or name to find users you can assign to tasks"))
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }

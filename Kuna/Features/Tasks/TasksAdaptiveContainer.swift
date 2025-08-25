@@ -130,7 +130,9 @@ struct TasksIPadSplitView: View {
         }
         .actionSheet(isPresented: $showingSort) {
             ActionSheet(
-                title: Text("Sort Tasks"),
+                // TODO: Localize
+                // title: Text("Sort Tasks"),
+                title: Text(String(localized: "sort_tasks_title", comment: "Title for sort tasks")),
                 buttons: TaskSortOption.allCases.map { sortOption in
                     ActionSheet.Button.default(
                         Text(sortOption.rawValue),
@@ -251,7 +253,8 @@ struct TasksIPadSplitView: View {
                         .font(.system(size: 64))
                         .foregroundColor(.secondary)
                     
-                    Text("Select a task to view its details")
+                    // Text("Select a task to view its details")
+                    Text(String(localized: "select_task_to_view_details_title", comment: "Title shown when no task is selected"))
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
@@ -271,12 +274,14 @@ struct TasksIPadSplitView: View {
                 .foregroundColor(.secondary)
 
             VStack(spacing: 8) {
-                Text("No Tasks Yet")
+                // Text("No Tasks Yet")
+                Text(String(localized: "no_tasks_yet_title", comment: "Title shown when there are no tasks"))
                     .font(.title3)
                     .fontWeight(.semibold)
                     .foregroundColor(.primary)
 
-                Text("Create your first task to get started!")
+                // Text("Create your first task to get started!")
+                Text(String(localized: "create_your_first_task_to_get_started_title", comment: "Title shown when there are no tasks"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -288,7 +293,8 @@ struct TasksIPadSplitView: View {
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
-                    Text("Create First Task")
+                    // Text("Create First Task")
+                    Text(String(localized: "create_first_task_title", comment: "Title for create first task"))
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -378,7 +384,8 @@ struct TasksIPadSplitView: View {
                 VStack(spacing: 16) {
                     ProgressView()
                         .scaleEffect(1.2)
-                    Text("Loading tasks...")
+                    // Text("Loading tasks...")
+                    Text(String(localized: "loading_tasks_label", comment: "Label shown when loading tasks"))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -417,7 +424,8 @@ struct TasksIPadSplitView: View {
         VStack {
             Spacer()
             VStack(alignment: .leading, spacing: 16) {
-                Text("Create New Task")
+                // Text("Create New Task")
+                Text(String(localized: "create_new_task_title", comment: "Title for create new task"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 TextField("Task title", text: $newTaskTitle)
@@ -567,7 +575,8 @@ struct TaskDetailViewInner: View {
         VStack(spacing: 0) {
             // Header with edit controls
             HStack {
-                Text("Task Details")
+                // Text("Task Details")
+                Text(String(localized: "task_details_title", comment: "Title for task details"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
@@ -604,7 +613,8 @@ struct TaskDetailViewInner: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // TASK INFO Section
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("TASK INFO")
+                        // Text("TASK INFO")
+                        Text(String(localized: "task_info_title", comment: "Title for task info"))
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -653,7 +663,8 @@ struct TaskDetailViewInner: View {
                                         Text(desc)
                                             .font(.body)
                                     } else {
-                                        Text("No description")
+                                        // Text("No description")
+                                        Text(String(localized: "no_description_title", comment: "Title for no description"))
                                             .font(.body)
                                             .foregroundColor(.secondary)
                                     }
@@ -668,7 +679,8 @@ struct TaskDetailViewInner: View {
                     
                     // SCHEDULING Section
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("SCHEDULING")
+                        // Text("SCHEDULING")
+                        Text(String(localized: "scheduling_title", comment: "Title for scheduling"))
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -682,7 +694,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Start Date")
+                                    // Text("Start Date")
+                                    Text(String(localized: "start_date_title", comment: "Title for start date"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -718,7 +731,8 @@ struct TaskDetailViewInner: View {
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
                                         } else {
-                                            Text("No start date")
+                                            // Text("No start date")
+                                            Text(String(localized: "no_start_date_title", comment: "Title for no start date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -737,7 +751,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Due Date")
+                                    // Text("Due Date")
+                                    Text(String(localized: "due_date_title", comment: "Title for due date"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -773,7 +788,8 @@ struct TaskDetailViewInner: View {
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
                                         } else {
-                                            Text("No due date")
+                                            // Text("No due date")
+                                            Text(String(localized: "no_due_date_title", comment: "Title for no due date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -792,7 +808,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("End Date")
+                                    // Text("End Date")
+                                    Text(String(localized: "end_date_title", comment: "Title for end date"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -828,7 +845,8 @@ struct TaskDetailViewInner: View {
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
                                         } else {
-                                            Text("No end date")
+                                            // Text("No end date")
+                                            Text(String(localized: "no_end_date_title", comment: "Title for no end date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -847,7 +865,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Reminders")
+                                    // Text("Reminders")
+                                    Text(String(localized: "reminders_title", comment: "Title for reminders"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -858,7 +877,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         }
                                     } else {
-                                        Text("No reminders")
+                                        // Text("No reminders")
+                                        Text(String(localized: "no_reminders_title", comment: "Title for no reminders"))
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                     }
@@ -884,7 +904,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Repeat")
+                                    // Text("Repeat")
+                                    Text(String(localized: "repeat_title", comment: "Title for repeat"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -893,7 +914,8 @@ struct TaskDetailViewInner: View {
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                     } else {
-                                        Text("Never")
+                                        // Text("Never")
+                                        Text(String(localized: "never_title", comment: "Title for never"))
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                     }
@@ -916,7 +938,8 @@ struct TaskDetailViewInner: View {
                     
                     // ORGANIZATION Section
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("ORGANIZATION")
+                        // Text("ORGANIZATION")
+                        Text(String(localized: "organization_title", comment: "Title for organization"))
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -951,7 +974,8 @@ struct TaskDetailViewInner: View {
                                             Text(task.priority.displayName)
                                         }
                                     } else {
-                                        Text("No priority")
+                                        // Text("No priority")
+                                        Text(String(localized: "no_priority_title", comment: "Title for no priority"))
                                             .foregroundColor(.secondary)
                                     }
                                     Spacer()
@@ -969,7 +993,8 @@ struct TaskDetailViewInner: View {
                                 
                                 VStack(alignment: .leading, spacing: 8) {
                                     HStack {
-                                        Text("Progress")
+                                        // Text("Progress")
+                                        Text(String(localized: "progress_title", comment: "Title for progress"))
                                             .font(.body)
                                         Spacer()
                                         Text("\(Int(isEditing ? editedPercentDone : task.percentDone))%")
@@ -1000,7 +1025,8 @@ struct TaskDetailViewInner: View {
                                 
                                 VStack(alignment: .leading, spacing: 8) {
                                     HStack {
-                                        Text("Labels")
+                                        // Text("Labels")
+                                        Text(String(localized: "labels_title", comment: "Title for labels"))
                                             .font(.body)
                                             .fontWeight(.medium)
                                         
@@ -1027,7 +1053,8 @@ struct TaskDetailViewInner: View {
                                             }
                                         }
                                     } else {
-                                        Text("No labels")
+                                        // Text("No labels")
+                                        Text(String(localized: "no_labels_title", comment: "Title for no labels"))
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                     }
@@ -1044,7 +1071,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Color")
+                                    // Text("Color")
+                                    Text(String(localized: "color_title", comment: "Title for color"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -1081,7 +1109,8 @@ struct TaskDetailViewInner: View {
                                 
                                 VStack(alignment: .leading, spacing: 8) {
                                     HStack {
-                                        Text("Assignees")
+                                        // Text("Assignees")
+                                        Text(String(localized: "assignees_title", comment: "Title for assignees"))
                                             .font(.body)
                                             .fontWeight(.medium)
                                         
@@ -1121,7 +1150,8 @@ struct TaskDetailViewInner: View {
                                             }
                                         }
                                     } else {
-                                        Text("No assignees")
+                                        // Text("No assignees")
+                                        Text(String(localized: "no_assignees_title", comment: "Title for no assignees"))
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                     }
@@ -1142,7 +1172,8 @@ struct TaskDetailViewInner: View {
                             HStack {
                                 Image(systemName: "link")
                                     .foregroundColor(.blue)
-                                Text("Related Tasks")
+                                // Text("Related Tasks")
+                                Text(String(localized: "related_tasks_title", comment: "Title for related tasks"))
                                     .font(.body)
                                 Spacer()
                                 Image(systemName: "chevron.right")
@@ -1162,7 +1193,8 @@ struct TaskDetailViewInner: View {
                             HStack {
                                 Image(systemName: "text.bubble")
                                     .foregroundColor(.green)
-                                Text("Comments")
+                                // Text("Comments")
+                                Text(String(localized: "comments_title", comment: "Title for comments"))
                                     .font(.body)
                                 Spacer()
                                 Image(systemName: "chevron.right")
@@ -1200,10 +1232,12 @@ struct TaskDetailViewInner: View {
                             HStack {
                                 ProgressView()
                                     .scaleEffect(0.8)
-                                Text("Saving...")
+                                // Text("Saving...")
+                                Text(String(localized: "saving_label", comment: "Label shown when saving"))
                             }
                         } else {
-                            Text("Save Changes")
+                            // Text("Save Changes")
+                            Text(String(localized: "save_changes_title", comment: "Title for save changes"))
                         }
                     }
                     .buttonStyle(.borderedProminent)
@@ -1565,7 +1599,8 @@ struct TaskDetailViewInner: View {
                     }
                 } else if availableLabels.isEmpty {
                     VStack {
-                        Text("No labels available")
+                        // Text("No labels available")
+                        Text(String(localized: "no_labels_available_title", comment: "Title for no labels available"))
                             .foregroundColor(.secondary)
                         Spacer()
                     }
@@ -1640,7 +1675,8 @@ struct TaskDetailViewInner: View {
     @ViewBuilder
     private var colorPreviewSection: some View {
         VStack(spacing: 8) {
-            Text("Current Color")
+            // Text("Current Color")
+            Text(String(localized: "current_colour_title", comment: "Title for current colour"))
                 .font(.headline)
             
             Circle()
@@ -1663,7 +1699,8 @@ struct TaskDetailViewInner: View {
     @ViewBuilder
     private var presetColorsSection: some View {
         VStack(spacing: 16) {
-            Text("Preset Colors")
+            // Text("Preset Colors")
+            Text(String(localized: "preset_colours_title", comment: "Title for preset colours"))
                 .font(.headline)
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 16) {
@@ -1721,11 +1758,13 @@ struct TaskDetailViewInner: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        Text("No Reminders Set")
+                        // Text("No Reminders Set")
+                        Text(String(localized: "no_reminders_set_title", comment: "Title for no reminders set"))
                             .font(.title3)
                             .fontWeight(.semibold)
                         
-                        Text("Add reminders to get notified about this task")
+                        // Text("Add reminders to get notified about this task")
+                        Text(String(localized: "add_reminders_to_get_notified_about_this_task_title", comment: "Title for add reminders to get notified about this task"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -1738,7 +1777,8 @@ struct TaskDetailViewInner: View {
                     Divider()
                     
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Add New Reminder")
+                        // Text("Add New Reminder")
+                        Text(String(localized: "add_new_reminder_title", comment: "Title for add new reminder"))
                             .font(.headline)
                         
                         DatePicker("Reminder Date", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
@@ -1786,12 +1826,14 @@ struct TaskDetailViewInner: View {
                         }
                     ))
                 } header: {
-                    Text("Repeat Task")
+                    // Text("Repeat Task")
+                    Text(String(localized: "repeat_task_title", comment: "Title for repeat task"))
                 } footer: {
                     if editedRepeatAfter > 0 {
                         Text("This task will repeat \(formatRepeatDescription())")
                     } else {
-                        Text("Task will not repeat")
+                        // Text("Task will not repeat")
+                        Text(String(localized: "task_will_not_repeat_title", comment: "Title for task will not repeat"))
                     }
                 }
                 
@@ -1818,7 +1860,8 @@ struct TaskDetailViewInner: View {
                     if editedRepeatMode == .afterAmount {
                         Section("Repeat Interval") {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Repeat every:")
+                                // Text("Repeat every:")
+                                Text(String(localized: "repeat_every_label", comment: "Label for repeat every"))
                                     .font(.headline)
                                 
                                 // Time unit picker
@@ -1842,9 +1885,14 @@ struct TaskDetailViewInner: View {
                                             hasChanges = true
                                         }
                                     )) {
-                                        Text("Days").tag("days")
-                                        Text("Weeks").tag("weeks") 
-                                        Text("Months").tag("months")
+                                        // Text("Days").tag("days")
+                                        Text(String(localized: "days_title", comment: "Title for days")).tag("days")
+                                        // Text("Weeks").tag("weeks") 
+                                        Text(String(localized: "weeks_title", comment: "Title for weeks")).tag("weeks")
+                                        // Text("Months").tag("months")
+                                        Text(String(localized: "months_title", comment: "Title for months")).tag("months")
+                                        // Text("Years").tag("years")
+                                        Text(String(localized: "years_title", comment: "Title for years")).tag("years")
                                     }
                                     .pickerStyle(.segmented)
                                 }
@@ -1898,7 +1946,8 @@ struct CommentsContentView: View {
                 VStack(spacing: 16) {
                     ProgressView()
                         .scaleEffect(1.2)
-                    Text("Loading comments...")
+                    // Text("Loading comments...")
+                    Text(String(localized: "loading_comments_label", comment: "Label shown when loading comments"))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -1939,10 +1988,12 @@ struct CommentsContentView: View {
                 .font(.system(size: 48))
                 .foregroundColor(.secondary)
             
-            Text("No comments yet")
+            // Text("No comments yet")
+            Text(String(localized: "no_comments_yet_title", comment: "Title shown when there are no comments"))
                 .font(.headline)
             
-            Text("Be the first to add a comment to this task")
+            // Text("Be the first to add a comment to this task")
+            Text(String(localized: "be_the_first_to_add_a_comment_to_this_task_title", comment: "Title shown when there are no comments"))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }

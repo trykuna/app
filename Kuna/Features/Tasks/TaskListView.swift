@@ -553,12 +553,14 @@ struct TaskListView: View {
                 .foregroundColor(.secondary)
 
             VStack(spacing: 8) {
-                Text("No Tasks Yet")
+                // Text("No Tasks Yet")
+                Text(String(localized: "no_tasks_yet_title", comment: "Title shown when there are no tasks"))
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(.primary)
 
-                Text("This project doesn't have any tasks yet. Create your first task to get started!")
+                // Text("This project doesn't have any tasks yet. Create your first task to get started!")
+                Text(String(localized: "this_project_doesnt_have_any_tasks_yet_title", comment: "Title shown when there are no tasks"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -570,7 +572,8 @@ struct TaskListView: View {
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
-                    Text("Create First Task")
+                    // Text("Create First Task")
+                    Text(String(localized: "create_first_task_title", comment: "Title for create first task"))
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -596,7 +599,8 @@ struct TaskListView: View {
         VStack {
             Spacer()
             VStack(alignment: .leading, spacing: 16) {
-                Text("Create New Task")
+                // Text("Create New Task")
+                Text(String(localized: "create_new_task_title", comment: "Title for create new task"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 TextField("Task title", text: $newTaskTitle)

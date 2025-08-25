@@ -46,11 +46,13 @@ struct DisableCalendarSyncView: View {
                 .foregroundColor(.orange)
             
             VStack(spacing: 8) {
-                Text("Disable Calendar Sync")
+                // Text("Disable Calendar Sync")
+                Text(String(localized: "disable_calendar_sync_title", comment: "Title for disable calendar sync"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
-                Text("What should happen to your existing calendars and events?")
+                // Text("What should happen to your existing calendars and events?")
+                Text(String(localized: "disable_calendar_sync_subtitle", comment: "Subtitle for disable calendar sync"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
             }
@@ -82,7 +84,8 @@ struct DisableCalendarSyncView: View {
                 HStack {
                     ProgressView()
                         .scaleEffect(0.8)
-                    Text("Processing...")
+                    // Text("Processing...")
+                    Text(String(localized: "processing_title", comment: "Title for processing"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -145,13 +148,15 @@ struct DispositionOptionCard: View {
                         .multilineTextAlignment(.leading)
                     
                     if disposition == .removeKunaEvents {
-                        Text("⚠️ This will permanently delete all synced events")
+                        // Text("⚠️ This will permanently delete all synced events")
+                        Text(String(localized: "this_will_permanently_delete_all_synced_events_title", comment: "Title for this will permanently delete all synced events"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     }
                     
                     if disposition == .deleteEverything {
-                        Text("🚨 This will permanently delete all Kuna calendars and events")
+                        // Text("🚨 This will permanently delete all Kuna calendars and events")
+                        Text(String(localized: "this_will_permanently_delete_all_kuna_calendars_and_events_title", comment: "Title for this will permanently delete all kuna calendars and events"))
                             .font(.caption)
                             .foregroundColor(.red)
                             .fontWeight(.semibold)

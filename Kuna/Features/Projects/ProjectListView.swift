@@ -79,7 +79,8 @@ struct ProjectListView: View {
                     ProgressView("Loading…") 
                 } else if let error = vm.error {
                     VStack {
-                        Text("Error loading projects")
+                        // Text("Error loading projects")
+                        Text(String(localized: "projects_error_title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)

@@ -31,12 +31,14 @@ struct EditLabelView: View {
                         
                         // Title field
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Label Name")
+                            // Text("Label Name")
+                            Text(String(localized: "edit_label_title_label", comment: "Label for label name field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .leading) {
                                 if title.isEmpty {
-                                    Text("Enter label name")
+                                    // Text("Enter label name")
+                                    Text(String(localized: "edit_label_title_placeholder", comment: "Placeholder for label name field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -51,7 +53,8 @@ struct EditLabelView: View {
                         
                         // Color picker
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Color")
+                            // Text("Color")
+                            Text(String(localized: "edit_label_colour_label", comment: "Label for colour picker"))
                                 .font(.headline)
                             
                             HStack {
@@ -59,7 +62,8 @@ struct EditLabelView: View {
                                     .labelsHidden()
                                     .frame(width: 44, height: 44)
                                 
-                                Text("Tap to choose a color")
+                                // Text("Tap to choose a color")
+                                Text(String(localized: "edit_label_colour_tap_label", comment: "Label for colour picker"))
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                 
@@ -69,12 +73,14 @@ struct EditLabelView: View {
                         
                         // Description field
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Description (Optional)")
+                            // Text("Description (Optional)")
+                            Text(String(localized: "edit_label_description_label", comment: "Label for description field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .topLeading) {
                                 if description.isEmpty {
-                                    Text("Add a description for this label")
+                                    // Text("Add a description for this label")
+                                    Text(String(localized: "edit_label_description_placeholder", comment: "Placeholder for description field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -93,7 +99,7 @@ struct EditLabelView: View {
                     .padding(.vertical, 8)
                 }
             }
-            .navigationTitle("Edit Label")
+            .navigationTitle(String(localized: "edit_label_title", comment: "Title for edit label view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -116,7 +122,8 @@ struct EditLabelView: View {
     
     private var labelPreview: some View {
         VStack(spacing: 8) {
-            Text("Preview")
+            // Text("Preview")
+            Text(String(localized: "edit_label_preview_label", comment: "Label for label preview"))
                 .font(.caption)
                 .foregroundColor(.secondary)
             

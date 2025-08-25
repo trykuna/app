@@ -14,7 +14,7 @@ struct AttachmentsView: View {
         VStack(spacing: 0) {
             if attachments.isEmpty && !isLoading {
                 HStack {
-                    Text(String(localized: "No_attachment", comment: "Label when no attachment is found for a task"))
+                    Text(String(localized: "attachment.none", comment: "Text shown when a task has no attachments"))
                         .foregroundColor(.secondary)
                     Spacer()
                 }

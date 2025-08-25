@@ -24,11 +24,13 @@ struct TOTPView: View {
                         .foregroundColor(.blue)
                     
                     VStack(spacing: 8) {
-                        Text("Two-Factor Authentication")
+                        // Text("Two-Factor Authentication")
+                        Text(String(localized: "totp_title", comment: "Title for two-factor authentication view"))
                             .font(.title2)
                             .fontWeight(.semibold)
                         
-                        Text("Enter the 6-digit code from your authenticator app")
+                        // Text("Enter the 6-digit code from your authenticator app")
+                        Text(String(localized: "totp_subtitle", comment: "Subtitle for two-factor authentication view"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -74,7 +76,8 @@ struct TOTPView: View {
                             .stroke(totpFocused ? Color.accentColor : Color.clear, lineWidth: 2)
                     )
                     
-                    Text("The code will be submitted automatically when complete")
+                    // Text("The code will be submitted automatically when complete")
+                    Text(String(localized: "totp_auto_submit_label", comment: "Label explaining that the code will be submitted automatically"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -83,6 +86,7 @@ struct TOTPView: View {
                 Spacer()
                 
                 // Manual submit button (in case auto-submit doesn't work)
+                // TODO: Localize
                 Button("Verify Code") {
                     submitTOTP()
                 }
@@ -111,7 +115,8 @@ struct TOTPView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Verifying...")
+                        // Text("Verifying...")
+                        Text(String(localized: "totp_verifying_label", comment: "Label shown when verifying two-factor code"))
                             .font(.headline)
                     }
                     .padding(24)
