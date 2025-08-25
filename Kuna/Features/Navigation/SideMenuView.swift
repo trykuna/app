@@ -82,7 +82,9 @@ struct SideMenuView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color(.systemBackground))
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 2, y: 0)
+        .accessibilityIdentifier("SideMenu")
     }
+
     
     private func menuItem(_ item: MenuItem) -> some View {
         Button(action: {

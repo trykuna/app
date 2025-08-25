@@ -1,6 +1,10 @@
 // Features/Navigation/MainContainerView.swift
 import SwiftUI
 
+// Global helper for UI tests to disable animations
+private let animationsEnabled: Bool = !ProcessInfo.processInfo.arguments.contains("-UITestsNoAnimations")
+
+
 struct MainContainerView: View {
     let api: VikunjaAPI
     @EnvironmentObject var appState: AppState
@@ -29,7 +33,10 @@ struct MainContainerView: View {
                     )
                     .frame(width: menuWidth)
                     .offset(x: isMenuOpen ? 0 : -menuWidth)
+                    .accessibilityElement(children: .contain)
                     .accessibilityIdentifier("Sidebar")
+                    .accessibilityHidden(!isMenuOpen)
+                    .zIndex(2) // Ensure it stays above the overlay for hit-testing
 
                     Spacer()
                 }
@@ -39,11 +46,14 @@ struct MainContainerView: View {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
                         .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.3)) {
+                            if animationsEnabled {
+                                withAnimation(.easeInOut(duration: 0.3)) { isMenuOpen = false }
+                            } else {
                                 isMenuOpen = false
                             }
                         }
                         .offset(x: menuWidth)
+                        .zIndex(1) // Keep below the menu to not block hit-testing
                 }
             }
         }
@@ -52,13 +62,15 @@ struct MainContainerView: View {
                 .onEnded { value in
                     let threshold: CGFloat = 50
                     if value.startLocation.x < 20 && value.translation.width > threshold {
-                        // Swipe right from left edge to open menu
-                        withAnimation(.easeInOut(duration: 0.3)) {
+                        if animationsEnabled {
+                            withAnimation(.easeInOut(duration: 0.3)) { isMenuOpen = true }
+                        } else {
                             isMenuOpen = true
                         }
                     } else if value.startLocation.x > menuWidth && value.translation.width < -threshold && isMenuOpen {
-                        // Swipe left to close menu
-                        withAnimation(.easeInOut(duration: 0.3)) {
+                        if animationsEnabled {
+                            withAnimation(.easeInOut(duration: 0.3)) { isMenuOpen = false }
+                        } else {
                             isMenuOpen = false
                         }
                     }
@@ -87,7 +99,7 @@ struct MainContainerView: View {
                     await MainActor.run {
                         let taskView = TaskDetailView(task: task, api: api)
                         let hosting = UIHostingController(rootView: taskView)
-                        
+
                         // Use modern window scene API instead of deprecated UIApplication.shared.windows
                         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                            let window = windowScene.windows.first {
@@ -170,13 +182,15 @@ struct ProjectListViewWithMenu: View {
     var body: some View {
         NavigationStack {
             List(vm.projects) { p in
-                NavigationLink(p.title) { TaskListView(project: p, api: api) }
+                NavigationLink(p.title) { TasksAdaptiveContainer(project: p, api: api) }
             }
             .navigationTitle("Projects")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
+                        if animationsEnabled {
+                            withAnimation(.easeInOut(duration: 0.3)) { isMenuOpen.toggle() }
+                        } else {
                             isMenuOpen.toggle()
                         }
                     }) {
@@ -251,7 +265,9 @@ struct LabelsViewWithMenu: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
+                        if animationsEnabled {
+                            withAnimation(.easeInOut(duration: 0.3)) { isMenuOpen.toggle() }
+                        } else {
                             isMenuOpen.toggle()
                         }
                     }) {
