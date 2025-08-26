@@ -18,7 +18,7 @@ struct TaskPickerSheet: View {
                 // Search bar
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass").foregroundColor(.secondary)
-                    TextField("Search tasks...", text: $query)
+                    TextField(String(localized: "tasks.search.placeholder", comment: "Search tasks..."), text: $query)
                         .textFieldStyle(PlainTextFieldStyle())
                         .onSubmit { search() }
                     if !query.isEmpty {
@@ -32,22 +32,24 @@ struct TaskPickerSheet: View {
                 if let error = error {
                     VStack(spacing: 8) {
                         Text(error).font(.caption).foregroundColor(.red)
-                        Button("Retry", action: search).font(.caption)
+                        // Button("Retry", action: search).font(.caption)
+                        Button(String(localized: "common.retry", comment: "Retry button"), action: search).font(.caption)
                     }.padding()
                 }
 
                 if isSearching {
                     ProgressView().padding()
                 } else if results.isEmpty && hasSearched {
-                    Text("No tasks found").foregroundColor(.secondary).padding()
+                    // Text("No tasks found").foregroundColor(.secondary).padding()
+                    Text(String(localized: "tasks.search.noResults", comment: "No tasks found")).foregroundColor(.secondary).padding()
                 } else if !hasSearched {
                     VStack(spacing: 12) {
                         Image(systemName: "text.magnifyingglass").font(.system(size: 40)).foregroundColor(.secondary)
                         // Text("Search for tasks")
-                        Text(String(localized: "search_for_tasks_title", comment: "Title for search for tasks"))
+                        Text(String(localized: "tasks.search.title", comment: "Title for search for tasks"))
                             .font(.headline)
                         // Text("Type part of a title or description to find a task")
-                        Text(String(localized: "type_part_of_a_title_or_description_to_find_a_task_title", comment: "Title for type part of a title or description to find a task"))
+                        Text(String(localized: "tasks.search.description", comment: "Type part of a title or description to find a task"))
                             .foregroundColor(.secondary).multilineTextAlignment(.center)
                     }
                     .padding()
@@ -63,7 +65,7 @@ struct TaskPickerSheet: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(t.title).lineLimit(1)
                                     HStack(spacing: 8) {
-                                        if let projectId = t.projectId { Text("#\(projectId)").font(.caption).foregroundColor(.secondary) }
+                                        if let projectId = t.projectId { Text(verbatim: "#\(projectId)").font(.caption).foregroundColor(.secondary) }
                                         if let due = t.dueDate { Text(due, style: .date).font(.caption).foregroundColor(.secondary) }
                                     }
                                 }
@@ -76,11 +78,14 @@ struct TaskPickerSheet: View {
 
                 Spacer(minLength: 0)
             }
-            .navigationTitle("Pick Task")
+            // .navigationTitle("Pick Task")
+            .navigationTitle(String(localized: "tasks.picker.navigationTitle", comment: "Pick task navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { Button("Cancel") { dismiss() } }
-                ToolbarItem(placement: .navigationBarTrailing) { Button("Search") { search() } }
+                // ToolbarItem(placement: .navigationBarLeading) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .navigationBarLeading) { Button(String(localized: "common.cancel", comment: "Cancel button")) { dismiss() } }
+                // ToolbarItem(placement: .navigationBarTrailing) { Button("Search") { search() } }
+                ToolbarItem(placement: .navigationBarTrailing) { Button(String(localized: "common.search", comment: "Search button")) { search() } }
             }
         }
     }

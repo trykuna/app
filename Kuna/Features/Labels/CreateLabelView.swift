@@ -22,14 +22,12 @@ struct CreateLabelView: View {
                         
                         // Title field
                         VStack(alignment: .leading, spacing: 8) {
-                            // Text("Label Name")
-                            Text(String(localized: "create_label_title_label", comment: "Label for label name field"))
+                            Text(String(localized: "labels.create.title.label", comment: "Label for label name field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .leading) {
                                 if title.isEmpty {
-                                    // Text("Enter label name")
-                                    Text(String(localized: "create_label_title_placeholder", comment: "Placeholder for label name field"))
+                                    Text(String(localized: "labels.create.title.placeholder", comment: "Placeholder for label name field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -45,7 +43,7 @@ struct CreateLabelView: View {
                         // Color picker
                         VStack(alignment: .leading, spacing: 8) {
                             // Text("Color")
-                            Text(String(localized: "create_label_colour_label", comment: "Label for colour picker"))
+                            Text(String(localized: "common.colour", comment: "Label for colour picker"))
                                 .font(.headline)
                             
                             HStack {
@@ -53,8 +51,7 @@ struct CreateLabelView: View {
                                     .labelsHidden()
                                     .frame(width: 44, height: 44)
                                 
-                                // Text("Tap to choose a color")
-                                Text(String(localized: "create_label_colour_tap_label", comment: "Label for colour picker"))
+                                Text(String(localized: "labels.create.colour.tap_label", comment: "Label for colour picker"))
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                 
@@ -65,13 +62,13 @@ struct CreateLabelView: View {
                         // Description field
                         VStack(alignment: .leading, spacing: 8) {
                             // Text("Description (Optional)")
-                            Text(String(localized: "create_label_description_label", comment: "Label for description field"))
+                            Text(String(localized: "common.descriptionOptional", comment: "Label for description field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .topLeading) {
                                 if description.isEmpty {
                                     // Text("Add a description for this label")
-                                    Text(String(localized: "create_label_description_placeholder", comment: "Placeholder for description field"))
+                                    Text(String(localized: "labels.create.description.placeholder", comment: "Placeholder for description field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -90,18 +87,20 @@ struct CreateLabelView: View {
                     .padding(.vertical, 8)
                 }
             }
-            .navigationTitle(String(localized: "create_label_title", comment: "Title for create label view"))
+            .navigationTitle(String(localized: "labels.create.title", comment: "Title for create label view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                     .disabled(isCreating)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Create") {
+                    // Button("Create") {
+                    Button(String(localized: "common.create", comment: "Create button")) {
                         createLabel()
                     }
                     .disabled(title.isEmpty || isCreating)
@@ -117,7 +116,7 @@ struct CreateLabelView: View {
     private var labelPreview: some View {
         VStack(spacing: 8) {
             // Text("Preview")
-            Text(String(localized: "create_label_preview_label", comment: "Label for label preview"))
+            Text(String(localized: "common.preview", comment: "Label for label preview"))
                 .font(.caption)
                 .foregroundColor(.secondary)
             

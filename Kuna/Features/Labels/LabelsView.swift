@@ -20,7 +20,7 @@ struct LabelsView: View {
             Group {
                 if viewModel.loading {
                     // Text("Loading labels...")
-                    ProgressView(String(localized: "labels_loading_label", comment: "Label shown when loading labels"))
+                    ProgressView(String(localized: "labels.view.loading", comment: "Label shown when loading labels"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.labels.isEmpty {
                     emptyStateView
@@ -28,12 +28,13 @@ struct LabelsView: View {
                     labelsList
                 }
             }
-            .navigationTitle(String(localized: "labels_title", comment: "Title for labels view"))
+            .navigationTitle(String(localized: "labels.title", comment: "Title for labels view"))
             .navigationBarTitleDisplayMode(.large)
             .accessibilityIdentifier("screen.labels")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         dismiss()
                     }
                 }
@@ -53,9 +54,12 @@ struct LabelsView: View {
                     EditLabelView(viewModel: viewModel, label: label)
                 }
             }
-            .alert("Delete Label", isPresented: $showingDeleteAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
+            // .alert("Delete Label", isPresented: $showingDeleteAlert) {
+            .alert(String(localized: "labels.delete.title", comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
+                // Button("Cancel", role: .cancel) { }
+                Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
+                // Button("Delete", role: .destructive) {
+                Button(String(localized: "common.delete", comment: "Delete button"), role: .destructive) {
                     if let label = labelToDelete {
                         Task {
                             await viewModel.deleteLabel(label)
@@ -64,8 +68,8 @@ struct LabelsView: View {
                 }
             } message: {
                 if let label = labelToDelete {
-                    // TODO: Localize                    
-                    Text("Are you sure you want to delete '\(label.title)'? This action cannot be undone.")
+                    Text("labels.delete.confirmation \(label.title)",
+                         comment: "Confirmation prompt when deleting a label. The placeholder is the label’s title")
                 }
             }
             .task {
@@ -75,12 +79,13 @@ struct LabelsView: View {
                 if let error = viewModel.error {
                     VStack {
                         // Text("Error")
-                        Text(String(localized: "labels_error_title", comment: "Title for error state"))
+                        Text(String(localized: "common.error", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Button("Retry") {
+                        // Button("Retry") {
+                        Button(String(localized: "common.retry", comment: "Retry button")) {
                             Task { await viewModel.load() }
                         }
                         .buttonStyle(.borderedProminent)
@@ -102,17 +107,18 @@ struct LabelsView: View {
                 .foregroundColor(.secondary.opacity(0.6))
             
             // Text("No Labels")
-            Text(String(localized: "labels_empty_title", comment: "Title shown when there are no labels"))
+            Text(String(localized: "labels.empty.title", comment: "Title shown when there are no labels"))
                 .font(.title2)
                 .fontWeight(.semibold)
             
             // Text("Create your first label to organize your tasks")
-            Text(String(localized: "labels_empty_subtitle", comment: "Subtitle shown when there are no labels"))
+            Text(String(localized: "labels.empty.subtitle", comment: "Subtitle shown when there are no labels"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
             
-            Button("Create Label") {
+            // Button("Create Label") {
+            Button(String(localized: "labels.create.button", comment: "Create label button")) {
                 showingCreateLabel = true
             }
             .buttonStyle(.borderedProminent)
@@ -160,14 +166,16 @@ struct LabelsView: View {
                     selectedLabel = label
                     showingEditLabel = true
                 }) {
-                    SwiftUI.Label("Edit", systemImage: "pencil")
+                    // SwiftUI.Label("Edit", systemImage: "pencil")
+                    SwiftUI.Label(String(localized: "common.edit", comment: "Edit button"), systemImage: "pencil")
                 }
 
                 Button(role: .destructive, action: {
                     labelToDelete = label
                     showingDeleteAlert = true
                 }) {
-                    SwiftUI.Label("Delete", systemImage: "trash")
+                    // SwiftUI.Label("Delete", systemImage: "trash")
+                    SwiftUI.Label(String(localized: "common.delete", comment: "Delete button"), systemImage: "trash")
                 }
             } label: {
                 Image(systemName: "ellipsis")

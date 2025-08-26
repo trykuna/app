@@ -61,7 +61,8 @@ struct ProjectListView: View {
             List(vm.projects) { p in
                 NavigationLink(p.title) { TasksAdaptiveContainer(project: p, api: api) }
             }
-            .navigationTitle("Projects")
+            // .navigationTitle("Projects")
+            .navigationTitle(String(localized: "navigation.projects", comment: "Projects navigation title"))
             .toolbar { 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { showingNewProject = true }) {
@@ -76,16 +77,18 @@ struct ProjectListView: View {
             }
             .overlay { 
                 if vm.loading { 
-                    ProgressView("Loading…") 
+                    // ProgressView("Loading…")
+                    ProgressView(String(localized: "common.loading", comment: "Label shown when loading")) 
                 } else if let error = vm.error {
                     VStack {
                         // Text("Error loading projects")
-                        Text(String(localized: "projects_error_title", comment: "Title for error state"))
+                        Text(String(localized: "projects.view.error.title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Button("Retry") {
+                        // Button("Retry") {
+                        Button(String(localized: "common.retry", comment: "Retry button")) {
                             Task { await vm.load() }
                         }
                         .buttonStyle(.borderedProminent)

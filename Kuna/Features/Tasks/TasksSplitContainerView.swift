@@ -37,10 +37,11 @@ struct TasksSplitContainerView: View {
                 TaskDetailView(task: task, api: api)
             } else {
                 if #available(iOS 17, *) {
-                    ContentUnavailableView("Select a task", systemImage: "square.and.pencil")
+                    // ContentUnavailableView("Select a task", systemImage: "square.and.pencil")
+                    ContentUnavailableView(String(localized: "tasks.select.title", comment: "Title for select a task"), systemImage: "square.and.pencil")
                 } else {
                     // Text("Select a task")
-                    Text(String(localized: "select_a_task_title", comment: "Title for select a task"))
+                    Text(String(localized: "tasks.select.title", comment: "Title for select a task"))
                         .font(.headline)
                         .foregroundStyle(.secondary)
                 }
@@ -84,10 +85,11 @@ struct TasksSplitContainerView: View {
                 }
             }
         }
-        .navigationTitle("Tasks")
+        .navigationTitle(String(localized: "tasks.title", comment: "Tasks"))
         .overlay {
             if vm.loading && vm.tasks.isEmpty {
-                ProgressView("Loading…")
+                // ProgressView("Loading…")
+                ProgressView(String(localized: "common.loading", comment: "Label shown when loading"))
             }
         }
         .refreshable { await vm.load(resetPagination: true) }

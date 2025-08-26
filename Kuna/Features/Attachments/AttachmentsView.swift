@@ -87,7 +87,8 @@ struct AttachmentsView: View {
         }
         .onAppear { Task { await loadAttachments() } }
         .alert(error ?? "", isPresented: Binding(get: { error != nil }, set: { _ in error = nil })) {
-            Button("OK", role: .cancel) {}
+            // Button("OK", role: .cancel) {}
+            Button(String(localized: "common.ok", comment: "OK button"), role: .cancel) {}
         }
     }
 

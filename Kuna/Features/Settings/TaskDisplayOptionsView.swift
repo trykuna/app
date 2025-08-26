@@ -17,9 +17,10 @@ struct TaskDisplayOptionsView: View {
                 Section {
                     DisplayPreviewRow(settings: settings)
                     // TODO: Localize
-                } header: { Text("Preview") } footer: {
+                // } header: { Text("Preview") } footer: {
+                } header: { Text(String(localized: "common.preview", comment: "Preview header")) } footer: {
                     // Text("Live preview of task list appearance based on your settings.")
-                    Text(String(localized: "live_preview_of_task_list_appearance_based_on_your_settings_title", comment: "Title for live preview of task list appearance based on your settings"))
+                    Text(String(localized: "settings.display.preview.title", comment: "Title for live preview of task list appearance based on your settings"))
                 }
 
                 // Example: Task Colors toggle
@@ -32,9 +33,9 @@ struct TaskDisplayOptionsView: View {
 
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Task Colors").font(.body)
-                            Text(String(localized: "task_colors_title", comment: "Title for task colors")).font(.body)
+                            Text(String(localized: "settings.display.colours.title", comment: "Title for task colors")).font(.body)
                             // Text("Display color indicators for all tasks")
-                            Text(String(localized: "display_color_indicators_for_all_tasks_title", comment: "Title for display color indicators for all tasks"))
+                            Text(String(localized: "settings.display.colours.description", comment: "Display color indicators for all tasks"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -50,9 +51,9 @@ struct TaskDisplayOptionsView: View {
                                 .frame(width: 20, alignment: .leading)
                             VStack(alignment: .leading, spacing: 2) {
                                 // Text("Default Color Balls").font(.body)
-                                Text(String(localized: "default_color_balls_title", comment: "Title for default color balls")).font(.body)
+                                Text(String(localized: "settings.display.colours.defaultBalls.title", comment: "Title for default color balls")).font(.body)
                                 // Text("Use the default blue color for task color indicators")
-                                Text(String(localized: "use_the_default_blue_color_for_task_color_indicators_title", comment: "Title for use the default blue color for task color indicators"))
+                                Text(String(localized: "settings.display.colours.defaultBalls.description", comment: "Use the default blue color for task color indicators"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -69,9 +70,9 @@ struct TaskDisplayOptionsView: View {
 
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Attachment Icons").font(.body)
-                            Text(String(localized: "attachment_icons_title", comment: "Title for attachment icons")).font(.body)
+                            Text(String(localized: "settings.display.attachments.title", comment: "Title for attachment icons")).font(.body)
                             // Text("Show paperclip icons for tasks with attachments")
-                            Text(String(localized: "show_paperclip_icons_for_tasks_with_attachments_title", comment: "Title for show paperclip icons for tasks with attachments"))
+                            Text(String(localized: "settings.display.attachments.description", comment: "Show paperclip icons for tasks with attachments"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -87,9 +88,9 @@ struct TaskDisplayOptionsView: View {
 
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Comment Counts").font(.body)
-                            Text(String(localized: "comment_counts_title", comment: "Title for comment counts")).font(.body)
+                            Text(String(localized: "settings.display.comments.title", comment: "Title for comment counts")).font(.body)
                             // Text("Show comment count badges on tasks")
-                            Text(String(localized: "show_comment_count_badges_on_tasks_title", comment: "Title for show comment count badges on tasks"))
+                            Text(String(localized: "settings.display.comments.description", comment: "Show comment count badges on tasks"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -105,9 +106,9 @@ struct TaskDisplayOptionsView: View {
 
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Priority Indicators").font(.body)
-                            Text(String(localized: "priority_indicators_title", comment: "Title for priority indicators")).font(.body)
+                            Text(String(localized: "settings.display.priority.title", comment: "Title for priority indicators")).font(.body)
                             // Text("Show priority indicators on tasks")
-                            Text(String(localized: "show_priority_indicators_on_tasks_title", comment: "Title for show priority indicators on tasks"))
+                            Text(String(localized: "settings.display.priority.description", comment: "Show priority indicators on tasks"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -115,7 +116,10 @@ struct TaskDisplayOptionsView: View {
                         Spacer()
                         Toggle("", isOn: $settings.showPriorityIndicators).labelsHidden()
                     }
-                } header: { Text("Display Options") }
+                } header: { 
+                    // Text("Display Options")
+                    Text(String(localized: "settings.display.title", comment: "Display options settings header"))
+                }
                 Section {
                     HStack {
                         Image(systemName: "calendar")
@@ -124,9 +128,9 @@ struct TaskDisplayOptionsView: View {
                             .frame(width: 20, alignment: .leading)
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Start Date").font(.body)
-                            Text(String(localized: "start_date_title", comment: "Title for start date")).font(.body)
+                            Text(String(localized: "tasks.startDate", comment: "Title for start date")).font(.body)
                             // Text("Show a task's start date")
-                            Text(String(localized: "show_a_tasks_start_date_title", comment: "Title for show a task's start date"))
+                            Text(String(localized: "settings.display.dates.startDate.description", comment: "Show a task's start date"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -140,9 +144,9 @@ struct TaskDisplayOptionsView: View {
                             .frame(width: 20, alignment: .leading)
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Due Date").font(.body)
-                            Text(String(localized: "due_date_title", comment: "Title for due date")).font(.body)
+                            Text(String(localized: "settings.display.dates.dueDate.title", comment: "Title for due date")).font(.body)
                             // Text("Show a task's due date")
-                            Text(String(localized: "show_a_tasks_due_date_title", comment: "Title for show a task's due date"))
+                            Text(String(localized: "settings.display.dates.dueDate.description", comment: "Show a task's due date"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -156,9 +160,9 @@ struct TaskDisplayOptionsView: View {
                             .frame(width: 20, alignment: .leading)
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("End Date").font(.body)
-                            Text(String(localized: "end_date_title", comment: "Title for end date")).font(.body)
+                            Text(String(localized: "settings.display.dates.endDate.title", comment: "Title for end date")).font(.body)
                             // Text("Show a task's end date")
-                            Text(String(localized: "show_a_tasks_end_date_title", comment: "Title for show a task's end date"))
+                            Text(String(localized: "settings.display.dates.endDate.description", comment: "Show a task's end date"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -172,9 +176,9 @@ struct TaskDisplayOptionsView: View {
                             .frame(width: 20, alignment: .leading)
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Sync Status").font(.body)
-                            Text(String(localized: "sync_status_title", comment: "Title for sync status")).font(.body)
+                            Text(String(localized: "settings.display.syncStatus.title", comment: "Title for sync status")).font(.body)
                             // Text("Show whether a task is synced to Calendar")
-                            Text(String(localized: "show_whether_a_task_is_synced_to_calendar_title", comment: "Title for show whether a task is synced to calendar"))
+                            Text(String(localized: "settings.display.syncStatus.description", comment: "Show whether a task is synced to calendar"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -182,7 +186,8 @@ struct TaskDisplayOptionsView: View {
                         Toggle("", isOn: $settings.showSyncStatus).labelsHidden()
                     }
 
-                } header: { Text("Task Dates") }
+                // } header: { Text("Task Dates") }
+                } header: { Text(String(localized: "settings.display.dates.header", comment: "Task dates header")) }
 
                 // Celebration
                 Section {
@@ -193,18 +198,20 @@ struct TaskDisplayOptionsView: View {
                             .frame(width: 20, alignment: .leading)
                         VStack(alignment: .leading, spacing: 2) {
                             // Text("Celebrate Completion").font(.body)
-                            Text(String(localized: "celebrate_completion_title", comment: "Title for celebrate completion")).font(.body)
+                            Text(String(localized: "settings.display.celebration.title", comment: "Title for celebrate completion")).font(.body)
                             // Text("Show confetti when marking a task complete")
-                            Text(String(localized: "celebrate_completion_subtitle", comment: "Subtitle for celebrate completion"))
+                            Text(String(localized: "settings.display.celebration.description", comment: "Show confetti when marking a task complete"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
                         Spacer()
                         Toggle("", isOn: $settings.celebrateCompletionConfetti).labelsHidden()
                     }
-                } header: { Text("Celebration") }
+                // } header: { Text("Celebration") }
+                } header: { Text(String(localized: "settings.display.celebration.header", comment: "Celebration header")) }
             }
-            .navigationTitle("Display Options")
+            // .navigationTitle("Display Options")
+            .navigationTitle(String(localized: "settings.display.title", comment: "Display options navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .animation(.default, value: settings.showTaskColors)
         }
@@ -230,7 +237,7 @@ private struct DisplayPreviewRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
                         // Text("Sample task title")
-                        Text(String(localized: "sample_task_title", comment: "Title for sample task"))
+                        Text(String(localized: "settings.display.preview.sampleTitle", comment: "Title for sample task"))
                             .foregroundStyle(.primary)
                             .lineLimit(1)
 

@@ -25,7 +25,7 @@ struct AppIconView: View {
                         
                         VStack(spacing: 4) {
                             // Text("Current Icon")
-                            Text(String(localized: "app_icon_current_title", comment: "Title for current app icon"))
+                            Text(String(localized: "settings.appIcon.current.title", comment: "Title for current app icon"))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
                             
@@ -56,12 +56,12 @@ struct AppIconView: View {
                             Image(systemName: "info.circle")
                                 .foregroundColor(.blue)
                             // Text("About App Icons")
-                            Text(String(localized: "app_icon_info_title", comment: "Title for app icon info"))
+                            Text(String(localized: "settings.appIcon.info.title", comment: "Title for app icon info"))
                                 .font(.headline)
                         }
                         
                         // Text("Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches.")
-                        Text(String(localized: "app_icon_info_text", comment: "Text for app icon info"))
+                        Text(String(localized: "settings.appIcon.info.text", comment: "Text for app icon info"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -75,17 +75,20 @@ struct AppIconView: View {
                     Spacer(minLength: 20)
                 }
             }
-            .navigationTitle("App Icon")
+            // .navigationTitle("App Icon")
+            .navigationTitle(String(localized: "settings.appIcon.title", comment: "App icon settings title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         dismiss()
                     }
                 }
             }
-            .alert("Error", isPresented: $showingError) {
-                Button("OK") { }
+            .alert(String(localized: "common.error"), isPresented: $showingError) {
+                // Button("OK") { }
+                Button(String(localized: "common.ok", comment: "OK button")) { }
             } message: {
                 Text(errorMessage)
             }
@@ -98,7 +101,7 @@ struct AppIconView: View {
                         ProgressView()
                             .scaleEffect(1.2)
                         // Text("Changing Icon...")
-                        Text(String(localized: "app_icon_changing_label", comment: "Label shown when changing app icon"))
+                        Text(String(localized: "settings.appIcon.changing", comment: "Label shown when changing app icon"))
                             .font(.headline)
                     }
                     .padding(24)

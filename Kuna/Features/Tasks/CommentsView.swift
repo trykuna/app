@@ -22,7 +22,7 @@ struct CommentsView: View {
                         ProgressView()
                             .scaleEffect(1.2)
                         // Text("Loading comments...")
-                        Text(String(localized: "loading_comments_label", comment: "Label shown when loading comments"))
+                        Text(String(localized: "comments.loading", comment: "Label shown when loading comments"))
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -35,12 +35,14 @@ struct CommentsView: View {
                 // Add comment section
                 addCommentSection
             }
-            .navigationTitle("Comments")
+            // .navigationTitle("Comments")
+            .navigationTitle(String(localized: "comments.title", comment: "Comments navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         dismiss()
                     }
                 }
@@ -49,8 +51,9 @@ struct CommentsView: View {
         .onAppear {
             loadComments()
         }
-        .alert("Error", isPresented: .constant(error != nil)) {
-            Button("OK") {
+        .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
+            // Button("OK") {
+            Button(String(localized: "common.ok", comment: "OK button")) {
                 error = nil
             }
         } message: {
@@ -70,12 +73,11 @@ struct CommentsView: View {
             
             VStack(spacing: 8) {
                 // Text("No Comments Yet")
-                Text(String(localized: "no_comments_yet_title", comment: "Title shown when there are no comments"))
+                Text(String(localized: "comments.empty.title", comment: "Title shown when there are no comments"))
                     .font(.title3)
                     .fontWeight(.semibold)
                 
-                // Text("Start the conversation by adding the first comment.")
-                Text(String(localized: "start_conversation_by_adding_first_comment_title", comment: "Title shown when there are no comments"))
+                Text(String(localized: "comments.empty.subtitle", comment: "Title shown when there are no comments"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -111,7 +113,8 @@ struct CommentsView: View {
             Divider()
             
             HStack(spacing: 12) {
-                TextField("Add a comment...", text: $newCommentText, axis: .vertical)
+                // TextField("Add a comment...", text: $newCommentText, axis: .vertical)
+                TextField(String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(1...4)
                 
@@ -247,7 +250,7 @@ struct CommentRowView: View {
                         .disabled(isDeleting)
                     }
                     
-                    Text("@\(comment.author.username)")
+                    Text(verbatim: "@\(comment.author.username)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -262,13 +265,15 @@ struct CommentRowView: View {
         .padding(.vertical, 12)
         .background(Color(.systemGray6))
         .cornerRadius(12)
-        .confirmationDialog("Delete Comment", isPresented: $showingDeleteConfirmation) {
-            Button("Delete", role: .destructive) {
+        // .confirmationDialog("Delete Comment", isPresented: $showingDeleteConfirmation) {
+        .confirmationDialog(String(localized: "comments.delete.title", comment: "Delete comment dialog title"), isPresented: $showingDeleteConfirmation) {
+            // Button("Delete", role: .destructive) {
+            Button(String(localized: "common.delete", comment: "Delete button"), role: .destructive) {
                 deleteComment()
             }
-            Button("Cancel", role: .cancel) { }
+            Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
         } message: {
-            Text(String(localized: "are_you_sure_you_want_to_delete_this_comment_title", comment: "Title for are you sure you want to delete this comment"))
+            Text(String(localized: "comments.delete.confirmation", comment: "Title for are you sure you want to delete this comment"))
         }
     }
     
@@ -311,17 +316,17 @@ struct CommentsButtonView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     // Text("Comments")
-                    Text(String(localized: "comments_title", comment: "Title for comments"))
+                    Text(String(localized: "comments.title", comment: "Title for comments"))
                         .font(.body)
                         .foregroundColor(.primary)
 
                     if isLoadingCount {
                         // Text("Loading...")
-                        Text(String(localized: "loading_label", comment: "Label shown when loading"))
+                        Text(String(localized: "common.loading.label", comment: "Label shown when loading"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text(commentCount == 0 ? "No comments yet" : "\(commentCount) comment\(commentCount == 1 ? "" : "s")")
+                        Text(commentCount == 0 ? String(localized: "tasks.comments.none", comment: "No comments yet") : "\(commentCount) comment\(commentCount == 1 ? "" : "s")")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -370,7 +375,7 @@ struct CommentBadge: View {
 
     var body: some View {
         if commentCount > 0 {
-            Text("\(commentCount)")
+            Text(verbatim: "\(commentCount)")
                 .font(.caption2)
                 .fontWeight(.medium)
                 .foregroundColor(.white)

@@ -174,7 +174,7 @@ struct TaskDetailView: View {
                     saveBar
                 }
             }
-            .navigationTitle("Task Details")
+            .navigationTitle(String(localized: "tasks.details.title", comment: "Task Details"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -185,7 +185,7 @@ struct TaskDetailView: View {
                         }
                         .disabled(isUpdatingFavorite)
 
-                        Button(isEditing ? "Done" : "Edit") {
+                        Button(isEditing ? String(localized: "common.done", comment: "Done button") : String(localized: "common.edit", comment: "Edit button")) {
                             if isEditing && hasChanges {
                                 Task { await saveChanges() }
                             } else {
@@ -268,12 +268,12 @@ struct TaskDetailView: View {
     private var titleRow: some View {
         HStack {
             // Text("Title")
-            Text(String(localized: "title_title", comment: "Title for title"))
+            Text(String(localized: "common.title", comment: "Title for title"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
             if isEditing {
-                TextField("Task title", text: $task.title)
+                TextField(String(localized: "tasks.placeholder.title", comment: "Task title"), text: $task.title)
                     .multilineTextAlignment(.trailing)
                     .foregroundColor(.secondary)
                     .onChange(of: task.title) { _, _ in hasChanges = true }
@@ -290,12 +290,12 @@ struct TaskDetailView: View {
     private var descriptionRow: some View {
         HStack(alignment: .top) {
             // Text("Description")
-            Text(String(localized: "description_title", comment: "Title for description"))
+            Text(String(localized: "tasks.details.description.title", comment: "Title for description"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
             if isEditing {
-                TextField("Enter description...", text: $editedDescription, axis: .vertical)
+                TextField(String(localized: "tasks.detail.description.placeholder", comment: "Placeholder text for description"), text: $editedDescription, axis: .vertical)
                     .multilineTextAlignment(.trailing)
                     .foregroundColor(.secondary)
                     .lineLimit(1...4)
@@ -314,7 +314,8 @@ struct TaskDetailView: View {
 
     private var startDateRow: some View {
         editableDateRow(
-            title: "Start Date",
+            // title: "Start Date",
+            title: String(localized: "tasks.startDate", comment: "Start date title"),
             date: task.startDate,
             hasTime: $startHasTime,
             onChange: { newDate in
@@ -330,7 +331,8 @@ struct TaskDetailView: View {
 
     private var dueDateRow: some View {
         editableDateRow(
-            title: "Due Date",
+            // title: "Due Date",
+            title: String(localized: "tasks.detail.dueDate", comment: "Due date title"),
             date: task.dueDate,
             hasTime: $dueHasTime,
             onChange: { newDate in
@@ -350,7 +352,8 @@ struct TaskDetailView: View {
 
     private var endDateRow: some View {
         editableDateRow(
-            title: "End Date",
+            // title: "End Date",
+            title: String(localized: "tasks.detail.endDate", comment: "End date title"),
             date: task.endDate,
             hasTime: $endHasTime,
             onChange: { newDate in
@@ -400,8 +403,10 @@ struct TaskDetailView: View {
                 if let date = date {
                     // Mode picker
                     Picker("", selection: hasTime) {
-                        Text("Date").tag(false)
-                        Text("Date & Time").tag(true)
+                        // Text("Date").tag(false)
+                        Text(String(localized: "common.date", comment: "Date label")).tag(false)
+                        // Text("Date & Time").tag(true)
+                        Text(String(localized: "common.dateAndTime", comment: "Date and time label")).tag(true)
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 16)
@@ -438,7 +443,8 @@ struct TaskDetailView: View {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(.accentColor)
                                 // TODO: Localize
-                            Text("Add \(title)")
+                            Text("add.title \(title)",
+                                 comment: "Button label to add an item with the given title")
                                 .foregroundColor(.accentColor)
                             Spacer()
                         }
@@ -459,7 +465,8 @@ struct TaskDetailView: View {
                                 .foregroundColor(.secondary)
                         }
                     } else {
-                        Text("Not set").foregroundColor(.secondary.opacity(0.6))
+                        // Text("Not set").foregroundColor(.secondary.opacity(0.6))
+                        Text(String(localized: "common.notSet", comment: "Not set label")).foregroundColor(.secondary.opacity(0.6))
                     }
                 }
                 .padding(.horizontal, 16)
@@ -471,14 +478,15 @@ struct TaskDetailView: View {
     private var remindersRow: some View {
         HStack {
             // Text("Reminders")
-            Text(String(localized: "reminders_title", comment: "Title for reminders"))
+            Text(String(localized: "tasks.details.reminders.title", comment: "Title for reminders"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
             if let reminders = task.reminders, !reminders.isEmpty {
-                Text("\(reminders.count)").foregroundColor(.secondary)
+                Text(verbatim: "\(reminders.count)").foregroundColor(.secondary)
             } else {
-                Text("None").foregroundColor(.secondary.opacity(0.6))
+                // Text("None").foregroundColor(.secondary.opacity(0.6))
+                Text(String(localized: "common.none", comment: "None value")).foregroundColor(.secondary.opacity(0.6))
             }
             if isEditing {
                 Image(systemName: "chevron.right")
@@ -499,14 +507,15 @@ struct TaskDetailView: View {
     private var repeatRow: some View {
         HStack {
             // Text("Repeat")
-            Text(String(localized: "repeat_title", comment: "Title for repeat"))
+            Text(String(localized: "tasks.details.repeat.title", comment: "Title for repeat"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
             if let repeatAfter = task.repeatAfter, repeatAfter > 0 {
                 Text(task.repeatMode.displayName).foregroundColor(.secondary)
             } else {
-                Text("Never").foregroundColor(.secondary.opacity(0.6))
+                // Text("Never").foregroundColor(.secondary.opacity(0.6))
+                Text(String(localized: "common.never", comment: "Never value")).foregroundColor(.secondary.opacity(0.6))
             }
             if isEditing {
                 Image(systemName: "chevron.right")
@@ -525,7 +534,7 @@ struct TaskDetailView: View {
     private var labelsRow: some View {
         HStack(alignment: .center) {
             // Text("Labels")
-            Text(String(localized: "labels_title", comment: "Title for labels"))
+            Text(String(localized: "labels.title", comment: "Title for labels"))
                 .font(.body)
                 .fontWeight(.medium)
             Spacer()
@@ -541,13 +550,14 @@ struct TaskDetailView: View {
                             .cornerRadius(10)
                     }
                     if labels.count > 3 {
-                        Text("+\(labels.count - 3)")
+                        Text(verbatim: "+\(labels.count - 3)")
                             .font(.caption)
                             .foregroundColor(.secondary.opacity(0.6))
                     }
                 }
             } else {
-                Text("None").foregroundColor(.secondary.opacity(0.6))
+                // Text("None").foregroundColor(.secondary.opacity(0.6))
+                Text(String(localized: "common.none", comment: "None value")).foregroundColor(.secondary.opacity(0.6))
             }
             if isEditing {
                 Image(systemName: "chevron.right")
@@ -569,8 +579,7 @@ struct TaskDetailView: View {
     private var colorRow: some View {
         HStack {
             // Text("Color").font(.body).fontWeight(.medium)
-            Text(String(localized: "colour_title", comment: "Title for colour")).font(.body).fontWeight(.medium)
-            Text("Color").font(.body).fontWeight(.medium)
+            Text(String(localized: "common.colour", comment: "Title for colour")).font(.body).fontWeight(.medium)
             Spacer()
             if isEditing {
                 HStack(spacing: 8) {
@@ -601,10 +610,12 @@ struct TaskDetailView: View {
 
     private var priorityRow: some View {
         HStack {
-            Text("Priority").font(.body).fontWeight(.medium)
+            // Text("Priority").font(.body).fontWeight(.medium)
+            Text(String(localized: "tasks.detail.priority.title", comment: "Priority title")).font(.body).fontWeight(.medium)
             Spacer()
             if isEditing {
-                Picker("Priority", selection: $task.priority) {
+                // Picker("Priority", selection: $task.priority) {
+                Picker(String(localized: "tasks.detail.priority.title", comment: "Priority picker"), selection: $task.priority) {
                     ForEach(TaskPriority.allCases) { p in
                         HStack {
                             Image(systemName: p.systemImage).foregroundColor(p.color)
@@ -631,9 +642,10 @@ struct TaskDetailView: View {
     private var progressRow: some View {
         VStack(spacing: 8) {
             HStack {
-                Text("Progress").font(.body).fontWeight(.medium)
+                // Text("Progress").font(.body).fontWeight(.medium)
+                Text(String(localized: "tasks.detail.progress.title", comment: "Progress title")).font(.body).fontWeight(.medium)
                 Spacer()
-                Text("\(Int(task.percentDone * 100))%").foregroundColor(.secondary)
+                Text(verbatim: "\(Int(task.percentDone * 100))%").foregroundColor(.secondary)
             }
             if isEditing {
                 Slider(value: Binding(
@@ -654,12 +666,12 @@ struct TaskDetailView: View {
             VStack(alignment: .leading, spacing: 2) {
                 if hasTaskDates {
                     // Text("This task will sync automatically on save")
-                    Text(String(localized: "this_task_will_sync_automatically_on_save_title", comment: "Title for this task will sync automatically on save"))
+                    Text(String(localized: "tasks.sync.autoSave", comment: "Title for this task will sync automatically on save"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
                     // Text("Task has no dates to sync")
-                    Text(String(localized: "task_has_no_dates_to_sync_title", comment: "Title for task has no dates to sync"))
+                    Text(String(localized: "tasks.sync.noDates", comment: "Title for task has no dates to sync"))
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
@@ -677,7 +689,8 @@ struct TaskDetailView: View {
             Divider()
                 .padding(.leading, 16)
             HStack {
-                Button("Cancel") {
+                // Button("Cancel") {
+                Button(String(localized: "common.cancel", comment: "Cancel button")) {
                     Task {
                         await reloadTask()
                         isEditing = false
@@ -693,7 +706,8 @@ struct TaskDetailView: View {
                 } label: {
                     HStack(spacing: 8) {
                         if isUpdating { ProgressView().scaleEffect(0.8) }
-                        Text("Save").fontWeight(.semibold)
+                        // Text("Save").fontWeight(.semibold)
+                        Text(String(localized: "common.save", comment: "Save button")).fontWeight(.semibold)
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -802,10 +816,12 @@ private struct LabelPickerSheet: View {
                     }
                 }
             }
-            .navigationTitle("Select Labels")
+            // .navigationTitle("Select Labels")
+            .navigationTitle(String(localized: "tasks.labels.select", comment: "Select labels navigation title"))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel", action: onCancel) }
-                ToolbarItem(placement: .confirmationAction) { Button("Done") { onCommit(selected) } }
+                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "common.cancel", comment: "Cancel button"), action: onCancel) }
+                // ToolbarItem(placement: .confirmationAction) { Button("Done") { onCommit(selected) } }
+                ToolbarItem(placement: .confirmationAction) { Button(String(localized: "common.done", comment: "Done button")) { onCommit(selected) } }
             }
         }
     }
@@ -835,25 +851,35 @@ private struct RemindersEditorSheet: View {
                         }
                     }
                 } else {
-                    Text("No reminders").foregroundColor(.secondary)
+                    // Text("No reminders").foregroundColor(.secondary)
+                    Text(String(localized: "tasks.detail.reminders.none", comment: "No reminders label")).foregroundColor(.secondary)
                 }
 
                 // Add new reminder
-                Text("Add").font(.footnote).foregroundStyle(.secondary)
-                DatePicker("Reminder", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                Text(String(localized: "common.add", comment: "Add"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                // DatePicker("Reminder", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                DatePicker(String(localized: "tasks.reminder", comment: "Reminder date picker"), selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(.graphical)
                 Button {
                     addReminder(date: newReminderDate)
                 } label: {
-                    SwiftUI.Label("Add Reminder", systemImage: "plus.circle.fill")
+                    // SwiftUI.Label("Add Reminder", systemImage: "plus.circle.fill")
+                    SwiftUI.Label(String(localized: "tasks.details.reminders.add", comment: "Add reminder button"), systemImage: "plus.circle.fill")
                 }
             }
-            .navigationTitle("Reminders")
+            // .navigationTitle("Reminders")
+            .navigationTitle(String(localized: "tasks.reminders.title", comment: "Reminders navigation title"))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Close", action: onClose) }
+                ToolbarItem(placement: .cancellationAction) { 
+                    // Button("Close", action: onClose)
+                    Button(String(localized: "common.close", comment: "Close button"), action: onClose)
+                }
             }
-            .alert("Error", isPresented: .constant(error != nil)) {
-                Button("OK") { error = nil }
+            .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
+                // Button("OK") { error = nil }
+                Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
             } message: {
                 if let error { Text(error) }
             }
@@ -906,23 +932,28 @@ private struct RepeatEditorSheet: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Mode") {
-                    Picker("Repeat Mode", selection: $mode) {
+                // Section("Mode") {
+                Section(String(localized: "tasks.repeat.mode", comment: "Repeat mode section")) {
+                    // Picker("Repeat Mode", selection: $mode) {
+                    Picker(String(localized: "tasks.repeat.mode.picker", comment: "Repeat mode picker"), selection: $mode) {
                         ForEach(RepeatMode.allCases) { m in
                             Text(m.displayName).tag(m)
                         }
                     }
                 }
-                Section("Interval (seconds)") {
-                    TextField("e.g. 86400 for daily", text: $repeatAfterText)
+                // Section("Interval (seconds)") {
+                Section(String(localized: "tasks.repeat.intervalSeconds", comment: "Interval in seconds section")) {
+                    TextField(String(localized: "tasks.repeat.placeholder", comment: "e.g. 86400 for daily"), text: $repeatAfterText)
                         .keyboardType(.numberPad)
                 }
             }
-            .navigationTitle("Repeat")
+            // .navigationTitle("Repeat")
+            .navigationTitle(String(localized: "tasks.repeat.title", comment: "Repeat navigation title"))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel", action: onCancel) }
+                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "common.cancel", comment: "Cancel button"), action: onCancel) }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         let val = Int(repeatAfterText)
                         onCommit(val, mode)
                     }

@@ -14,11 +14,11 @@ struct RelatedTasksButtonView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     // Text("Related Tasks")
-                    Text(String(localized: "related_tasks_title", comment: "Title for related tasks"))
+                    Text(String(localized: "tasks.details.relatedTasks.title", comment: "Title for related tasks"))
                         .font(.body)
                         .foregroundColor(.primary)
                     let count = (task.relations ?? []).count
-                    Text(count == 0 ? "No related tasks" : "\(count) related")
+                    Text(count == 0 ? String(localized: "tasks.related.none", comment: "No related tasks") : "\(count) related")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

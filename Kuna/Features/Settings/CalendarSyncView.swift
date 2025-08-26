@@ -26,7 +26,8 @@ struct CalendarSyncView: View {
                     
                     // ADVANCED (optional)
                     Section {
-                        Toggle("Show Technical Details", isOn: $showAdvanced.animation())
+                        // Toggle("Show Technical Details", isOn: $showAdvanced.animation())
+                        Toggle(String(localized: "settings.calendarSync.showTechnicalDetails", comment: "Show technical details toggle"), isOn: $showAdvanced.animation())
                     }
                     if showAdvanced {
                         technicalDetailsSection
@@ -35,11 +36,13 @@ struct CalendarSyncView: View {
                     introSection
                 }
             }
-            .navigationTitle("Calendar Sync")
+            // .navigationTitle("Calendar Sync")
+            .navigationTitle(String(localized: "settings.calendarSync.navigationTitle", comment: "Calendar sync navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { dismiss() }
+                    // Button("Done") { dismiss() }
+                    Button(String(localized: "common.done", comment: "Done button")) { dismiss() }
                 }
             }
             .sheet(isPresented: $showOnboarding) {
@@ -78,9 +81,9 @@ struct CalendarSyncView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     // Text("Calendar Sync")
-                    Text(String(localized: "calendar_sync_title", comment: "Title for calendar sync"))
+                    Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar sync"))
                         .font(.headline)
-                    Text(appSettings.calendarSyncPrefs.isEnabled ? "Enabled" : "Disabled")
+                    Text(appSettings.calendarSyncPrefs.isEnabled ? String(localized: "settings.calendarSync.enabled.title", comment: "Title for enabled") : String(localized: "common.disabled", comment: "Title for disabled"))
                         .font(.caption)
                         .foregroundColor(appSettings.calendarSyncPrefs.isEnabled ? .green : .secondary)
                 }
@@ -116,16 +119,17 @@ struct CalendarSyncView: View {
                     
                     VStack(alignment: .leading, spacing: 2) {
                         // Text("Sync with Calendar")
-                        Text(String(localized: "sync_with_calendar_title", comment: "Title for sync with calendar"))
+                        Text(String(localized: "settings.calendarSync.intro.title", comment: "Title for sync with calendar"))
                             .font(.headline)
                         // Text("Keep your tasks in sync with your calendar app")
-                        Text(String(localized: "sync_with_calendar_subtitle", comment: "Subtitle for sync with calendar"))
+                        Text(String(localized: "settings.calendarSync.intro.subtitle", comment: "Subtitle for sync with calendar"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
                 
-                Button("Set up Calendar Sync") {
+                // Button("Set up Calendar Sync") {
+                Button(String(localized: "settings.calendarSync.setupButton", comment: "Set up calendar sync button")) {
                     showOnboarding = true
                 }
                 .buttonStyle(.borderedProminent)
@@ -137,10 +141,10 @@ struct CalendarSyncView: View {
     
     @ViewBuilder
     private var configurationSection: some View {
-        Section("Configuration") {
+        Section(String(localized: "common.configuration", comment: "Configuration")) {
             HStack {
                 // Text("Mode")
-                Text(String(localized: "mode_title", comment: "Title for mode"))
+                Text(String(localized: "settings.calendarSync.mode.title", comment: "Title for mode"))
                 Spacer()
                 Text(appSettings.calendarSyncPrefs.mode.displayName)
                     .foregroundColor(.secondary)
@@ -148,7 +152,7 @@ struct CalendarSyncView: View {
             
             HStack {
                 // Text("Projects")
-                Text(String(localized: "projects_title", comment: "Title for projects"))
+                Text(String(localized: "settings.calendarSync.projects.title", comment: "Title for projects"))
                 Spacer()
                 // TODO: Localize
                 Text("\(appSettings.calendarSyncPrefs.selectedProjectIDs.count) selected")
@@ -159,7 +163,7 @@ struct CalendarSyncView: View {
                 if let calendar = appSettings.calendarSyncPrefs.singleCalendar {
                     HStack {
                         // Text("Calendar")
-                        Text(String(localized: "calendar_title", comment: "Title for calendar"))
+                        Text(String(localized: "settings.calendarSync.calendar.title", comment: "Title for calendar"))
                         Spacer()
                         Text(calendar.name)
                             .foregroundColor(.secondary)
@@ -168,15 +172,17 @@ struct CalendarSyncView: View {
             } else {
                 HStack {
                     // Text("Calendars")
-                    Text(String(localized: "calendars_title", comment: "Title for calendars"))
+                    Text(String(localized: "settings.calendarSync.calendars.title", comment: "Title for calendars"))
                     Spacer()
                     // TODO: Localize
-                    Text("\(appSettings.calendarSyncPrefs.projectCalendars.count) calendars")
+                    let count = appSettings.calendarSyncPrefs.projectCalendars.count
+                    Text("\(count) calendars")
                         .foregroundColor(.secondary)
                 }
             }
             
-            Button("Reconfigure") {
+            // Button("Reconfigure") {
+            Button(String(localized: "settings.calendarSync.reconfigure", comment: "Reconfigure button")) {
                 showOnboarding = true
             }
             .foregroundColor(.blue)
@@ -185,7 +191,7 @@ struct CalendarSyncView: View {
     
     @ViewBuilder
     private var technicalDetailsSection: some View {
-        Section("Technical Details") {
+        Section(String(localized: "settings.calendarSync.technicalDetails", comment: "Technical Details")) {
             DetailRow(label: "URL Scheme", value: "kuna://task/<id>")
             DetailRow(label: "Event Marker", value: "KUNA_EVENT:")
             DetailRow(label: "Mode", value: appSettings.calendarSyncPrefs.mode.rawValue)
@@ -196,7 +202,8 @@ struct CalendarSyncView: View {
     
     @ViewBuilder
     private var statusSection: some View {
-        Section("Status") {
+        // Section("Status") {
+        Section(String(localized: "settings.calendarSync.status", comment: "Status section")) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: statusIcon)
                     .foregroundColor(statusColor)
@@ -207,13 +214,13 @@ struct CalendarSyncView: View {
                         .font(.headline)
 
                     if let last = engine.lastSyncDate {
-                        // TODO: Localize
-                        Text("Last synced: \(last, style: .relative) ago")
+                        Text("settings.calendarSync.status.lastSynced \(last, style: .relative)",
+                             comment: "Shows 'Last synced:' followed by a relative time (system handles 'ago' / 'in')")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        // Text("Never synced")
-                        Text(String(localized: "never_synced_title", comment: "Title for never synced"))
+                        Text("settings.calendarSync.status.neverSynced",
+                             comment: "Shown in Calendar Sync settings when sync has never run")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -226,7 +233,9 @@ struct CalendarSyncView: View {
                 }
             }
 
-            Button("Sync Now") {
+            // TODO: Localize
+            // Button("Sync Now") {
+            Button(String(localized: "settings.calendarSync.syncNow", comment: "Sync now button")) {
                 Task { await engine.resyncNow() }
             }
             .buttonStyle(.borderedProminent)
@@ -238,7 +247,7 @@ struct CalendarSyncView: View {
     @ViewBuilder
     private var calendarSection: some View {
         if let cal = calendarSync.selectedCalendar {
-            Section("Calendar") {
+            Section(String(localized: "common.calendar", comment: "Calendar")) {
                 HStack {
                     Circle()
                         .fill(Color(cal.cgColor))
@@ -252,7 +261,7 @@ struct CalendarSyncView: View {
                     }
 
                     Spacer()
-                    Text(cal.allowsContentModifications ? "Writable" : "Read-only")
+                    Text(cal.allowsContentModifications ? String(localized: "settings.calendarSync.writable", comment: "Writable calendar") : String(localized: "settings.calendarSync.readOnly", comment: "Read-only calendar"))
                         .font(.caption)
                         .foregroundColor(cal.allowsContentModifications ? .green : .orange)
                 }
@@ -263,13 +272,14 @@ struct CalendarSyncView: View {
     @ViewBuilder
     private var errorsSection: some View {
         if !engine.syncErrors.isEmpty || !calendarSync.syncErrors.isEmpty {
-            Section("Errors") {
+            Section(String(localized: "settings.calendarSync.errors.title", comment: "Title for recent errors")) {
                 ForEach(Array((engine.syncErrors + calendarSync.syncErrors).enumerated()), id: \.offset) { index, err in
                     Text(err)
                         .font(.caption)
                         .foregroundColor(.red)
                 }
-                Button("Clear Errors") {
+                // Button("Clear Errors") {
+                Button(String(localized: "settings.calendarSync.clearErrors", comment: "Clear calendar sync errors button")) {
                     engine.syncErrors.removeAll()
                     calendarSync.syncErrors.removeAll()
                 }
@@ -280,7 +290,8 @@ struct CalendarSyncView: View {
     
     @ViewBuilder
     private var statisticsSection: some View {
-        Section("Statistics") {
+        // Section("Statistics") {
+        Section(String(localized: "settings.calendarSync.statistics", comment: "Statistics section")) {
             statRow(icon: "calendar.badge.plus", color: .green,
                     label: "Synced Events", value: "\(syncedEventsCount)")
             statRow(icon: "xmark.circle", color: .red,

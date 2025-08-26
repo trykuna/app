@@ -30,6 +30,15 @@ struct SideMenuView: View {
             case .settings: return .gray
             }
         }
+        
+        var displayName: String {
+            switch self {
+            case .favorites: return String(localized: "navigation.favorites", comment: "Favorites menu item")
+            case .projects: return String(localized: "navigation.projects", comment: "Projects menu item")
+            case .labels: return String(localized: "labels.title", comment: "Labels menu item")
+            case .settings: return String(localized: "settings.title", comment: "Settings menu item")
+            }
+        }
     }
     
     var body: some View {
@@ -101,7 +110,8 @@ struct SideMenuView: View {
                     .foregroundColor(selectedMenuItem == item ? item.color : item.color.opacity(0.7))
                     .frame(width: 24, height: 24)
                 
-                Text(item.rawValue)
+                // Text(item.rawValue)
+                Text(item.displayName)
                     .font(.body)
                     .fontWeight(selectedMenuItem == item ? .semibold : .regular)
                     .foregroundColor(selectedMenuItem == item ? .accentColor : .primary)

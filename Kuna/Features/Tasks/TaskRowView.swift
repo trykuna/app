@@ -100,7 +100,7 @@ struct TaskRowContent: View, Equatable {
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.caption2)
-                            Text("\(count)")
+                            Text(verbatim: "\(count)")
                                 .font(.caption2)
                         }
                         .foregroundStyle(.secondary)
