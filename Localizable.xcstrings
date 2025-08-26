@@ -29,9 +29,6 @@
         }
       }
     },
-    "%lld selected" : {
-
-    },
     "%lld%%" : {
       "shouldTranslate" : false
     },
@@ -324,16 +321,48 @@
       }
     },
     "auth.username" : {
-      "comment" : "Username"
+      "comment" : "Username",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Username"
+          }
+        }
+      }
     },
     "auth.usernamePassword" : {
-      "comment" : "Username & Password"
+      "comment" : "Username & Password",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Username & Password"
+          }
+        }
+      }
     },
     "auth.useToken" : {
-      "comment" : "Use Token"
+      "comment" : "Use Token",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Token"
+          }
+        }
+      }
     },
     "auth.verification" : {
-      "comment" : "Verification"
+      "comment" : "Verification",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verification"
+          }
+        }
+      }
     },
     "calendar.sync.switch %@" : {
       "comment" : "Confirmation prompt when switching to a new calendar for sync. Placeholder is the new calendar’s title",
@@ -817,7 +846,15 @@
       }
     },
     "common.loading.label" : {
-      "comment" : "Label shown when loading"
+      "comment" : "Label shown when loading",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading..."
+          }
+        }
+      }
     },
     "common.low" : {
       "comment" : "Low priority",
@@ -1051,6 +1088,17 @@
         }
       }
     },
+    "common.selectedCount %lld" : {
+      "comment" : "Number of labels selected\nNumber of projects selected for calendar sync\nNumber of projects selected for sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ selected"
+          }
+        }
+      }
+    },
     "common.setFilename" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1164,7 +1212,15 @@
       }
     },
     "common.to" : {
-      "comment" : "To"
+      "comment" : "To",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To"
+          }
+        }
+      }
     },
     "common.urgent" : {
       "comment" : "Urgent priority",
@@ -1199,7 +1255,15 @@
       }
     },
     "Excluded Labels (%lld)" : {
-
+      "comment" : "Excluded labels with count",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded Labels (%lld)"
+          }
+        }
+      }
     },
     "favorites.empty.subtitle" : {
       "comment" : "Subtitle shown when there are no favorites",
@@ -1604,7 +1668,15 @@
       }
     },
     "Required Labels (%lld)" : {
-
+      "comment" : "Required labels with count",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required Labels (%lld)"
+          }
+        }
+      }
     },
     "settings.about.title" : {
       "comment" : "Title for about view",
@@ -1750,7 +1822,15 @@
       }
     },
     "settings.auth.token.expired" : {
-      "comment" : "Token expired"
+      "comment" : "Token expired",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token expired"
+          }
+        }
+      }
     },
     "settings.backgroundSync.debug.runSyncNow" : {
       "comment" : "Debug button to run sync now",
@@ -2359,7 +2439,15 @@
       }
     },
     "settings.calendarSync.readOnly" : {
-      "comment" : "Read-only calendar"
+      "comment" : "Read-only calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read-only"
+          }
+        }
+      }
     },
     "settings.calendarSync.reconfigure" : {
       "comment" : "Reconfigure button",
@@ -2462,10 +2550,26 @@
       }
     },
     "settings.calendarSync.statistics" : {
-      "comment" : "Statistics section"
+      "comment" : "Statistics section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistics"
+          }
+        }
+      }
     },
     "settings.calendarSync.status" : {
-      "comment" : "Status section"
+      "comment" : "Status section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
     },
     "settings.calendarSync.status.lastSynced %@" : {
       "comment" : "Shows 'Last synced:' followed by a relative time (system handles 'ago' / 'in')",
@@ -2479,7 +2583,15 @@
       }
     },
     "settings.calendarSync.status.neverSynced" : {
-      "comment" : "Shown in Calendar Sync settings when sync has never run"
+      "comment" : "Shown in Calendar Sync settings when sync has never run",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never synced"
+          }
+        }
+      }
     },
     "settings.calendarSync.subtitle" : {
       "comment" : "Subtitle for calendar sync",
@@ -2527,7 +2639,15 @@
       }
     },
     "settings.calendarSync.technicalDetails" : {
-      "comment" : "Technical Details"
+      "comment" : "Technical Details",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technical Details"
+          }
+        }
+      }
     },
     "settings.calendarSync.title" : {
       "comment" : "Title for calendar integration\nTitle for calendar sync",
@@ -2541,7 +2661,15 @@
       }
     },
     "settings.calendarSync.writable" : {
-      "comment" : "Writable calendar"
+      "comment" : "Writable calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writable"
+          }
+        }
+      }
     },
     "settings.connection.authMethod.title" : {
       "comment" : "Title for authentication method",
@@ -3072,7 +3200,15 @@
       }
     },
     "settings.watchedLabels" : {
-      "comment" : "Watched Labels"
+      "comment" : "Watched Labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watched Labels"
+          }
+        }
+      }
     },
     "tasks.add.title" : {
       "comment" : "Add task button",
@@ -3785,7 +3921,15 @@
       }
     },
     "tasks.filter.status" : {
-      "comment" : "Status section"
+      "comment" : "Status section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
     },
     "tasks.filter.title" : {
       "comment" : "Filter tasks navigation title",
@@ -3844,7 +3988,15 @@
       }
     },
     "tasks.list.title" : {
-      "comment" : "Task List"
+      "comment" : "Task List",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task List"
+          }
+        }
+      }
     },
     "tasks.loading" : {
       "comment" : "Label shown when loading tasks",
@@ -3880,7 +4032,15 @@
       }
     },
     "tasks.placeholder.title" : {
-      "comment" : "Task Title\nTask title"
+      "comment" : "Task Title\nTask title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task title"
+          }
+        }
+      }
     },
     "tasks.priority.max" : {
       "comment" : "Title for max priority",
@@ -4008,7 +4168,15 @@
       }
     },
     "tasks.reminders.title" : {
-      "comment" : "Reminders navigation title"
+      "comment" : "Reminders navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
+          }
+        }
+      }
     },
     "tasks.repeat" : {
       "comment" : "Repeat label",
@@ -4068,10 +4236,26 @@
       }
     },
     "tasks.repeat.mode.picker" : {
-      "comment" : "Repeat mode picker"
+      "comment" : "Repeat mode picker",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        }
+      }
     },
     "tasks.repeat.mode.section" : {
-      "comment" : "Repeat mode section"
+      "comment" : "Repeat mode section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat Mode"
+          }
+        }
+      }
     },
     "tasks.repeat.placeholder" : {
       "comment" : "e.g. 86400 for daily",
@@ -4097,10 +4281,26 @@
       }
     },
     "tasks.repeat.title" : {
-      "comment" : "Repeat navigation title"
+      "comment" : "Repeat navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        }
+      }
     },
     "tasks.repeat.unit" : {
-      "comment" : "Unit"
+      "comment" : "Unit",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unit"
+          }
+        }
+      }
     },
     "tasks.sample.title" : {
       "comment" : "Title for sample task",
@@ -4237,7 +4437,15 @@
       }
     },
     "tasks.title" : {
-      "comment" : "Tasks"
+      "comment" : "Tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks"
+          }
+        }
+      }
     },
     "users.find.title" : {
       "comment" : "Find users navigation title",

@@ -97,7 +97,8 @@ struct ProjectSyncSelectionView: View {
                             Spacer()
                             if !isLoading && !projects.isEmpty {
                                 // TODO: Localize
-                                Text("\(settings.selectedProjectsForSync.count) selected")
+                                Text("common.selectedCount \(settings.selectedProjectsForSync.count)",
+                                     comment: "Number of projects selected for sync")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }

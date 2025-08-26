@@ -155,7 +155,8 @@ struct CalendarSyncView: View {
                 Text(String(localized: "settings.calendarSync.projects.title", comment: "Title for projects"))
                 Spacer()
                 // TODO: Localize
-                Text("\(appSettings.calendarSyncPrefs.selectedProjectIDs.count) selected")
+                Text("common.selectedCount \(appSettings.calendarSyncPrefs.selectedProjectIDs.count)",
+                     comment: "Number of projects selected for calendar sync")
                     .foregroundColor(.secondary)
             }
             

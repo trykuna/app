@@ -94,7 +94,8 @@ struct BackgroundSyncSettingsSection: View {
                                 // Text("Watched Labels").font(.body)
                                 Text(String(localized: "settings.backgroundSync.watchedLabels.title", comment: "Title for watched labels"))
                                 // TODO: Localize
-                                Text("\(settings.watchedLabelIDs.count) selected")
+                                Text("common.selectedCount \(settings.watchedLabelIDs.count)",
+                                     comment: "Number of labels selected")
                                     .font(.caption).foregroundColor(.secondary)
                             }
                             Spacer()

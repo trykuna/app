@@ -140,7 +140,7 @@ struct FilterView: View {
                     Toggle(String(localized: "tasks.filter.byLabels", comment: "Filter by labels toggle"), isOn: $filter.filterByLabels)
                     
                     if filter.filterByLabels {
-                        NavigationLink("Required Labels (\(filter.requiredLabelIds.count))") {
+                        NavigationLink(String.localizedStringWithFormat(String(localized: "Required Labels (%lld)", comment: "Required labels with count"), filter.requiredLabelIds.count)) {
                             LabelSelectionView(
                                 title: "Required Labels",
                                 availableLabels: availableLabels,
@@ -149,7 +149,7 @@ struct FilterView: View {
                             )
                         }
                         
-                        NavigationLink("Excluded Labels (\(filter.excludedLabelIds.count))") {
+                        NavigationLink(String.localizedStringWithFormat(String(localized: "Excluded Labels (%lld)", comment: "Excluded labels with count"), filter.excludedLabelIds.count)) {
                             LabelSelectionView(
                                 title: "Excluded Labels",
                                 availableLabels: availableLabels,
