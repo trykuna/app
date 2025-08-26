@@ -25,7 +25,7 @@ struct LabelWatchListView: View {
                 }
             }
         }
-        .navigationTitle("Watched Labels")
+        .navigationTitle(String(localized: "settings.watchedLabels", comment: "Watched Labels"))
         .onAppear(perform: load)
     }
 

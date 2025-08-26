@@ -11,18 +11,24 @@ struct AppIconTestView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("App Icon Test")
+                // Text("App Icon Test")
+                Text(String(localized: "settings.appIcon.test.title", comment: "App icon test view title"))
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("Current Icon: \(iconManager.currentIcon.displayName)")
+                // TODO: Localize
+                Text("settings.icon.current \(iconManager.currentIcon.displayName)",
+                     comment: "Label showing the current app icon name")
+
                     .font(.headline)
                 
                 if iconManager.supportsAlternateIcons {
-                    Text("✅ Alternate icons are supported")
+                    // Text("✅ Alternate icons are supported")
+                    Text(String(localized: "settings.appIcon.supported", comment: "Text for supported app icons"))
                         .foregroundColor(.green)
                 } else {
-                    Text("❌ Alternate icons are not supported")
+                    // Text("❌ Alternate icons are not supported")
+                    Text(String(localized: "settings.appIcon.unsupported", comment: "Text for unsupported app icons"))
                         .foregroundColor(.red)
                 }
                 
@@ -62,8 +68,9 @@ struct AppIconTestView: View {
                 Spacer()
             }
             .padding()
-            .alert("Error", isPresented: $showingError) {
-                Button("OK") { }
+            .alert(String(localized: "common.error"), isPresented: $showingError) {
+                // Button("OK") { }
+                Button(String(localized: "common.ok", comment: "OK button")) { }
             } message: {
                 Text(errorMessage)
             }
@@ -75,7 +82,8 @@ struct AppIconTestView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Changing Icon...")
+                        // Text("Changing Icon...")
+                        Text(String(localized: "settings.appIcon.changing", comment: "Label shown when changing app icon"))
                             .font(.headline)
                     }
                     .padding(24)

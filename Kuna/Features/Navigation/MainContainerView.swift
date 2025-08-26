@@ -184,7 +184,8 @@ struct ProjectListViewWithMenu: View {
             List(vm.projects) { p in
                 NavigationLink(p.title) { TasksAdaptiveContainer(project: p, api: api) }
             }
-            .navigationTitle("Projects")
+            // .navigationTitle("Projects")
+            .navigationTitle(String(localized: "navigation.projects", comment: "Projects navigation title"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -198,7 +199,8 @@ struct ProjectListViewWithMenu: View {
                             .font(.system(size: 18, weight: .medium))
                     }
                     .accessibilityIdentifier("MenuButton")
-                    .accessibilityLabel("Menu")
+                    // .accessibilityLabel("Menu")
+                    .accessibilityLabel(String(localized: "navigation.menu", comment: "Menu button accessibility label"))
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -209,15 +211,18 @@ struct ProjectListViewWithMenu: View {
             }
             .overlay {
                 if vm.loading {
-                    ProgressView("Loading…")
+                    // Text("Loading…")
+                    ProgressView(String(localized: "common.loading", comment: "Label shown when loading"))
                 } else if let error = vm.error {
                     VStack {
-                        Text("Error loading projects")
+                        // Text("Error loading projects")
+                        Text(String(localized: "common.error.title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Button("Retry") {
+                        // Button("Retry") {
+                        Button(String(localized: "common.retry", comment: "Retry button")) {
                             Task { await vm.load() }
                         }
                         .buttonStyle(.borderedProminent)
@@ -252,7 +257,7 @@ struct LabelsViewWithMenu: View {
         NavigationStack {
             Group {
                 if viewModel.loading {
-                    ProgressView("Loading labels...")
+                    ProgressView(String(localized: "labels.loading", comment: "Loading labels..."))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.labels.isEmpty {
                     emptyStateView
@@ -260,7 +265,8 @@ struct LabelsViewWithMenu: View {
                     labelsList
                 }
             }
-            .navigationTitle("Labels")
+            // .navigationTitle("Labels")
+            .navigationTitle(String(localized: "labels.title", comment: "Labels navigation title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -275,7 +281,8 @@ struct LabelsViewWithMenu: View {
                             .font(.system(size: 18, weight: .medium))
                     }
                     .accessibilityIdentifier("MenuButton")
-                    .accessibilityLabel("Menu")
+                    // .accessibilityLabel("Menu")
+                    .accessibilityLabel(String(localized: "navigation.menu", comment: "Menu button accessibility label"))
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -292,9 +299,12 @@ struct LabelsViewWithMenu: View {
                     EditLabelView(viewModel: viewModel, label: label)
                 }
             }
-            .alert("Delete Label", isPresented: $showingDeleteAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
+            // .alert("Delete Label", isPresented: $showingDeleteAlert) {
+            .alert(String(localized: "labels.delete.title", comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
+                // Button("Cancel", role: .cancel) { }
+                Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
+                // Button("Delete", role: .destructive) {
+                Button(String(localized: "common.delete", comment: "Delete button"), role: .destructive) {
                     if let label = labelToDelete {
                         Task {
                             await viewModel.deleteLabel(label)
@@ -303,7 +313,10 @@ struct LabelsViewWithMenu: View {
                 }
             } message: {
                 if let label = labelToDelete {
-                    Text("Are you sure you want to delete '\(label.title)'? This action cannot be undone.")
+                    // TODO: Localize
+                    Text("labels.delete.confirmation \(label.title)",
+                         comment: "Confirmation prompt when deleting a label. The placeholder is the label’s title")
+
                 }
             }
             .task {
@@ -312,12 +325,14 @@ struct LabelsViewWithMenu: View {
             .overlay {
                 if let error = viewModel.error {
                     VStack {
-                        Text("Error")
+                        // Text("Error")
+                        Text(String(localized: "common.error.title", comment: "Title for error state"))
                             .font(.headline)
                         Text(error)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Button("Retry") {
+                        // Button("Retry") {
+                        Button(String(localized: "common.retry", comment: "Retry button")) {
                             Task { await viewModel.load() }
                         }
                         .buttonStyle(.borderedProminent)
@@ -338,16 +353,19 @@ struct LabelsViewWithMenu: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary.opacity(0.6))
 
-            Text("No Labels")
+            // Text("No Labels")
+            Text(String(localized: "labels.empty.title", comment: "Title shown when there are no labels"))
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Create your first label to organize your tasks")
+            // Text("Create your first label to organize your tasks")
+            Text(String(localized: "labels.empty.subtitle", comment: "Subtitle shown when there are no labels"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
 
-            Button("Create Label") {
+            // Button("Create Label") {
+            Button(String(localized: "labels.create.button", comment: "Create label button")) {
                 showingCreateLabel = true
             }
             .buttonStyle(.borderedProminent)
@@ -395,14 +413,16 @@ struct LabelsViewWithMenu: View {
                     selectedLabel = label
                     showingEditLabel = true
                 }) {
-                    SwiftUI.Label("Edit", systemImage: "pencil")
+                    // SwiftUI.Label("Edit", systemImage: "pencil")
+                    SwiftUI.Label(String(localized: "common.edit", comment: "Edit button"), systemImage: "pencil")
                 }
 
                 Button(role: .destructive, action: {
                     labelToDelete = label
                     showingDeleteAlert = true
                 }) {
-                    SwiftUI.Label("Delete", systemImage: "trash")
+                    // SwiftUI.Label("Delete", systemImage: "trash")
+                    SwiftUI.Label(String(localized: "common.delete", comment: "Delete button"), systemImage: "trash")
                 }
             } label: {
                 Image(systemName: "ellipsis")

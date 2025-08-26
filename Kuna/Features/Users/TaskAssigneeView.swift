@@ -16,7 +16,8 @@ struct TaskAssigneeView: View {
         VStack(spacing: 0) {
             // Top “Assignees” row (matches your other rows)
             HStack {
-                Text("Assignees")
+                // Text("Assignees")
+                Text(String(localized: "tasks.details.assignees.title", comment: "Title for assignees"))
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
@@ -24,10 +25,11 @@ struct TaskAssigneeView: View {
                 Spacer()
 
                 if assignees.isEmpty {
-                    Text("None")
+                    // Text("None")
+                    Text(String(localized: "common.none", comment: "Title for none"))
                         .foregroundColor(.secondary.opacity(0.6))
                 } else {
-                    Text("\(assignees.count)")
+                    Text(verbatim: "\(assignees.count)")
                         .foregroundColor(.secondary)
                 }
 
@@ -69,7 +71,7 @@ struct TaskAssigneeView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(createdBy.displayName)
                             .font(.subheadline)
-                        Text("@\(createdBy.username)")
+                        Text(verbatim: "@\(createdBy.username)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -84,8 +86,9 @@ struct TaskAssigneeView: View {
                 assignUser(user)
             }
         }
-        .alert("Error", isPresented: .constant(error != nil)) {
-            Button("OK") { error = nil }
+        .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
+            // Button("OK") { error = nil }
+            Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
         } message: {
             if let error { Text(error) }
         }
@@ -102,7 +105,7 @@ struct TaskAssigneeView: View {
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text("@\(user.username)")
+                Text(verbatim: "@\(user.username)")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

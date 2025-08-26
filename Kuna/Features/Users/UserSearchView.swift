@@ -21,7 +21,7 @@ struct UserSearchView: View {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.secondary)
                         
-                        TextField("Search users...", text: $searchText)
+                        TextField(String(localized: "users.search.placeholder", comment: "Search users..."), text: $searchText)
                             .textFieldStyle(PlainTextFieldStyle())
                             .onSubmit {
                                 searchUsers()
@@ -47,7 +47,8 @@ struct UserSearchView: View {
                         Button(action: searchUsers) {
                             HStack {
                                 Image(systemName: "magnifyingglass")
-                                Text("Search for '\(searchText)'")
+                                Text("users.search.prompt \(searchText)",
+                                     comment: "Prompt in user search view. Placeholder is the current search text")
                             }
                             .foregroundColor(.accentColor)
                         }
@@ -61,7 +62,8 @@ struct UserSearchView: View {
                 if isSearching {
                     VStack(spacing: 16) {
                         ProgressView()
-                        Text("Searching users...")
+                        // Text("Searching users...")
+                        Text(String(localized: "users.search.searching", comment: "Label shown when searching users"))
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -71,10 +73,12 @@ struct UserSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        Text("No users found")
+                        // Text("No users found")
+                        Text(String(localized: "users.search.noResults.title", comment: "Title for no users found"))
                             .font(.headline)
                         
-                        Text("Try a different search term")
+                        // Text("Try a different search term")
+                        Text(String(localized: "users.search.noResults.suggestion", comment: "Try a different search term"))
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -84,10 +88,12 @@ struct UserSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        Text("Search for Users")
+                        // Text("Search for Users")
+                        Text(String(localized: "users.search.title", comment: "Title for search for users"))
                             .font(.headline)
                         
-                        Text("Enter a username or name to find users you can assign to tasks")
+                        // Text("Enter a username or name to find users you can assign to tasks")
+                        Text(String(localized: "users.search.description", comment: "Enter a username or name to find users you can assign to tasks"))
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
@@ -105,17 +111,20 @@ struct UserSearchView: View {
                 
                 Spacer()
             }
-            .navigationTitle("Find Users")
+            // .navigationTitle("Find Users")
+            .navigationTitle(String(localized: "users.find.title", comment: "Find users navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
             }
-            .alert("Error", isPresented: .constant(error != nil)) {
-                Button("OK") {
+            .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
+                // Button("OK") {
+                Button(String(localized: "common.ok", comment: "OK button")) {
                     error = nil
                 }
             } message: {
@@ -172,7 +181,7 @@ struct UserRow: View {
                         .font(.headline)
                         .foregroundColor(.primary)
                     
-                    Text("@\(user.username)")
+                    Text(verbatim: "@\(user.username)")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     

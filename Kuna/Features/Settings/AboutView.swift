@@ -34,7 +34,8 @@ struct AboutView: View {
 
                 // Vikunja thanks
                 CardSection(title: "Vikunja") {
-                    Text("Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist.")
+                    // Text("Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist.")
+                    Text(String(localized: "settings.about.vikunja.text", comment: "Text for about view"))
                         .fixedSize(horizontal: false, vertical: true)
                         .lineSpacing(2)
 
@@ -46,7 +47,8 @@ struct AboutView: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 22)
 
-                            Text("Learn more")
+                            // Text("Learn more")
+                            Text(String(localized: "settings.about.vikunja.link", comment: "Link for about view"))
                                 .foregroundStyle(.primary)
 
                             Spacer()
@@ -61,22 +63,19 @@ struct AboutView: View {
                 // Libraries & Tools
                 CardSection(title: "Libraries & Tools") {
                     VStack(alignment: .leading, spacing: 10) {
-                        SwiftUI.Label("SwiftUI — Apple’s native UI framework", systemImage: "square.stack.3d.up")
-                        SwiftUI.Label("Foundation — Core system services", systemImage: "shippingbox")
-                        SwiftUI.Label("Keychain Services — Secure credential storage", systemImage: "lock.circle")
+                        // SwiftUI.Label("SwiftUI — Apple's native UI framework", systemImage: "square.stack.3d.up")
+                        SwiftUI.Label(String(localized: "about.framework.swiftui", comment: "SwiftUI framework description"), systemImage: "square.stack.3d.up")
+                        // SwiftUI.Label("Foundation — Core system services", systemImage: "shippingbox")
+                        SwiftUI.Label(String(localized: "about.framework.foundation", comment: "Foundation framework description"), systemImage: "shippingbox")
+                        // SwiftUI.Label("Keychain Services — Secure credential storage", systemImage: "lock.circle")
+                        SwiftUI.Label(String(localized: "about.framework.keychain", comment: "Keychain services description"), systemImage: "lock.circle")
                     }
                     .labelStyle(.aboutBullet)
                 }
 
                 // Special Thanks
-                CardSection(title: "Special Thanks") {
-                    Text("""
-                    This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.
-
-                    Big thanks to ChatGPT for UI mockups and keeping things iOS‑native (and steering me away from “1998 shareware” vibes).
-
-                    And thanks to everyone who tested builds, gave feedback, and proved task apps can be fun. You’re the real MVPs.
-                    """)
+                CardSection(title: String(localized: "about.specialThanks.title", comment: "Special Thanks")) {
+                    Text(String(localized: "about.specialThanks.message", comment: "Special thanks message from the developer"))
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(2)
                 }
@@ -86,7 +85,8 @@ struct AboutView: View {
                     VStack(spacing: 0) {
                         LinkRowPrimitive(title: "Website", systemImage: "globe", url: URL(string: "https://vikunja.io")!)
                         Divider()
-                        LinkRowPrimitive(title: "Privacy Policy", systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
+                        // LinkRowPrimitive(title: "Privacy Policy", systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
+                        LinkRowPrimitive(title: String(localized: "about.privacyPolicy", comment: "Privacy policy link"), systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
                         Divider()
                         LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: URL(string: "https://example.com/licenses")!)
                     }
@@ -96,7 +96,8 @@ struct AboutView: View {
             }
             .padding(.bottom, 24)
         }
-        .navigationTitle("About")
+        // .navigationTitle("About")
+        .navigationTitle(String(localized: "settings.about.title", comment: "Title for about view"))
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground))
     }

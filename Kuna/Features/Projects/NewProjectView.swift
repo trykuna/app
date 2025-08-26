@@ -14,14 +14,16 @@ struct NewProjectView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Project Name", text: $projectTitle)
+                    // TextField("Project Name", text: $projectTitle)
+                    TextField(String(localized: "projects.new.name", comment: "Project name field"), text: $projectTitle)
                         .textInputAutocapitalization(.words)
                     
-                    TextField("Description (Optional)", text: $projectDescription, axis: .vertical)
+                    TextField(String(localized: "common.descriptionOptional"), text: $projectDescription, axis: .vertical)
                         .lineLimit(3...6)
                         .textInputAutocapitalization(.sentences)
                 } header: {
-                    Text("Project Details")
+                    // Text("Project Details")
+                    Text(String(localized: "projects.new.details.title", comment: "Title for new project view"))
                 }
                 
                 if let error = error {
@@ -32,18 +34,21 @@ struct NewProjectView: View {
                     }
                 }
             }
-            .navigationTitle("New Project")
+            // .navigationTitle("New Project")
+            .navigationTitle(String(localized: "projects.new.details.title", comment: "Title for new project view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
                     .disabled(isCreating)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Create") {
+                    // Button("Create") {
+                    Button(String(localized: "common.create", comment: "Create button")) {
                         createProject()
                     }
                     .disabled(projectTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isCreating)
@@ -52,7 +57,7 @@ struct NewProjectView: View {
         }
         .overlay {
             if isCreating {
-                ProgressView("Creating...")
+                ProgressView(String(localized: "common.creating", comment: "Creating..."))
                     .padding()
                     .background(Color(.systemBackground))
                     .cornerRadius(8)

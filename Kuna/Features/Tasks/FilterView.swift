@@ -15,8 +15,10 @@ struct FilterView: View {
         NavigationView {
             Form {
                 // Quick Filters Section
-                Section("Quick Filters") {
-                    Picker("Quick Filter", selection: $filter.quickFilter) {
+                // Section("Quick Filters") {
+                Section(String(localized: "tasks.filter.quickFilters", comment: "Quick filters section")) {
+                    // Picker("Quick Filter", selection: $filter.quickFilter) {
+                    Picker(String(localized: "tasks.filter.quickFilter", comment: "Quick filter picker"), selection: $filter.quickFilter) {
                         ForEach(TaskFilter.QuickFilterType.allCases, id: \.self) { quickFilter in
                             HStack {
                                 Image(systemName: quickFilter.systemImage)
@@ -29,20 +31,26 @@ struct FilterView: View {
                 }
                 
                 // Status Section
-                Section("Status") {
-                    Toggle("Show Completed Tasks", isOn: $filter.showCompleted)
-                    Toggle("Show Incomplete Tasks", isOn: $filter.showIncomplete)
+                // Section("Status") {
+                Section(String(localized: "tasks.filter.status", comment: "Status section")) {
+                    // Toggle("Show Completed Tasks", isOn: $filter.showCompleted)
+                    Toggle(String(localized: "tasks.filter.showCompleted", comment: "Show completed tasks toggle"), isOn: $filter.showCompleted)
+                    // Toggle("Show Incomplete Tasks", isOn: $filter.showIncomplete)
+                    Toggle(String(localized: "tasks.filter.showIncomplete", comment: "Show incomplete tasks toggle"), isOn: $filter.showIncomplete)
                 }
                 
                 // Priority Section
                 Section {
-                    Toggle("Filter by Priority", isOn: $filter.filterByPriority)
+                    // Toggle("Filter by Priority", isOn: $filter.filterByPriority)
+                    Toggle(String(localized: "tasks.filter.byPriority", comment: "Filter by priority toggle"), isOn: $filter.filterByPriority)
                     
                     if filter.filterByPriority {
                         HStack {
-                            Text("Min Priority")
+                            // Text("Min Priority")
+                            Text(String(localized: "tasks.priority.min", comment: "Title for min priority"))
                             Spacer()
-                            Picker("Min", selection: $filter.minPriority) {
+                            // Picker("Min", selection: $filter.minPriority) {
+                            Picker(String(localized: "common.min", comment: "Min label"), selection: $filter.minPriority) {
                                 ForEach(TaskPriority.allCases) { priority in
                                     Text(priority.displayName).tag(priority)
                                 }
@@ -51,9 +59,11 @@ struct FilterView: View {
                         }
                         
                         HStack {
-                            Text("Max Priority")
+                            // Text("Max Priority")
+                            Text(String(localized: "tasks.priority.max", comment: "Title for max priority"))
                             Spacer()
-                            Picker("Max", selection: $filter.maxPriority) {
+                            // Picker("Max", selection: $filter.maxPriority) {
+                            Picker(String(localized: "common.max", comment: "Max label"), selection: $filter.maxPriority) {
                                 ForEach(TaskPriority.allCases) { priority in
                                     Text(priority.displayName).tag(priority)
                                 }
@@ -62,20 +72,27 @@ struct FilterView: View {
                         }
                     }
                 } header: {
-                    Text("Priority")
+                    // Text("Priority")
+                    Text(String(localized: "tasks.details.priority.title", comment: "Title for priority"))
                 }
                 
                 // Progress Section
                 Section {
-                    Toggle("Filter by Progress", isOn: $filter.filterByProgress)
+                    // Toggle("Filter by Progress", isOn: $filter.filterByProgress)
+                    Toggle(String(localized: "tasks.filter.byProgress", comment: "Filter by progress toggle"), isOn: $filter.filterByProgress)
                     
                     if filter.filterByProgress {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Text("Min: \(Int(filter.minProgress * 100))%")
+                                Text("tasks.filter.minProgress \(filter.minProgress, format: .percent)",
+                                     comment: "Minimum progress percentage in task filter")
+
                                 Spacer()
-                                Text("Max: \(Int(filter.maxProgress * 100))%")
+
+                                Text("tasks.filter.maxProgress \(filter.maxProgress, format: .percent)",
+                                     comment: "Maximum progress percentage in task filter")
                             }
+
                             .font(.caption)
                             .foregroundColor(.secondary)
                             
@@ -84,40 +101,46 @@ struct FilterView: View {
                         }
                     }
                 } header: {
-                    Text("Progress")
+                    // Text("Progress")
+                    Text(String(localized: "tasks.details.progress.title", comment: "Title for progress"))
                 }
                 
                 // Due Date Section
                 Section {
-                    Toggle("Filter by Due Date", isOn: $filter.filterByDueDate)
+                    // Toggle("Filter by Due Date", isOn: $filter.filterByDueDate)
+                    Toggle(String(localized: "tasks.filter.byDueDate", comment: "Filter by due date toggle"), isOn: $filter.filterByDueDate)
                     
                     if filter.filterByDueDate {
-                        DatePicker("From", selection: Binding(
+                        // DatePicker("From", selection: Binding(
+                        DatePicker(String(localized: "common.from", comment: "From date label"), selection: Binding(
                             get: { filter.dueDateFrom ?? Date() },
                             set: { filter.dueDateFrom = $0 }
                         ), displayedComponents: [.date])
                         
-                        DatePicker("To", selection: Binding(
+                        DatePicker(String(localized: "common.to", comment: "To"), selection: Binding(
                             get: { filter.dueDateTo ?? Date() },
                             set: { filter.dueDateTo = $0 }
                         ), displayedComponents: [.date])
                         
-                        Button("Clear Dates") {
+                        // Button("Clear Dates") {
+                        Button(String(localized: "filter.clearDates", comment: "Clear date filters button")) {
                             filter.dueDateFrom = nil
                             filter.dueDateTo = nil
                         }
                         .foregroundColor(.red)
                     }
                 } header: {
-                    Text("Due Date")
+                    // Text("Due Date")
+                    Text(String(localized: "tasks.details.dates.dueDate.title", comment: "Title for due date"))
                 }
                 
                 // Labels Section
                 Section {
-                    Toggle("Filter by Labels", isOn: $filter.filterByLabels)
+                    // Toggle("Filter by Labels", isOn: $filter.filterByLabels)
+                    Toggle(String(localized: "tasks.filter.byLabels", comment: "Filter by labels toggle"), isOn: $filter.filterByLabels)
                     
                     if filter.filterByLabels {
-                        NavigationLink("Required Labels (\(filter.requiredLabelIds.count))") {
+                        NavigationLink(String.localizedStringWithFormat(String(localized: "Required Labels (%lld)", comment: "Required labels with count"), filter.requiredLabelIds.count)) {
                             LabelSelectionView(
                                 title: "Required Labels",
                                 availableLabels: availableLabels,
@@ -126,7 +149,7 @@ struct FilterView: View {
                             )
                         }
                         
-                        NavigationLink("Excluded Labels (\(filter.excludedLabelIds.count))") {
+                        NavigationLink(String.localizedStringWithFormat(String(localized: "Excluded Labels (%lld)", comment: "Excluded labels with count"), filter.excludedLabelIds.count)) {
                             LabelSelectionView(
                                 title: "Excluded Labels",
                                 availableLabels: availableLabels,
@@ -136,30 +159,35 @@ struct FilterView: View {
                         }
                     }
                 } header: {
-                    Text("Labels")
+                    // Text("Labels")
+                    Text(String(localized: "labels.title", comment: "Title for labels"))
                 }
                 
                 // Reset Section
                 if filter.hasActiveFilters {
                     Section {
-                        Button("Reset All Filters") {
+                        // Button("Reset All Filters") {
+                        Button(String(localized: "tasks.filter.resetAll", comment: "Reset all filters button")) {
                             filter.reset()
                         }
                         .foregroundColor(.red)
                     }
                 }
             }
-            .navigationTitle("Filter Tasks")
+            // .navigationTitle("Filter Tasks")
+            .navigationTitle(String(localized: "tasks.filter.title", comment: "Filter tasks navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Apply") {
+                    // Button("Apply") {
+                    Button(String(localized: "common.apply", comment: "Apply button")) {
                         isPresented = false
                     }
                     .fontWeight(.semibold)

@@ -54,7 +54,8 @@ struct LoginView: View {
                     }
                     .listRowBackground(Color.clear)
 
-                    Section("Server") {
+                    // Section("Server") {
+                    Section(String(localized: "auth.server", comment: "Server section")) {
                         HStack {
                             ZStack(alignment: .leading) {
                                 if serverURL.isEmpty {
@@ -89,7 +90,8 @@ struct LoginView: View {
                     }
 
                     Section {
-                        Picker("Login Method", selection: $mode) {
+                        // Picker("Login Method", selection: $mode) {
+                        Picker(String(localized: "auth.loginMethod", comment: "Login method picker"), selection: $mode) {
                             ForEach(LoginMode.allCases) { Text($0.rawValue).tag($0) }
                         }
                         .pickerStyle(.segmented)
@@ -100,8 +102,8 @@ struct LoginView: View {
                                     .foregroundColor(.secondary)
                                     .font(.footnote)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("**Username & Password**: Full access to all features including user management and task assignment.")
-                                    Text("**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions.")
+                                    Text(String(localized: "auth.login.username_password", comment: "Explains what a username and password allows"))
+                                    Text(String(localized: "auth.login.api_token", comment: "Explains what an API token allows"))
                                 }
                             }
                             .font(.footnote)
@@ -111,8 +113,8 @@ struct LoginView: View {
                     }
 
                     if mode == .password {
-                        Section("Username & Password") {
-                            TextField("Username", text: $username)
+                        Section(String(localized: "auth.usernamePassword", comment: "Username & Password")) {
+                            TextField(String(localized: "auth.username", comment: "Username"), text: $username)
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
                                 .textContentType(.username)
@@ -120,7 +122,8 @@ struct LoginView: View {
                                 .submitLabel(.next)
                                 .onSubmit { focused = .password }
 
-                            SecureField("Password", text: $password)
+                            // SecureField("Password", text: $password)
+                            SecureField(String(localized: "auth.password", comment: "Password field"), text: $password)
                                 .textContentType(.password)
                                 .focused($focused, equals: .password)
                                 .submitLabel(.go)
@@ -133,7 +136,7 @@ struct LoginView: View {
                                             .scaleEffect(0.8)
                                             .padding(.trailing, 4)
                                     }
-                                    Text(isLoggingIn ? "Logging In..." : "Log In")
+                                    Text(isLoggingIn ? String(localized: "auth.loggingIn", comment: "Logging in button text") : String(localized: "auth.logIn", comment: "Log in button text"))
                                 }
                             }
                             .buttonStyle(.borderedProminent)
@@ -144,21 +147,23 @@ struct LoginView: View {
                             HStack(alignment: .top, spacing: 6) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.secondary)
-                                Text("If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials.")
+                                Text(String(localized: "auth.login.totp", comment: "Explains how to enter a two-factor code"))
                             }
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                         }
                     } else {
-                        Section("Personal API Token") {
-                            SecureField("API Token", text: $personalToken)
+                        // Section("Personal API Token") {
+                        Section(String(localized: "auth.personalApiToken", comment: "Personal API token section")) {
+                            // SecureField("API Token", text: $personalToken)
+                            SecureField(String(localized: "auth.login.apiToken.placeholder", comment: "Placeholder for API token field"), text: $personalToken)
                                 .textContentType(.password)
                                 .focused($focused, equals: .token)
                                 .submitLabel(.go)
                                 .onSubmit { useToken() }
 
-                            Button("Use Token", action: useToken)
+                            Button(String(localized: "auth.useToken", comment: "Use Token"), action: useToken)
                                 .buttonStyle(.borderedProminent)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .disabled(!isServerValid || personalToken.isEmpty)
@@ -166,7 +171,7 @@ struct LoginView: View {
                             HStack(alignment: .top, spacing: 6) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.secondary)
-                                Text("In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token.")
+                                Text(String(localized: "auth.login.api_token_creation", comment: "Explains how to create a API Token in Vikunja"))
                             }
                             .font(.footnote)
                             .foregroundColor(.secondary)
@@ -244,15 +249,17 @@ private struct URLHelpSheet: View {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .font(.title2)
-                Text("Server URL Help")
+                Text(String(localized: "auth.login.serverUrl.help.title", comment: "Title for server URL help sheet"))
                     .font(.headline)
                 Spacer()
-                Button("Done") { dismiss() }
-                    .buttonStyle(.bordered)
+                Button(String(localized: "common.done", comment: "Dismisses a modal sheet")) {
+                    dismiss() 
+                }
+                .buttonStyle(.bordered)
             }
             .padding(.bottom, 4)
 
-            Text("Enter your server address — you don’t need to add `/api/v1`; the app will do that for you.")
+            Text(String(localized: "auth.login.serverUrl.help.text", comment: "Text for server URL help sheet"))
                 .fixedSize(horizontal: false, vertical: true)
 
             Spacer(minLength: 0)

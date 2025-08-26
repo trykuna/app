@@ -26,7 +26,8 @@ struct TaskAttachmentView: View {
         VStack(spacing: 0) {
             Button(action: { showingSourceDialog = true }) {
                 HStack {
-                    Text("Add Attachment")
+                    // Text("Add Attachment")
+                    Text(String(localized: "tasks.details.attachments.addTitle", comment: "Title for add attachment"))
                     Spacer()
                     Image(systemName: "paperclip")
                         .foregroundColor(.secondary)
@@ -35,23 +36,29 @@ struct TaskAttachmentView: View {
                 .padding(.vertical, 12)
             }
             .buttonStyle(.plain)
-            .confirmationDialog("Add Attachment", isPresented: $showingSourceDialog) {
-                Button("Photo Library") { showPhotoPicker = true }
-                Button("Files") { showFileImporter = true }
+            // .confirmationDialog("Add Attachment", isPresented: $showingSourceDialog) {
+            .confirmationDialog(String(localized: "tasks.details.attachments.add", comment: "Add attachment dialog title"), isPresented: $showingSourceDialog) {
+                // Button("Photo Library") { showPhotoPicker = true }
+                Button(String(localized: "tasks.attachment.photoLibrary", comment: "Photo library button")) { showPhotoPicker = true }
+                // Button("Files") { showFileImporter = true }
+                Button(String(localized: "tasks.attachment.files", comment: "Files button")) { showFileImporter = true }
             }
             .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhoto, matching: .images)
             .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.item], onCompletion: handleFileSelection)
-            .alert("Set Filename", isPresented: $showingFilenameDialog) {
-                TextField("Filename", text: $customFilename)
+            .alert(String(localized: "common.setFilename"), isPresented: $showingFilenameDialog) {
+                TextField(String(localized: "common.filename"), text: $customFilename)
                     .autocorrectionDisabled()
-                Button("Upload") {
+                // Button("Upload") {
+                Button(String(localized: "tasks.attachment.upload", comment: "Upload button")) {
                     performUpload()
                 }
-                Button("Cancel", role: .cancel) {
+                // Button("Cancel", role: .cancel) {
+                Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) {
                     clearPendingUpload()
                 }
             } message: {
-                Text("Enter a custom name for '\(pendingUploadOriginalName)'")
+                Text("tasks.attachments.enter_custom_name \(pendingUploadOriginalName)",
+                     comment: "Prompt asking user to enter a custom name for an attachment. Placeholder is the original filename")
             }
 
             if isUploading {

@@ -24,11 +24,13 @@ struct TOTPView: View {
                         .foregroundColor(.blue)
                     
                     VStack(spacing: 8) {
-                        Text("Two-Factor Authentication")
+                        // Text("Two-Factor Authentication")
+                        Text(String(localized: "auth.totp.title", comment: "Title for two-factor authentication view"))
                             .font(.title2)
                             .fontWeight(.semibold)
                         
-                        Text("Enter the 6-digit code from your authenticator app")
+                        // Text("Enter the 6-digit code from your authenticator app")
+                        Text(String(localized: "auth.totp.subtitle", comment: "Subtitle for two-factor authentication view"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -40,7 +42,7 @@ struct TOTPView: View {
                 VStack(spacing: 16) {
                     ZStack(alignment: .leading) {
                         if totpCode.isEmpty {
-                            Text("000000")
+                            Text(verbatim: "000000")
                                 .foregroundColor(Color(UIColor.placeholderText))
                                 .textSelection(.disabled)
                                 .allowsHitTesting(false)
@@ -74,7 +76,8 @@ struct TOTPView: View {
                             .stroke(totpFocused ? Color.accentColor : Color.clear, lineWidth: 2)
                     )
                     
-                    Text("The code will be submitted automatically when complete")
+                    // Text("The code will be submitted automatically when complete")
+                    Text(String(localized: "auth.totp.auto_submit", comment: "Label explaining that the code will be submitted automatically"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -83,18 +86,20 @@ struct TOTPView: View {
                 Spacer()
                 
                 // Manual submit button (in case auto-submit doesn't work)
-                Button("Verify Code") {
+                // Button("Verify Code") {
+                Button(String(localized: "auth.totp.verifyCode", comment: "Verify code button")) {
                     submitTOTP()
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(totpCode.count != 6 || isLoggingIn)
                 .padding(.horizontal)
             }
-            .navigationTitle("Verification")
+            .navigationTitle(String(localized: "auth.verification", comment: "Verification"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
                     .disabled(isLoggingIn)
@@ -111,7 +116,8 @@ struct TOTPView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        Text("Verifying...")
+                        // Text("Verifying...")
+                        Text(String(localized: "auth.totp.verifying", comment: "Label shown when verifying two-factor code"))
                             .font(.headline)
                     }
                     .padding(24)

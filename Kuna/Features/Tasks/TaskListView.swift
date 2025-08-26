@@ -553,12 +553,14 @@ struct TaskListView: View {
                 .foregroundColor(.secondary)
 
             VStack(spacing: 8) {
-                Text("No Tasks Yet")
+                // Text("No Tasks Yet")
+                Text(String(localized: "tasks.empty.title", comment: "Title shown when there are no tasks"))
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(.primary)
 
-                Text("This project doesn't have any tasks yet. Create your first task to get started!")
+                // Text("This project doesn't have any tasks yet. Create your first task to get started!")
+                Text(String(localized: "projects.empty.tasks", comment: "Title shown when there are no tasks"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -570,7 +572,8 @@ struct TaskListView: View {
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
-                    Text("Create First Task")
+                    // Text("Create First Task")
+                    Text(String(localized: "tasks.create.first", comment: "Title for create first task"))
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -596,23 +599,26 @@ struct TaskListView: View {
         VStack {
             Spacer()
             VStack(alignment: .leading, spacing: 16) {
-                Text("Create New Task")
+                // Text("Create New Task")
+                Text(String(localized: "tasks.create.new", comment: "Title for create new task"))
                     .font(.headline)
                     .fontWeight(.semibold)
-                TextField("Task title", text: $newTaskTitle)
+                TextField(String(localized: "tasks.placeholder.title", comment: "Task title"), text: $newTaskTitle)
                     .textFieldStyle(.roundedBorder)
-                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
+                TextField(String(localized: "common.descriptionOptional"), text: $newTaskDescription, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(2...4)
                 HStack(spacing: 12) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         vm.isAddingTask = false
                         newTaskTitle = ""
                         newTaskDescription = ""
                     }
                     .buttonStyle(.bordered)
                     .frame(maxWidth: .infinity)
-                    Button("Create Task") {
+                    // Button("Create Task") {
+                    Button(String(localized: "tasks.create.button", comment: "Create task button")) {
                         Task {
                             await vm.createTask(
                                 title: newTaskTitle,
@@ -654,7 +660,8 @@ struct TaskListView: View {
                     } else if vm.canLoadPrevious {
                         HStack {
                             Spacer()
-                            Button("Load earlier") {
+                            // Button("Load earlier") {
+                            Button(String(localized: "tasks.list.loadEarlier", comment: "Load earlier button")) {
                                 Task {
                                     let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
                                     await vm.loadPreviousTasks(queryItems: query)
@@ -689,7 +696,8 @@ struct TaskListView: View {
                 } else if vm.hasMoreTasks {
                     HStack {
                         Spacer()
-                        Button("Load more") {
+                        // Button("Load more") {
+                        Button(String(localized: "tasks.list.loadMore", comment: "Load more button")) {
                             Task {
                                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
                                 await vm.loadMoreTasks(queryItems: query)
@@ -707,19 +715,21 @@ struct TaskListView: View {
     private var addNewTaskSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 8) {
-                TextField("Task title", text: $newTaskTitle)
+                TextField(String(localized: "tasks.placeholder.title", comment: "Task title"), text: $newTaskTitle)
                     .textFieldStyle(.roundedBorder)
-                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
+                TextField(String(localized: "common.descriptionOptional"), text: $newTaskDescription, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(2...4)
                 HStack {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         vm.isAddingTask = false
                         newTaskTitle = ""
                         newTaskDescription = ""
                     }
                     .buttonStyle(.bordered)
-                    Button("Add Task") {
+                    // Button("Add Task") {
+                    Button(String(localized: "tasks.create.add", comment: "Add task button")) {
                         Task {
                             await vm.createTask(
                                 title: newTaskTitle,
@@ -781,7 +791,8 @@ struct TaskListView: View {
         }
         .actionSheet(isPresented: $showingSort) {
             ActionSheet(
-                title: Text("Sort Tasks"),
+                // title: Text("Sort Tasks"),
+                title: Text(String(localized: "tasks.sort.title", comment: "Sort tasks action sheet title")),
                 buttons: TaskSortOption.allCases.map { sortOption in
                     ActionSheet.Button.default(
                         Text(sortOption.rawValue),

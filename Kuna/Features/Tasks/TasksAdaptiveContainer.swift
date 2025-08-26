@@ -130,7 +130,9 @@ struct TasksIPadSplitView: View {
         }
         .actionSheet(isPresented: $showingSort) {
             ActionSheet(
-                title: Text("Sort Tasks"),
+                // TODO: Localize
+                // title: Text("Sort Tasks"),
+                title: Text(String(localized: "tasks.sort.title", comment: "Title for sort tasks")),
                 buttons: TaskSortOption.allCases.map { sortOption in
                     ActionSheet.Button.default(
                         Text(sortOption.rawValue),
@@ -251,7 +253,8 @@ struct TasksIPadSplitView: View {
                         .font(.system(size: 64))
                         .foregroundColor(.secondary)
                     
-                    Text("Select a task to view its details")
+                    // Text("Select a task to view its details")
+                    Text(String(localized: "tasks.select.description", comment: "Title shown when no task is selected"))
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
@@ -271,12 +274,14 @@ struct TasksIPadSplitView: View {
                 .foregroundColor(.secondary)
 
             VStack(spacing: 8) {
-                Text("No Tasks Yet")
+                // Text("No Tasks Yet")
+                Text(String(localized: "tasks.empty.title", comment: "Title shown when there are no tasks"))
                     .font(.title3)
                     .fontWeight(.semibold)
                     .foregroundColor(.primary)
 
-                Text("Create your first task to get started!")
+                // Text("Create your first task to get started!")
+                Text(String(localized: "tasks.empty.action", comment: "Title shown when there are no tasks"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -288,7 +293,8 @@ struct TasksIPadSplitView: View {
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
-                    Text("Create First Task")
+                    // Text("Create First Task")
+                    Text(String(localized: "tasks.create.first", comment: "Title for create first task"))
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -355,7 +361,8 @@ struct TasksIPadSplitView: View {
                 } else if vm.hasMoreTasks {
                     HStack {
                         Spacer()
-                        Button("Load more") {
+                        // Button("Load more") {
+                        Button(String(localized: "tasks.list.loadMore", comment: "Load more button")) {
                             Task {
                                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
                                 await vm.loadMoreTasks(queryItems: query)
@@ -378,7 +385,8 @@ struct TasksIPadSplitView: View {
                 VStack(spacing: 16) {
                     ProgressView()
                         .scaleEffect(1.2)
-                    Text("Loading tasks...")
+                    // Text("Loading tasks...")
+                    Text(String(localized: "tasks.loading", comment: "Label shown when loading tasks"))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -417,23 +425,26 @@ struct TasksIPadSplitView: View {
         VStack {
             Spacer()
             VStack(alignment: .leading, spacing: 16) {
-                Text("Create New Task")
+                // Text("Create New Task")
+                Text(String(localized: "tasks.create.new", comment: "Title for create new task"))
                     .font(.headline)
                     .fontWeight(.semibold)
-                TextField("Task title", text: $newTaskTitle)
+                TextField(String(localized: "tasks.placeholder.title", comment: "Task title"), text: $newTaskTitle)
                     .textFieldStyle(.roundedBorder)
-                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
+                TextField(String(localized: "common.descriptionOptional"), text: $newTaskDescription, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(2...4)
                 HStack(spacing: 12) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         vm.isAddingTask = false
                         newTaskTitle = ""
                         newTaskDescription = ""
                     }
                     .buttonStyle(.bordered)
                     .frame(maxWidth: .infinity)
-                    Button("Create Task") {
+                    // Button("Create Task") {
+                    Button(String(localized: "tasks.create.button", comment: "Create task button")) {
                         Task {
                             await vm.createTask(
                                 title: newTaskTitle,
@@ -465,19 +476,21 @@ struct TasksIPadSplitView: View {
     private var addNewTaskSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 8) {
-                TextField("Task title", text: $newTaskTitle)
+                TextField(String(localized: "tasks.placeholder.title", comment: "Task title"), text: $newTaskTitle)
                     .textFieldStyle(.roundedBorder)
-                TextField("Description (optional)", text: $newTaskDescription, axis: .vertical)
+                TextField(String(localized: "common.descriptionOptional"), text: $newTaskDescription, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(2...4)
                 HStack {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         vm.isAddingTask = false
                         newTaskTitle = ""
                         newTaskDescription = ""
                     }
                     .buttonStyle(.bordered)
-                    Button("Add Task") {
+                    // Button("Add Task") {
+                    Button(String(localized: "tasks.add.title", comment: "Add task button")) {
                         Task {
                             await vm.createTask(
                                 title: newTaskTitle,
@@ -565,653 +578,10 @@ struct TaskDetailViewInner: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header with edit controls
-            HStack {
-                Text("Task Details")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                
-                Spacer()
-                
-                // Favorite button
-                Button(action: toggleFavorite) {
-                    Image(systemName: task.isFavorite ? "star.fill" : "star")
-                        .foregroundColor(task.isFavorite ? .yellow : .gray)
-                }
-                .disabled(isUpdatingFavorite)
-                
-                // Edit/Done button
-                Button(isEditing ? "Done" : "Edit") {
-                    if isEditing {
-                        if hasChanges {
-                            Task { await saveChanges() }
-                        } else {
-                            isEditing = false
-                        }
-                    } else {
-                        startEditing()
-                    }
-                }
-                .fontWeight(.medium)
-                .disabled(isUpdating)
-            }
-            .padding()
-            .background(Color(.systemBackground))
-            
+            headerView
             Divider()
-            
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // TASK INFO Section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("TASK INFO")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
-                            .padding(.horizontal)
-                        
-                        VStack(spacing: 0) {
-                            // Title Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "square.and.pencil")
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 24)
-                                
-                                if isEditing {
-                                    TextField("Task Title", text: $editedTitle)
-                                        .textFieldStyle(.plain)
-                                        .font(.body)
-                                        .onChange(of: editedTitle) { _, _ in
-                                            hasChanges = true
-                                        }
-                                } else {
-                                    Text(task.title)
-                                        .font(.body)
-                                    Spacer()
-                                }
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // Description Row
-                            HStack(alignment: .top, spacing: 12) {
-                                Image(systemName: "text.alignleft")
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 24)
-                                
-                                if isEditing {
-                                    TextField("Add description...", text: $editedDescription, axis: .vertical)
-                                        .textFieldStyle(.plain)
-                                        .font(.body)
-                                        .lineLimit(3...6)
-                                        .onChange(of: editedDescription) { _, _ in
-                                            hasChanges = true
-                                        }
-                                } else {
-                                    if let desc = task.description, !desc.isEmpty {
-                                        Text(desc)
-                                            .font(.body)
-                                    } else {
-                                        Text("No description")
-                                            .font(.body)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                }
-                            }
-                            .padding()
-                        }
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                    }
-                    
-                    // SCHEDULING Section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("SCHEDULING")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
-                            .padding(.horizontal)
-                        
-                        VStack(spacing: 0) {
-                            // Start Date Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "play.circle")
-                                    .foregroundColor(.green)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Start Date")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                    
-                                    if isEditing {
-                                        HStack {
-                                            if editedStartDate != nil {
-                                                DatePicker("Start Date", selection: Binding(
-                                                    get: { editedStartDate ?? Date() },
-                                                    set: { editedStartDate = $0; hasChanges = true }
-                                                ), displayedComponents: [.date, .hourAndMinute])
-                                                .labelsHidden()
-                                                .datePickerStyle(.compact)
-                                                
-                                                Button("Remove") {
-                                                    editedStartDate = nil
-                                                    hasChanges = true
-                                                }
-                                                .font(.caption)
-                                                .foregroundColor(.red)
-                                            } else {
-                                                Button("Add Start Date") {
-                                                    editedStartDate = Date()
-                                                    hasChanges = true
-                                                }
-                                                .font(.body)
-                                            }
-                                        }
-                                    } else {
-                                        if let startDate = task.startDate {
-                                            Text(startDate, style: .date)
-                                                .font(.callout)
-                                            Text(startDate, style: .time)
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                        } else {
-                                            Text("No start date")
-                                                .font(.callout)
-                                                .foregroundColor(.secondary)
-                                        }
-                                    }
-                                }
-                                Spacer()
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // Due Date Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "calendar.badge.clock")
-                                    .foregroundColor(.orange)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Due Date")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                    
-                                    if isEditing {
-                                        HStack {
-                                            if editedDueDate != nil {
-                                                DatePicker("Due Date", selection: Binding(
-                                                    get: { editedDueDate ?? Date() },
-                                                    set: { editedDueDate = $0; hasChanges = true }
-                                                ), displayedComponents: [.date, .hourAndMinute])
-                                                .labelsHidden()
-                                                .datePickerStyle(.compact)
-                                                
-                                                Button("Remove") {
-                                                    editedDueDate = nil
-                                                    hasChanges = true
-                                                }
-                                                .font(.caption)
-                                                .foregroundColor(.red)
-                                            } else {
-                                                Button("Add Due Date") {
-                                                    editedDueDate = Date()
-                                                    hasChanges = true
-                                                }
-                                                .font(.body)
-                                            }
-                                        }
-                                    } else {
-                                        if let dueDate = task.dueDate {
-                                            Text(dueDate, style: .date)
-                                                .font(.callout)
-                                            Text(dueDate, style: .time)
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                        } else {
-                                            Text("No due date")
-                                                .font(.callout)
-                                                .foregroundColor(.secondary)
-                                        }
-                                    }
-                                }
-                                Spacer()
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // End Date Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "stop.circle")
-                                    .foregroundColor(.red)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("End Date")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                    
-                                    if isEditing {
-                                        HStack {
-                                            if editedEndDate != nil {
-                                                DatePicker("End Date", selection: Binding(
-                                                    get: { editedEndDate ?? Date() },
-                                                    set: { editedEndDate = $0; hasChanges = true }
-                                                ), displayedComponents: [.date, .hourAndMinute])
-                                                .labelsHidden()
-                                                .datePickerStyle(.compact)
-                                                
-                                                Button("Remove") {
-                                                    editedEndDate = nil
-                                                    hasChanges = true
-                                                }
-                                                .font(.caption)
-                                                .foregroundColor(.red)
-                                            } else {
-                                                Button("Add End Date") {
-                                                    editedEndDate = Date()
-                                                    hasChanges = true
-                                                }
-                                                .font(.body)
-                                            }
-                                        }
-                                    } else {
-                                        if let endDate = task.endDate {
-                                            Text(endDate, style: .date)
-                                                .font(.callout)
-                                            Text(endDate, style: .time)
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                        } else {
-                                            Text("No end date")
-                                                .font(.callout)
-                                                .foregroundColor(.secondary)
-                                        }
-                                    }
-                                }
-                                Spacer()
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 16)
-                            
-                            // Reminders Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "bell")
-                                    .foregroundColor(.purple)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Reminders")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                    
-                                    if let reminders = task.reminders, !reminders.isEmpty {
-                                        ForEach(reminders, id: \.id) { reminder in
-                                            Text(reminder.reminder, style: .date)
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                        }
-                                    } else {
-                                        Text("No reminders")
-                                            .font(.callout)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                                
-                                Spacer()
-                                
-                                if isEditing {
-                                    Button("Edit") {
-                                        showingRemindersEditor = true
-                                    }
-                                    .font(.caption)
-                                }
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 16)
-                            
-                            // Repeat Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "repeat")
-                                    .foregroundColor(.cyan)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Repeat")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                    
-                                    if let repeatAfter = task.repeatAfter, repeatAfter > 0 {
-                                        Text("Every \(repeatAfter) \(task.repeatMode.displayName)")
-                                            .font(.callout)
-                                            .foregroundColor(.secondary)
-                                    } else {
-                                        Text("Never")
-                                            .font(.callout)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                                
-                                Spacer()
-                                
-                                if isEditing {
-                                    Button("Edit") {
-                                        showingRepeatEditor = true
-                                    }
-                                    .font(.caption)
-                                }
-                            }
-                            .padding()
-                        }
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                    }
-                    
-                    // ORGANIZATION Section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("ORGANIZATION")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
-                            .padding(.horizontal)
-                        
-                        VStack(spacing: 0) {
-                            // Priority Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "exclamationmark.triangle")
-                                    .foregroundColor(.orange)
-                                    .frame(width: 24)
-                                
-                                if isEditing {
-                                    Picker("Priority", selection: $editedPriority) {
-                                        Text("None").tag(TaskPriority.unset)
-                                        Text("Low").tag(TaskPriority.low)
-                                        Text("Medium").tag(TaskPriority.medium)
-                                        Text("High").tag(TaskPriority.high)
-                                        Text("Urgent").tag(TaskPriority.urgent)
-                                        Text("DO NOW").tag(TaskPriority.doNow)
-                                    }
-                                    .pickerStyle(.menu)
-                                    .onChange(of: editedPriority) { _, _ in
-                                        hasChanges = true
-                                    }
-                                    Spacer()
-                                } else {
-                                    if task.priority != .unset {
-                                        HStack {
-                                            Image(systemName: task.priority.systemImage)
-                                                .foregroundColor(task.priority.color)
-                                            Text(task.priority.displayName)
-                                        }
-                                    } else {
-                                        Text("No priority")
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                }
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // Progress Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "chart.line.uptrend.xyaxis")
-                                    .foregroundColor(.blue)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 8) {
-                                    HStack {
-                                        Text("Progress")
-                                            .font(.body)
-                                        Spacer()
-                                        Text("\(Int(isEditing ? editedPercentDone : task.percentDone))%")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    
-                                    if isEditing {
-                                        Slider(value: $editedPercentDone, in: 0...100, step: 5)
-                                            .onChange(of: editedPercentDone) { _, _ in
-                                                hasChanges = true
-                                            }
-                                    } else {
-                                        ProgressView(value: task.percentDone, total: 100)
-                                            .tint(.blue)
-                                    }
-                                }
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // Labels Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "tag")
-                                    .foregroundColor(.orange)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 8) {
-                                    HStack {
-                                        Text("Labels")
-                                            .font(.body)
-                                            .fontWeight(.medium)
-                                        
-                                        Spacer()
-                                        
-                                        if isEditing {
-                                            Button("Edit") {
-                                                showingLabelPicker = true
-                                            }
-                                            .font(.caption)
-                                        }
-                                    }
-                                    
-                                    if let labels = task.labels, !labels.isEmpty {
-                                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 6) {
-                                            ForEach(labels) { label in
-                                                Text(label.title)
-                                                    .font(.caption)
-                                                    .padding(.horizontal, 6)
-                                                    .padding(.vertical, 3)
-                                                    .background(label.color.opacity(0.2))
-                                                    .foregroundColor(label.color)
-                                                    .cornerRadius(6)
-                                            }
-                                        }
-                                    } else {
-                                        Text("No labels")
-                                            .font(.callout)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // Color Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "paintpalette")
-                                    .foregroundColor(.purple)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Color")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                    
-                                    HStack {
-                                        Circle()
-                                            .fill(isEditing ? editedColor : task.color)
-                                            .frame(width: 20, height: 20)
-                                            .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 0.5))
-                                        
-                                        Text(isEditing ? "Custom" : "Task Color")
-                                            .font(.callout)
-                                            .foregroundColor(.secondary)
-                                        
-                                        Spacer()
-                                        
-                                        if isEditing {
-                                            Button("Edit") {
-                                                showingColorPicker = true
-                                            }
-                                            .font(.caption)
-                                        }
-                                    }
-                                }
-                            }
-                            .padding()
-                            
-                            Divider().padding(.leading, 48)
-                            
-                            // Assignees Row
-                            HStack(spacing: 12) {
-                                Image(systemName: "person.2")
-                                    .foregroundColor(.green)
-                                    .frame(width: 24)
-                                
-                                VStack(alignment: .leading, spacing: 8) {
-                                    HStack {
-                                        Text("Assignees")
-                                            .font(.body)
-                                            .fontWeight(.medium)
-                                        
-                                        Spacer()
-                                        
-                                        if isEditing {
-                                            Button("Add") {
-                                                showingUserSearch = true
-                                            }
-                                            .font(.caption)
-                                        }
-                                    }
-                                    
-                                    if let assignees = task.assignees, !assignees.isEmpty {
-                                        VStack(alignment: .leading, spacing: 6) {
-                                            ForEach(assignees) { assignee in
-                                                HStack(spacing: 8) {
-                                                    Image(systemName: "person.circle.fill")
-                                                        .foregroundColor(.blue)
-                                                        .font(.caption)
-                                                    
-                                                    Text(assignee.displayName)
-                                                        .font(.callout)
-                                                    
-                                                    if isEditing {
-                                                        Button("Remove") {
-                                                            Task {
-                                                                await removeAssignee(userId: assignee.id)
-                                                            }
-                                                        }
-                                                        .font(.caption2)
-                                                        .foregroundColor(.red)
-                                                    }
-                                                    
-                                                    Spacer()
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        Text("No assignees")
-                                            .font(.callout)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                            }
-                            .padding()
-                        }
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                    }
-                    
-                    // Action Buttons Section
-                    VStack(spacing: 12) {
-                        // Related Tasks Button
-                        Button {
-                            showingRelatedTasks = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "link")
-                                    .foregroundColor(.blue)
-                                Text("Related Tasks")
-                                    .font(.body)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        // Comments Button
-                        Button {
-                            showingComments = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "text.bubble")
-                                    .foregroundColor(.green)
-                                Text("Comments")
-                                    .font(.body)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    
-                    Spacer(minLength: 50)
-                }
-                .padding()
-            }
-            
-            // Bottom toolbar for editing
-            if isEditing {
-                Divider()
-                HStack {
-                    Button("Cancel") {
-                        cancelEditing()
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(isUpdating)
-                    
-                    Spacer()
-                    
-                    Button {
-                        Task { await saveChanges() }
-                    } label: {
-                        if isUpdating {
-                            HStack {
-                                ProgressView()
-                                    .scaleEffect(0.8)
-                                Text("Saving...")
-                            }
-                        } else {
-                            Text("Save Changes")
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(!hasChanges || isUpdating)
-                }
-                .padding()
-                .background(Color(.systemBackground))
-            }
+            contentScrollView
+            bottomToolbar
         }
         .onAppear {
             initializeEditingState()
@@ -1220,8 +590,9 @@ struct TaskDetailViewInner: View {
         .onChange(of: task) { _, newTask in
             initializeEditingState()
         }
-        .alert("Error", isPresented: .constant(updateError != nil)) {
-            Button("OK") { updateError = nil }
+        .alert(String(localized: "common.error"), isPresented: .constant(updateError != nil)) {
+            // Button("OK") {
+            Button(String(localized: "common.ok", comment: "OK button")) { updateError = nil }
         } message: {
             if let error = updateError { Text(error) }
         }
@@ -1267,6 +638,700 @@ struct TaskDetailViewInner: View {
             }
         }) {
             RelatedTasksView(task: Binding.constant(task), api: api)
+        }
+    }
+    
+    @ViewBuilder
+    private var headerView: some View {
+        HStack {
+            // Text("Task Details")
+            Text(String(localized: "tasks.details.title", comment: "Title for task details"))
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Spacer()
+            
+            // Favorite button
+            Button(action: toggleFavorite) {
+                Image(systemName: task.isFavorite ? "star.fill" : "star")
+                    .foregroundColor(task.isFavorite ? .yellow : .gray)
+            }
+            .disabled(isUpdatingFavorite)
+            
+            // Edit/Done button
+            Button(isEditing ? String(localized: "common.done", comment: "Done button") : String(localized: "common.edit", comment: "Edit button")) {
+                if isEditing {
+                    if hasChanges {
+                        Task { await saveChanges() }
+                    } else {
+                        isEditing = false
+                    }
+                } else {
+                    startEditing()
+                }
+            }
+            .fontWeight(.medium)
+            .disabled(isUpdating)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+    }
+    
+    @ViewBuilder
+    private var contentScrollView: some View {
+        ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // TASK INFO Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        // Text("TASK INFO")
+                        Text(String(localized: "tasks.info.title", comment: "Title for task info"))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal)
+                        
+                        VStack(spacing: 0) {
+                            // Title Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 24)
+                                
+                                if isEditing {
+                                    TextField(String(localized: "tasks.placeholder.title", comment: "Task Title"), text: $editedTitle)
+                                        .textFieldStyle(.plain)
+                                        .font(.body)
+                                        .onChange(of: editedTitle) { _, _ in
+                                            hasChanges = true
+                                        }
+                                } else {
+                                    Text(task.title)
+                                        .font(.body)
+                                    Spacer()
+                                }
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // Description Row
+                            HStack(alignment: .top, spacing: 12) {
+                                Image(systemName: "text.alignleft")
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 24)
+                                
+                                if isEditing {
+                                    // TextField("Add description...", text: $editedDescription, axis: .vertical)
+                                    TextField(String(localized: "tasks.details.description.placeholder", comment: "Placeholder for adding description"), text: $editedDescription, axis: .vertical)
+                                        .textFieldStyle(.plain)
+                                        .font(.body)
+                                        .lineLimit(3...6)
+                                        .onChange(of: editedDescription) { _, _ in
+                                            hasChanges = true
+                                        }
+                                } else {
+                                    if let desc = task.description, !desc.isEmpty {
+                                        Text(desc)
+                                            .font(.body)
+                                    } else {
+                                        // Text("No description")
+                                        Text(String(localized: "tasks.details.description.none", comment: "Title for no description"))
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .padding()
+                        }
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    
+                    // SCHEDULING Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        // Text("SCHEDULING")
+                        Text(String(localized: "tasks.details.scheduling.title", comment: "Title for scheduling"))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal)
+                        
+                        VStack(spacing: 0) {
+                            // Start Date Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "play.circle")
+                                    .foregroundColor(.green)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    // Text("Start Date")
+                                    Text(String(localized: "tasks.details.dates.startDate.title", comment: "Title for start date"))
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                    
+                                    if isEditing {
+                                        HStack {
+                                            if editedStartDate != nil {
+                                                // DatePicker("Start Date", selection: Binding(
+                                                DatePicker(String(localized: "tasks.startDate", comment: "Start date picker"), selection: Binding(
+                                                    get: { editedStartDate ?? Date() },
+                                                    set: { editedStartDate = $0; hasChanges = true }
+                                                ), displayedComponents: [.date, .hourAndMinute])
+                                                .labelsHidden()
+                                                .datePickerStyle(.compact)
+                                                
+                                                // Button("Remove") {
+                                                Button(String(localized: "common.remove", comment: "Remove button")) {
+                                                    editedStartDate = nil
+                                                    hasChanges = true
+                                                }
+                                                .font(.caption)
+                                                .foregroundColor(.red)
+                                            } else {
+                                                // Button("Add Start Date") {
+                                                Button(String(localized: "tasks.details.dates.startDate.add", comment: "Add start date")) {
+                                                    editedStartDate = Date()
+                                                    hasChanges = true
+                                                }
+                                                .font(.body)
+                                            }
+                                        }
+                                    } else {
+                                        if let startDate = task.startDate {
+                                            Text(startDate, style: .date)
+                                                .font(.callout)
+                                            Text(startDate, style: .time)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        } else {
+                                            // Text("No start date")
+                                            Text(String(localized: "tasks.details.dates.startDate.none", comment: "Title for no start date"))
+                                                .font(.callout)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    }
+                                }
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // Due Date Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "calendar.badge.clock")
+                                    .foregroundColor(.orange)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    // Text("Due Date")
+                                    Text(String(localized: "tasks.details.dates.dueDate.title", comment: "Title for due date"))
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                    
+                                    if isEditing {
+                                        HStack {
+                                            if editedDueDate != nil {
+                                                DatePicker(String(localized: "tasks.detail.dueDate"), selection: Binding(
+                                                    get: { editedDueDate ?? Date() },
+                                                    set: { editedDueDate = $0; hasChanges = true }
+                                                ), displayedComponents: [.date, .hourAndMinute])
+                                                .labelsHidden()
+                                                .datePickerStyle(.compact)
+                                                
+                                                // Button("Remove") {
+                                                Button(String(localized: "common.remove", comment: "Remove button")) {
+                                                    editedDueDate = nil
+                                                    hasChanges = true
+                                                }
+                                                .font(.caption)
+                                                .foregroundColor(.red)
+                                            } else {
+                                                // Button("Add Due Date") {
+                                                Button(String(localized: "tasks.details.dates.dueDate.add", comment: "Add due date")) {
+                                                    editedDueDate = Date()
+                                                    hasChanges = true
+                                                }
+                                                .font(.body)
+                                            }
+                                        }
+                                    } else {
+                                        if let dueDate = task.dueDate {
+                                            Text(dueDate, style: .date)
+                                                .font(.callout)
+                                            Text(dueDate, style: .time)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        } else {
+                                            // Text("No due date")
+                                            Text(String(localized: "tasks.details.dates.dueDate.none", comment: "Title for no due date"))
+                                                .font(.callout)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    }
+                                }
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // End Date Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "stop.circle")
+                                    .foregroundColor(.red)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    // Text("End Date")
+                                    Text(String(localized: "tasks.details.dates.endDate.title", comment: "Title for end date"))
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                    
+                                    if isEditing {
+                                        HStack {
+                                            if editedEndDate != nil {
+                                                DatePicker(String(localized: "tasks.detail.endDate"), selection: Binding(
+                                                    get: { editedEndDate ?? Date() },
+                                                    set: { editedEndDate = $0; hasChanges = true }
+                                                ), displayedComponents: [.date, .hourAndMinute])
+                                                .labelsHidden()
+                                                .datePickerStyle(.compact)
+                                                
+                                                // Button("Remove") {
+                                                Button(String(localized: "common.remove", comment: "Remove button")) {
+                                                    editedEndDate = nil
+                                                    hasChanges = true
+                                                }
+                                                .font(.caption)
+                                                .foregroundColor(.red)
+                                            } else {
+                                                // Button("Add End Date") {
+                                                Button(String(localized: "tasks.details.dates.endDate.add", comment: "Add end date")) {
+                                                    editedEndDate = Date()
+                                                    hasChanges = true
+                                                }
+                                                .font(.body)
+                                            }
+                                        }
+                                    } else {
+                                        if let endDate = task.endDate {
+                                            Text(endDate, style: .date)
+                                                .font(.callout)
+                                            Text(endDate, style: .time)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        } else {
+                                            // Text("No end date")
+                                            Text(String(localized: "tasks.details.dates.endDate.none", comment: "Title for no end date"))
+                                                .font(.callout)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    }
+                                }
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 16)
+                            
+                            // Reminders Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "bell")
+                                    .foregroundColor(.purple)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    // Text("Reminders")
+                                    Text(String(localized: "tasks.details.reminders.title", comment: "Title for reminders"))
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                    
+                                    if let reminders = task.reminders, !reminders.isEmpty {
+                                        ForEach(reminders, id: \.id) { reminder in
+                                            Text(reminder.reminder, style: .date)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    } else {
+                                        // Text("No reminders")
+                                        Text(String(localized: "tasks.details.reminders.none", comment: "Title for no reminders"))
+                                            .font(.callout)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                                
+                                Spacer()
+                                
+                                if isEditing {
+                                    // Button("Edit") {
+                                    Button(String(localized: "common.edit", comment: "Edit button")) {
+                                        showingRemindersEditor = true
+                                    }
+                                    .font(.caption)
+                                }
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 16)
+                            
+                            // Repeat Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "repeat")
+                                    .foregroundColor(.cyan)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    // Text("Repeat")
+                                    Text(String(localized: "tasks.details.repeat.title", comment: "Title for repeat"))
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                    
+                                    if let repeatAfter = task.repeatAfter, repeatAfter > 0 {
+                                        Text("Every \(repeatAfter) \(task.repeatMode.displayName)")
+                                            .font(.callout)
+                                            .foregroundColor(.secondary)
+                                    } else {
+                                        // Text("Never")
+                                        Text(String(localized: "common.never", comment: "Title for never"))
+                                            .font(.callout)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                                
+                                Spacer()
+                                
+                                if isEditing {
+                                    // Button("Edit") {
+                                    Button(String(localized: "common.edit", comment: "Edit button")) {
+                                        showingRepeatEditor = true
+                                    }
+                                    .font(.caption)
+                                }
+                            }
+                            .padding()
+                        }
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    
+                    // ORGANIZATION Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        // Text("ORGANIZATION")
+                        Text(String(localized: "common.organization", comment: "Title for organization"))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal)
+                        
+                        VStack(spacing: 0) {
+                            // Priority Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "exclamationmark.triangle")
+                                    .foregroundColor(.orange)
+                                    .frame(width: 24)
+                                
+                                if isEditing {
+                                    // Picker("Priority", selection: $editedPriority) {
+                                    Picker(String(localized: "tasks.detail.priority.title", comment: "Priority picker"), selection: $editedPriority) {
+                                        Text(String(localized: "common.none", comment: "None priority")).tag(TaskPriority.unset)
+                                        Text(String(localized: "common.low", comment: "Low priority")).tag(TaskPriority.low)
+                                        Text(String(localized: "common.medium", comment: "Medium priority")).tag(TaskPriority.medium)
+                                        Text(String(localized: "common.high", comment: "High priority")).tag(TaskPriority.high)
+                                        Text(String(localized: "common.urgent", comment: "Urgent priority")).tag(TaskPriority.urgent)
+                                        Text(String(localized: "common.doNow", comment: "Do now priority")).tag(TaskPriority.doNow)
+                                    }
+                                    .pickerStyle(.menu)
+                                    .onChange(of: editedPriority) { _, _ in
+                                        hasChanges = true
+                                    }
+                                    Spacer()
+                                } else {
+                                    if task.priority != .unset {
+                                        HStack {
+                                            Image(systemName: task.priority.systemImage)
+                                                .foregroundColor(task.priority.color)
+                                            Text(task.priority.displayName)
+                                        }
+                                    } else {
+                                        // Text("No priority")
+                                        Text(String(localized: "tasks.details.priority.none", comment: "Title for no priority"))
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // Progress Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "chart.line.uptrend.xyaxis")
+                                    .foregroundColor(.blue)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        // Text("Progress")
+                                        Text(String(localized: "tasks.details.progress.title", comment: "Title for progress"))
+                                            .font(.body)
+                                        Spacer()
+                                        Text("\(Int(isEditing ? editedPercentDone : task.percentDone))%")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    
+                                    if isEditing {
+                                        Slider(value: $editedPercentDone, in: 0...100, step: 5)
+                                            .onChange(of: editedPercentDone) { _, _ in
+                                                hasChanges = true
+                                            }
+                                    } else {
+                                        ProgressView(value: task.percentDone, total: 100)
+                                            .tint(.blue)
+                                    }
+                                }
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // Labels Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "tag")
+                                    .foregroundColor(.orange)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        // Text("Labels")
+                                        Text(String(localized: "labels.title", comment: "Title for labels"))
+                                            .font(.body)
+                                            .fontWeight(.medium)
+                                        
+                                        Spacer()
+                                        
+                                        if isEditing {
+                                            // Button("Edit") {
+                                    Button(String(localized: "common.edit", comment: "Edit button")) {
+                                                showingLabelPicker = true
+                                            }
+                                            .font(.caption)
+                                        }
+                                    }
+                                    
+                                    if let labels = task.labels, !labels.isEmpty {
+                                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 6) {
+                                            ForEach(labels) { label in
+                                                Text(label.title)
+                                                    .font(.caption)
+                                                    .padding(.horizontal, 6)
+                                                    .padding(.vertical, 3)
+                                                    .background(label.color.opacity(0.2))
+                                                    .foregroundColor(label.color)
+                                                    .cornerRadius(6)
+                                            }
+                                        }
+                                    } else {
+                                        // Text("No labels")
+                                        Text(String(localized: "tasks.details.labels.none", comment: "Title for no labels"))
+                                            .font(.callout)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // Color Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "paintpalette")
+                                    .foregroundColor(.purple)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    // Text("Color")
+                                    Text(String(localized: "common.colour", comment: "Title for color"))
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                    
+                                    HStack {
+                                        Circle()
+                                            .fill(isEditing ? editedColor : task.color)
+                                            .frame(width: 20, height: 20)
+                                            .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 0.5))
+                                        
+                                        Text(isEditing ? String(localized: "common.custom") : String(localized: "settings.display.colours.title"))
+                                            .font(.callout)
+                                            .foregroundColor(.secondary)
+                                        
+                                        Spacer()
+                                        
+                                        if isEditing {
+                                            // Button("Edit") {
+                                    Button(String(localized: "common.edit", comment: "Edit button")) {
+                                                showingColorPicker = true
+                                            }
+                                            .font(.caption)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding()
+                            
+                            Divider().padding(.leading, 48)
+                            
+                            // Assignees Row
+                            HStack(spacing: 12) {
+                                Image(systemName: "person.2")
+                                    .foregroundColor(.green)
+                                    .frame(width: 24)
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        // Text("Assignees")
+                                        Text(String(localized: "tasks.details.assignees.title", comment: "Title for assignees"))
+                                            .font(.body)
+                                            .fontWeight(.medium)
+                                        
+                                        Spacer()
+                                        
+                                        if isEditing {
+                                            Button(String(localized: "common.add", comment: "Add")) {
+                                                showingUserSearch = true
+                                            }
+                                            .font(.caption)
+                                        }
+                                    }
+                                    
+                                    if let assignees = task.assignees, !assignees.isEmpty {
+                                        VStack(alignment: .leading, spacing: 6) {
+                                            ForEach(assignees) { assignee in
+                                                HStack(spacing: 8) {
+                                                    Image(systemName: "person.circle.fill")
+                                                        .foregroundColor(.blue)
+                                                        .font(.caption)
+                                                    
+                                                    Text(assignee.displayName)
+                                                        .font(.callout)
+                                                    
+                                                    if isEditing {
+                                                        // Button("Remove") {
+                                                Button(String(localized: "common.remove", comment: "Remove button")) {
+                                                            Task {
+                                                                await removeAssignee(userId: assignee.id)
+                                                            }
+                                                        }
+                                                        .font(.caption2)
+                                                        .foregroundColor(.red)
+                                                    }
+                                                    
+                                                    Spacer()
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // Text("No assignees")
+                                        Text(String(localized: "tasks.details.assignees.none", comment: "Title for no assignees"))
+                                            .font(.callout)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                            }
+                            .padding()
+                        }
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    
+                    // Action Buttons Section
+                    VStack(spacing: 12) {
+                        // Related Tasks Button
+                        Button {
+                            showingRelatedTasks = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "link")
+                                    .foregroundColor(.blue)
+                                // Text("Related Tasks")
+                                Text(String(localized: "tasks.details.relatedTasks.title", comment: "Title for related tasks"))
+                                    .font(.body)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(12)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        // Comments Button
+                        Button {
+                            showingComments = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "text.bubble")
+                                    .foregroundColor(.green)
+                                // Text("Comments")
+                                Text(String(localized: "comments.title", comment: "Title for comments"))
+                                    .font(.body)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(12)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    
+                    Spacer(minLength: 50)
+                }
+                .padding()
+        }
+    }
+    
+    @ViewBuilder
+    private var bottomToolbar: some View {
+        if isEditing {
+            Divider()
+            HStack {
+                // Button("Cancel") {
+                Button(String(localized: "common.cancel", comment: "Cancel button")) {
+                    cancelEditing()
+                }
+                .buttonStyle(.bordered)
+                .disabled(isUpdating)
+                
+                Spacer()
+                
+                Button {
+                    Task { await saveChanges() }
+                } label: {
+                    if isUpdating {
+                        HStack {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                            // Text("Saving...")
+                            Text(String(localized: "common.saving", comment: "Label shown when saving"))
+                        }
+                    } else {
+                        // Text("Save Changes")
+                        Text(String(localized: "common.saveChanges", comment: "Title for save changes"))
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!hasChanges || isUpdating)
+            }
+            .padding()
+            .background(Color(.systemBackground))
         }
     }
     
@@ -1560,12 +1625,13 @@ struct TaskDetailViewInner: View {
             VStack(alignment: .leading, spacing: 16) {
                 if isLoadingLabels {
                     VStack {
-                        ProgressView("Loading labels...")
+                        ProgressView(String(localized: "labels.loading", comment: "Loading labels..."))
                         Spacer()
                     }
                 } else if availableLabels.isEmpty {
                     VStack {
-                        Text("No labels available")
+                        // Text("No labels available")
+                        Text(String(localized: "labels.none.available", comment: "Title for no labels available"))
                             .foregroundColor(.secondary)
                         Spacer()
                     }
@@ -1602,11 +1668,13 @@ struct TaskDetailViewInner: View {
                     }
                 }
             }
-            .navigationTitle("Select Labels")
+            // .navigationTitle("Select Labels")
+            .navigationTitle(String(localized: "tasks.labels.select", comment: "Select labels navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         showingLabelPicker = false
                     }
                 }
@@ -1625,11 +1693,12 @@ struct TaskDetailViewInner: View {
                 }
                 .padding()
             }
-            .navigationTitle("Task Color")
+            .navigationTitle(String(localized: "settings.display.colours.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         showingColorPicker = false
                     }
                 }
@@ -1640,7 +1709,8 @@ struct TaskDetailViewInner: View {
     @ViewBuilder
     private var colorPreviewSection: some View {
         VStack(spacing: 8) {
-            Text("Current Color")
+            // Text("Current Color")
+            Text(String(localized: "common.colour.current", comment: "Title for current colour"))
                 .font(.headline)
             
             Circle()
@@ -1653,7 +1723,8 @@ struct TaskDetailViewInner: View {
     
     @ViewBuilder 
     private var colorPickerSection: some View {
-        ColorPicker("Select Color", selection: $editedColor, supportsOpacity: false)
+        // ColorPicker("Select Color", selection: $editedColor, supportsOpacity: false)
+        ColorPicker(String(localized: "tasks.colour.select", comment: "Select colour picker"), selection: $editedColor, supportsOpacity: false)
             .labelsHidden()
             .onChange(of: editedColor) { _, _ in
                 hasChanges = true
@@ -1663,7 +1734,7 @@ struct TaskDetailViewInner: View {
     @ViewBuilder
     private var presetColorsSection: some View {
         VStack(spacing: 16) {
-            Text("Preset Colors")
+            Text(String(localized: "common.colours.preset", comment: "Title for preset colours"))
                 .font(.headline)
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 16) {
@@ -1688,7 +1759,8 @@ struct TaskDetailViewInner: View {
             VStack {
                 if let reminders = task.reminders, !reminders.isEmpty {
                     List {
-                        Section("Current Reminders") {
+//                        Section("Current Reminders") {
+                        Section(String(localized: "common.reminders.current", comment: "Remove button")) {
                             ForEach(reminders, id: \.id) { reminder in
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
@@ -1701,7 +1773,8 @@ struct TaskDetailViewInner: View {
                                     
                                     Spacer()
                                     
-                                    Button("Remove") {
+                                    // Button("Remove") {
+                                    Button(String(localized: "common.remove", comment: "Remove button")) {
                                         if let reminderId = reminder.id {
                                             Task {
                                                 await removeReminder(reminderId: reminderId)
@@ -1721,11 +1794,13 @@ struct TaskDetailViewInner: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        Text("No Reminders Set")
+                        // Text("No Reminders Set")
+                        Text(String(localized: "tasks.details.reminders.none.set", comment: "Title for no reminders set"))
                             .font(.title3)
                             .fontWeight(.semibold)
                         
-                        Text("Add reminders to get notified about this task")
+                        // Text("Add reminders to get notified about this task")
+                        Text(String(localized: "tasks.details.reminders.description", comment: "Title for add reminders to get notified about this task"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -1738,15 +1813,18 @@ struct TaskDetailViewInner: View {
                     Divider()
                     
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Add New Reminder")
+                        // Text("Add New Reminder")
+                        Text(String(localized: "tasks.details.reminders.addNew", comment: "Title for add new reminder"))
                             .font(.headline)
                         
-                        DatePicker("Reminder Date", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                        // DatePicker("Reminder Date", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                        DatePicker(String(localized: "tasks.reminder.date", comment: "Reminder date picker"), selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
                             .labelsHidden()
                             .datePickerStyle(.wheel)
                     }
                     
-                    Button("Add Reminder") {
+                    // Button("Add Reminder") {
+                    Button(String(localized: "tasks.details.reminders.add", comment: "Add reminder button")) {
                         Task {
                             await addReminder(date: newReminderDate)
                         }
@@ -1757,11 +1835,13 @@ struct TaskDetailViewInner: View {
                 .padding()
                 .background(Color(.systemGroupedBackground))
             }
-            .navigationTitle("Reminders")
+            // .navigationTitle("Reminders")
+            .navigationTitle(String(localized: "tasks.reminders.title", comment: "Reminders navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         showingRemindersEditor = false
                     }
                 }
@@ -1774,7 +1854,7 @@ struct TaskDetailViewInner: View {
         NavigationStack {
             Form {
                 Section {
-                    Toggle("Enable Repeat", isOn: Binding(
+                    Toggle(String(localized: "common.enableRepeat"), isOn: Binding(
                         get: { editedRepeatAfter > 0 },
                         set: { enabled in
                             if enabled {
@@ -1786,18 +1866,23 @@ struct TaskDetailViewInner: View {
                         }
                     ))
                 } header: {
-                    Text("Repeat Task")
+                    // Text("Repeat Task")
+                    Text(String(localized: "tasks.details.repeat.task", comment: "Title for repeat task"))
                 } footer: {
                     if editedRepeatAfter > 0 {
-                        Text("This task will repeat \(formatRepeatDescription())")
+                        Text("tasks.repeat.description \(formatRepeatDescription())",
+                             comment: "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'")
                     } else {
-                        Text("Task will not repeat")
+                        // Text("Task will not repeat")
+                        Text(String(localized: "tasks.details.repeat.none", comment: "Title for task will not repeat"))
                     }
                 }
                 
                 if editedRepeatAfter > 0 {
-                    Section("Repeat Mode") {
-                        Picker("Mode", selection: $editedRepeatMode) {
+                    // Section("Repeat Mode") {
+                    Section(String(localized: "tasks.repeat.mode.section", comment: "Repeat mode section")) {
+                        // Picker("Mode", selection: $editedRepeatMode) {
+                        Picker(String(localized: "common.mode", comment: "Mode label"), selection: $editedRepeatMode) {
                             ForEach(RepeatMode.allCases) { mode in
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(mode.displayName)
@@ -1816,9 +1901,11 @@ struct TaskDetailViewInner: View {
                     }
                     
                     if editedRepeatMode == .afterAmount {
-                        Section("Repeat Interval") {
+                        // Section("Repeat Interval") {
+                        Section(String(localized: "tasks.repeat.interval", comment: "Repeat interval section")) {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Repeat every:")
+                                // Text("Repeat every:")
+                                Text(String(localized: "tasks.details.repeat.every", comment: "Label for repeat every"))
                                     .font(.headline)
                                 
                                 // Time unit picker
@@ -1835,16 +1922,21 @@ struct TaskDetailViewInner: View {
                                             .fontWeight(.semibold)
                                     }
                                     
-                                    Picker("Unit", selection: Binding(
+                                    Picker(String(localized: "tasks.repeat.unit", comment: "Unit"), selection: Binding(
                                         get: { getRepeatUnit() },
                                         set: { unit in
                                             setRepeatUnit(unit)
                                             hasChanges = true
                                         }
                                     )) {
-                                        Text("Days").tag("days")
-                                        Text("Weeks").tag("weeks") 
-                                        Text("Months").tag("months")
+                                        // Text("Days").tag("days")
+                                        Text(String(localized: "common.time.days", comment: "Title for days")).tag("days")
+                                        // Text("Weeks").tag("weeks") 
+                                        Text(String(localized: "common.time.weeks", comment: "Title for weeks")).tag("weeks")
+                                        // Text("Months").tag("months")
+                                        Text(String(localized: "common.time.months", comment: "Title for months")).tag("months")
+                                        // Text("Years").tag("years")
+                                        Text(String(localized: "common.time.years", comment: "Title for years")).tag("years")
                                     }
                                     .pickerStyle(.segmented)
                                 }
@@ -1854,11 +1946,13 @@ struct TaskDetailViewInner: View {
                     }
                 }
             }
-            .navigationTitle("Repeat Settings")
+            // .navigationTitle("Repeat Settings")
+            .navigationTitle(String(localized: "tasks.repeat.settings", comment: "Repeat settings navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    // Button("Cancel") {
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         // Reset to original values
                         editedRepeatAfter = task.repeatAfter ?? 0
                         editedRepeatMode = task.repeatMode
@@ -1867,7 +1961,8 @@ struct TaskDetailViewInner: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    // Button("Done") {
+                    Button(String(localized: "common.done", comment: "Done button")) {
                         showingRepeatEditor = false
                     }
                     .fontWeight(.semibold)
@@ -1898,7 +1993,8 @@ struct CommentsContentView: View {
                 VStack(spacing: 16) {
                     ProgressView()
                         .scaleEffect(1.2)
-                    Text("Loading comments...")
+                    // Text("Loading comments...")
+                    Text(String(localized: "comments.loading", comment: "Label shown when loading comments"))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -1911,12 +2007,14 @@ struct CommentsContentView: View {
             // Add comment section
             addCommentSection
         }
-        .navigationTitle("Comments")
+        // .navigationTitle("Comments")
+        .navigationTitle(String(localized: "comments.title", comment: "Comments navigation title"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button("Done") {
+                // Button("Done") {
+                Button(String(localized: "common.done", comment: "Done button")) {
                     dismiss()
                 }
             }
@@ -1924,8 +2022,9 @@ struct CommentsContentView: View {
         .onAppear {
             loadComments()
         }
-        .alert("Error", isPresented: .constant(error != nil)) {
-            Button("OK") { error = nil }
+        .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
+            // Button("OK") {
+            Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
         } message: {
             if let error { Text(error) }
         }
@@ -1939,10 +2038,12 @@ struct CommentsContentView: View {
                 .font(.system(size: 48))
                 .foregroundColor(.secondary)
             
-            Text("No comments yet")
+            // Text("No comments yet")
+            Text(String(localized: "comments.empty.title", comment: "Title shown when there are no comments"))
                 .font(.headline)
             
-            Text("Be the first to add a comment to this task")
+            // Text("Be the first to add a comment to this task")
+            Text(String(localized: "comments.empty.action", comment: "Title shown when there are no comments"))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
@@ -1990,7 +2091,8 @@ struct CommentsContentView: View {
             Divider()
             
             HStack(alignment: .top, spacing: 12) {
-                TextField("Add a comment...", text: $newCommentText, axis: .vertical)
+                // TextField("Add a comment...", text: $newCommentText, axis: .vertical)
+                TextField(String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .lineLimit(1...6)
                 

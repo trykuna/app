@@ -14,17 +14,19 @@ struct AnalyticsConsentSheet: View {
                     .foregroundColor(.accentColor)
                     .padding(.top, 8)
 
-                Text("Anonymous Analytics")
+                // Text("Anonymous Analytics")
+                Text(String(localized: "onboarding.analytics_consent.title", comment: "Title for analytics consent sheet"))
                     .font(.title2).bold()
 
-                Text("We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features.")
+                // Text("We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features.")
+                Text(String(localized: "onboarding.analytics_consent.text", comment: "Text for analytics consent sheet"))
                     .font(.body)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 
                 HStack(spacing: 16) {
                     Button(action: { openPrivacy() }) {
-                        SwiftUI.Label("Privacy Policy", systemImage: "doc.text.magnifyingglass")
+                        SwiftUI.Label(String(localized: "common.privacyPolicy", comment: "Privacy Policy"), systemImage: "doc.text.magnifyingglass")
                     }
                     .buttonStyle(.bordered)
                 }
@@ -34,12 +36,12 @@ struct AnalyticsConsentSheet: View {
 
                 VStack(spacing: 10) {
                     Button(action: allow) {
-                        Text("Allow Anonymous Analytics").frame(maxWidth: .infinity)
+                        Text(String(localized: "onboarding.analytics_consent.allow_button", comment: "Button for allowing analytics")).frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
 
                     Button(role: .cancel, action: deny) {
-                        Text("No Thanks").frame(maxWidth: .infinity)
+                        Text(String(localized: "onboarding.analytics_consent.deny_button", comment: "Button for denying analytics")).frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
                 }
@@ -47,7 +49,8 @@ struct AnalyticsConsentSheet: View {
                 .padding(.bottom)
             }
             .padding()
-            .navigationTitle("Help Improve Kuna")
+            // .navigationTitle("Help Improve Kuna")
+            .navigationTitle(String(localized: "onboarding.analytics_consent.title", comment: "Title for analytics consent sheet"))
             .navigationBarTitleDisplayMode(.inline)
         }
     }

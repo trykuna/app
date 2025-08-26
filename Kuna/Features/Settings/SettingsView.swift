@@ -41,11 +41,12 @@ struct SettingsView: View {
                 accountSection
             }
         }
-        .navigationTitle("Settings")
+        .navigationTitle(String(localized: "settings.title", comment: "Title for settings"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Done") { dismiss() }
+                // Button("Done") { dismiss() }
+                Button(String(localized: "common.done", comment: "Done button")) { dismiss() }
             }
         }
         .sheet(isPresented: $showingAppIcons) { AppIconView() }
@@ -67,15 +68,17 @@ struct SettingsView: View {
     
     @ViewBuilder
     private var privacySection: some View {
-        Section(header: Text("Privacy")) {
+        // Section(header: Text("Privacy")) {
+        Section(header: Text(String(localized: "settings.privacy.header", comment: "Privacy section header"))) {
             Toggle(isOn: analyticsBinding) {
                 HStack {
                     Image(systemName: "chart.bar.doc.horizontal")
                         .foregroundColor(.purple).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Anonymous Analytics").font(.body)
-                        Text("Help improve the app by sending anonymous usage data")
-                            .font(.caption).foregroundColor(.secondary)
+                        // Text("Anonymous Analytics").font(.body)
+                        Text(String(localized: "settings.privacy.analytics.title", comment: "Title for anonymous analytics")).font(.body)
+                        // Text("Help improve the app by sending anonymous usage data")
+                        Text(String(localized: "settings.privacy.analytics.subtitle", comment: "Title for help improve the app by sending anonymous usage data"))
                     }
                 }
             }
@@ -90,15 +93,21 @@ struct SettingsView: View {
                     Image(systemName: "eye")
                         .foregroundColor(.blue).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Display Options").font(.body)
-                        Text("Customize what appears on task lists")
+                        // Text("Display Options").font(.body)
+                        Text(String(localized: "settings.display.title", comment: "Title for display options")).font(.body)
+                        // Text("Customize what appears on task lists")
+                        Text(String(localized: "settings.display.subtitle", comment: "Title for customize what appears on task lists"))
                             .font(.caption).foregroundColor(.secondary)
                     }
                     Spacer()
                 }
             }
-        } header: { Text("Display Options") } footer: {
-            Text("Control which elements are displayed in task lists. Changes apply to all task views.")
+        } header: { 
+            // Text("Display Options")
+            Text(String(localized: "settings.display.title", comment: "Display options settings header"))
+        } footer: {
+            // Text("Control which elements are displayed in task lists. Changes apply to all task views.")
+            Text(String(localized: "settings.display.footer", comment: "Title for control which elements are displayed in task lists changes apply to all task views"))
         }
     }
     
@@ -111,7 +120,8 @@ struct SettingsView: View {
                         .frame(width: 24, height: 24)
                         .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("App Icon").font(.body)
+                        // Text("App Icon").font(.body)
+                        Text(String(localized: "settings.appearance.appIcon.title", comment: "Title for app icon")).font(.body)
                         Text(iconManager.currentIcon.displayName)
                             .font(.caption).foregroundColor(.secondary)
                     }
@@ -121,7 +131,10 @@ struct SettingsView: View {
                         .font(.caption)
                 }
             }
-        } header: { Text("Appearance") }
+        } header: { 
+            // Text("Appearance")
+            Text(String(localized: "settings.appearance.title", comment: "Settings section header for appearance"))
+        }
     }
     
     @ViewBuilder
@@ -131,8 +144,10 @@ struct SettingsView: View {
                 Image(systemName: "arrow.up.arrow.down")
                     .foregroundColor(.orange).font(.body)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Default Sort Order").font(.body)
-                    Text("How tasks are sorted when you open a project")
+                    // Text("Default Sort Order").font(.body)
+                    Text(String(localized: "settings.taskList.sortOrder.title", comment: "Title for default sort order")).font(.body)
+                    // Text("How tasks are sorted when you open a project")
+                    Text(String(localized: "settings.taskList.sortOrder.subtitle", comment: "Title for how tasks are sorted when you open a project"))
                         .font(.caption).foregroundColor(.secondary)
                 }
                 Spacer()
@@ -143,7 +158,7 @@ struct SettingsView: View {
                 }
                 .pickerStyle(.menu)
             }
-        } header: { Text("Task List") }
+        } header: { Text(String(localized: "tasks.list.title", comment: "Task List")) }
     }
     
     @ViewBuilder
@@ -154,16 +169,18 @@ struct SettingsView: View {
                     Image(systemName: "calendar.badge.plus")
                         .foregroundColor(.green).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Calendar Sync").font(.body).foregroundColor(.primary)
+                        // Text("Calendar Sync").font(.body).foregroundColor(.primary)
+                        Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar sync")).font(.body).foregroundColor(.primary)
                         Text(settings.calendarSyncPrefs.isEnabled ? 
                              "\(settings.calendarSyncPrefs.mode.displayName) • \(settings.calendarSyncPrefs.selectedProjectIDs.count) projects" :
-                             "Sync tasks with your calendar app")
+                             String(localized: "settings.calendarSync.description", comment: "Calendar sync description"))
                             .font(.caption).foregroundColor(.secondary)
                     }
                     Spacer()
                     HStack(spacing: 4) {
                         if settings.calendarSyncPrefs.isEnabled {
-                            Text("Enabled")
+                            // Text("Enabled")
+                            Text(String(localized: "settings.calendarSync.enabled.title", comment: "Title for enabled"))
                                 .font(.caption)
                                 .foregroundColor(.green)
                         }
@@ -175,9 +192,11 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
         } header: { 
-            Text("Calendar Integration") 
+            // Text("Calendar Integration")
+            Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar integration")) 
         } footer: {
-            Text("Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones.")
+            // Text("Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones.")
+            Text(String(localized: "settings.calendarSync.footer", comment: "Title for safely sync your tasks with calendar apps kuna creates its own calendars and never touches your existing ones"))
         }
     }
     
@@ -187,11 +206,13 @@ struct SettingsView: View {
             HStack(spacing: 12) {
                 LeadingIcon(systemName: "server.rack", color: .green)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Server").font(.body)
+                    // Text("Server").font(.body)
+                    Text(String(localized: "settings.connection.server.title", comment: "Title for server")).font(.body)
                     if let serverURL = Keychain.readServerURL() {
                         Text(serverURL).font(.caption).foregroundColor(.secondary).lineLimit(1)
                     } else {
-                        Text("No server configured")
+                        // Text("No server configured")
+                        Text(String(localized: "settings.connection.server.noServer.title", comment: "Title for no server configured"))
                             .font(.caption).foregroundColor(.secondary).italic()
                     }
                 }
@@ -206,8 +227,10 @@ struct SettingsView: View {
                     LeadingIcon(systemName: appState.canManageUsers ? "person.2.fill" : "person.2.slash",
                                 color: appState.canManageUsers ? .blue : .orange)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("User Management").font(.body)
-                        Text(appState.canManageUsers ? "Available" : "Requires username/password login")
+                        // Text("User Management").font(.body)
+                        Text(String(localized: "settings.connection.userManagement.title", comment: "Title for user management")).font(.body)
+                        // Text(appState.canManageUsers ? "Available" : "Requires username/password login")
+                        Text(String(localized: "settings.connection.userManagement.subtitle", comment: "Subtitle for user management"))
                             .font(.caption).foregroundColor(.secondary)
                     }
                     Spacer()
@@ -222,11 +245,14 @@ struct SettingsView: View {
                             Image(systemName: "lightbulb")
                                 .foregroundColor(.orange).font(.caption).padding(.top, 1)
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Why is user management limited?")
+                                // Text("Why is user management limited?")
+                                Text(String(localized: "settings.connection.userManagement.limited.title", comment: "Title for why is user management limited"))
                                     .font(.caption).fontWeight(.medium)
-                                Text("The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication.")
+                                // Text("The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication.")
+                                Text(String(localized: "settings.connection.userManagement.limited.text", comment: "Text for why is user management limited"))
                                     .font(.caption2).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true)
-                                Text("You can still create and manage your personal tasks with full functionality.")
+                                // Text("You can still create and manage your personal tasks with full functionality.")
+                                Text(String(localized: "settings.connection.userManagement.limited.text2", comment: "Text for why is user management limited"))
                                     .font(.caption2).foregroundColor(.secondary).fontWeight(.medium).padding(.top, 2)
                                 Button(action: {
                                     appState.logout()
@@ -234,7 +260,8 @@ struct SettingsView: View {
                                 }) {
                                     HStack(spacing: 4) {
                                         Image(systemName: "arrow.right.circle")
-                                        Text("Switch to Username/Password Login")
+                                        // Text("Switch to Username/Password Login")
+                                        Text(String(localized: "settings.connection.userManagement.switchToUsernamePassword.title", comment: "Title for switch to username/password login"))
                                     }
                                     .font(.caption).fontWeight(.medium)
                                 }
@@ -251,7 +278,8 @@ struct SettingsView: View {
             HStack(spacing: 12) {
                 LeadingIcon(systemName: appState.authenticationMethod?.systemImage ?? "questionmark.circle", color: .blue)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Authentication Method").font(.body)
+                    // Text("Authentication Method").font(.body)
+                    Text(String(localized: "settings.connection.authMethod.title", comment: "Title for authentication method")).font(.body)
                     HStack(spacing: 4) {
                         Text(appState.authenticationMethod?.description ?? "Unknown method")
                         if let method = appState.authenticationMethod {
@@ -272,13 +300,15 @@ struct SettingsView: View {
                 HStack(spacing: 12) {
                     LeadingIcon(systemName: "clock", color: .orange)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Token Expiration").font(.body)
+                        // Text("No server configured").font(.body)
+                        Text(String(localized: "settings.connection.tokenExpiration.title", comment: "Title for token expiration")).font(.body)
                         let t = expirationDate.timeIntervalSinceNow
                         if t > 0 {
-                            Text("Expires in \(t.formattedDuration)")
+                            Text("settings.view.token.expiresIn \(t.formattedDuration)",
+                                 comment: "Label in Settings showing when the JWT token expires. Placeholder is the formatted duration (e.g. '5 minutes')")
                                 .font(.caption).foregroundColor(.secondary)
                         } else {
-                            Text("Token expired").font(.caption).foregroundColor(.red)
+                            Text(String(localized: "settings.auth.token.expired", comment: "Token expired")).font(.caption).foregroundColor(.red)
                         }
                     }
                     Spacer()
@@ -290,7 +320,10 @@ struct SettingsView: View {
                     StatusIcon(systemName: status.0, color: status.1)
                 }
             }
-        } header: { Text("Connection") }
+        } header: { 
+            // Text("Connection")
+            Text(String(localized: "settings.connection.header", comment: "Connection settings header"))
+        }
     }
     
     @ViewBuilder
@@ -300,20 +333,24 @@ struct SettingsView: View {
                 HStack {
                     Image(systemName: "info.circle")
                         .foregroundColor(.blue).font(.body)
-                    Text("About").font(.body)
+                    Text(String(localized: "common.about", comment: "About")).font(.body)
                 }
             }
-        } header: { Text("Information") }
+        // } header: { Text("Information") }
+        } header: { Text(String(localized: "settings.information.header", comment: "Information section header")) }
     }
     
     @ViewBuilder
     private var accountSection: some View {
         Section {
-            Button("Sign Out", role: .destructive) {
+            // TODO: Localize
+            Button(String(localized: "common.signOut", comment: "Sign Out"), role: .destructive) {
                 appState.logout()
                 dismiss()
             }
-        } header: { Text("Account") }
+        } header: {
+            Text(String(localized: "common.account", comment: "Account"))
+        }
     }
     
     // MARK: - Helpers
@@ -399,7 +436,8 @@ private struct PreviewTaskRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
-                    Text("Sample task title")
+                    // Text("Sample task title")
+                    Text(String(localized: "tasks.sample.title", comment: "Title for sample task"))
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                     if settings.showPriorityIndicators {
@@ -414,7 +452,8 @@ private struct PreviewTaskRow: View {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
                         .font(.caption)
-                    Text("Today, 12:00")
+                    // Text("Today, 12:00")
+                    Text(String(localized: "common.time.today1200", comment: "Title for today 12 00"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -428,7 +467,7 @@ private struct PreviewTaskRow: View {
                             Image(systemName: "bubble.left.and.bubble.right")
                                 .foregroundColor(.secondary)
                                 .font(.caption)
-                            Text("3")
+                            Text(verbatim: "3")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

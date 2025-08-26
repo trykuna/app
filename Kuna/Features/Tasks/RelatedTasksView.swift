@@ -21,11 +21,13 @@ struct RelatedTasksView: View {
                 content
                 addBar
             }
-            .navigationTitle("Related Tasks")
+            // .navigationTitle("Related Tasks")
+            .navigationTitle(String(localized: "tasks.related.title", comment: "Related tasks navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") { dismiss() }
+                    // Button("Done") { dismiss() }
+                    Button(String(localized: "common.done", comment: "Done button")) { dismiss() }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { Task { await refresh() } } label: {
@@ -38,8 +40,9 @@ struct RelatedTasksView: View {
             }
         }
         .onAppear { Task { await refresh() } }
-        .alert("Error", isPresented: .constant(error != nil)) {
-            Button("OK") { error = nil }
+        .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
+            // Button("OK") { error = nil }
+            Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
         } message: { Text(error ?? "") }
     }
 
@@ -49,15 +52,16 @@ struct RelatedTasksView: View {
         if isRefreshing && relations.isEmpty {
             VStack(spacing: 16) {
                 ProgressView().scaleEffect(1.2)
-                Text("Loading related tasks...").foregroundColor(.secondary)
+                Text(String(localized: "tasks.related.loading", comment: "Loading related tasks...")).foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if relations.isEmpty {
             VStack(spacing: 20) {
                 Spacer()
                 Image(systemName: "link").font(.system(size: 48)).foregroundColor(.secondary)
-                Text("No Related Tasks").font(.title3).fontWeight(.semibold)
-                Text("Use the picker below to relate another task.")
+                // Text("No Related Tasks").font(.title3).fontWeight(.semibold)
+                Text(String(localized: "tasks.related.none.title", comment: "No related tasks title")).font(.title3).fontWeight(.semibold)
+                Text(String(localized: "tasks.related.none.subtitle", comment: "Use the picker below to relate another task."))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
@@ -110,7 +114,8 @@ struct RelatedTasksView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 8) {
-                Picker("Kind", selection: $selectedKind) {
+                // Picker("Kind", selection: $selectedKind) {
+                Picker(String(localized: "tasks.relation.kind", comment: "Relation kind picker"), selection: $selectedKind) {
                     ForEach(TaskRelationKind.allCases.filter { $0 != .unknown }, id: \.self) { kind in
                         Text(kind.displayName).tag(kind)
                     }
@@ -120,7 +125,11 @@ struct RelatedTasksView: View {
                 Button {
                     showingPicker = true
                 } label: {
-                    HStack(spacing: 6) { Image(systemName: "text.magnifyingglass"); Text("Pick Task") }
+                    HStack(spacing: 6) { 
+                        Image(systemName: "text.magnifyingglass")
+                        // Text("Pick Task")
+                        Text(String(localized: "tasks.picker.title", comment: "Pick task button"))
+                    }
                 }
                 .buttonStyle(.bordered)
                 .sheet(isPresented: $showingPicker) {

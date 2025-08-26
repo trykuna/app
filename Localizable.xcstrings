@@ -1,0 +1,4540 @@
+{
+  "sourceLanguage" : "en-GB",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "%lld" : {
+      "shouldTranslate" : false
+    },
+    "%lld calendars" : {
+      "localizations" : {
+        "en-GB" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld calendar"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld calendars"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+      "shouldTranslate" : false
+    },
+    "about.framework.foundation" : {
+      "comment" : "Foundation framework description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foundation — Core system services"
+          }
+        }
+      }
+    },
+    "about.framework.keychain" : {
+      "comment" : "Keychain services description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain Services — Secure credential storage"
+          }
+        }
+      }
+    },
+    "about.framework.swiftui" : {
+      "comment" : "SwiftUI framework description",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SwiftUI — Apple's native UI framework"
+          }
+        }
+      }
+    },
+    "about.privacyPolicy" : {
+      "comment" : "Privacy policy link",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        }
+      }
+    },
+    "about.specialThanks.message" : {
+      "comment" : "Special thanks message from the developer",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.\n\nBig thanks to ChatGPT for UI mockups and keeping things iOS‑native (and steering me away from \"1998 shareware\" vibes).\n\nAnd thanks to everyone who tested builds, gave feedback, and proved task apps can be fun. You're the real MVPs."
+          }
+        }
+      }
+    },
+    "about.specialThanks.title" : {
+      "comment" : "Special Thanks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Special Thanks"
+          }
+        }
+      }
+    },
+    "add.title %@" : {
+      "comment" : "Button label to add an item with the given title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add %@"
+          }
+        }
+      }
+    },
+    "attachment.none" : {
+      "comment" : "Text shown when a task has no attachments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No attachments"
+          }
+        }
+      }
+    },
+    "auth.loggingIn" : {
+      "comment" : "Logging in button text",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logging In..."
+          }
+        }
+      }
+    },
+    "auth.logIn" : {
+      "comment" : "Log in button text",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log In"
+          }
+        }
+      }
+    },
+    "auth.login.api_token" : {
+      "comment" : "Explains what an API token allows",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions."
+          }
+        }
+      }
+    },
+    "auth.login.api_token_creation" : {
+      "comment" : "Explains how to create a API Token in Vikunja",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token."
+          }
+        }
+      }
+    },
+    "auth.login.apiToken.placeholder" : {
+      "comment" : "Placeholder for API token field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API Token"
+          }
+        }
+      }
+    },
+    "auth.login.serverUrl.help.text" : {
+      "comment" : "Text for server URL help sheet",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your server address — you don’t need to add `/api/v1`; the app will do that for you."
+          }
+        }
+      }
+    },
+    "auth.login.serverUrl.help.title" : {
+      "comment" : "Title for server URL help sheet",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server URL Help"
+          }
+        }
+      }
+    },
+    "auth.login.totp" : {
+      "comment" : "Explains how to enter a two-factor code",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials."
+          }
+        }
+      }
+    },
+    "auth.login.username_password" : {
+      "comment" : "Explains what a username and password allows",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Username & Password**: Full access to all features including user management and task assignment."
+          }
+        }
+      }
+    },
+    "auth.loginMethod" : {
+      "comment" : "Login method picker",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Method"
+          }
+        }
+      }
+    },
+    "auth.password" : {
+      "comment" : "Password field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
+          }
+        }
+      }
+    },
+    "auth.personalApiToken" : {
+      "comment" : "Personal API token section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal API Token"
+          }
+        }
+      }
+    },
+    "auth.server" : {
+      "comment" : "Server field label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server"
+          }
+        }
+      }
+    },
+    "auth.totp.auto_submit" : {
+      "comment" : "Label explaining that the code will be submitted automatically",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The code will be submitted automatically when complete"
+          }
+        }
+      }
+    },
+    "auth.totp.subtitle" : {
+      "comment" : "Subtitle for two-factor authentication view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the 6-digit code from your authenticator app"
+          }
+        }
+      }
+    },
+    "auth.totp.title" : {
+      "comment" : "Title for two-factor authentication view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Two-Factor Authentication"
+          }
+        }
+      }
+    },
+    "auth.totp.verifyCode" : {
+      "comment" : "Verify code button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verify Code"
+          }
+        }
+      }
+    },
+    "auth.totp.verifying" : {
+      "comment" : "Label shown when verifying two-factor code",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifying"
+          }
+        }
+      }
+    },
+    "auth.username" : {
+      "comment" : "Username",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Username"
+          }
+        }
+      }
+    },
+    "auth.usernamePassword" : {
+      "comment" : "Username & Password",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Username & Password"
+          }
+        }
+      }
+    },
+    "auth.useToken" : {
+      "comment" : "Use Token",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Token"
+          }
+        }
+      }
+    },
+    "auth.verification" : {
+      "comment" : "Verification",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verification"
+          }
+        }
+      }
+    },
+    "calendar.sync.switch %@" : {
+      "comment" : "Confirmation prompt when switching to a new calendar for sync. Placeholder is the new calendar’s title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch to '%@' for future syncs? Existing events will remain in the current calendar."
+          }
+        }
+      }
+    },
+    "comments.add.placeholder" : {
+      "comment" : "Placeholder for adding a comment",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a comment..."
+          }
+        }
+      }
+    },
+    "comments.delete.confirmation" : {
+      "comment" : "Title for are you sure you want to delete this comment",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete this comment?"
+          }
+        }
+      }
+    },
+    "comments.delete.title" : {
+      "comment" : "Delete comment dialog title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Comment"
+          }
+        }
+      }
+    },
+    "comments.empty.action" : {
+      "comment" : "Title shown when there are no comments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Be the first to add a comment to this task"
+          }
+        }
+      }
+    },
+    "comments.empty.subtitle" : {
+      "comment" : "Title shown when there are no comments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start the conversation by adding the first comment."
+          }
+        }
+      }
+    },
+    "comments.empty.title" : {
+      "comment" : "Title shown when there are no comments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Comments Yet"
+          }
+        }
+      }
+    },
+    "comments.loading" : {
+      "comment" : "Label shown when loading comments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading comments"
+          }
+        }
+      }
+    },
+    "comments.title" : {
+      "comment" : "Comments navigation title\nTitle for comments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comments"
+          }
+        }
+      }
+    },
+    "common.about" : {
+      "comment" : "About",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "common.account" : {
+      "comment" : "Account",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
+          }
+        }
+      }
+    },
+    "common.add" : {
+      "comment" : "Add",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
+    },
+    "common.apply" : {
+      "comment" : "Apply button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply"
+          }
+        }
+      }
+    },
+    "common.back" : {
+      "comment" : "Back button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
+    },
+    "common.calendar" : {
+      "comment" : "Calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar"
+          }
+        }
+      }
+    },
+    "common.cancel" : {
+      "comment" : "Cancel button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "common.close" : {
+      "comment" : "Close button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
+    },
+    "common.colour" : {
+      "comment" : "Label for colour picker\nTitle for color\nTitle for colour",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colour"
+          }
+        }
+      }
+    },
+    "common.colour.current" : {
+      "comment" : "Title for current colour",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Colour"
+          }
+        }
+      }
+    },
+    "common.colours.preset" : {
+      "comment" : "Title for preset colours",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preset Colours"
+          }
+        }
+      }
+    },
+    "common.configuration" : {
+      "comment" : "Configuration",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration"
+          }
+        }
+      }
+    },
+    "common.continue" : {
+      "comment" : "Continue button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "common.create" : {
+      "comment" : "Create button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        }
+      }
+    },
+    "common.creating" : {
+      "comment" : "Creating...",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating..."
+          }
+        }
+      }
+    },
+    "common.custom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom"
+          }
+        }
+      }
+    },
+    "common.date" : {
+      "comment" : "Date label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
+    },
+    "common.dateAndTime" : {
+      "comment" : "Date and time label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date & Time"
+          }
+        }
+      }
+    },
+    "common.debugInfo" : {
+      "comment" : "Debug info",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug Info"
+          }
+        }
+      }
+    },
+    "common.delete" : {
+      "comment" : "Delete button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        }
+      }
+    },
+    "common.descriptionOptional" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Description (Optional)"
+          }
+        }
+      }
+    },
+    "common.deselectAll" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deselect All"
+          }
+        }
+      }
+    },
+    "common.disabled" : {
+      "comment" : "Title for disabled",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disabled"
+          }
+        }
+      }
+    },
+    "common.done" : {
+      "comment" : "Dismisses a modal sheet\nDone button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "common.doNow" : {
+      "comment" : "Do now priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DO NOW"
+          }
+        }
+      }
+    },
+    "common.edit" : {
+      "comment" : "Edit button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        }
+      }
+    },
+    "common.enable" : {
+      "comment" : "Enable button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable"
+          }
+        }
+      }
+    },
+    "common.enableRepeat" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Repeat"
+          }
+        }
+      }
+    },
+    "common.error" : {
+      "comment" : "Title for error state",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
+    },
+    "common.error.title" : {
+      "comment" : "Title for error state",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error loading projects"
+          }
+        }
+      }
+    },
+    "common.favorites" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorites"
+          }
+        }
+      }
+    },
+    "common.filename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filename"
+          }
+        }
+      }
+    },
+    "common.from" : {
+      "comment" : "From date label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From"
+          }
+        }
+      }
+    },
+    "common.high" : {
+      "comment" : "High priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "High"
+          }
+        }
+      }
+    },
+    "common.loading" : {
+      "comment" : "Label shown when loading",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading"
+          }
+        }
+      }
+    },
+    "common.loading.label" : {
+      "comment" : "Label shown when loading",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading..."
+          }
+        }
+      }
+    },
+    "common.low" : {
+      "comment" : "Low priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Low"
+          }
+        }
+      }
+    },
+    "common.max" : {
+      "comment" : "Max label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max"
+          }
+        }
+      }
+    },
+    "common.medium" : {
+      "comment" : "Medium priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
+        }
+      }
+    },
+    "common.min" : {
+      "comment" : "Min label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Min"
+          }
+        }
+      }
+    },
+    "common.mode" : {
+      "comment" : "Mode label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        }
+      }
+    },
+    "common.never" : {
+      "comment" : "Never value\nTitle for never",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neven"
+          }
+        }
+      }
+    },
+    "common.none" : {
+      "comment" : "None priority\nNone value\nTitle for none",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        }
+      }
+    },
+    "common.notSet" : {
+      "comment" : "Not set label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not set"
+          }
+        }
+      }
+    },
+    "common.ok" : {
+      "comment" : "OK button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "common.organization" : {
+      "comment" : "Title for organization",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organisation"
+          }
+        }
+      }
+    },
+    "common.preview" : {
+      "comment" : "Label for label preview\nPreview header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview"
+          }
+        }
+      }
+    },
+    "common.privacyPolicy" : {
+      "comment" : "Privacy Policy label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        }
+      }
+    },
+    "common.readOnly" : {
+      "comment" : "Read-only status",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read-only"
+          }
+        }
+      }
+    },
+    "common.reminders.current" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Reminders"
+          }
+        }
+      }
+    },
+    "common.remove" : {
+      "comment" : "Remove button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        }
+      }
+    },
+    "common.retry" : {
+      "comment" : "Retry button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
+          }
+        }
+      }
+    },
+    "common.save" : {
+      "comment" : "Save button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        }
+      }
+    },
+    "common.saveChanges" : {
+      "comment" : "Title for save changes",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Changes"
+          }
+        }
+      }
+    },
+    "common.saving" : {
+      "comment" : "Label shown when saving",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving"
+          }
+        }
+      }
+    },
+    "common.search" : {
+      "comment" : "Search button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
+    },
+    "common.selectAll" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select All"
+          }
+        }
+      }
+    },
+    "common.selectedCount %lld" : {
+      "comment" : "Number of labels selected\nNumber of projects selected for calendar sync\nNumber of projects selected for sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ selected"
+          }
+        }
+      }
+    },
+    "common.setFilename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Filename"
+          }
+        }
+      }
+    },
+    "common.signOut" : {
+      "comment" : "Sign Out",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Out"
+          }
+        }
+      }
+    },
+    "common.statistics" : {
+      "comment" : "Statistics section",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistics"
+          }
+        }
+      }
+    },
+    "common.status" : {
+      "comment" : "Status section",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "common.time.days" : {
+      "comment" : "Title for days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Days"
+          }
+        }
+      }
+    },
+    "common.time.months" : {
+      "comment" : "Title for months",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Months"
+          }
+        }
+      }
+    },
+    "common.time.today1200" : {
+      "comment" : "Title for today 12 00",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today, 12:00"
+          }
+        }
+      }
+    },
+    "common.time.weeks" : {
+      "comment" : "Title for weeks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeks"
+          }
+        }
+      }
+    },
+    "common.time.years" : {
+      "comment" : "Title for years",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Years"
+          }
+        }
+      }
+    },
+    "common.title" : {
+      "comment" : "Title for title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        }
+      }
+    },
+    "common.to" : {
+      "comment" : "To",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To"
+          }
+        }
+      }
+    },
+    "common.urgent" : {
+      "comment" : "Urgent priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Urgent"
+          }
+        }
+      }
+    },
+    "contentView.helloWorld" : {
+      "comment" : "Hello world text",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hello, world!"
+          }
+        }
+      }
+    },
+    "Every %lld %@" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Every %1$lld %2$@"
+          }
+        }
+      }
+    },
+    "Excluded Labels (%lld)" : {
+      "comment" : "Excluded labels with count",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded Labels (%lld)"
+          }
+        }
+      }
+    },
+    "favorites.empty.subtitle" : {
+      "comment" : "Subtitle shown when there are no favorites",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks you mark as favorites will appear here for quick access"
+          }
+        }
+      }
+    },
+    "favorites.empty.tap_label" : {
+      "comment" : "Label shown when there are no favorites",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the star icon on any task to add it to favorites"
+          }
+        }
+      }
+    },
+    "favorites.empty.title" : {
+      "comment" : "Title shown when there are no favorites",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Favorite Tasks"
+          }
+        }
+      }
+    },
+    "favorites.loading" : {
+      "comment" : "Label shown when loading favorites",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading favorites"
+          }
+        }
+      }
+    },
+    "filter.clearDates" : {
+      "comment" : "Clear date filters button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Dates"
+          }
+        }
+      }
+    },
+    "https:​//tasks.example.com" : {
+      "shouldTranslate" : false
+    },
+    "Kuna" : {
+      "shouldTranslate" : false
+    },
+    "labels.create.button" : {
+      "comment" : "Create label button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Label"
+          }
+        }
+      }
+    },
+    "labels.create.colour.tap_label" : {
+      "comment" : "Label for colour picker",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to choose a color"
+          }
+        }
+      }
+    },
+    "labels.create.description.placeholder" : {
+      "comment" : "Placeholder for description field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a description for this label"
+          }
+        }
+      }
+    },
+    "labels.create.title" : {
+      "comment" : "Title for create label view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Label"
+          }
+        }
+      }
+    },
+    "labels.create.title.label" : {
+      "comment" : "Label for label name field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label Name"
+          }
+        }
+      }
+    },
+    "labels.create.title.placeholder" : {
+      "comment" : "Placeholder for label name field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter label name"
+          }
+        }
+      }
+    },
+    "labels.delete.confirmation %@" : {
+      "comment" : "Confirmation prompt when deleting a label. The placeholder is the label’s title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to delete '%@'? This action cannot be undone."
+          }
+        }
+      }
+    },
+    "labels.delete.title" : {
+      "comment" : "Delete label alert title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Label"
+          }
+        }
+      }
+    },
+    "labels.edit.colour.tap_label" : {
+      "comment" : "Label for colour picker",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to choose a colour"
+          }
+        }
+      }
+    },
+    "labels.edit.description.placeholder" : {
+      "comment" : "Placeholder for description field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a description for this label"
+          }
+        }
+      }
+    },
+    "labels.edit.title" : {
+      "comment" : "Title for edit label view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Label"
+          }
+        }
+      }
+    },
+    "labels.edit.title.label" : {
+      "comment" : "Label for label name field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label Name"
+          }
+        }
+      }
+    },
+    "labels.edit.title.placeholder" : {
+      "comment" : "Placeholder for label name field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter label name"
+          }
+        }
+      }
+    },
+    "labels.empty.subtitle" : {
+      "comment" : "Subtitle shown when there are no labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create your first label to organize your tasks"
+          }
+        }
+      }
+    },
+    "labels.empty.title" : {
+      "comment" : "Title shown when there are no labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Labels"
+          }
+        }
+      }
+    },
+    "labels.loading" : {
+      "comment" : "Loading labels...",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading labels..."
+          }
+        }
+      }
+    },
+    "labels.none.available" : {
+      "comment" : "Title for no labels available",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Labels"
+          }
+        }
+      }
+    },
+    "labels.title" : {
+      "comment" : "Labels menu item\nLabels navigation title\nTitle for labels\nTitle for labels view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labels"
+          }
+        }
+      }
+    },
+    "labels.view.loading" : {
+      "comment" : "Label shown when loading labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading labels"
+          }
+        }
+      }
+    },
+    "navigation.favorites" : {
+      "comment" : "Favorites menu item",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorites"
+          }
+        }
+      }
+    },
+    "navigation.menu" : {
+      "comment" : "Menu button accessibility label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu"
+          }
+        }
+      }
+    },
+    "navigation.projects" : {
+      "comment" : "Projects menu item\nProjects navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projects"
+          }
+        }
+      }
+    },
+    "onboarding.analytics_consent.allow_button" : {
+      "comment" : "Button for allowing analytics",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow Anonymous Analytics"
+          }
+        }
+      }
+    },
+    "onboarding.analytics_consent.deny_button" : {
+      "comment" : "Button for denying analytics",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Thanks"
+          }
+        }
+      }
+    },
+    "onboarding.analytics_consent.text" : {
+      "comment" : "Text for analytics consent sheet",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features."
+          }
+        }
+      }
+    },
+    "onboarding.analytics_consent.title" : {
+      "comment" : "Title for analytics consent sheet",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help Improve Kuna"
+          }
+        }
+      }
+    },
+    "projects.empty.tasks" : {
+      "comment" : "Title shown when there are no tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This project doesn't have any tasks yet. Create your first task to get started!"
+          }
+        }
+      }
+    },
+    "projects.new.details.title" : {
+      "comment" : "Title for new project view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project Details"
+          }
+        }
+      }
+    },
+    "projects.new.name" : {
+      "comment" : "Project name field",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project Name"
+          }
+        }
+      }
+    },
+    "projects.selection_status %lld %lld" : {
+      "comment" : "Shows how many projects are selected out of the total count",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of  %2$lld selected"
+          }
+        }
+      }
+    },
+    "projects.view.error.title" : {
+      "comment" : "Title for error state",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error loading projects"
+          }
+        }
+      }
+    },
+    "Required Labels (%lld)" : {
+      "comment" : "Required labels with count",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required Labels (%lld)"
+          }
+        }
+      }
+    },
+    "settings.about.title" : {
+      "comment" : "Title for about view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "settings.about.vikunja.link" : {
+      "comment" : "Link for about view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn more"
+          }
+        }
+      }
+    },
+    "settings.about.vikunja.text" : {
+      "comment" : "Text for about view",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist."
+          }
+        }
+      }
+    },
+    "settings.appearance.appIcon.title" : {
+      "comment" : "Title for app icon",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Icon"
+          }
+        }
+      }
+    },
+    "settings.appearance.title" : {
+      "comment" : "Settings section header for appearance",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        }
+      }
+    },
+    "settings.appIcon.changing" : {
+      "comment" : "Label shown when changing app icon",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changing icon"
+          }
+        }
+      }
+    },
+    "settings.appIcon.current.title" : {
+      "comment" : "Title for current app icon",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Icon"
+          }
+        }
+      }
+    },
+    "settings.appIcon.info.text" : {
+      "comment" : "Text for app icon info",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches."
+          }
+        }
+      }
+    },
+    "settings.appIcon.info.title" : {
+      "comment" : "Title for app icon info",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About App Icons"
+          }
+        }
+      }
+    },
+    "settings.appIcon.supported" : {
+      "comment" : "Text for supported app icons",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternate icons are supported"
+          }
+        }
+      }
+    },
+    "settings.appIcon.test.title" : {
+      "comment" : "App icon test view title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Icon Test"
+          }
+        }
+      }
+    },
+    "settings.appIcon.title" : {
+      "comment" : "App icon settings title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Icon"
+          }
+        }
+      }
+    },
+    "settings.appIcon.unsupported" : {
+      "comment" : "Text for unsupported app icons",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternate icons are not supported"
+          }
+        }
+      }
+    },
+    "settings.auth.token.expired" : {
+      "comment" : "Token expired",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token expired"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.debug.runSyncNow" : {
+      "comment" : "Debug button to run sync now",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run Sync Now (Debug)"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.footer" : {
+      "comment" : "iOS schedules background refresh based on system conditions. Frequency is a minimum interval.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.1h" : {
+      "comment" : "Frequency for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 hour"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.6h" : {
+      "comment" : "Frequency for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 hours"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.12h" : {
+      "comment" : "Frequency for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "12 hours"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.15m" : {
+      "comment" : "Frequency for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15 mins"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.24h" : {
+      "comment" : "Frequency for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "24 hours"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.30m" : {
+      "comment" : "Frequency for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 mins"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.subtitle" : {
+      "comment" : "Subtitle for background sync frequency",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How often to refresh tasks in background"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.frequency.title" : {
+      "comment" : "Title for background sync frequency",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frequency"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.header" : {
+      "comment" : "Background sync settings header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Background Sync & Notifications (Beta)"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.includeSummary" : {
+      "comment" : "Include summary notification toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include summary notification"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.lastAttempt %@" : {
+      "comment" : "Label in Background Sync settings showing the last attempt time. Placeholder is a formatted date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Attempt: %@"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.lastSuccess %@" : {
+      "comment" : "Label in Background Sync settings showing the last successful sync time. Placeholder is a formatted date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Success: %@"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.notifications %@" : {
+      "comment" : "Label in Background Sync settings showing the notifications status. Placeholder is the status text (e.g. Enabled, Disabled)",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications: %@"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.notifyAssignedToMe" : {
+      "comment" : "Notify when assigned to me toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notify when assigned to me"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.notifyNewTasks" : {
+      "comment" : "Notify on new tasks toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notify on new tasks"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.notifyUpdatedTasks" : {
+      "comment" : "Notify on updated tasks toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notify on updated tasks"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.notifyWatchedLabels" : {
+      "comment" : "Notify when watched labels change toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notify when watched labels change"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.subtitle" : {
+      "comment" : "Subtitle for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync tasks periodically in the background"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.title" : {
+      "comment" : "Title for background sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Background Sync"
+          }
+        }
+      }
+    },
+    "settings.backgroundSync.watchedLabels.title" : {
+      "comment" : "Title for watched labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watched Labels"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.access.subtitle" : {
+      "comment" : "Subtitle for calendar access required",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To sync tasks with your calendar, please grant calendar access in Settings."
+          }
+        }
+      }
+    },
+    "settings.calendarSync.access.title" : {
+      "comment" : "Title for calendar access required",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Access Required"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.advanced.title" : {
+      "comment" : "Title for advanced options",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Advanced Options"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.calendar.title" : {
+      "comment" : "Title for calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.calendars.title" : {
+      "comment" : "Title for calendars",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendars"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.clearErrors" : {
+      "comment" : "Clear calendar sync errors button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Errors"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.default.subtitle" : {
+      "comment" : "Subtitle for default calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default calendar for all tasks"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.default.title" : {
+      "comment" : "Title for default calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuna Tasks"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.description" : {
+      "comment" : "Calendar sync description",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync tasks with your calendar app"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.disable.button" : {
+      "comment" : "Disable calendar sync button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disable Calendar Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.disable.disposition.deleteEverything.title" : {
+      "comment" : "Title for this will permanently delete all kuna calendars and events",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This will permanently delete all Kuna calendars and events"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.disable.disposition.removeKunaEvents.title" : {
+      "comment" : "Title for this will permanently delete all synced events",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disable Calendar Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.disable.subtitle" : {
+      "comment" : "Subtitle for disable calendar sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What should happen to your existing calendars and events?"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.disable.title" : {
+      "comment" : "Title for disable calendar sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disable Calendar Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.enabled.title" : {
+      "comment" : "Title for enabled",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enabled"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.enableSync" : {
+      "comment" : "Enable sync button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.errors.title" : {
+      "comment" : "Title for recent errors",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Errors"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.footer" : {
+      "comment" : "Title for safely sync your tasks with calendar apps kuna creates its own calendars and never touches your existing ones",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones."
+          }
+        }
+      }
+    },
+    "settings.calendarSync.intro.subtitle" : {
+      "comment" : "Subtitle for sync with calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep your tasks in sync with your calendar app"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.intro.title" : {
+      "comment" : "Title for sync with calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync with Calendar"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.mode.subtitle" : {
+      "comment" : "Subtitle for choose sync mode",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How would you like to organize your synced tasks?"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.mode.title" : {
+      "comment" : "Title for choose sync mode\nTitle for mode",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Sync Mode"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.navigationTitle" : {
+      "comment" : "Calendar sync navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.onboarding.subtitle" : {
+      "comment" : "Subtitle for confirm setup",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review your calendar sync configuration:"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.onboarding.title" : {
+      "comment" : "Title for confirm setup",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anonymous Analytics"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projects.selectedProjects.title" : {
+      "comment" : "Title for tasks from selected projects will appear in your calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Selection"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projects.syncAll.allProjects.title" : {
+      "comment" : "Title for all projects will be synced to your calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync All Projects"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projects.syncAll.specificProjects.title" : {
+      "comment" : "Title for select specific projects below to sync to your calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select specific projects below to sync to your calendar."
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projects.syncAll.subtitle" : {
+      "comment" : "Subtitle for sync all projects",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically include all current and future projects"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projects.syncAll.title" : {
+      "comment" : "Title for sync all projects",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync All Projects"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projects.title" : {
+      "comment" : "Title for projects\nTitle for select projects\nTitle for sync options",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Projects"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projectSelection.perProject" : {
+      "comment" : "Choose which projects to create calendars for",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose which projects to create calendars for:"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.projectSelection.single" : {
+      "comment" : "Choose which projects to include in your Kuna calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose which projects to include in your Kuna calendar:"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.readOnly" : {
+      "comment" : "Read-only calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read-only"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.reconfigure" : {
+      "comment" : "Reconfigure button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reconfigure"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.requestAccess" : {
+      "comment" : "Request access button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request Access"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.selection.advanced.subtitle" : {
+      "comment" : "Subtitle for choose different calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown."
+          }
+        }
+      }
+    },
+    "settings.calendarSync.selection.advanced.title" : {
+      "comment" : "Title for choose different calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Different Calendar"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.selection.subtitle" : {
+      "comment" : "Subtitle for calendar selection",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar."
+          }
+        }
+      }
+    },
+    "settings.calendarSync.selection.title" : {
+      "comment" : "Calendar selection navigation title\nTitle for calendar selection",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Selection"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.setup.title" : {
+      "comment" : "Calendar sync setup navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Sync Setup"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.setupButton" : {
+      "comment" : "Set up calendar sync button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up Calendar Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.showTechnicalDetails" : {
+      "comment" : "Show technical details toggle",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Technical Details"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.statistics" : {
+      "comment" : "Statistics section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistics"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.status" : {
+      "comment" : "Status section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.status.lastSynced %@" : {
+      "comment" : "Shows 'Last synced:' followed by a relative time (system handles 'ago' / 'in')",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last synced: %@"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.status.neverSynced" : {
+      "comment" : "Shown in Calendar Sync settings when sync has never run",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never synced"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.subtitle" : {
+      "comment" : "Subtitle for calendar sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuna creates its own calendars and never edits your existing ones."
+          }
+        }
+      }
+    },
+    "settings.calendarSync.switch" : {
+      "comment" : "Switch button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.switchCalendar.title" : {
+      "comment" : "Switch calendar alert title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch Calendar?"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.syncNow" : {
+      "comment" : "Sync now button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync Now"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.technicalDetails" : {
+      "comment" : "Technical Details",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technical Details"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.title" : {
+      "comment" : "Title for calendar integration\nTitle for calendar sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Sync"
+          }
+        }
+      }
+    },
+    "settings.calendarSync.writable" : {
+      "comment" : "Writable calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writable"
+          }
+        }
+      }
+    },
+    "settings.connection.authMethod.title" : {
+      "comment" : "Title for authentication method",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication Method"
+          }
+        }
+      }
+    },
+    "settings.connection.header" : {
+      "comment" : "Connection settings header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection"
+          }
+        }
+      }
+    },
+    "settings.connection.server.noServer.title" : {
+      "comment" : "Title for no server configured",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No server configured"
+          }
+        }
+      }
+    },
+    "settings.connection.server.title" : {
+      "comment" : "Title for server",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server"
+          }
+        }
+      }
+    },
+    "settings.connection.tokenExpiration.title" : {
+      "comment" : "Title for token expiration",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token Expiration"
+          }
+        }
+      }
+    },
+    "settings.connection.userManagement.limited.text" : {
+      "comment" : "Text for why is user management limited",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication."
+          }
+        }
+      }
+    },
+    "settings.connection.userManagement.limited.text2" : {
+      "comment" : "Text for why is user management limited",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can still create and manage your personal tasks with full functionality."
+          }
+        }
+      }
+    },
+    "settings.connection.userManagement.limited.title" : {
+      "comment" : "Title for why is user management limited",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Why is user management limited?"
+          }
+        }
+      }
+    },
+    "settings.connection.userManagement.subtitle" : {
+      "comment" : "Subtitle for user management",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires username/password login"
+          }
+        }
+      }
+    },
+    "settings.connection.userManagement.switchToUsernamePassword.title" : {
+      "comment" : "Title for switch to username/password login",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch to Username/Password Login"
+          }
+        }
+      }
+    },
+    "settings.connection.userManagement.title" : {
+      "comment" : "Title for user management",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Management"
+          }
+        }
+      }
+    },
+    "settings.display.attachments.description" : {
+      "comment" : "Show paperclip icons for tasks with attachments",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show paperclip icons for tasks with attachments"
+          }
+        }
+      }
+    },
+    "settings.display.attachments.title" : {
+      "comment" : "Title for attachment icons",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attachment Icons"
+          }
+        }
+      }
+    },
+    "settings.display.celebration.description" : {
+      "comment" : "Show confetti when marking a task complete",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show confetti when marking a task complete"
+          }
+        }
+      }
+    },
+    "settings.display.celebration.header" : {
+      "comment" : "Celebration header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Celebration"
+          }
+        }
+      }
+    },
+    "settings.display.celebration.title" : {
+      "comment" : "Title for celebrate completion",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Celebrate Completion"
+          }
+        }
+      }
+    },
+    "settings.display.colours.defaultBalls.description" : {
+      "comment" : "Use the default blue color for task color indicators",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the default blue color for task color indicators"
+          }
+        }
+      }
+    },
+    "settings.display.colours.defaultBalls.title" : {
+      "comment" : "Title for default color balls",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Color Balls"
+          }
+        }
+      }
+    },
+    "settings.display.colours.description" : {
+      "comment" : "Display color indicators for all tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display color indicators for all tasks"
+          }
+        }
+      }
+    },
+    "settings.display.colours.title" : {
+      "comment" : "Title for task colors",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task Colours"
+          }
+        }
+      }
+    },
+    "settings.display.comments.description" : {
+      "comment" : "Show comment count badges on tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show comment count badges on tasks"
+          }
+        }
+      }
+    },
+    "settings.display.comments.title" : {
+      "comment" : "Title for comment counts",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment Counts"
+          }
+        }
+      }
+    },
+    "settings.display.dates.dueDate.description" : {
+      "comment" : "Show a task's due date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show a task's due date"
+          }
+        }
+      }
+    },
+    "settings.display.dates.dueDate.title" : {
+      "comment" : "Title for due date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Due Date"
+          }
+        }
+      }
+    },
+    "settings.display.dates.endDate.description" : {
+      "comment" : "Show a task's end date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show a task's end date"
+          }
+        }
+      }
+    },
+    "settings.display.dates.endDate.title" : {
+      "comment" : "Title for end date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Date"
+          }
+        }
+      }
+    },
+    "settings.display.dates.header" : {
+      "comment" : "Task dates header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task Dates"
+          }
+        }
+      }
+    },
+    "settings.display.dates.startDate.description" : {
+      "comment" : "Show a task's start date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show a task's start date"
+          }
+        }
+      }
+    },
+    "settings.display.footer" : {
+      "comment" : "Title for control which elements are displayed in task lists changes apply to all task views",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control which elements are displayed in task lists. Changes apply to all task views."
+          }
+        }
+      }
+    },
+    "settings.display.preview.sampleTitle" : {
+      "comment" : "Title for sample task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample task title"
+          }
+        }
+      }
+    },
+    "settings.display.preview.title" : {
+      "comment" : "Title for live preview of task list appearance based on your settings",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live preview of task list appearance based on your settings."
+          }
+        }
+      }
+    },
+    "settings.display.priority.description" : {
+      "comment" : "Show priority indicators on tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show priority indicators on tasks"
+          }
+        }
+      }
+    },
+    "settings.display.priority.title" : {
+      "comment" : "Title for priority indicators",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priority Indicators"
+          }
+        }
+      }
+    },
+    "settings.display.subtitle" : {
+      "comment" : "Title for customize what appears on task lists",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize what appears on task lists"
+          }
+        }
+      }
+    },
+    "settings.display.syncStatus.description" : {
+      "comment" : "Show whether a task is synced to calendar",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show whether a task is synced to Calendar"
+          }
+        }
+      }
+    },
+    "settings.display.syncStatus.title" : {
+      "comment" : "Title for sync status",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync Status"
+          }
+        }
+      }
+    },
+    "settings.display.title" : {
+      "comment" : "Display options navigation title\nDisplay options settings header\nTitle for display options",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display Options"
+          }
+        }
+      }
+    },
+    "settings.icon.current %@" : {
+      "comment" : "Label showing the current app icon name",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Icon: %@"
+          }
+        }
+      }
+    },
+    "settings.information.header" : {
+      "comment" : "Information section header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information"
+          }
+        }
+      }
+    },
+    "settings.privacy.analytics.subtitle" : {
+      "comment" : "Title for help improve the app by sending anonymous usage data",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help improve the app by sending anonymous usage data"
+          }
+        }
+      }
+    },
+    "settings.privacy.analytics.title" : {
+      "comment" : "Title for anonymous analytics",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anonymous Analytics"
+          }
+        }
+      }
+    },
+    "settings.privacy.header" : {
+      "comment" : "Privacy section header",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
+          }
+        }
+      }
+    },
+    "settings.processing.title" : {
+      "comment" : "Title for processing",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processing"
+          }
+        }
+      }
+    },
+    "settings.projectSync.title" : {
+      "comment" : "Project sync navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project Sync"
+          }
+        }
+      }
+    },
+    "settings.taskList.sortOrder.subtitle" : {
+      "comment" : "Title for how tasks are sorted when you open a project",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How tasks are sorted when you open a project"
+          }
+        }
+      }
+    },
+    "settings.taskList.sortOrder.title" : {
+      "comment" : "Title for default sort order",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Sort Order"
+          }
+        }
+      }
+    },
+    "settings.title" : {
+      "comment" : "Settings menu item\nTitle for settings",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "settings.view.token.expiresIn %@" : {
+      "comment" : "Label in Settings showing when the JWT token expires. Placeholder is the formatted duration (e.g. '5 minutes')",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expires in %@"
+          }
+        }
+      }
+    },
+    "settings.watchedLabels" : {
+      "comment" : "Watched Labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watched Labels"
+          }
+        }
+      }
+    },
+    "tasks.add.title" : {
+      "comment" : "Add task button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Task"
+          }
+        }
+      }
+    },
+    "tasks.attachment.files" : {
+      "comment" : "Files button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files"
+          }
+        }
+      }
+    },
+    "tasks.attachment.photoLibrary" : {
+      "comment" : "Photo library button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo Library"
+          }
+        }
+      }
+    },
+    "tasks.attachment.upload" : {
+      "comment" : "Upload button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upload"
+          }
+        }
+      }
+    },
+    "tasks.attachments.enter_custom_name %@" : {
+      "comment" : "Prompt asking user to enter a custom name for an attachment. Placeholder is the original filename",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a custom name for '%@'"
+          }
+        }
+      }
+    },
+    "tasks.colour.select" : {
+      "comment" : "Select colour button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Color"
+          }
+        }
+      }
+    },
+    "tasks.comments.none" : {
+      "comment" : "No comments yet",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No comments yet"
+          }
+        }
+      }
+    },
+    "tasks.create.add" : {
+      "comment" : "Add task button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Task"
+          }
+        }
+      }
+    },
+    "tasks.create.button" : {
+      "comment" : "Create task button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Task"
+          }
+        }
+      }
+    },
+    "tasks.create.first" : {
+      "comment" : "Title for create first task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create First Task"
+          }
+        }
+      }
+    },
+    "tasks.create.new" : {
+      "comment" : "Title for create new task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create New Task"
+          }
+        }
+      }
+    },
+    "tasks.detail.description.placeholder" : {
+      "comment" : "Placeholder text for description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter description"
+          }
+        }
+      }
+    },
+    "tasks.detail.dueDate" : {
+      "comment" : "Due date title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Due Date"
+          }
+        }
+      }
+    },
+    "tasks.detail.endDate" : {
+      "comment" : "End date title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Date"
+          }
+        }
+      }
+    },
+    "tasks.detail.priority.title" : {
+      "comment" : "Priority picker\nPriority title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priority"
+          }
+        }
+      }
+    },
+    "tasks.detail.progress.title" : {
+      "comment" : "Progress title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progress"
+          }
+        }
+      }
+    },
+    "tasks.detail.reminders.none" : {
+      "comment" : "No reminders label",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No reminders"
+          }
+        }
+      }
+    },
+    "tasks.details.assignees.none" : {
+      "comment" : "Title for no assignees",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No assignees"
+          }
+        }
+      }
+    },
+    "tasks.details.assignees.title" : {
+      "comment" : "Title for assignees",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assignees"
+          }
+        }
+      }
+    },
+    "tasks.details.attachments.add" : {
+      "comment" : "Add attachment dialog title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Attachment"
+          }
+        }
+      }
+    },
+    "tasks.details.attachments.addTitle" : {
+      "comment" : "Title for add attachment",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Attachment"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.dueDate.add" : {
+      "comment" : "Add due date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Due Date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.dueDate.none" : {
+      "comment" : "Title for no due date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No due date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.dueDate.title" : {
+      "comment" : "Title for due date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add due date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.endDate.add" : {
+      "comment" : "Add end date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add End Date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.endDate.none" : {
+      "comment" : "Title for no end date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No end date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.endDate.title" : {
+      "comment" : "Title for end date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add end date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.startDate.add" : {
+      "comment" : "Add start date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Start Date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.startDate.none" : {
+      "comment" : "Title for no start date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No start date"
+          }
+        }
+      }
+    },
+    "tasks.details.dates.startDate.title" : {
+      "comment" : "Title for start date",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add start date"
+          }
+        }
+      }
+    },
+    "tasks.details.description.none" : {
+      "comment" : "Title for no description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No description"
+          }
+        }
+      }
+    },
+    "tasks.details.description.placeholder" : {
+      "comment" : "Placeholder for adding description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add description"
+          }
+        }
+      }
+    },
+    "tasks.details.description.title" : {
+      "comment" : "Title for description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Description"
+          }
+        }
+      }
+    },
+    "tasks.details.labels.none" : {
+      "comment" : "Title for no labels",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No labels"
+          }
+        }
+      }
+    },
+    "tasks.details.priority.none" : {
+      "comment" : "Title for no priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No priority"
+          }
+        }
+      }
+    },
+    "tasks.details.priority.title" : {
+      "comment" : "Title for priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priority"
+          }
+        }
+      }
+    },
+    "tasks.details.progress.title" : {
+      "comment" : "Title for progress",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progress"
+          }
+        }
+      }
+    },
+    "tasks.details.relatedTasks.title" : {
+      "comment" : "Title for related tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Related Tasks"
+          }
+        }
+      }
+    },
+    "tasks.details.reminders.add" : {
+      "comment" : "Add reminder button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add reminder"
+          }
+        }
+      }
+    },
+    "tasks.details.reminders.addNew" : {
+      "comment" : "Title for add new reminder",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add New Reminder"
+          }
+        }
+      }
+    },
+    "tasks.details.reminders.description" : {
+      "comment" : "Title for add reminders to get notified about this task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add reminders to get notified about this task"
+          }
+        }
+      }
+    },
+    "tasks.details.reminders.none" : {
+      "comment" : "Title for no reminders",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Reminders"
+          }
+        }
+      }
+    },
+    "tasks.details.reminders.none.set" : {
+      "comment" : "Title for no reminders set",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Reminders Set"
+          }
+        }
+      }
+    },
+    "tasks.details.reminders.title" : {
+      "comment" : "Title for reminders",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
+          }
+        }
+      }
+    },
+    "tasks.details.repeat.every" : {
+      "comment" : "Label for repeat every",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat every:"
+          }
+        }
+      }
+    },
+    "tasks.details.repeat.none" : {
+      "comment" : "Title for task will not repeat",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task will not repeat"
+          }
+        }
+      }
+    },
+    "tasks.details.repeat.task" : {
+      "comment" : "Title for repeat task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat Task"
+          }
+        }
+      }
+    },
+    "tasks.details.repeat.title" : {
+      "comment" : "Title for repeat",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        }
+      }
+    },
+    "tasks.details.scheduling.title" : {
+      "comment" : "Title for scheduling",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SCHEDULING"
+          }
+        }
+      }
+    },
+    "tasks.details.title" : {
+      "comment" : "Task Details\nTitle for task details",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task Details"
+          }
+        }
+      }
+    },
+    "tasks.empty.action" : {
+      "comment" : "Title shown when there are no tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create your first task to get started!"
+          }
+        }
+      }
+    },
+    "tasks.empty.title" : {
+      "comment" : "Title shown when there are no tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Tasks Yet"
+          }
+        }
+      }
+    },
+    "tasks.filter.byDueDate" : {
+      "comment" : "Filter by due date toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by Due Date"
+          }
+        }
+      }
+    },
+    "tasks.filter.byLabels" : {
+      "comment" : "Filter by labels toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by Labels"
+          }
+        }
+      }
+    },
+    "tasks.filter.byPriority" : {
+      "comment" : "Filter by priority toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by Priority"
+          }
+        }
+      }
+    },
+    "tasks.filter.byProgress" : {
+      "comment" : "Filter by progress toggle",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by Progress"
+          }
+        }
+      }
+    },
+    "tasks.filter.maxProgress %@" : {
+      "comment" : "Maximum progress percentage in task filter",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max: %@"
+          }
+        }
+      }
+    },
+    "tasks.filter.minProgress %@" : {
+      "comment" : "Minimum progress percentage in task filter",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Min: %@"
+          }
+        }
+      }
+    },
+    "tasks.filter.quickFilter" : {
+      "comment" : "Quick filter label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick Filter"
+          }
+        }
+      }
+    },
+    "tasks.filter.quickFilters" : {
+      "comment" : "Quick filters section title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick Filters"
+          }
+        }
+      }
+    },
+    "tasks.filter.resetAll" : {
+      "comment" : "Reset all filters button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset All Filters"
+          }
+        }
+      }
+    },
+    "tasks.filter.showCompleted" : {
+      "comment" : "Show completed tasks toggle",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Completed Tasks"
+          }
+        }
+      }
+    },
+    "tasks.filter.showIncomplete" : {
+      "comment" : "Show incomplete tasks toggle",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Incomplete Tasks"
+          }
+        }
+      }
+    },
+    "tasks.filter.sort" : {
+      "comment" : "Sort tasks section",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort Tasks"
+          }
+        }
+      }
+    },
+    "tasks.filter.status" : {
+      "comment" : "Status section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "tasks.filter.title" : {
+      "comment" : "Filter tasks navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter Tasks"
+          }
+        }
+      }
+    },
+    "tasks.info.title" : {
+      "comment" : "Title for task info",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TASK INFO"
+          }
+        }
+      }
+    },
+    "tasks.labels.select" : {
+      "comment" : "Select labels button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Labels"
+          }
+        }
+      }
+    },
+    "tasks.list.loadEarlier" : {
+      "comment" : "Load earlier button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load earlier"
+          }
+        }
+      }
+    },
+    "tasks.list.loadMore" : {
+      "comment" : "Load more button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load more"
+          }
+        }
+      }
+    },
+    "tasks.list.title" : {
+      "comment" : "Task List",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task List"
+          }
+        }
+      }
+    },
+    "tasks.loading" : {
+      "comment" : "Label shown when loading tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading tasks"
+          }
+        }
+      }
+    },
+    "tasks.picker.navigationTitle" : {
+      "comment" : "Pick task navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick Task"
+          }
+        }
+      }
+    },
+    "tasks.picker.title" : {
+      "comment" : "Pick task button",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick Task"
+          }
+        }
+      }
+    },
+    "tasks.placeholder.title" : {
+      "comment" : "Task Title\nTask title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task title"
+          }
+        }
+      }
+    },
+    "tasks.priority.max" : {
+      "comment" : "Title for max priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Min Priority"
+          }
+        }
+      }
+    },
+    "tasks.priority.min" : {
+      "comment" : "Title for min priority",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max Priority"
+          }
+        }
+      }
+    },
+    "tasks.related.loading" : {
+      "comment" : "Loading related tasks...",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading related tasks..."
+          }
+        }
+      }
+    },
+    "tasks.related.none" : {
+      "comment" : "No related tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No related tasks"
+          }
+        }
+      }
+    },
+    "tasks.related.none.subtitle" : {
+      "comment" : "Use the picker below to relate another task.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the picker below to relate another task."
+          }
+        }
+      }
+    },
+    "tasks.related.none.title" : {
+      "comment" : "No related tasks title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Related Tasks"
+          }
+        }
+      }
+    },
+    "tasks.related.title" : {
+      "comment" : "Related tasks section title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Related Tasks"
+          }
+        }
+      }
+    },
+    "tasks.relation.kind" : {
+      "comment" : "Relation kind picker",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kind"
+          }
+        }
+      }
+    },
+    "tasks.reminder" : {
+      "comment" : "Reminder label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminder"
+          }
+        }
+      }
+    },
+    "tasks.reminder.date" : {
+      "comment" : "Reminder date label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminder Date"
+          }
+        }
+      }
+    },
+    "tasks.reminders" : {
+      "comment" : "Reminders section title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
+          }
+        }
+      }
+    },
+    "tasks.reminders.title" : {
+      "comment" : "Reminders navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
+          }
+        }
+      }
+    },
+    "tasks.repeat" : {
+      "comment" : "Repeat label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        }
+      }
+    },
+    "tasks.repeat.description %@" : {
+      "comment" : "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This task will repeat %@"
+          }
+        }
+      }
+    },
+    "tasks.repeat.interval" : {
+      "comment" : "Repeat interval label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat Interval"
+          }
+        }
+      }
+    },
+    "tasks.repeat.intervalSeconds" : {
+      "comment" : "Interval in seconds section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interval (seconds)"
+          }
+        }
+      }
+    },
+    "tasks.repeat.mode" : {
+      "comment" : "Repeat mode section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        }
+      }
+    },
+    "tasks.repeat.mode.picker" : {
+      "comment" : "Repeat mode picker",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        }
+      }
+    },
+    "tasks.repeat.mode.section" : {
+      "comment" : "Repeat mode section",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat Mode"
+          }
+        }
+      }
+    },
+    "tasks.repeat.placeholder" : {
+      "comment" : "e.g. 86400 for daily",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "e.g. 86400 for daily"
+          }
+        }
+      }
+    },
+    "tasks.repeat.settings" : {
+      "comment" : "Repeat settings section",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat Settings"
+          }
+        }
+      }
+    },
+    "tasks.repeat.title" : {
+      "comment" : "Repeat navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit" : {
+      "comment" : "Unit",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unit"
+          }
+        }
+      }
+    },
+    "tasks.sample.title" : {
+      "comment" : "Title for sample task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample task title"
+          }
+        }
+      }
+    },
+    "tasks.search.description" : {
+      "comment" : "Type part of a title or description to find a task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type part of a title or description to find a task"
+          }
+        }
+      }
+    },
+    "tasks.search.noResults" : {
+      "comment" : "No tasks found",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tasks found"
+          }
+        }
+      }
+    },
+    "tasks.search.placeholder" : {
+      "comment" : "Search tasks...",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search tasks..."
+          }
+        }
+      }
+    },
+    "tasks.search.title" : {
+      "comment" : "Title for search for tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for tasks"
+          }
+        }
+      }
+    },
+    "tasks.select" : {
+      "comment" : "Select a task label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a task"
+          }
+        }
+      }
+    },
+    "tasks.select.description" : {
+      "comment" : "Title shown when no task is selected",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a task to view its details"
+          }
+        }
+      }
+    },
+    "tasks.select.title" : {
+      "comment" : "Title for select a task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a task"
+          }
+        }
+      }
+    },
+    "tasks.sort.title" : {
+      "comment" : "Sort tasks action sheet title\nTitle for sort tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort Tasks"
+          }
+        }
+      }
+    },
+    "tasks.startDate" : {
+      "comment" : "Start date label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Date"
+          }
+        }
+      }
+    },
+    "tasks.sync.autoSave" : {
+      "comment" : "Title for this task will sync automatically on save",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This task will sync automatically on save"
+          }
+        }
+      }
+    },
+    "tasks.sync.noDates" : {
+      "comment" : "Title for task has no dates to sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task has no dates to sync"
+          }
+        }
+      }
+    },
+    "tasks.title" : {
+      "comment" : "Tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks"
+          }
+        }
+      }
+    },
+    "users.find.title" : {
+      "comment" : "Find users navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Users"
+          }
+        }
+      }
+    },
+    "users.search.description" : {
+      "comment" : "Enter a username or name to find users you can assign to tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a username or name to find users you can assign to tasks"
+          }
+        }
+      }
+    },
+    "users.search.noResults.suggestion" : {
+      "comment" : "Try a different search term",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try a different search term"
+          }
+        }
+      }
+    },
+    "users.search.noResults.title" : {
+      "comment" : "Title for no users found",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No users found"
+          }
+        }
+      }
+    },
+    "users.search.placeholder" : {
+      "comment" : "Search users...",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search users..."
+          }
+        }
+      }
+    },
+    "users.search.prompt %@" : {
+      "comment" : "Prompt in user search view. Placeholder is the current search text",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for '%@'"
+          }
+        }
+      }
+    },
+    "users.search.searching" : {
+      "comment" : "Label shown when searching users",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Searching users"
+          }
+        }
+      }
+    },
+    "users.search.title" : {
+      "comment" : "Title for search for users",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for User"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
