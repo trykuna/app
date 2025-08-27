@@ -1,1 +1,2 @@
-UITests.local.xcconfig
+# Ignore the actual local config with credentials, but allow the template
+UITests.local.xcconfig.local

@@ -1,0 +1,8 @@
+// UITests.local.xcconfig
+// This file contains configuration for UI tests.
+// Copy this file and update with your actual test server details.
+
+VIKUNJA_SERVER_SCHEME = https
+VIKUNJA_SERVER_HOST = your-vikunja-server.com
+VIKUNJA_USERNAME = your-test-username
+VIKUNJA_PASSWORD = your-test-password
