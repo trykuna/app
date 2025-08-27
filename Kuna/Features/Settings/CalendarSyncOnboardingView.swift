@@ -170,14 +170,10 @@ struct CalendarSyncOnboardingView: View {
     private var projectSelectionView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                // Text("Select Projects")
                 Text(String(localized: "settings.calendarSync.projects.title", comment: "Title for select projects"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
-                // Text(selectedMode == .single ? 
-                //      "Choose which projects to include in your Kuna calendar:" :
-                //      "Choose which projects to create calendars for:")
                 Text(selectedMode == .single ? 
                      String(localized: "settings.calendarSync.projectSelection.single", comment: "Choose which projects to include in your Kuna calendar") :
                      String(localized: "settings.calendarSync.projectSelection.perProject", comment: "Choose which projects to create calendars for"))
@@ -197,13 +193,21 @@ struct CalendarSyncOnboardingView: View {
                     .foregroundColor(.blue)
                     
                     Spacer()
-                    
-                    // TODO: Localize
-//                    Text("\(selectedProjectIDs.count) of \(projects.count) selected")
-                    Text("projects.selection_status \(selectedProjectIDs.count) \(projects.count)",
-                         comment: "Shows how many projects are selected out of the total count")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+
+                    let selected = selectedProjectIDs.count
+                    let total = projects.count
+                    Text(
+                    String.localizedStringWithFormat(
+                        NSLocalizedString(
+                        "projects.selection_status",
+                        comment: "Shows how many projects are selected out of the total count"
+                        ),
+                        selected, total
+                    )
+                    )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
                 }
                 
                 ScrollView {

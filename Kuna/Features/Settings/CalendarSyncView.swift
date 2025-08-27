@@ -73,6 +73,16 @@ struct CalendarSyncView: View {
         }
     }
 
+    // On iOS 17+, reading events requires Full Access (write-only cannot read)
+    private var hasReadAccess: Bool {
+        let status = calendarSync.authorizationStatus
+        if #available(iOS 17.0, *) {
+            return status == .fullAccess
+        } else {
+            return status == .authorized
+        }
+    }
+
     // MARK: - View Sections
     
     @ViewBuilder
@@ -151,13 +161,20 @@ struct CalendarSyncView: View {
             }
             
             HStack {
-                // Text("Projects")
                 Text(String(localized: "settings.calendarSync.projects.title", comment: "Title for projects"))
                 Spacer()
-                // TODO: Localize
-                Text("common.selectedCount \(appSettings.calendarSyncPrefs.selectedProjectIDs.count)",
-                     comment: "Number of projects selected for calendar sync")
-                    .foregroundColor(.secondary)
+                // Text("common.selectedCount \(appSettings.calendarSyncPrefs.selectedProjectIDs.count)",
+                //      comment: "Number of projects selected for calendar sync")
+                //     .foregroundColor(.secondary)
+                let count = appSettings.calendarSyncPrefs.selectedProjectIDs.count
+                Text(
+                String.localizedStringWithFormat(
+                    NSLocalizedString("common.selectedCount",
+                                    comment: "Number of projects selected for calendar sync"),
+                    count   // Swift Int
+                )
+                )
+                .foregroundColor(.secondary)
             }
             
             if appSettings.calendarSyncPrefs.mode == .single {
@@ -291,15 +308,16 @@ struct CalendarSyncView: View {
     
     @ViewBuilder
     private var statisticsSection: some View {
-        // Section("Statistics") {
-        Section(String(localized: "settings.calendarSync.statistics", comment: "Statistics section")) {
-            statRow(icon: "calendar.badge.plus", color: .green,
-                    label: "Synced Events", value: "\(syncedEventsCount)")
-            statRow(icon: "xmark.circle", color: .red,
-                    label: "Errors", value: "\((engine.syncErrors + calendarSync.syncErrors).count)")
+        if hasReadAccess {
+            Section(String(localized: "settings.calendarSync.statistics", comment: "Statistics section")) {
+                statRow(icon: "calendar.badge.plus", color: .green,
+                        label: "Synced Events", value: "\(syncedEventsCount)")
+                statRow(icon: "xmark.circle", color: .red,
+                        label: "Errors", value: "\((engine.syncErrors + calendarSync.syncErrors).count)")
+            }
         }
     }
-    
+
     private var statusIcon: String {
         if engine.isSyncing { return "arrow.triangle.2.circlepath" }
         if !(engine.syncErrors.isEmpty && calendarSync.syncErrors.isEmpty) { return "xmark.circle" }
@@ -345,15 +363,21 @@ struct CalendarSyncView: View {
     // MARK: - Stats helpers
 
     private var syncedEventsCount: Int {
-        guard let cal = calendarSync.selectedCalendar else { return 0 }
+        // Require read access before attempting to fetch events (iOS 17+: Full Access)
+        guard hasReadAccess else {
+            return 0
+        }
+        guard let cal = calendarSync.selectedCalendar else {
+            return 0
+        }
         let pred = calendarSync.eventStore.predicateForEvents(
             withStart: Date().addingTimeInterval(-30*24*60*60),
             end: Date().addingTimeInterval(30*24*60*60),
             calendars: [cal]
         )
-        return calendarSync.eventStore.events(matching: pred)
-            .filter { $0.url?.absoluteString.hasPrefix("kuna://task/") == true }
-            .count
+        let events = calendarSync.eventStore.events(matching: pred)
+        let kunaEvents = events.filter { $0.url?.absoluteString.hasPrefix("kuna://task/") == true }
+        return kunaEvents.count
     }
 
     private func statRow(icon: String, color: Color, label: String, value: String) -> some View {
