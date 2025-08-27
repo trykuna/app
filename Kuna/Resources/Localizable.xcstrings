@@ -1088,8 +1088,19 @@
         }
       }
     },
+    "common.selectedCount" : {
+      "comment" : "Number of projects selected for calendar sync",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$ld selected"
+          }
+        }
+      }
+    },
     "common.selectedCount %lld" : {
-      "comment" : "Number of labels selected\nNumber of projects selected for calendar sync\nNumber of projects selected for sync",
+      "comment" : "Number of labels selected\nNumber of projects selected for sync",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1645,13 +1656,13 @@
         }
       }
     },
-    "projects.selection_status %lld %lld" : {
+    "projects.selection_status" : {
       "comment" : "Shows how many projects are selected out of the total count",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld of  %2$lld selected"
+            "value" : "%1$ld of %2$ld selected"
           }
         }
       }
