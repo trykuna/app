@@ -5,6 +5,7 @@ import EventKit
 struct TaskDetailView: View {
     @State private var task: VikunjaTask
     let api: VikunjaAPI
+    let onUpdate: ((VikunjaTask) -> Void)?
     @StateObject private var commentCountManager: CommentCountManager
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
@@ -54,9 +55,10 @@ struct TaskDetailView: View {
         Color.blue, Color.purple, Color.pink, Color.gray
     ]
 
-    init(task: VikunjaTask, api: VikunjaAPI) {
+    init(task: VikunjaTask, api: VikunjaAPI, onUpdate: ((VikunjaTask) -> Void)? = nil) {
         self._task = State(initialValue: task)
         self.api = api
+        self.onUpdate = onUpdate
         self._editedDescription = State(initialValue: task.description ?? "")
         self._commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
     }
@@ -227,6 +229,8 @@ struct TaskDetailView: View {
                             for id in toRemove {
                                 task = try await api.removeLabelFromTask(taskId: task.id, labelId: id)
                             }
+                            // Notify the parent view of the update
+                            onUpdate?(task)
                         } catch {
                             updateError = error.localizedDescription
                         }
@@ -243,6 +247,8 @@ struct TaskDetailView: View {
                 api: api,
                 onUpdated: { updated in
                     task = updated
+                    // Notify the parent view of the update
+                    onUpdate?(updated)
                 },
                 onClose: { showingRemindersEditor = false }
             )
@@ -735,6 +741,9 @@ struct TaskDetailView: View {
             task = try await api.updateTask(task)
             hasChanges = false
             isEditing = false
+            
+            // Notify the parent view of the update
+            onUpdate?(task)
 
             // ✅ Trigger calendar sync automatically (fire-and-forget to avoid blocking UI)
             if settings.calendarSyncEnabled {
@@ -775,6 +784,8 @@ struct TaskDetailView: View {
                 await MainActor.run {
                     task = updatedTask
                     isUpdatingFavorite = false
+                    // Notify the parent view of the update
+                    onUpdate?(task)
                 }
             } catch {
                 await MainActor.run {

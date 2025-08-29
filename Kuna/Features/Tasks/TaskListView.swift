@@ -355,6 +355,14 @@ final class TaskListVM: ObservableObject {
             self.error = error.localizedDescription
         }
     }
+    
+    func updateTask(_ updatedTask: VikunjaTask) {
+        if let index = tasks.firstIndex(where: { $0.id == updatedTask.id }) {
+            tasks[index] = updatedTask
+            // Update widget cache after task update
+            WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
+        }
+    }
 }
 
 struct TaskListView: View {
@@ -874,6 +882,9 @@ struct TaskListView: View {
                         if !UIAccessibility.isReduceMotionEnabled { confettiTrigger.toggle() }
                     }
                 }
+            },
+            onUpdate: { updatedTask in
+                vm.updateTask(updatedTask)
             }
         )
 

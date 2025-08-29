@@ -530,16 +530,23 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         // Handle date encoding
         let formatter = ISO8601DateFormatter()
 
+        // Always encode dates - use "0001-01-01T00:00:00Z" for nil dates to clear them
         if let dueDate = dueDate {
             try container.encode(formatter.string(from: dueDate), forKey: .dueDate)
+        } else {
+            try container.encode("0001-01-01T00:00:00Z", forKey: .dueDate)
         }
 
         if let startDate = startDate {
             try container.encode(formatter.string(from: startDate), forKey: .startDate)
+        } else {
+            try container.encode("0001-01-01T00:00:00Z", forKey: .startDate)
         }
 
         if let endDate = endDate {
             try container.encode(formatter.string(from: endDate), forKey: .endDate)
+        } else {
+            try container.encode("0001-01-01T00:00:00Z", forKey: .endDate)
         }
 
         try container.encodeIfPresent(labels, forKey: .labels)
