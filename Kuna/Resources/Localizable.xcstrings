@@ -4436,8 +4436,20 @@
         }
       }
     },
+    "tasks.sync.needBothDates" : {
+      "comment" : "Needs both start and end dates",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar sync requires both start and end dates"
+          }
+        }
+      }
+    },
     "tasks.sync.noDates" : {
       "comment" : "No dates to sync",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

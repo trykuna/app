@@ -619,7 +619,7 @@ struct TaskDetailView: View {
                     Text(String(localized: "tasks.sync.autoSave", comment: "Auto sync on save"))
                         .font(.caption).foregroundColor(.secondary)
                 } else {
-                    Text(String(localized: "tasks.sync.noDates", comment: "No dates to sync"))
+                    Text(String(localized: "tasks.sync.needBothDates", comment: "Needs both start and end dates"))
                         .font(.caption).foregroundColor(.orange)
                 }
             }
@@ -672,7 +672,8 @@ struct TaskDetailView: View {
     // MARK: - Save / API
 
     private var hasTaskDates: Bool {
-        task.startDate != nil || task.dueDate != nil || task.endDate != nil
+        // Only sync if task has BOTH start and end dates
+        task.startDate != nil && task.endDate != nil
     }
 
     private func saveChanges() async {
@@ -744,6 +745,13 @@ struct TaskDetailView: View {
             editEndDate = updatedTask.endDate
             editedDescription = updatedTask.description ?? ""
             
+            // Trigger calendar sync after task update (skip bidirectional to avoid overwriting)
+            if settings.calendarSyncEnabled {
+                print("📅 Triggering one-way calendar sync after task update")
+                calendarSync.setAPI(api)
+                await calendarSync.syncAfterTaskUpdate()
+            }
+            
             // Then update the task
             task = updatedTask
             
@@ -757,11 +765,6 @@ struct TaskDetailView: View {
             
             // Notify the parent view of the update
             onUpdate?(task)
-            
-            // Direct calendar sync with fresh EventStore
-            if settings.calendarSyncEnabled {
-                await syncTaskToCalendarDirect(task)
-            }
         } catch {
             print("❌ Failed to save task: \(error)")
             updateError = error.localizedDescription
@@ -850,21 +853,31 @@ struct TaskDetailView: View {
         
         print("📅 Syncing task \(task.id): '\(task.title)'")
         print("📅 Task dates - start: \(task.startDate?.description ?? "nil"), due: \(task.dueDate?.description ?? "nil"), end: \(task.endDate?.description ?? "nil")")
+        print("📅 Task actual dates being used - startDate: \(task.startDate?.timeIntervalSince1970 ?? 0), endDate: \(task.endDate?.timeIntervalSince1970 ?? 0)")
         
-        let hasTaskDates = task.startDate != nil || task.dueDate != nil || task.endDate != nil
+        // Only sync tasks that have BOTH start and end dates
+        let hasRequiredDates = task.startDate != nil && task.endDate != nil
         
-        if hasTaskDates {
+        if hasRequiredDates {
             // Find existing event or create new one
             if let existingEvent = findExistingEventDirect(for: task, in: calendar, using: eventStore) {
-                print("📅 Found existing event, updating...")
-                await updateCalendarEventDirect(existingEvent, with: task, using: eventStore)
+                print("📅 Found existing event, will delete and recreate...")
+                // Delete the old event
+                do {
+                    try eventStore.remove(existingEvent, span: .thisEvent, commit: true)
+                    print("📅 Deleted old event")
+                } catch {
+                    print("📅 Failed to delete old event: \(error)")
+                }
+                // Create a new event with updated dates
+                await createCalendarEventDirect(for: task, in: calendar, using: eventStore)
             } else {
                 print("📅 No existing event found, creating new...")
                 await createCalendarEventDirect(for: task, in: calendar, using: eventStore)
             }
         } else {
-            print("📅 Task has no dates, removing calendar event if exists...")
-            // Remove calendar event if task no longer has dates
+            print("📅 Task doesn't have both start and end dates, removing calendar event if exists...")
+            // Remove calendar event if task doesn't have both required dates
             if let existingEvent = findExistingEventDirect(for: task, in: calendar, using: eventStore) {
                 await removeCalendarEventDirect(existingEvent, using: eventStore)
             }
@@ -877,10 +890,19 @@ struct TaskDetailView: View {
         let predicate = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: [calendar])
         let events = eventStore.events(matching: predicate)
         
-        return events.first { event in
+        print("📅 Searching for event with URL: kuna://task/\(task.id)")
+        print("📅 Found \(events.count) events in calendar")
+        
+        let matchingEvent = events.first { event in
             guard let url = event.url?.absoluteString else { return false }
-            return url == "kuna://task/\(task.id)" || url.hasPrefix("kuna://task/\(task.id)?")
+            let matches = url == "kuna://task/\(task.id)" || url.hasPrefix("kuna://task/\(task.id)?")
+            if matches {
+                print("📅 Found matching event with identifier: \(event.eventIdentifier)")
+            }
+            return matches
         }
+        
+        return matchingEvent
     }
     
     private func createCalendarEventDirect(for task: VikunjaTask, in calendar: EKCalendar, using eventStore: EKEventStore) async {
@@ -915,19 +937,26 @@ struct TaskDetailView: View {
     
     private func updateCalendarEventDirect(_ event: EKEvent, with task: VikunjaTask, using eventStore: EKEventStore) async {
         print("📅 Updating event - current dates: start=\(event.startDate?.description ?? "nil"), end=\(event.endDate?.description ?? "nil")")
+        print("📅 Event identifier: \(event.eventIdentifier)")
         
-        event.title = task.title
-        event.notes = task.description
+        // Use the event directly - don't refresh as it might be a different instance
+        let eventToUpdate = event
+        
+        eventToUpdate.title = task.title
+        eventToUpdate.notes = task.description
         
         // Calculate dates with proper priority: endDate > dueDate > startDate  
         let (startDate, endDate) = calculateEventDatesDirect(for: task)
         print("📅 New calculated dates: start=\(startDate), end=\(endDate)")
         
-        event.startDate = startDate
-        event.endDate = endDate
+        // Force the dates to update
+        eventToUpdate.startDate = startDate
+        eventToUpdate.endDate = endDate
+        
+        print("📅 Event dates after setting: start=\(eventToUpdate.startDate?.description ?? "nil"), end=\(eventToUpdate.endDate?.description ?? "nil")")
         
         // Handle priority note without duplicating it
-        var baseNotes = (event.notes ?? "")
+        var baseNotes = (eventToUpdate.notes ?? "")
         baseNotes = baseNotes.replacingOccurrences(
             of: #"\n\[Priority:.*\]$"#,
             with: "",
@@ -936,21 +965,21 @@ struct TaskDetailView: View {
         
         if task.priority != .unset {
             let priorityNote = "\n[Priority: \(task.priority.displayName)]"
-            event.notes = baseNotes + priorityNote
+            eventToUpdate.notes = baseNotes + priorityNote
         } else {
-            event.notes = baseNotes
+            eventToUpdate.notes = baseNotes
         }
         
         // Update reminders
         if let reminders = task.reminders, !reminders.isEmpty {
-            event.alarms = reminders.map { EKAlarm(absoluteDate: $0.reminder) }
+            eventToUpdate.alarms = reminders.map { EKAlarm(absoluteDate: $0.reminder) }
         } else {
-            event.alarms = []
+            eventToUpdate.alarms = []
         }
         
         do {
-            try eventStore.save(event, span: .thisEvent, commit: true)
-            print("📅 Successfully updated calendar event with dates: start=\(event.startDate?.description ?? "nil"), end=\(event.endDate?.description ?? "nil")")
+            try eventStore.save(eventToUpdate, span: .thisEvent, commit: true)
+            print("📅 Successfully updated calendar event with dates: start=\(eventToUpdate.startDate?.description ?? "nil"), end=\(eventToUpdate.endDate?.description ?? "nil")")
         } catch {
             print("📅 Failed to update calendar event: \(error)")
         }
@@ -965,31 +994,17 @@ struct TaskDetailView: View {
     }
     
     private func calculateEventDatesDirect(for task: VikunjaTask) -> (start: Date, end: Date) {
+        // Since we only sync tasks with both start and end dates,
+        // we can safely use them directly
+        if let taskStart = task.startDate, let taskEnd = task.endDate {
+            print("📅 calculateEventDatesDirect: Using task dates - start: \(taskStart), end: \(taskEnd)")
+            return (taskStart, taskEnd)
+        }
+        
+        // Fallback (shouldn't happen given our new validation)
         let now = Date()
-        
-        // Determine start date
-        let startDate: Date
-        if let taskStart = task.startDate {
-            startDate = taskStart
-        } else if let taskDue = task.dueDate {
-            startDate = taskDue.addingTimeInterval(-3600) // 1 hour before due
-        } else if let taskEnd = task.endDate {
-            startDate = taskEnd.addingTimeInterval(-3600) // 1 hour before end
-        } else {
-            startDate = now
-        }
-        
-        // Determine end date - PRIORITIZE endDate over dueDate
-        let endDate: Date
-        if let taskEnd = task.endDate {
-            endDate = taskEnd
-        } else if let taskDue = task.dueDate {
-            endDate = taskDue
-        } else {
-            endDate = startDate.addingTimeInterval(3600) // 1 hour event
-        }
-        
-        return (startDate, endDate)
+        print("📅 calculateEventDatesDirect: WARNING - Using fallback dates")
+        return (now, now.addingTimeInterval(3600))
     }
 
 

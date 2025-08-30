@@ -514,4 +514,6 @@ final class CalendarSyncService: ObservableObject {
     func performFullSync() async { await syncEngine.resyncNow() }
 
     func performTwoWaySync() async { await syncEngine.resyncNow() }
+    
+    func syncAfterTaskUpdate() async { await syncEngine.syncAfterTaskUpdate() }
 }
