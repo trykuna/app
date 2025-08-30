@@ -100,7 +100,7 @@
       }
     },
     "add.title %@" : {
-      "comment" : "Button label to add an item with the given title",
+      "comment" : "Add title",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -530,7 +530,7 @@
       }
     },
     "common.cancel" : {
-      "comment" : "Cancel button",
+      "comment" : "Cancel\nCancel button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -541,7 +541,7 @@
       }
     },
     "common.close" : {
-      "comment" : "Close button",
+      "comment" : "Close",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -552,7 +552,7 @@
       }
     },
     "common.colour" : {
-      "comment" : "Label for colour picker\nTitle for color\nTitle for colour",
+      "comment" : "Colour\nLabel for colour picker\nTitle for color",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -640,7 +640,7 @@
       }
     },
     "common.date" : {
-      "comment" : "Date label",
+      "comment" : "Date",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -651,7 +651,7 @@
       }
     },
     "common.dateAndTime" : {
-      "comment" : "Date and time label",
+      "comment" : "Date & time",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -716,7 +716,7 @@
       }
     },
     "common.done" : {
-      "comment" : "Dismisses a modal sheet\nDone button",
+      "comment" : "Dismisses a modal sheet\nDone\nDone button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -912,7 +912,7 @@
       }
     },
     "common.never" : {
-      "comment" : "Never value\nTitle for never",
+      "comment" : "Never\nTitle for never",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -923,7 +923,7 @@
       }
     },
     "common.none" : {
-      "comment" : "None priority\nNone value\nTitle for none",
+      "comment" : "None\nNone priority\nTitle for none",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -934,7 +934,7 @@
       }
     },
     "common.notSet" : {
-      "comment" : "Not set label",
+      "comment" : "Not set",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -945,7 +945,7 @@
       }
     },
     "common.ok" : {
-      "comment" : "OK button",
+      "comment" : "OK\nOK button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1035,7 +1035,7 @@
       }
     },
     "common.save" : {
-      "comment" : "Save button",
+      "comment" : "Save\nSave button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1212,7 +1212,7 @@
       }
     },
     "common.title" : {
-      "comment" : "Title for title",
+      "comment" : "Title",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1525,7 +1525,7 @@
       }
     },
     "labels.title" : {
-      "comment" : "Labels menu item\nLabels navigation title\nTitle for labels\nTitle for labels view",
+      "comment" : "Labels\nLabels menu item\nLabels navigation title\nTitle for labels\nTitle for labels view",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3344,7 +3344,7 @@
       }
     },
     "tasks.detail.description.placeholder" : {
-      "comment" : "Placeholder text for description",
+      "comment" : "Description",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3355,7 +3355,7 @@
       }
     },
     "tasks.detail.dueDate" : {
-      "comment" : "Due date title",
+      "comment" : "Due date",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3366,7 +3366,7 @@
       }
     },
     "tasks.detail.endDate" : {
-      "comment" : "End date title",
+      "comment" : "End date",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3377,7 +3377,7 @@
       }
     },
     "tasks.detail.priority.title" : {
-      "comment" : "Priority picker\nPriority title",
+      "comment" : "Priority\nPriority picker",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3388,7 +3388,7 @@
       }
     },
     "tasks.detail.progress.title" : {
-      "comment" : "Progress title",
+      "comment" : "Progress",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3399,7 +3399,7 @@
       }
     },
     "tasks.detail.reminders.none" : {
-      "comment" : "No reminders label",
+      "comment" : "No reminders",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3575,7 +3575,7 @@
       }
     },
     "tasks.details.description.title" : {
-      "comment" : "Title for description",
+      "comment" : "Description",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3641,7 +3641,7 @@
       }
     },
     "tasks.details.reminders.add" : {
-      "comment" : "Add reminder button",
+      "comment" : "Add reminder\nAdd reminder button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3696,7 +3696,7 @@
       }
     },
     "tasks.details.reminders.title" : {
-      "comment" : "Title for reminders",
+      "comment" : "Reminders\nTitle for reminders",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3740,7 +3740,7 @@
       }
     },
     "tasks.details.repeat.title" : {
-      "comment" : "Title for repeat",
+      "comment" : "Repeat\nTitle for repeat",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4179,7 +4179,7 @@
       }
     },
     "tasks.reminders.title" : {
-      "comment" : "Reminders navigation title",
+      "comment" : "Reminders\nReminders navigation title",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4225,7 +4225,7 @@
       }
     },
     "tasks.repeat.intervalSeconds" : {
-      "comment" : "Interval in seconds section",
+      "comment" : "Interval in seconds",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4236,7 +4236,7 @@
       }
     },
     "tasks.repeat.mode" : {
-      "comment" : "Repeat mode section",
+      "comment" : "Repeat mode",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4247,7 +4247,7 @@
       }
     },
     "tasks.repeat.mode.picker" : {
-      "comment" : "Repeat mode picker",
+      "comment" : "Repeat mode",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4292,7 +4292,7 @@
       }
     },
     "tasks.repeat.title" : {
-      "comment" : "Repeat navigation title",
+      "comment" : "Repeat",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4426,7 +4426,7 @@
       }
     },
     "tasks.sync.autoSave" : {
-      "comment" : "Title for this task will sync automatically on save",
+      "comment" : "Auto sync on save",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4437,7 +4437,7 @@
       }
     },
     "tasks.sync.noDates" : {
-      "comment" : "Title for task has no dates to sync",
+      "comment" : "No dates to sync",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

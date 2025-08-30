@@ -139,10 +139,10 @@ final class CalendarSyncService: ObservableObject {
     func getOrCreateDefaultCalendar() -> EKCalendar? {
         // First check if we have calendar access
         let hasAccess: Bool = {
-            if #available(iOS 17.0, *) { 
+            if #available(iOS 17.0, *) {
                 return authorizationStatus == .fullAccess || authorizationStatus == .writeOnly
-            } else { 
-                return authorizationStatus == .authorized 
+            } else {
+                return authorizationStatus == .authorized
             }
         }()
         
@@ -185,19 +185,25 @@ final class CalendarSyncService: ObservableObject {
 
     // MARK: - Legacy Sync ops (used by CalendarSyncManager)
 
-    /// One‑off: push a single task into the currently selected calendar.
+    /// One-off: push a single task into the currently selected calendar.
     func syncTaskToCalendar(_ task: VikunjaTask) async -> Bool {
         let hasAccess: Bool = {
             if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
             else { return authorizationStatus == .authorized }
         }()
-        guard isCalendarSyncEnabled, hasAccess, let calendar = selectedCalendar else { return false }
+        guard isCalendarSyncEnabled, hasAccess, let calendar = selectedCalendar else {
+            return false
+        }
 
         // Only sync tasks that actually have dates
-        guard task.startDate != nil || task.dueDate != nil || task.endDate != nil else { return false }
+        guard task.startDate != nil || task.dueDate != nil || task.endDate != nil else {
+            return false
+        }
         
         // Check project filter settings
-        if !shouldSyncTaskBasedOnProject(task) { return false }
+        if !shouldSyncTaskBasedOnProject(task) {
+            return false
+        }
 
         if let existingEvent = findExistingEvent(for: task, in: calendar) {
             return await updateCalendarEvent(existingEvent, with: task)
@@ -233,12 +239,26 @@ final class CalendarSyncService: ObservableObject {
         event.notes = task.description
 
         let (startDate, endDate) = calculateEventDates(for: task)
+        
         event.startDate = startDate
         event.endDate = endDate
 
+        // ✅ Keep a stable identifier for reliable lookups on subsequent edits
+        event.url = URL(string: "kuna://task/\(task.id)")
+
+        // Handle priority note without duplicating it
+        var baseNotes = (event.notes ?? "")
+        baseNotes = baseNotes.replacingOccurrences(
+            of: #"\n\[Priority:.*\]$"#,
+            with: "",
+            options: .regularExpression
+        )
+
         if task.priority != .unset {
             let priorityNote = "\n[Priority: \(task.priority.displayName)]"
-            event.notes = (event.notes ?? "") + priorityNote
+            event.notes = baseNotes + priorityNote
+        } else {
+            event.notes = baseNotes
         }
 
         if let reminders = task.reminders, !reminders.isEmpty {
@@ -248,8 +268,8 @@ final class CalendarSyncService: ObservableObject {
         }
 
         do {
-            try eventStore.save(event, span: .thisEvent)
-            syncSuccessMessage = "Updated calendar event for ‘\(task.title)’"
+            try eventStore.save(event, span: .thisEvent, commit: true)
+            syncSuccessMessage = "Updated calendar event for '\(task.title)'"
             return true
         } catch {
             syncErrors.append("Update failed: \(error.localizedDescription)")
@@ -337,7 +357,11 @@ final class CalendarSyncService: ObservableObject {
 
         if task.priority != .unset {
             let priorityNote = "\n[Priority: \(task.priority.displayName)]"
-            event.notes = (event.notes ?? "") + priorityNote
+            event.notes = (event.notes ?? "").replacingOccurrences(
+                of: #"\n\[Priority:.*\]$"#,
+                with: "",
+                options: .regularExpression
+            ) + priorityNote
         }
 
         if let reminders = task.reminders, !reminders.isEmpty {
@@ -345,9 +369,9 @@ final class CalendarSyncService: ObservableObject {
         }
 
         do {
-            try eventStore.save(event, span: .thisEvent)
+            try eventStore.save(event, span: .thisEvent, commit: true)
             syncedEventIdentifiers.insert(event.eventIdentifier)
-            syncSuccessMessage = "Synced ‘\(task.title)’ to calendar"
+            syncSuccessMessage = "Synced '\(task.title)' to calendar"
             return true
         } catch {
             syncErrors.append("Create failed: \(error.localizedDescription)")
@@ -356,26 +380,51 @@ final class CalendarSyncService: ObservableObject {
     }
 
     private func findExistingEvent(for task: VikunjaTask, in calendar: EKCalendar) -> EKEvent? {
+        // Refresh sources; do not reset the store (which loses identifiers/cache)
+        eventStore.refreshSourcesIfNecessary()
+        
         let window = DateInterval(start: Date().addingTimeInterval(-365*24*60*60),
                                   end: Date().addingTimeInterval(365*24*60*60))
         let pred = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: [calendar])
-        return eventStore.events(matching: pred).first { $0.url?.absoluteString == "kuna://task/\(task.id)" }
+        let events = eventStore.events(matching: pred)
+        
+        return events.first { event in
+            guard let u = event.url?.absoluteString else { return false }
+            // Accept both plain and querystring variants
+            return u == "kuna://task/\(task.id)" || u.hasPrefix("kuna://task/\(task.id)?")
+        }
     }
 
     private func calculateEventDates(for task: VikunjaTask) -> (start: Date, end: Date) {
         let now = Date()
-        if let startDate = task.startDate {
-            let endDate = task.endDate ?? task.dueDate ?? startDate.addingTimeInterval(3600)
-            return (startDate, endDate)
-        } else if let dueDate = task.dueDate {
-            let startDate = task.startDate ?? dueDate.addingTimeInterval(-3600)
-            return (startDate, dueDate)
-        } else if let endDate = task.endDate {
-            let startDate = endDate.addingTimeInterval(-3600)
-            return (startDate, endDate)
+        
+        // Determine start date
+        let startDate: Date
+        if let taskStart = task.startDate {
+            startDate = taskStart
+        } else if let taskDue = task.dueDate {
+            // If no start date, use due date minus 1 hour as start
+            startDate = taskDue.addingTimeInterval(-3600)
+        } else if let taskEnd = task.endDate {
+            // If only end date exists, use end date minus 1 hour as start
+            startDate = taskEnd.addingTimeInterval(-3600)
         } else {
-            return (now, now.addingTimeInterval(3600))
+            // No dates at all (shouldn't happen as we check before syncing)
+            startDate = now
         }
+        
+        // Determine end date - prioritize endDate, then dueDate, then startDate + 1 hour
+        let endDate: Date
+        if let taskEnd = task.endDate {
+            endDate = taskEnd
+        } else if let taskDue = task.dueDate {
+            endDate = taskDue
+        } else {
+            // Only start date exists, make it a 1-hour event
+            endDate = startDate.addingTimeInterval(3600)
+        }
+        
+        return (startDate, endDate)
     }
 
     // MARK: - Settings Persistence (legacy bridge)
@@ -433,7 +482,7 @@ final class CalendarSyncService: ObservableObject {
         }
     }
 
-    /// Remove a single project's calendar (if per‑project mode) by its title.
+    /// Remove a single project's calendar (if per-project mode) by its title.
     func tidyUpProjectCalendar(projectTitle: String) async {
         let name = "Kuna: \(projectTitle)"
         let cals = eventStore.calendars(for: .event).filter { $0.title == name }
