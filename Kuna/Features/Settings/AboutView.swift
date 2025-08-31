@@ -34,7 +34,6 @@ struct AboutView: View {
 
                 // Vikunja thanks
                 CardSection(title: "Vikunja") {
-                    // Text("Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist.")
                     Text(String(localized: "settings.about.vikunja.text", comment: "Text for about view"))
                         .fixedSize(horizontal: false, vertical: true)
                         .lineSpacing(2)
