@@ -157,21 +157,24 @@ final class CalendarSyncModelsTests: XCTestCase {
     
     func testDisableDispositionDisplayNames() {
         XCTAssertEqual(DisableDisposition.keepEverything.displayName, "Keep Everything")
-        XCTAssertEqual(DisableDisposition.removeKunaEvents.displayName, "Remove Kuna Events")
+        XCTAssertEqual(DisableDisposition.removeKunaEvents.displayName, "Remove Events Only")
         XCTAssertEqual(DisableDisposition.archiveCalendars.displayName, "Archive Calendars")
+        XCTAssertEqual(DisableDisposition.deleteEverything.displayName, "Delete Everything")
     }
     
     func testDisableDispositionDescriptions() {
-        XCTAssertEqual(DisableDisposition.keepEverything.description, "Keep calendars and events (recommended)")
-        XCTAssertEqual(DisableDisposition.removeKunaEvents.description, "Remove Kuna events only, keep calendars")
-        XCTAssertEqual(DisableDisposition.archiveCalendars.description, "Rename calendars to archived and stop syncing")
+        XCTAssertEqual(DisableDisposition.keepEverything.description, "Keep Everything")
+        XCTAssertEqual(DisableDisposition.removeKunaEvents.description, "Remove Events Only")
+        XCTAssertEqual(DisableDisposition.archiveCalendars.description, "Archive Calendars")
+        XCTAssertEqual(DisableDisposition.deleteEverything.description, "Delete Everything")
     }
     
     func testDisableDispositionAllCases() {
         let allCases = DisableDisposition.allCases
-        XCTAssertEqual(allCases.count, 3)
+        XCTAssertEqual(allCases.count, 4)
         XCTAssertTrue(allCases.contains(.keepEverything))
         XCTAssertTrue(allCases.contains(.removeKunaEvents))
         XCTAssertTrue(allCases.contains(.archiveCalendars))
+        XCTAssertTrue(allCases.contains(.deleteEverything))
     }
 }

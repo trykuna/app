@@ -262,7 +262,3 @@ final class KunaModelTests: XCTestCase {
         )
     }
 }
-
-// MARK: - Test Extensions
-
-// VikunjaTask is already Equatable in the main module
