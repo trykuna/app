@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 
 /// Picks the right container for the current size class.
 /// - iPhone: TaskListView (pushes detail)
@@ -77,29 +78,29 @@ struct TasksIPadSplitView: View {
         }
         .onChange(of: vm.tasks) { _, newTasks in
             #if DEBUG
-            print("TasksIPadSplitView: Tasks changed, count: \(newTasks.count)")
-            print("TasksIPadSplitView: Current selectedTask: \(selectedTask?.title ?? "nil")")
+            Log.app.debug("TasksIPadSplitView: Tasks changed, count: \(newTasks.count)")
+            Log.app.debug("TasksIPadSplitView: Current selectedTask: \(selectedTask?.title ?? "nil")")
             #endif
             
             // Auto-select first task if none selected and we have tasks
             if selectedTask == nil && !newTasks.isEmpty {
                 selectedTask = newTasks.first
                 #if DEBUG
-                print("TasksIPadSplitView: Auto-selected first task: \(selectedTask?.title ?? "nil")")
+                Log.app.debug("TasksIPadSplitView: Auto-selected first task: \(selectedTask?.title ?? "nil")")
                 #endif
             }
             // If current selection exists, update it with the latest data
             else if let current = selectedTask, let updatedTask = newTasks.first(where: { $0.id == current.id }) {
                 selectedTask = updatedTask
                 #if DEBUG
-                print("TasksIPadSplitView: Updated selectedTask with fresh data: \(updatedTask.title)")
+                Log.app.debug("TasksIPadSplitView: Updated selectedTask with fresh data: \(updatedTask.title)")
                 #endif
             }
             // If current selection is no longer valid, select first available task
             else if let current = selectedTask, !newTasks.contains(where: { $0.id == current.id }) {
                 selectedTask = newTasks.first
                 #if DEBUG
-                print("TasksIPadSplitView: Previous selection invalid, selected: \(selectedTask?.title ?? "nil")")
+                Log.app.debug("TasksIPadSplitView: Previous selection invalid, selected: \(selectedTask?.title ?? "nil")")
                 #endif
             }
         }
@@ -220,7 +221,7 @@ struct TasksIPadSplitView: View {
         NavigationStack {
             if let task = selectedTask {
                 #if DEBUG
-                let _ = print("TasksIPadSplitView: Rendering TaskDetailView for task: \(task.title)")
+                let _ = Log.app.debug("TasksIPadSplitView: Rendering TaskDetailView for task: \(task.title)")
                 #endif
                 // Extract just the content from TaskDetailView without the NavigationView wrapper
                 TaskDetailViewInner(
@@ -246,7 +247,7 @@ struct TasksIPadSplitView: View {
                 .navigationBarTitleDisplayMode(.large)
             } else {
                 #if DEBUG
-                let _ = print("TasksIPadSplitView: No task selected, showing empty state")
+                let _ = Log.app.debug("TasksIPadSplitView: No task selected, showing empty state")
                 #endif
                 VStack(spacing: 20) {
                     Image(systemName: "square.and.pencil")
@@ -331,11 +332,11 @@ struct TasksIPadSplitView: View {
                     )
                     .onTapGesture {
                         #if DEBUG
-                        print("TasksIPadSplitView: Tapped task: \(task.title)")
+                        Log.app.debug("TasksIPadSplitView: Tapped task: \(task.title)")
                         #endif
                         selectedTask = task
                         #if DEBUG
-                        print("TasksIPadSplitView: Selected task set to: \(selectedTask?.title ?? "nil")")
+                        Log.app.debug("TasksIPadSplitView: Selected task set to: \(selectedTask?.title ?? "nil")")
                         #endif
                     }
                     .onAppear {
@@ -620,7 +621,7 @@ struct TaskDetailViewInner: View {
             // This helps ensure sidebar accessibility is restored
             DispatchQueue.main.async {
                 #if DEBUG
-                print("Comments sheet dismissed - navigation state should be reset")
+                Log.app.debug("Comments sheet dismissed - navigation state should be reset")
                 #endif
             }
         }) {
@@ -633,7 +634,7 @@ struct TaskDetailViewInner: View {
             // Reset navigation state after related tasks sheet dismissal
             DispatchQueue.main.async {
                 #if DEBUG
-                print("Related tasks sheet dismissed - navigation state should be reset")
+                Log.app.debug("Related tasks sheet dismissed - navigation state should be reset")
                 #endif
             }
         }) {
@@ -2160,4 +2161,3 @@ struct CommentsContentView: View {
         }
     }
 }
-
