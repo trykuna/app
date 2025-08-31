@@ -533,7 +533,6 @@ struct TaskListView: View {
                     }
                 }
 
-
             }
             .padding(.horizontal, 16)
             .padding(.top, 8)

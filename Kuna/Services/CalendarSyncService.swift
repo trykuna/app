@@ -441,7 +441,6 @@ final class CalendarSyncService: ObservableObject {
         UserDefaults.standard.set(selectedCalendar?.calendarIdentifier, forKey: "selectedCalendarIdentifier")
     }
 
-
     // MARK: - Cleanup
 
     /// Remove **all** Kuna-tagged events from any Kuna calendar(s); then try deleting empty Kuna calendars.

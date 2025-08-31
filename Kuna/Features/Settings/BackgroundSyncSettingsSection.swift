@@ -63,7 +63,6 @@ struct BackgroundSyncSettingsSection: View {
                     }
                 }
 
-
                 Toggle(isOn: $settings.notifyNewTasks) {
                     // SwiftUI.Label("Notify on new tasks", systemImage: "bell.badge")
                     SwiftUI.Label(String(localized: "settings.backgroundSync.notifyNewTasks", comment: "Notify on new tasks toggle"), systemImage: "bell.badge")
@@ -148,7 +147,6 @@ struct BackgroundSyncSettingsSection: View {
             Text(String(localized: "settings.backgroundSync.footer", comment: "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."))
         }
         }
-
 
     // Helper to display notification authorization state
     private var statusText: String {

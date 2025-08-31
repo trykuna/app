@@ -512,7 +512,6 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         self.relations = relations
     }
 
-
     // Custom encoder
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -564,7 +563,6 @@ extension VikunjaTask: Hashable {
     static func == (lhs: VikunjaTask, rhs: VikunjaTask) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
-
 
 struct TasksResponse {
     let tasks: [VikunjaTask]
@@ -652,7 +650,6 @@ struct TaskAttachment: Identifiable, Decodable {
         }
     }
 }
-
 
 // MARK: - Task Relations
 enum TaskRelationKind: String, CaseIterable, Codable, Identifiable {
@@ -765,7 +762,6 @@ extension TaskRelation {
         self.otherTask = otherTask
     }
 }
-
 
 // MARK: - Calendar Sync Models
 enum CalendarSyncMode: String, Codable, CaseIterable {

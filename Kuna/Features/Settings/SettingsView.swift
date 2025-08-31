@@ -13,7 +13,6 @@ struct SettingsView: View {
     @State private var showingCalendarPicker = false
     @State private var showingCalendarSync = false
 
-
     var body: some View {
         NavigationView {
             settingsList
@@ -478,7 +477,6 @@ private struct PreviewTaskRow: View {
         .padding(.vertical, 6)
     }
 }
-
 
 // MARK: - Previews
 struct SettingsView_Previews: PreviewProvider {

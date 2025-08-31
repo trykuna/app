@@ -173,7 +173,6 @@ final class KunaUITests: XCTestCase {
         XCTAssertTrue(waitForNavTitle("Display Options", in: app, timeout: 6))
     }
 
-
     // MARK: - Device Detection
 
     private func detectIPad(_ app: XCUIApplication) -> Bool {

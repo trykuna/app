@@ -26,7 +26,6 @@ final class AppState: ObservableObject {
     @Published var tokenExpirationDate: Date?
     @Published var deepLinkTaskId: Int?
 
-
     init() {
         // Initialize all properties first
         self.isAuthenticated = false
@@ -360,7 +359,6 @@ final class AppState: ObservableObject {
         
         // Clear UserDefaults cache that might be holding data
         UserDefaults.standard.synchronize()
-        
         
         // Multiple rounds of garbage collection
         for _ in 0..<3 {

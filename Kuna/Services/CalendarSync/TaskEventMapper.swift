@@ -32,7 +32,6 @@ struct TaskEventMapper {
             comps.queryItems = [URLQueryItem(name: "project", value: String(task.projectId))]
             event.url = comps.url
 
-
         // --- Reminders ---
         event.alarms = task.reminders.map { r in
             let offsetFromStart = event.isAllDay ? r.relativeSeconds : (r.relativeSeconds + 3600)

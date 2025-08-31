@@ -94,7 +94,6 @@ struct SideMenuView: View {
         .accessibilityIdentifier("SideMenu")
     }
 
-    
     private func menuItem(_ item: MenuItem) -> some View {
         Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {

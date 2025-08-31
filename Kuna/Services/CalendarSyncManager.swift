@@ -45,7 +45,6 @@ final class CalendarSyncManager: ObservableObject {
                 }
             }
 
-
             // Update last sync date
             lastSyncDate = Date()
             saveLastSyncDate()

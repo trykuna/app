@@ -4,7 +4,6 @@ import SwiftUI
 // Global helper for UI tests to disable animations
 private let animationsEnabled: Bool = !ProcessInfo.processInfo.arguments.contains("-UITestsNoAnimations")
 
-
 struct MainContainerView: View {
     let api: VikunjaAPI
     @EnvironmentObject var appState: AppState

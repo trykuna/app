@@ -1076,7 +1076,6 @@ struct TaskDetailView: View {
         return (now, now.addingTimeInterval(3600))
     }
 
-
 // MARK: - Sheets
 private struct LabelPickerSheet: View {
     let availableLabels: [Label]
@@ -1392,8 +1391,6 @@ private struct PresetButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
-
-
 
     // MARK: - Section wrapper
 
