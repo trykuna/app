@@ -187,8 +187,11 @@ final class KunaUITests: XCTestCase {
         _ = app.wait(for: .runningForeground, timeout: 3)
         let allowButton = app.buttons["Allow Anonymous Analytics"]
         let denyButton  = app.buttons["No Thanks"]
-        if denyButton.waitForHittable(timeout: 1.5) { denyButton.tap() }
-        else if allowButton.waitForHittable(timeout: 1.0) { allowButton.tap() }
+        if denyButton.waitForHittable(timeout: 1.5) { 
+            denyButton.tap()
+        } else if allowButton.waitForHittable(timeout: 1.0) { 
+            allowButton.tap()
+        }
     }
 
     // MARK: - Sidebar / Login helpers

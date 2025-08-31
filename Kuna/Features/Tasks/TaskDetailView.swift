@@ -868,8 +868,9 @@ struct TaskDetailView: View {
     }
 
     private func loadAvailableLabels() async {
-        do { availableLabels = try await api.fetchLabels() }
-        catch {
+        do { 
+            availableLabels = try await api.fetchLabels()
+        } catch {
             Log.app.error("Failed to load labels: \(String(describing: error))")
         }
     }

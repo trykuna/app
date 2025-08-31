@@ -231,8 +231,7 @@ final class TaskListVM: ObservableObject {
                 // Also write to shared file for watch
                 SharedFileManager.shared.writeTasks(tasks, for: projectId)
             }
-        }
-        catch {
+        } catch {
             let ms = Date().timeIntervalSince(t0) * 1000
             Analytics.track("Task.Fetch.ListView", parameters: [
                 "duration_ms": String(Int(ms)),

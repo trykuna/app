@@ -27,8 +27,7 @@ final class ProjectListVM: ObservableObject {
             WidgetCacheWriter.writeProjectsSnapshot(from: projects)
             // Persist projects to App Group for widgets
             SharedFileManager.shared.writeProjects(projects)
-        }
-        catch { self.error = error.localizedDescription }
+        } catch { self.error = error.localizedDescription }
     }
     
     func createProject(title: String, description: String? = nil) async {
@@ -39,8 +38,9 @@ final class ProjectListVM: ObservableObject {
             error = nil
             // Update cached projects after creating new project
             WidgetCacheWriter.writeProjectsSnapshot(from: projects)
+        } catch { 
+            self.error = error.localizedDescription
         }
-        catch { self.error = error.localizedDescription }
     }
 }
 

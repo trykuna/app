@@ -188,8 +188,11 @@ final class CalendarSyncService: ObservableObject {
     /// One-off: push a single task into the currently selected calendar.
     func syncTaskToCalendar(_ task: VikunjaTask) async -> Bool {
         let hasAccess: Bool = {
-            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
-            else { return authorizationStatus == .authorized }
+            if #available(iOS 17.0, *) {
+                return authorizationStatus == .fullAccess
+            } else {
+                return authorizationStatus == .authorized 
+            }
         }()
         guard isCalendarSyncEnabled, hasAccess, let calendar = selectedCalendar else {
             return false
@@ -214,8 +217,11 @@ final class CalendarSyncService: ObservableObject {
 
     func removeTaskFromCalendar(_ task: VikunjaTask) async -> Bool {
         let hasAccess: Bool = {
-            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
-            else { return authorizationStatus == .authorized }
+            if #available(iOS 17.0, *) {
+                return authorizationStatus == .fullAccess
+            } else {
+                return authorizationStatus == .authorized
+            }
         }()
         guard hasAccess, let cal = selectedCalendar else { return false }
 
@@ -314,8 +320,11 @@ final class CalendarSyncService: ObservableObject {
     // Used by CalendarSyncManager to scan EK → API
     func syncCalendarChangesToTasks(api: VikunjaAPI) async -> [VikunjaTask] {
         let hasAccess: Bool = {
-            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
-            else { return authorizationStatus == .authorized }
+            if #available(iOS 17.0, *) { 
+                return authorizationStatus == .fullAccess
+            } else {
+                return authorizationStatus == .authorized
+            }
         }()
         guard isCalendarSyncEnabled, hasAccess, let calendar = selectedCalendar else { return [] }
 
@@ -446,8 +455,11 @@ final class CalendarSyncService: ObservableObject {
     /// Remove **all** Kuna-tagged events from any Kuna calendar(s); then try deleting empty Kuna calendars.
     func tidyUpAllKunaCalendars() async {
         let hasReadAccess: Bool = {
-            if #available(iOS 17.0, *) { return authorizationStatus == .fullAccess }
-            else { return authorizationStatus == .authorized }
+            if #available(iOS 17.0, *) {
+                return authorizationStatus == .fullAccess
+            } else {
+                return authorizationStatus == .authorized
+            }
         }()
         guard hasReadAccess else { return }
 
@@ -463,8 +475,11 @@ final class CalendarSyncService: ObservableObject {
             let pred = eventStore.predicateForEvents(withStart: start, end: end, calendars: [cal])
             let events = eventStore.events(matching: pred).filter { $0.url?.scheme == SyncConst.scheme }
             for ev in events {
-                do { try eventStore.remove(ev, span: .thisEvent); removed += 1 }
-                catch { syncErrors.append("Cleanup remove failed: \(error.localizedDescription)") }
+                do {
+                    try eventStore.remove(ev, span: .thisEvent); removed += 1
+                } catch { 
+                    syncErrors.append("Cleanup remove failed: \(error.localizedDescription)")
+                }
             }
         }
         if removed > 0 {
@@ -476,8 +491,11 @@ final class CalendarSyncService: ObservableObject {
             let pred = eventStore.predicateForEvents(withStart: start, end: end, calendars: [cal])
             let hasAny = eventStore.events(matching: pred).isEmpty == false
             guard !hasAny else { continue }
-            do { try eventStore.removeCalendar(cal, commit: true) }
-            catch { /* some sources don't allow deletion; ignore */ }
+            do {
+                try eventStore.removeCalendar(cal, commit: true)
+            } catch {
+                // some sources don't allow deletion; ignore
+            }
         }
     }
 
