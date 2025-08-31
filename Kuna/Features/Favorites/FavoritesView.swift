@@ -275,12 +275,14 @@ struct FavoriteTaskRow: View {
         Task {
             do {
                 #if DEBUG
-                Log.app.debug("FavoritesView: Toggling favorite for task id=\(task.id, privacy: .public) title=\(task.title, privacy: .public)")
+                Log.app.debug("FavoritesView: Toggling favorite for task id=\(task.id, privacy: .public)")
+                Log.app.debug("FavoritesView: Task title=\(task.title, privacy: .public)")
                 #endif
                 let updated = try await api.toggleTaskFavorite(task: task)
                 await MainActor.run {
                     #if DEBUG
-                    Log.app.debug("FavoritesView: Task id=\(task.id, privacy: .public) favorite -> \(updated.isFavorite, privacy: .public)")
+                    Log.app.debug("FavoritesView: Task id=\(task.id, privacy: .public)")
+                    Log.app.debug("FavoritesView: Favorite status=\(updated.isFavorite, privacy: .public)")
                     #endif
                     onTaskUpdated(updated)
                     isUpdatingFavorite = false
@@ -288,7 +290,8 @@ struct FavoriteTaskRow: View {
             } catch {
                 await MainActor.run {
                     #if DEBUG
-                    Log.app.error("FavoritesView: Error toggling favorite for task id=\(task.id, privacy: .public): \(String(describing: error), privacy: .public)")
+                    Log.app.error("FavoritesView: Error toggling favorite for task id=\(task.id, privacy: .public)")
+                    Log.app.error("FavoritesView: Error details: \(String(describing: error), privacy: .public)")
                     #endif
                     isUpdatingFavorite = false
                 }

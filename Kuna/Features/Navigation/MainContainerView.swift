@@ -106,7 +106,9 @@ struct MainContainerView: View {
                         }
                     }
                 } catch {
-                    Log.app.error("DeepLink: Failed to open task id=\(id, privacy: .public): \(String(describing: error), privacy: .public)")
+                    Log.app.error(
+                        "DeepLink: Failed to open task id=\(id, privacy: .public): \(String(describing: error), privacy: .public)"
+                    )
                 }
                 await MainActor.run { appState.deepLinkTaskId = nil }
             }
@@ -299,7 +301,8 @@ struct LabelsViewWithMenu: View {
                 }
             }
             // .alert("Delete Label", isPresented: $showingDeleteAlert) {
-            .alert(String(localized: "labels.delete.title", comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
+            .alert(String(localized: "labels.delete.title",
+                            comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
                 // Button("Cancel", role: .cancel) { }
                 Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
                 // Button("Delete", role: .destructive) {
@@ -312,7 +315,6 @@ struct LabelsViewWithMenu: View {
                 }
             } message: {
                 if let label = labelToDelete {
-                    // TODO: Localize
                     Text("labels.delete.confirmation \(label.title)",
                          comment: "Confirmation prompt when deleting a label. The placeholder is the label’s title")
 
@@ -435,6 +437,14 @@ struct LabelsViewWithMenu: View {
 }
 
 #Preview {
-    MainContainerView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })) // swiftlint:disable:this force_unwrapping
-        .environmentObject(AppState())
+    MainContainerView(
+        api: VikunjaAPI(
+            config: .init(
+                baseURL: URL(string: "https://example.com")!
+            ),
+            tokenProvider: { nil }
+        )
+    )
+    .environmentObject(AppState())
 }
+

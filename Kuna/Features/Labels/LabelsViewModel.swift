@@ -40,7 +40,12 @@ final class LabelsViewModel: ObservableObject {
     
     func updateLabel(_ label: Label, title: String, hexColor: String, description: String?) async -> Bool {
         do {
-            let updatedLabel = try await api.updateLabel(labelId: label.id, title: title, hexColor: hexColor, description: description)
+            let updatedLabel = try await api.updateLabel(
+                labelId: label.id,
+                title: title,
+                hexColor: hexColor,
+                description: description
+            )
             if let index = labels.firstIndex(where: { $0.id == label.id }) {
                 labels[index] = updatedLabel
             }

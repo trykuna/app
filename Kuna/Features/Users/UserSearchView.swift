@@ -93,7 +93,10 @@ struct UserSearchView: View {
                             .font(.headline)
                         
                         // Text("Enter a username or name to find users you can assign to tasks")
-                        Text(String(localized: "users.search.description", comment: "Enter a username or name to find users you can assign to tasks"))
+                        Text(
+                            String(localized: "users.search.description", 
+                                   comment: "Enter a username or name to find users you can assign to tasks")
+                        )
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
@@ -206,7 +209,10 @@ struct UserRow: View {
 
 #Preview {
     UserSearchView(
-        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }), // swiftlint:disable:this force_unwrapping
+        api: VikunjaAPI(
+            config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+            tokenProvider: { nil }
+        ),
         onUserSelected: { _ in }
     )
 }

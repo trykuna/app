@@ -140,12 +140,18 @@ final class AppSettings: ObservableObject {
         }
     }
 
-    @Published var notifyNewTasks: Bool { didSet { UserDefaults.standard.set(notifyNewTasks, forKey: "notifyNewTasks") } }
-    @Published var notifyUpdatedTasks: Bool { didSet { UserDefaults.standard.set(notifyUpdatedTasks, forKey: "notifyUpdatedTasks") } }
-    @Published var notifyAssignedToMe: Bool { didSet { UserDefaults.standard.set(notifyAssignedToMe, forKey: "notifyAssignedToMe") } }
-    @Published var notifyLabelsUpdated: Bool { didSet { UserDefaults.standard.set(notifyLabelsUpdated, forKey: "notifyLabelsUpdated") } }
-    @Published var watchedLabelIDs: [Int] { didSet { UserDefaults.standard.set(watchedLabelIDs, forKey: "watchedLabelIDs") } }
-    @Published var notifyWithSummary: Bool { didSet { UserDefaults.standard.set(notifyWithSummary, forKey: "notifyWithSummary") } }
+    @Published var notifyNewTasks: Bool {
+        didSet { UserDefaults.standard.set(notifyNewTasks, forKey: "notifyNewTasks") } }
+    @Published var notifyUpdatedTasks: Bool {
+        didSet { UserDefaults.standard.set(notifyUpdatedTasks, forKey: "notifyUpdatedTasks") } }
+    @Published var notifyAssignedToMe: Bool {
+        didSet { UserDefaults.standard.set(notifyAssignedToMe, forKey: "notifyAssignedToMe") } }
+    @Published var notifyLabelsUpdated: Bool {
+        didSet { UserDefaults.standard.set(notifyLabelsUpdated, forKey: "notifyLabelsUpdated") } }
+    @Published var watchedLabelIDs: [Int] {
+        didSet { UserDefaults.standard.set(watchedLabelIDs, forKey: "watchedLabelIDs") } }
+    @Published var notifyWithSummary: Bool {
+        didSet { UserDefaults.standard.set(notifyWithSummary, forKey: "notifyWithSummary") } }
     
     // MARK: - Calendar Sync Preferences
     @Published var calendarSyncPrefs: CalendarSyncPrefs {

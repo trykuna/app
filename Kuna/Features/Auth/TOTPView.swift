@@ -77,7 +77,8 @@ struct TOTPView: View {
                     )
                     
                     // Text("The code will be submitted automatically when complete")
-                    Text(String(localized: "auth.totp.auto_submit", comment: "Label explaining that the code will be submitted automatically"))
+                    Text(String(localized: "auth.totp.auto_submit",
+                                comment: "Label explaining that the code will be submitted automatically"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

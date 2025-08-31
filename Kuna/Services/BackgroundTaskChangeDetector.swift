@@ -136,7 +136,7 @@ final class BackgroundTaskChangeDetector {
             state.lastSeenUpdatedISO = Dictionary(uniqueKeysWithValues: Array(sortedEntries.prefix(100)))
             
             saveState(state)
-            Log.app.debug("BackgroundTaskChangeDetector: Trimmed task tracking from \(oldCount) to \(state.lastSeenUpdatedISO.count) entries")
+            Log.app.debug("BackgroundTaskChangeDetector: Trimmed task tracking from \(oldCount) to \(state.lastSeenUpdatedISO.count) entries") // swiftlint:disable:this line_length
         }
     }
 }

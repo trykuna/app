@@ -111,7 +111,9 @@ final class BackgroundSyncService: ObservableObject {
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "lastBackgroundSyncAttempt")
 
         // Build an API instance from persisted server URL + token to avoid needing AppState
-        guard let server = Keychain.readServerURL(), let _ = Keychain.readToken(), let apiBase = try? AppState.buildAPIURL(from: server) else {
+        guard let server = Keychain.readServerURL(), 
+                Keychain.readToken() != nil, 
+                let apiBase = try? AppState.buildAPIURL(from: server) else {
             Log.app.error("BG: runSync failed - missing server URL or token")
             return
         }
@@ -125,7 +127,10 @@ final class BackgroundSyncService: ObservableObject {
         let detector = BackgroundTaskChangeDetector.shared
         // Determine current user ID from token (sub) if available
         var currentUserId: Int? = nil
-        if let token = Keychain.readToken(), let payload = try? JWTDecoder.decode(token), let sub = payload.sub, let id = Int(sub) {
+        if let token = Keychain.readToken(), 
+           let payload = try? JWTDecoder.decode(token), 
+           let sub = payload.sub, 
+           let id = Int(sub) {
             currentUserId = id
             Log.app.debug("BG: Current user ID: \(id)")
         } else {
@@ -134,11 +139,12 @@ final class BackgroundSyncService: ObservableObject {
 
         do {
             let summary = try await detector.detectChanges(api: api, currentUserId: currentUserId, settings: settings)
-            Log.app.debug("BG: changes new:\(summary.newTasks.count) updated:\(summary.updatedTasks.count) assigned:\(summary.assignedToMe.count) labels:\(summary.labelWatched.count)")
+            Log.app.debug("BG: changes new:\(summary.newTasks.count) updated:\(summary.updatedTasks.count) assigned:\(summary.assignedToMe.count) labels:\(summary.labelWatched.count)") // swiftlint:disable:this line_length
             // Notifications per user toggles
             let notifier = NotificationsManager.shared
             // Request permission if needed when any toggle is enabled
-            if settings.notifyNewTasks || settings.notifyUpdatedTasks || settings.notifyAssignedToMe || settings.notifyLabelsUpdated || settings.notifyWithSummary {
+            if settings.notifyNewTasks || settings.notifyUpdatedTasks ||
+                settings.notifyAssignedToMe || settings.notifyLabelsUpdated || settings.notifyWithSummary {
                 _ = await notifier.requestAuthorizationIfNeeded()
             }
 
@@ -153,21 +159,24 @@ final class BackgroundSyncService: ObservableObject {
                 Log.app.debug("BG: Sending \(summary.updatedTasks.count) updated task notifications")
                 for t in summary.updatedTasks {
                     Log.app.debug("BG: Updated task notification - \(t.title)")
-                    notifier.postImmediate(title: "Task Updated", body: t.title, thread: "tasks.updated", userInfo: ["taskId": t.id])
+                    notifier.postImmediate(
+                        title: "Task Updated", body: t.title, thread: "tasks.updated", userInfo: ["taskId": t.id])
                 }
             }
             if settings.notifyAssignedToMe, let uid = currentUserId {
                 Log.app.debug("BG: Sending \(summary.assignedToMe.count) assignment notifications for user \(uid)")
                 for t in summary.assignedToMe {
                     Log.app.debug("BG: Assignment notification - \(t.title)")
-                    notifier.postImmediate(title: "Assigned to You", body: t.title, thread: "tasks.assigned", userInfo: ["taskId": t.id])
+                    notifier.postImmediate(
+                        title: "Assigned to You", body: t.title, thread: "tasks.assigned", userInfo: ["taskId": t.id])
                 }
             }
             if settings.notifyLabelsUpdated {
                 Log.app.debug("BG: Sending \(summary.labelWatched.count) label watch notifications")
                 for t in summary.labelWatched {
                     Log.app.debug("BG: Label watch notification - \(t.title)")
-                    notifier.postImmediate(title: "Watched Label Updated", body: t.title, thread: "tasks.labels", userInfo: ["taskId": t.id])
+                    notifier.postImmediate(
+                        title: "Watched Label Updated", body: t.title, thread: "tasks.labels", userInfo: ["taskId": t.id])
                 }
             }
 

@@ -52,7 +52,8 @@ struct RelatedTasksView: View {
         if isRefreshing && relations.isEmpty {
             VStack(spacing: 16) {
                 ProgressView().scaleEffect(1.2)
-                Text(String(localized: "tasks.related.loading", comment: "Loading related tasks...")).foregroundColor(.secondary)
+                Text(String(localized: "tasks.related.loading", comment: "Loading related tasks..."))
+                    .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if relations.isEmpty {
@@ -60,7 +61,9 @@ struct RelatedTasksView: View {
                 Spacer()
                 Image(systemName: "link").font(.system(size: 48)).foregroundColor(.secondary)
                 // Text("No Related Tasks").font(.title3).fontWeight(.semibold)
-                Text(String(localized: "tasks.related.none.title", comment: "No related tasks title")).font(.title3).fontWeight(.semibold)
+                Text(String(localized: "tasks.related.none.title", comment: "No related tasks title"))
+                    .font(.title3)
+                    .fontWeight(.semibold)
                 Text(String(localized: "tasks.related.none.subtitle", comment: "Use the picker below to relate another task."))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)

@@ -155,7 +155,8 @@ final class CalendarSyncManager: ObservableObject {
         return conflicts.first ?? .title // Return the first conflict type
     }
 
-    func resolveConflict(_ conflict: SyncConflict, resolution: CalendarSyncService.SyncConflictResolution, api: VikunjaAPI) async {
+    func resolveConflict(
+        _ conflict: SyncConflict, resolution: CalendarSyncService.SyncConflictResolution, api: VikunjaAPI) async {
         guard let calendar = calendarSync.selectedCalendar else {
             syncConflicts.removeAll { $0.id == conflict.id }
             return
@@ -165,8 +166,10 @@ final class CalendarSyncManager: ObservableObject {
             let task = try await api.getTask(taskId: conflict.taskId)
 
             // Find the matching event via URL scheme
-            let window = DateInterval(start: Date().addingTimeInterval(-365*24*60*60), end: Date().addingTimeInterval(365*24*60*60))
-            let predicate = calendarSync.eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: [calendar])
+            let window = DateInterval(
+                start: Date().addingTimeInterval(-365*24*60*60), end: Date().addingTimeInterval(365*24*60*60))
+            let predicate = calendarSync.eventStore.predicateForEvents(
+                withStart: window.start, end: window.end, calendars: [calendar])
             let event = calendarSync.eventStore.events(matching: predicate).first { ev in
                 ev.url?.absoluteString == "kuna://task/\(conflict.taskId)"
             }

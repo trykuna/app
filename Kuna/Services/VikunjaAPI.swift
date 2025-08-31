@@ -142,7 +142,7 @@ final class VikunjaAPI {
         if let t = tokenProvider() {
             req.setValue("Bearer \(t)", forHTTPHeaderField: "Authorization")
             #if DEBUG
-            Log.network.debug("Authorization header set for endpoint \(endpoint.pathComponents.joined(separator: "/"), privacy: .public)")
+            Log.network.debug("Authorization header set for endpoint \(endpoint.pathComponents.joined(separator: "/"), privacy: .public)") // swiftlint:disable:this line_length
             #endif
         } else if !isAuthEndpoint {
             Log.network.error("No token available for request to \(url.absoluteString, privacy: .public)")
@@ -159,13 +159,15 @@ final class VikunjaAPI {
             do {
                 let (data, resp) = try await session.data(for: req)
                 guard let http = resp as? HTTPURLResponse else { throw APIError.other("No HTTP response") }
-                Log.network.debug("Response: status=\(http.statusCode, privacy: .public) url=\(url.absoluteString, privacy: .public)")
+                Log.network.debug("Response: status=\(http.statusCode, privacy: .public) url=\(url.absoluteString, privacy: .public)") // swiftlint:disable:this line_length
 
                 if (200..<300).contains(http.statusCode) {
                     return (data, http)
                 }
 
-                if isGet && (http.statusCode == 500 || http.statusCode == 502 || http.statusCode == 503 || http.statusCode == 504) && attempt < 3 {
+                if isGet && (
+                        http.statusCode == 500 || http.statusCode == 502 || http.statusCode == 503 || http.statusCode == 504)
+                    && attempt < 3 {
                     let delay = UInt64(pow(2.0, Double(attempt - 1)) * 0.3 * 1_000_000_000)
                     try? await Task.sleep(nanoseconds: delay)
                     continue
@@ -176,7 +178,7 @@ final class VikunjaAPI {
                     if serverMessage.isEmpty {
                         Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public)")
                     } else {
-                        Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public) message=\(serverMessage, privacy: .public)")
+                        Log.network.debug("HTTP error status=\(http.statusCode, privacy: .public) message=\(serverMessage, privacy: .public)") // swiftlint:disable:this line_length
                     }
                 }
 
@@ -188,7 +190,7 @@ final class VikunjaAPI {
                     Log.network.error("HTTP 412 Precondition Failed - Raw response: \(rawResponse, privacy: .public)")
                     
                     let serverMessage = extractErrorMessage(from: data) ?? ""
-                    Log.network.error("HTTP 412 Precondition Failed - Extracted message: \(serverMessage.isEmpty ? "<empty>" : serverMessage, privacy: .public)")
+                    Log.network.error("HTTP 412 Precondition Failed - Extracted message: \(serverMessage.isEmpty ? "<empty>" : serverMessage, privacy: .public)") // swiftlint:disable:this line_length
                     
                     #if DEBUG
                     Log.network.debug("HTTP 412 body(raw): \(rawResponse, privacy: .public)")
@@ -207,40 +209,40 @@ final class VikunjaAPI {
 
                         // Check if credentials are wrong first (code 1011)
                         if msg.contains("wrong username or password") ||
-                           msg.contains("invalid username") || msg.contains("invalid password") ||
-                           (msg.contains("authentication") && msg.contains("failed")) {
-                            Log.network.error("412(/login) -> INVALID_CREDENTIALS - matched: '\(serverMessage, privacy: .public)'")
-                            throw APIError.invalidCredentials
+                            msg.contains("invalid username") || msg.contains("invalid password") ||
+                            (msg.contains("authentication") && msg.contains("failed")) {
+                                Log.network.error("412(/login) -> INVALID_CREDENTIALS - matched: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
+                                throw APIError.invalidCredentials
                         }
 
                         // For "Invalid totp passcode" (code 1017), we need to check context
                         if msg.contains("invalid totp") || msg.contains("invalid totp passcode") ||
-                           msg.contains("totp passcode invalid") || msg.contains("wrong totp") {
-                            // Check if we actually sent a TOTP code in this request
-                            let sentTOTP = context?.sentTOTP ?? false
-                            
-                            if sentTOTP {
-                                // We sent a TOTP but it was wrong
-                                Log.network.error("412(/login) -> INVALID_TOTP - TOTP was sent but incorrect: '\(serverMessage, privacy: .public)'")
-                                throw APIError.invalidTOTP
-                            } else {
-                                // We didn't send a TOTP, so this means TOTP is required
-                                Log.network.info("412(/login) -> TOTP_REQUIRED - No TOTP sent, server requires it: '\(serverMessage, privacy: .public)'")
-                                throw APIError.totpRequired
-                            }
+                            msg.contains("totp passcode invalid") || msg.contains("wrong totp") {
+                                // Check if we actually sent a TOTP code in this request
+                                let sentTOTP = context?.sentTOTP ?? false
+                                
+                                if sentTOTP {
+                                    // We sent a TOTP but it was wrong
+                                    Log.network.error("412(/login) -> INVALID_TOTP - TOTP was sent but incorrect: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
+                                    throw APIError.invalidTOTP
+                                } else {
+                                    // We didn't send a TOTP, so this means TOTP is required
+                                    Log.network.info("412(/login) -> TOTP_REQUIRED - No TOTP sent, server requires it: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
+                                    throw APIError.totpRequired
+                                }
                         }
 
-                        Log.network.info("412(/login) -> TOTP_REQUIRED (strict fallback) - message was: '\(serverMessage, privacy: .public)'")
+                        Log.network.info("412(/login) -> TOTP_REQUIRED (strict fallback) - message was: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
                         throw APIError.totpRequired
                     }
 
                     // Non-login endpoints: classify normally
                     let meaning = classifyAuthPrecondition(message: serverMessage, context: context)
-                    Log.network.info("HTTP 412 on non-login endpoint - Classification: \(String(describing: meaning), privacy: .public), Message: '\(serverMessage, privacy: .public)'")
+                    Log.network.info("HTTP 412 on non-login endpoint - Classification: \(String(describing: meaning), privacy: .public), Message: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
                     
                     switch meaning {
                     case .invalidCredentials:
-                        Log.network.error("412 -> INVALID_CREDENTIALS (non-login) - message: '\(serverMessage, privacy: .public)'")
+                        Log.network.error("412 -> INVALID_CREDENTIALS (non-login) - message: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
                         throw APIError.invalidCredentials
                     case .invalidTOTP:
                         Log.network.error("412 -> INVALID_TOTP (non-login) - message: '\(serverMessage, privacy: .public)'")
@@ -249,7 +251,7 @@ final class VikunjaAPI {
                         Log.network.info("412 -> TOTP_REQUIRED (non-login) - message: '\(serverMessage, privacy: .public)'")
                         throw APIError.totpRequired
                     case .unknown:
-                        Log.network.warning("412 -> HTTP(412) (unknown, non-login) - message: '\(serverMessage, privacy: .public)'")
+                        Log.network.warning("412 -> HTTP(412) (unknown, non-login) - message: '\(serverMessage, privacy: .public)'") // swiftlint:disable:this line_length
                         if !serverMessage.isEmpty { throw APIError.other(serverMessage) }
                         throw APIError.http(412)
                     }
@@ -324,7 +326,8 @@ final class VikunjaAPI {
         if totalCount == nil, let tp = totalPages, let pp = perPage {
             totalCount = tp * pp
         }
-        return PaginationInfo(totalPages: totalPages, currentPage: currentPage, perPage: perPage, resultCount: resultCount, totalCount: totalCount)
+        return PaginationInfo(
+            totalPages: totalPages, currentPage: currentPage, perPage: perPage, resultCount: resultCount, totalCount: totalCount)
     }
 
     // MARK: - Error payload extraction
@@ -375,7 +378,7 @@ final class VikunjaAPI {
             config.httpMaximumConnectionsPerHost = 4 // Limit concurrent connections
             config.timeoutIntervalForRequest = 30 // Shorter timeout
             config.timeoutIntervalForResource = 60
-            config.urlCache = URLCache(memoryCapacity: 2 * 1024 * 1024, diskCapacity: 0, diskPath: nil) // Small memory cache, no disk cache
+            config.urlCache = URLCache(memoryCapacity: 2 * 1024 * 1024, diskCapacity: 0, diskPath: nil)
             config.requestCachePolicy = .reloadIgnoringLocalCacheData // Don't cache requests
             self.session = URLSession(configuration: config)
         }
@@ -541,7 +544,7 @@ final class VikunjaAPI {
         let newProject = NewProject(title: title, description: description)
 
         #if DEBUG
-        Log.network.debug("Creating project body size bytes: \((try? JSONEncoder.vikunja.encode(newProject).count) ?? 0, privacy: .public)")
+        Log.network.debug("Creating project body size bytes: \((try? JSONEncoder.vikunja.encode(newProject).count) ?? 0, privacy: .public)") // swiftlint:disable:this line_length
         #endif
 
         let data = try await request("projects", method: "PUT", body: newProject)
@@ -562,7 +565,8 @@ final class VikunjaAPI {
     }
 
     // Paginated task fetching with optional query items
-    func fetchTasks(projectId: Int, page: Int = 1, perPage: Int = 50, queryItems: [URLQueryItem] = []) async throws -> TasksResponse {
+    func fetchTasks(
+        projectId: Int, page: Int = 1, perPage: Int = 50, queryItems: [URLQueryItem] = []) async throws -> TasksResponse {
         var allQueryItems = queryItems
         allQueryItems.append(URLQueryItem(name: "page", value: String(page)))
         allQueryItems.append(URLQueryItem(name: "per_page", value: String(perPage)))
@@ -572,7 +576,7 @@ final class VikunjaAPI {
 
         #if DEBUG
         Log.network.debug("Tasks(response) bytes: \(data.count, privacy: .public)")
-        Log.network.debug("Fetching tasks for project \(projectId, privacy: .public), page \(page, privacy: .public), per_page \(perPage, privacy: .public)")
+        Log.network.debug("Fetching tasks for project \(projectId, privacy: .public), page \(page, privacy: .public), per_page \(perPage, privacy: .public)") // swiftlint:disable:this line_length
         #endif
 
         // First try to decode as array (legacy, some endpoints still return a raw array)
@@ -584,7 +588,12 @@ final class VikunjaAPI {
             let p = paginationInfo(from: http)
             let totalPages = p.totalPages
             let hasMore = totalPages.map { page < $0 } ?? (tasks.count == perPage)
-            return TasksResponse(tasks: tasks, hasMore: hasMore, currentPage: p.currentPage ?? page, totalPages: totalPages, totalCount: p.totalCount)
+            return TasksResponse(
+                tasks: tasks,
+                hasMore: hasMore,
+                currentPage: p.currentPage ?? page,
+                totalPages: totalPages,
+                totalCount: p.totalCount)
         }
 
         // Try paginated response body shape as a fallback
@@ -603,8 +612,14 @@ final class VikunjaAPI {
             let p = paginationInfo(from: http)
             let totalPages = body.totalPages ?? p.totalPages
             let current = body.page ?? p.currentPage ?? page
-            let hasMore = totalPages.map { current < $0 } ?? (body.tasks.count == perPage)
-            return TasksResponse(tasks: body.tasks, hasMore: hasMore, currentPage: current, totalPages: totalPages, totalCount: p.totalCount)
+            let hasMore = totalPages.map { current < $0 } ?? 
+                        (body.tasks.count == perPage)
+            return TasksResponse(
+                tasks: body.tasks,
+                hasMore: hasMore,
+                currentPage: current,
+                totalPages: totalPages,
+                totalCount: p.totalCount)
         } catch {
             #if DEBUG
             Log.network.error("Failed to decode tasks response: \(String(describing: error), privacy: .public)")
@@ -635,7 +650,7 @@ final class VikunjaAPI {
         let newTask = NewTask(title: title, description: description)
 
         #if DEBUG
-        Log.network.debug("Creating task body size bytes: \((try? JSONEncoder.vikunja.encode(newTask).count) ?? 0, privacy: .public)")
+        Log.network.debug("Creating task body size bytes: \((try? JSONEncoder.vikunja.encode(newTask).count) ?? 0, privacy: .public)") // swiftlint:disable:this line_length
         #endif
 
         // PUT to /projects/{id}/tasks endpoint as per Vikunja API docs
@@ -653,7 +668,7 @@ final class VikunjaAPI {
         updated.done = done
 
         #if DEBUG
-        Log.network.debug("Updating task body size bytes: \((try? JSONEncoder.vikunja.encode(updated).count) ?? 0, privacy: .public)")
+        Log.network.debug("Updating task body size bytes: \((try? JSONEncoder.vikunja.encode(updated).count) ?? 0, privacy: .public)") // swiftlint:disable:this line_length
         #endif
 
         // Use POST for updating tasks in Vikunja API
@@ -669,7 +684,7 @@ final class VikunjaAPI {
     func updateTask(_ task: VikunjaTask) async throws -> VikunjaTask {
         // Debug: print what we're sending
         if let jsonData = try? JSONEncoder.vikunja.encode(task),
-           let jsonString = String(data: jsonData, encoding: .utf8) {
+            let jsonString = String(data: jsonData, encoding: .utf8) {
             Log.network.debug("Updating task with body: \(jsonString, privacy: .public)")
         }
 
@@ -739,7 +754,7 @@ final class VikunjaAPI {
     func addLabelToTask(taskId: Int, labelId: Int) async throws -> VikunjaTask {
         struct LabelAssignment: Encodable { let label_id: Int }
         _ = try await request("tasks/\(taskId)/labels", method: "PUT",
-                              body: LabelAssignment(label_id: labelId))
+                                body: LabelAssignment(label_id: labelId))
 
         // The API just returns a confirmation, not the updated task
         // So we need to fetch the updated task separately
@@ -856,7 +871,7 @@ final class VikunjaAPI {
     func assignUserToTask(taskId: Int, userId: Int) async throws -> VikunjaTask {
         struct UserAssignment: Encodable { let user_id: Int }
         _ = try await request("tasks/\(taskId)/assignees", method: "PUT",
-                              body: UserAssignment(user_id: userId))
+                                body: UserAssignment(user_id: userId))
 
         // Fetch the updated task
         return try await getTask(taskId: taskId)
@@ -1163,7 +1178,7 @@ final class VikunjaAPI {
         let favoriteTasks = allTasks.filter { $0.isFavorite }
 
         #if DEBUG
-        Log.network.debug("Client-side: Got \(allTasks.count, privacy: .public) total tasks, \(favoriteTasks.count, privacy: .public) favorites")
+        Log.network.debug("Client-side: Got \(allTasks.count, privacy: .public) total tasks, \(favoriteTasks.count, privacy: .public) favorites") // swiftlint:disable:this line_length
         #endif
 
         return favoriteTasks
@@ -1225,7 +1240,7 @@ final class VikunjaAPI {
         updatedTask.isFavorite = !task.isFavorite
 
         #if DEBUG
-        Log.network.debug("Toggling favorite for task: id=\(task.id, privacy: .public) title=\(task.title, privacy: .public) current=\(task.isFavorite, privacy: .public) new=\(updatedTask.isFavorite, privacy: .public) createdBy=\(task.createdBy?.name ?? "nil", privacy: .public) assignees=\(task.assignees?.count ?? 0, privacy: .public)")
+        Log.network.debug("Toggling favorite for task: id=\(task.id, privacy: .public) title=\(task.title, privacy: .public) current=\(task.isFavorite, privacy: .public) new=\(updatedTask.isFavorite, privacy: .public) createdBy=\(task.createdBy?.name ?? "nil", privacy: .public) assignees=\(task.assignees?.count ?? 0, privacy: .public)") // swiftlint:disable:this line_length
         #endif
 
         // Send the complete task object to preserve all fields
@@ -1241,7 +1256,7 @@ final class VikunjaAPI {
         let finalTask = try JSONDecoder.vikunja.decode(VikunjaTask.self, from: data)
 
         #if DEBUG
-        Log.network.debug("Final task after favorite toggle: id=\(finalTask.id, privacy: .public) title=\(finalTask.title, privacy: .public) isFavorite=\(finalTask.isFavorite, privacy: .public) createdBy=\(finalTask.createdBy?.name ?? "nil", privacy: .public) assignees=\(finalTask.assignees?.count ?? 0, privacy: .public)")
+        Log.network.debug("Final task after favorite toggle: id=\(finalTask.id, privacy: .public) title=\(finalTask.title, privacy: .public) isFavorite=\(finalTask.isFavorite, privacy: .public) createdBy=\(finalTask.createdBy?.name ?? "nil", privacy: .public) assignees=\(finalTask.assignees?.count ?? 0, privacy: .public)") // swiftlint:disable:this line_length
         #endif
 
         return finalTask
@@ -1308,7 +1323,7 @@ extension VikunjaAPI {
                     page += 1
                 } catch {
                     #if DEBUG
-                    Log.network.error("fetchAllTasksUpdatedSince: server filter failed on page \(page, privacy: .public): \(String(describing: error), privacy: .public)")
+                    Log.network.error("fetchAllTasksUpdatedSince: server filter failed on page \(page, privacy: .public): \(String(describing: error), privacy: .public)") // swiftlint:disable:this line_length
                     #endif
                     usedServerFilter = false
                     break

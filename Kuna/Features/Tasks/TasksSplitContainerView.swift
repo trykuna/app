@@ -39,7 +39,8 @@ struct TasksSplitContainerView: View {
             } else {
                 if #available(iOS 17, *) {
                     // ContentUnavailableView("Select a task", systemImage: "square.and.pencil")
-                    ContentUnavailableView(String(localized: "tasks.select.title", comment: "Title for select a task"), systemImage: "square.and.pencil")
+                    ContentUnavailableView(String(localized: "tasks.select.title",
+                                                    comment: "Title for select a task"), systemImage: "square.and.pencil")
                 } else {
                     // Text("Select a task")
                     Text(String(localized: "tasks.select.title", comment: "Title for select a task"))

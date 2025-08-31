@@ -152,14 +152,16 @@ struct DispositionOptionCard: View {
                     
                     if disposition == .removeKunaEvents {
                         // Text("⚠️ This will permanently delete all synced events")
-                        Text(String(localized: "settings.calendarSync.disable.disposition.removeKunaEvents.title", comment: "Title for this will permanently delete all synced events"))
+                        Text(String(localized: "settings.calendarSync.disable.disposition.removeKunaEvents.title",
+                                    comment: "Title for this will permanently delete all synced events"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     }
                     
                     if disposition == .deleteEverything {
                         // Text("🚨 This will permanently delete all Kuna calendars and events")
-                        Text(String(localized: "settings.calendarSync.disable.disposition.deleteEverything.title", comment: "Title for this will permanently delete all kuna calendars and events"))
+                        Text(String(localized: "settings.calendarSync.disable.disposition.deleteEverything.title",
+                                    comment: "Title for this will permanently delete all kuna calendars and events"))
                             .font(.caption)
                             .foregroundColor(.red)
                             .fontWeight(.semibold)

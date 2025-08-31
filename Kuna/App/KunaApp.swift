@@ -47,16 +47,22 @@ struct KunaApp: App {
                     
                     // Only handle if it's been at least 5 seconds since last warning
                     guard now - lastWarning > 5.0 else {
-                        Log.app.debug("Memory warning rate limited - skipping")
+                        Log.app.debug(
+                            "Memory warning rate limited - skipping"
+                        )
                         return
                     }
                     
                     UserDefaults.standard.set(now, forKey: "lastMemoryWarningTime")
-                    Log.app.warning("App: Received memory warning - clearing caches")
+                    Log.app.warning(
+                        "App: Received memory warning - clearing caches"
+                    )
                     appState.handleMemoryWarning()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                    Log.app.debug("App: Entered background - performing memory cleanup and scheduling background sync")
+                    Log.app.debug(
+                        "App: Entered background - performing memory cleanup and scheduling background sync"
+                    )
                     // Aggressive memory cleanup when app goes to background
                     appState.handleMemoryWarning()
                     CommentCountManager.shared?.clearCache()

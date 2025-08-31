@@ -41,7 +41,9 @@ struct TaskPickerSheet: View {
                     ProgressView().padding()
                 } else if results.isEmpty && hasSearched {
                     // Text("No tasks found").foregroundColor(.secondary).padding()
-                    Text(String(localized: "tasks.search.noResults", comment: "No tasks found")).foregroundColor(.secondary).padding()
+                    Text(String(localized: "tasks.search.noResults", comment: "No tasks found"))
+                        .foregroundColor(.secondary)
+                        .padding()
                 } else if !hasSearched {
                     VStack(spacing: 12) {
                         Image(systemName: "text.magnifyingglass").font(.system(size: 40)).foregroundColor(.secondary)
@@ -49,7 +51,10 @@ struct TaskPickerSheet: View {
                         Text(String(localized: "tasks.search.title", comment: "Title for search for tasks"))
                             .font(.headline)
                         // Text("Type part of a title or description to find a task")
-                        Text(String(localized: "tasks.search.description", comment: "Type part of a title or description to find a task"))
+                        Text(
+                            String(localized: "tasks.search.description", 
+                                   comment: "Type part of a title or description to find a task")
+                        )
                             .foregroundColor(.secondary).multilineTextAlignment(.center)
                     }
                     .padding()
@@ -65,8 +70,16 @@ struct TaskPickerSheet: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(t.title).lineLimit(1)
                                     HStack(spacing: 8) {
-                                        if let projectId = t.projectId { Text(verbatim: "#\(projectId)").font(.caption).foregroundColor(.secondary) }
-                                        if let due = t.dueDate { Text(due, style: .date).font(.caption).foregroundColor(.secondary) }
+                                        if let projectId = t.projectId {
+                                            Text(verbatim: "#\(projectId)")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        if let due = t.dueDate { 
+                                            Text(due, style: .date)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
                                     }
                                 }
                                 Spacer()
@@ -83,9 +96,13 @@ struct TaskPickerSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // ToolbarItem(placement: .navigationBarLeading) { Button("Cancel") { dismiss() } }
-                ToolbarItem(placement: .navigationBarLeading) { Button(String(localized: "common.cancel", comment: "Cancel button")) { dismiss() } }
+                ToolbarItem(placement: .navigationBarLeading) { 
+                    Button(String(localized: "common.cancel", comment: "Cancel button")) { dismiss() } 
+                }
                 // ToolbarItem(placement: .navigationBarTrailing) { Button("Search") { search() } }
-                ToolbarItem(placement: .navigationBarTrailing) { Button(String(localized: "common.search", comment: "Search button")) { search() } }
+                ToolbarItem(placement: .navigationBarTrailing) { 
+                    Button(String(localized: "common.search", comment: "Search button")) { search() } 
+                }
             }
         }
     }

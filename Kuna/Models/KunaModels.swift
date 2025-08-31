@@ -449,13 +449,13 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         let projectIdVal = projectId
 
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
-            Log.app.debug("Decoded isFavorite for task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public): \(favoriteValue, privacy: .public)")
+            Log.app.debug("Decoded isFavorite for task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public): \(favoriteValue, privacy: .public)") // swiftlint:disable:this line_length
         } else {
-            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no isFavorite field, defaulting to false")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no isFavorite field, defaulting to false") // swiftlint:disable:this line_length
         }
 
         if let projectIdValue = projectIdVal {
-            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) belongs to project ID: \(projectIdValue, privacy: .public)")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) belongs to project ID: \(projectIdValue, privacy: .public)") // swiftlint:disable:this line_length
         } else {
             Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no project ID")
         }

@@ -27,7 +27,8 @@ struct CalendarSyncView: View {
                     // ADVANCED (optional)
                     Section {
                         // Toggle("Show Technical Details", isOn: $showAdvanced.animation())
-                        Toggle(String(localized: "settings.calendarSync.showTechnicalDetails", comment: "Show technical details toggle"), isOn: $showAdvanced.animation())
+                        Toggle(String(localized: "settings.calendarSync.showTechnicalDetails",
+                                        comment: "Show technical details toggle"), isOn: $showAdvanced.animation())
                     }
                     if showAdvanced {
                         technicalDetailsSection
@@ -37,7 +38,8 @@ struct CalendarSyncView: View {
                 }
             }
             // .navigationTitle("Calendar Sync")
-            .navigationTitle(String(localized: "settings.calendarSync.navigationTitle", comment: "Calendar sync navigation title"))
+            .navigationTitle(String(localized: "settings.calendarSync.navigationTitle",
+                                        comment: "Calendar sync navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -93,7 +95,9 @@ struct CalendarSyncView: View {
                     // Text("Calendar Sync")
                     Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar sync"))
                         .font(.headline)
-                    Text(appSettings.calendarSyncPrefs.isEnabled ? String(localized: "settings.calendarSync.enabled.title", comment: "Title for enabled") : String(localized: "common.disabled", comment: "Title for disabled"))
+                    Text(appSettings.calendarSyncPrefs.isEnabled
+                            ? String(localized: "settings.calendarSync.enabled.title", comment: "Title for enabled")
+                            : String(localized: "common.disabled", comment: "Title for disabled"))
                         .font(.caption)
                         .foregroundColor(appSettings.calendarSyncPrefs.isEnabled ? .green : .secondary)
                 }
@@ -132,7 +136,8 @@ struct CalendarSyncView: View {
                         Text(String(localized: "settings.calendarSync.intro.title", comment: "Title for sync with calendar"))
                             .font(.headline)
                         // Text("Keep your tasks in sync with your calendar app")
-                        Text(String(localized: "settings.calendarSync.intro.subtitle", comment: "Subtitle for sync with calendar"))
+                        Text(String(localized: "settings.calendarSync.intro.subtitle",
+                                    comment: "Subtitle for sync with calendar"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -192,7 +197,6 @@ struct CalendarSyncView: View {
                     // Text("Calendars")
                     Text(String(localized: "settings.calendarSync.calendars.title", comment: "Title for calendars"))
                     Spacer()
-                    // TODO: Localize
                     let count = appSettings.calendarSyncPrefs.projectCalendars.count
                     Text("\(count) calendars")
                         .foregroundColor(.secondary)
@@ -251,7 +255,6 @@ struct CalendarSyncView: View {
                 }
             }
 
-            // TODO: Localize
             // Button("Sync Now") {
             Button(String(localized: "settings.calendarSync.syncNow", comment: "Sync now button")) {
                 Task { await engine.resyncNow() }
@@ -279,7 +282,9 @@ struct CalendarSyncView: View {
                     }
 
                     Spacer()
-                    Text(cal.allowsContentModifications ? String(localized: "settings.calendarSync.writable", comment: "Writable calendar") : String(localized: "settings.calendarSync.readOnly", comment: "Read-only calendar"))
+                    Text(cal.allowsContentModifications
+                            ? String(localized: "settings.calendarSync.writable", comment: "Writable calendar")
+                            : String(localized: "settings.calendarSync.readOnly", comment: "Read-only calendar"))
                         .font(.caption)
                         .foregroundColor(cal.allowsContentModifications ? .green : .orange)
                 }

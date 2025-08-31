@@ -1,6 +1,7 @@
 // Features/Tasks/TaskDetailView.swift
 import SwiftUI
 import EventKit
+import os
 
 struct TaskDetailView: View {
     @State private var task: VikunjaTask
@@ -91,26 +92,30 @@ struct TaskDetailView: View {
                 if weeks == 1 {
                     return String(localized: "tasks.repeat.display.weekly", comment: "Weekly")
                 } else {
-                    return String(localized: "tasks.repeat.display.everyXWeeks", comment: "Every X weeks").replacingOccurrences(of: "X", with: "\(weeks)")
+                    return String(localized: "tasks.repeat.display.everyXWeeks", comment: "Every X weeks")
+                        .replacingOccurrences(of: "X", with: "\(weeks)")
                 }
             } else if seconds % 86400 == 0 {
                 let days = seconds / 86400
                 if days == 1 {
                     return String(localized: "tasks.repeat.display.daily", comment: "Daily")
                 } else {
-                    return String(localized: "tasks.repeat.display.everyXDays", comment: "Every X days").replacingOccurrences(of: "X", with: "\(days)")
+                    return String(localized: "tasks.repeat.display.everyXDays", comment: "Every X days")
+                        .replacingOccurrences(of: "X", with: "\(days)")
                 }
             } else if seconds % 3600 == 0 {
                 let hours = seconds / 3600
                 if hours == 1 {
                     return String(localized: "tasks.repeat.display.hourly", comment: "Hourly")
                 } else {
-                    return String(localized: "tasks.repeat.display.everyXHours", comment: "Every X hours").replacingOccurrences(of: "X", with: "\(hours)")
+                    return String(localized: "tasks.repeat.display.everyXHours", comment: "Every X hours")
+                        .replacingOccurrences(of: "X", with: "\(hours)")
                 }
             } else {
                 // Fallback - show in days with decimal
                 let days = Double(seconds) / 86400.0
-                return String(format: String(localized: "tasks.repeat.display.everyXDaysDecimal", comment: "Every %.1f days"), days)
+                return String(format: String(localized: "tasks.repeat.display.everyXDaysDecimal",
+                                            comment: "Every %.1f days"), days)
             }
         }
     }
@@ -219,7 +224,7 @@ struct TaskDetailView: View {
             .id(refreshID) // Force view refresh when ID changes
             .navigationTitle(String(localized: "tasks.details.title", comment: "Task Details"))
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
+            .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
                         Button(action: toggleFavorite) {
@@ -248,7 +253,7 @@ struct TaskDetailView: View {
                         }
                     }
                 }
-            }
+            })
         }
         .onAppear {
             // Initialize edit buffers
@@ -318,19 +323,23 @@ struct TaskDetailView: View {
                 repeatAfter: taskRepeatAfter,  // Use workaround state
                 repeatMode: taskRepeatMode,     // Use workaround state
                 onCommit: { newAfter, newMode in
-                    print("🔄 RepeatEditorSheet onCommit: newAfter=\(newAfter?.description ?? "nil"), newMode=\(newMode)")
-                    print("🔄 BEFORE: taskRepeatAfter=\(taskRepeatAfter?.description ?? "nil"), taskRepeatMode=\(taskRepeatMode)")
-                    
+                    Log.app.debug("RepeatEditorSheet onCommit - newAfter: \(newAfter?.description ?? "nil", privacy: .public)")
+                    Log.app.debug("RepeatEditorSheet onCommit - newMode: \(newMode.displayName, privacy: .public)")
+                    Log.app.debug("BEFORE - taskRepeatAfter: \(taskRepeatAfter?.description ?? "nil", privacy: .public)")
+                    Log.app.debug("BEFORE - taskRepeatMode: \(taskRepeatMode.displayName, privacy: .public)")
+
                     // WORKAROUND: Update the separate state variables
                     taskRepeatAfter = newAfter
                     taskRepeatMode = newMode
-                    
-                    print("🔄 AFTER setting workaround state: taskRepeatAfter=\(taskRepeatAfter?.description ?? "nil"), taskRepeatMode=\(taskRepeatMode)")
-                    
+
+                    Log.app.debug("AFTER - taskRepeatAfter: \(taskRepeatAfter?.description ?? "nil", privacy: .public)")
+                    Log.app.debug("AFTER - taskRepeatMode: \(taskRepeatMode.displayName, privacy: .public)")
+
                     // Also try to update task (even though we know it fails)
                     task.repeatAfter = newAfter
                     task.repeatMode = newMode
-                    print("🔄 Task values (will be wrong): task.repeatAfter=\(task.repeatAfter?.description ?? "nil"), task.repeatMode=\(task.repeatMode)")
+                    Log.app.debug("Task (wrong) - repeatAfter: \(task.repeatAfter?.description ?? "nil", privacy: .public)")
+                    Log.app.debug("Task (wrong) - repeatMode: \(task.repeatMode.displayName, privacy: .public)")
                     
                     hasChanges = true
                     showingRepeatEditor = false
@@ -746,11 +755,12 @@ struct TaskDetailView: View {
         // Move buffered edits into the task
         task.description = editedDescription.isEmpty ? nil : editedDescription
 
-        print("🔍 Processing edit buffers:")
-        print("  - editStartDate: \(editStartDate?.description ?? "nil") (hasTime: \(startHasTime))")
-        print("  - editDueDate: \(editDueDate?.description ?? "nil") (hasTime: \(dueHasTime))")
-        print("  - editEndDate: \(editEndDate?.description ?? "nil") (hasTime: \(endHasTime))")
-        print("🔄 Using workaround repeat values: taskRepeatAfter=\(taskRepeatAfter?.description ?? "nil"), taskRepeatMode=\(taskRepeatMode)")
+        let _ = Log.app.debug("🔍 Processing edit buffers:")
+        let _ = Log.app.debug("  - editStartDate: \(editStartDate?.description ?? "nil") (hasTime: \(startHasTime))")
+        let _ = Log.app.debug("  - editDueDate: \(editDueDate?.description ?? "nil") (hasTime: \(dueHasTime))")
+        let _ = Log.app.debug("  - editEndDate: \(editEndDate?.description ?? "nil") (hasTime: \(endHasTime))")
+        Log.app.debug("Using workaround repeat - taskRepeatAfter: \(taskRepeatAfter?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Using workaround repeat - taskRepeatMode: \(taskRepeatMode.displayName, privacy: .public)")
 
         // Create a completely new task instance to send to API using workaround values
         let taskToSave = VikunjaTask(
@@ -778,42 +788,41 @@ struct TaskDetailView: View {
             relations: task.relations
         )
         
-        print("  ✅ Created new task instance:")
-        print("    - taskToSave.startDate = \(taskToSave.startDate?.description ?? "nil")")
-        print("    - taskToSave.dueDate = \(taskToSave.dueDate?.description ?? "nil")")
-        print("    - taskToSave.endDate = \(taskToSave.endDate?.description ?? "nil")")
+        Log.app.debug("Created new task instance with dates")
+        Log.app.debug("taskToSave dates - start: \(taskToSave.startDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("taskToSave dates - due: \(taskToSave.dueDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("taskToSave dates - end: \(taskToSave.endDate?.description ?? "nil", privacy: .public)")
 
         do {
-            print("🔄 Saving task \(taskToSave.id) with dates:")
-            print("  - Start: \(taskToSave.startDate?.description ?? "nil")")
-            print("  - Due: \(taskToSave.dueDate?.description ?? "nil")")
-            print("  - End: \(taskToSave.endDate?.description ?? "nil")")
-            print("🔄 Saving task with repeat values: repeatAfter=\(taskToSave.repeatAfter?.description ?? "nil"), repeatMode=\(taskToSave.repeatMode)")
-            
+            Log.app.debug("Saving task \(taskToSave.id, privacy: .public) with updated dates")
+            Log.app.debug("Saving task with repeat: after=\(taskToSave.repeatAfter?.description ?? "nil", privacy: .public)")
+            Log.app.debug("Saving task with repeat mode: \(taskToSave.repeatMode.displayName, privacy: .public)")
+
             // Test what gets encoded
             if let encoded = try? JSONEncoder.vikunja.encode(taskToSave),
                let jsonString = String(data: encoded, encoding: .utf8) {
-                print("🔍 JSON being sent to API:")
-                print("  \(jsonString)")
+                Log.app.debug("JSON payload being sent to API")
+                Log.app.debug("JSON content: \(jsonString, privacy: .private)")
             }
-            
+
             let updatedTask = try await api.updateTask(taskToSave)
-            
-            print("✅ Task saved successfully! API response:")
-            print("  - Start: \(updatedTask.startDate?.description ?? "nil")")
-            print("  - Due: \(updatedTask.dueDate?.description ?? "nil")")
-            print("  - End: \(updatedTask.endDate?.description ?? "nil")")
-            print("🔄 API returned repeat values: repeatAfter=\(updatedTask.repeatAfter?.description ?? "nil"), repeatMode=\(updatedTask.repeatMode)")
-            
+
+            Log.app.debug("Task saved successfully")
+            Log.app.debug("API response dates - start: \(updatedTask.startDate?.description ?? "nil", privacy: .public)")
+            Log.app.debug("API response dates - due: \(updatedTask.dueDate?.description ?? "nil", privacy: .public)")
+            Log.app.debug("API response dates - end: \(updatedTask.endDate?.description ?? "nil", privacy: .public)")
+            Log.app.debug("API returned repeat: after=\(updatedTask.repeatAfter?.description ?? "nil", privacy: .public)")
+            Log.app.debug("API returned repeat mode: \(updatedTask.repeatMode.displayName, privacy: .public)")
+
             // Update the edit buffers FIRST (these are what get displayed)
             editStartDate = updatedTask.startDate
             editDueDate = updatedTask.dueDate
             editEndDate = updatedTask.endDate
             editedDescription = updatedTask.description ?? ""
-            
+
             // Trigger calendar sync after task update (skip bidirectional to avoid overwriting)
             if settings.calendarSyncEnabled {
-                print("📅 Triggering one-way calendar sync after task update")
+                Log.app.debug("Triggering one-way calendar sync after task update")
                 calendarSync.setAPI(api)
                 await calendarSync.syncAfterTaskUpdate()
             }
@@ -822,7 +831,7 @@ struct TaskDetailView: View {
             task = updatedTask
             // Also update our workaround variables to stay in sync
             taskRepeatAfter = updatedTask.repeatAfter
-            taskRepeatMode = updatedTask.repeatMode ?? .afterAmount
+            taskRepeatMode = updatedTask.repeatMode
             
             hasChanges = false
             isEditing = false
@@ -835,7 +844,7 @@ struct TaskDetailView: View {
             // Notify the parent view of the update
             onUpdate?(task)
         } catch {
-            print("❌ Failed to save task: \(error)")
+            Log.app.error("Failed to save task: \(String(describing: error), privacy: .public)")
             updateError = error.localizedDescription
         }
     }
@@ -888,14 +897,14 @@ struct TaskDetailView: View {
     
     private func syncTaskToCalendarDirect(_ task: VikunjaTask) async {
         // Only proceed if calendar sync is enabled and we have permission
-        guard settings.calendarSyncEnabled else { 
-            print("📅 Calendar sync disabled")
-            return 
+        guard settings.calendarSyncEnabled else {
+            Log.app.debug("Calendar sync disabled")
+            return
         }
-        
+
         // Create a fresh EventStore for this operation to avoid caching issues
         let eventStore = EKEventStore()
-        
+
         let hasAccess: Bool = {
             if #available(iOS 17.0, *) {
                 return EKEventStore.authorizationStatus(for: .event) == .fullAccess
@@ -903,26 +912,29 @@ struct TaskDetailView: View {
                 return EKEventStore.authorizationStatus(for: .event) == .authorized
             }
         }()
-        
-        guard hasAccess else { 
-            print("📅 No calendar access")
-            return 
-        }
-        
-        // Get the calendar to sync to - find it by identifier in our fresh eventStore
-        guard let selectedCalendarId = calendarSync.selectedCalendar?.calendarIdentifier else { 
-            print("📅 No selected calendar")
-            return 
-        }
-        
-        guard let calendar = eventStore.calendar(withIdentifier: selectedCalendarId) else {
-            print("📅 Could not find calendar with identifier: \(selectedCalendarId)")
+
+        guard hasAccess else {
+            Log.app.debug("No calendar access")
             return
         }
-        
-        print("📅 Syncing task \(task.id): '\(task.title)'")
-        print("📅 Task dates - start: \(task.startDate?.description ?? "nil"), due: \(task.dueDate?.description ?? "nil"), end: \(task.endDate?.description ?? "nil")")
-        print("📅 Task actual dates being used - startDate: \(task.startDate?.timeIntervalSince1970 ?? 0), endDate: \(task.endDate?.timeIntervalSince1970 ?? 0)")
+
+        // Get the calendar to sync to - find it by identifier in our fresh eventStore
+        guard let selectedCalendarId = calendarSync.selectedCalendar?.calendarIdentifier else {
+            Log.app.debug("No selected calendar")
+            return
+        }
+
+        guard let calendar = eventStore.calendar(withIdentifier: selectedCalendarId) else {
+            Log.app.debug("Could not find calendar with ID: \(selectedCalendarId, privacy: .public)")
+            return
+        }
+
+        Log.app.debug("Syncing task \(task.id, privacy: .public): '\(task.title, privacy: .public)'")
+        Log.app.debug("Task dates - start: \(task.startDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Task dates - due: \(task.dueDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Task dates - end: \(task.endDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Task timestamps - start: \(task.startDate?.timeIntervalSince1970 ?? 0, privacy: .public)")
+        Log.app.debug("Task timestamps - end: \(task.endDate?.timeIntervalSince1970 ?? 0, privacy: .public)")
         
         // Only sync tasks that have BOTH start and end dates
         let hasRequiredDates = task.startDate != nil && task.endDate != nil
@@ -930,22 +942,22 @@ struct TaskDetailView: View {
         if hasRequiredDates {
             // Find existing event or create new one
             if let existingEvent = findExistingEventDirect(for: task, in: calendar, using: eventStore) {
-                print("📅 Found existing event, will delete and recreate...")
+                Log.app.debug("Found existing event, will delete and recreate")
                 // Delete the old event
                 do {
                     try eventStore.remove(existingEvent, span: .thisEvent, commit: true)
-                    print("📅 Deleted old event")
+                    Log.app.debug("Deleted old event")
                 } catch {
-                    print("📅 Failed to delete old event: \(error)")
+                    Log.app.error("Failed to delete old event: \(String(describing: error), privacy: .public)")
                 }
                 // Create a new event with updated dates
                 await createCalendarEventDirect(for: task, in: calendar, using: eventStore)
             } else {
-                print("📅 No existing event found, creating new...")
+                Log.app.debug("No existing event found, creating new")
                 await createCalendarEventDirect(for: task, in: calendar, using: eventStore)
             }
         } else {
-            print("📅 Task doesn't have both start and end dates, removing calendar event if exists...")
+            Log.app.debug("Task missing required dates, removing calendar event if exists")
             // Remove calendar event if task doesn't have both required dates
             if let existingEvent = findExistingEventDirect(for: task, in: calendar, using: eventStore) {
                 await removeCalendarEventDirect(existingEvent, using: eventStore)
@@ -953,20 +965,22 @@ struct TaskDetailView: View {
         }
     }
     
-    private func findExistingEventDirect(for task: VikunjaTask, in calendar: EKCalendar, using eventStore: EKEventStore) -> EKEvent? {
+    private func findExistingEventDirect(for task: VikunjaTask,
+                                         in calendar: EKCalendar,
+                                         using eventStore: EKEventStore) -> EKEvent? {
         let window = DateInterval(start: Date().addingTimeInterval(-365*24*60*60),
                                   end: Date().addingTimeInterval(365*24*60*60))
         let predicate = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: [calendar])
         let events = eventStore.events(matching: predicate)
-        
-        print("📅 Searching for event with URL: kuna://task/\(task.id)")
-        print("📅 Found \(events.count) events in calendar")
-        
+
+        Log.app.debug("Searching for event with URL: kuna://task/\(task.id, privacy: .public)")
+        Log.app.debug("Found \(events.count, privacy: .public) events in calendar")
+
         let matchingEvent = events.first { event in
             guard let url = event.url?.absoluteString else { return false }
             let matches = url == "kuna://task/\(task.id)" || url.hasPrefix("kuna://task/\(task.id)?")
             if matches {
-                print("📅 Found matching event with identifier: \(event.eventIdentifier)")
+                Log.app.debug("Found matching event with ID: \(event.eventIdentifier, privacy: .public)")
             }
             return matches
         }
@@ -1000,29 +1014,31 @@ struct TaskDetailView: View {
         do {
             try eventStore.save(event, span: .thisEvent, commit: true)
         } catch {
-            print("Failed to create calendar event: \(error)")
+            Log.app.error("Failed to create calendar event: \(String(describing: error), privacy: .public)")
         }
     }
     
     private func updateCalendarEventDirect(_ event: EKEvent, with task: VikunjaTask, using eventStore: EKEventStore) async {
-        print("📅 Updating event - current dates: start=\(event.startDate?.description ?? "nil"), end=\(event.endDate?.description ?? "nil")")
-        print("📅 Event identifier: \(event.eventIdentifier)")
-        
+        Log.app.debug("Updating event - current start: \(event.startDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Updating event - current end: \(event.endDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Event identifier: \(event.eventIdentifier, privacy: .public)")
+
         // Use the event directly - don't refresh as it might be a different instance
         let eventToUpdate = event
-        
+
         eventToUpdate.title = task.title
         eventToUpdate.notes = task.description
-        
-        // Calculate dates with proper priority: endDate > dueDate > startDate  
+
+        // Calculate dates with proper priority: endDate > dueDate > startDate
         let (startDate, endDate) = calculateEventDatesDirect(for: task)
-        print("📅 New calculated dates: start=\(startDate), end=\(endDate)")
-        
+        Log.app.debug("New calculated dates: start=\(startDate, privacy: .public), end=\(endDate, privacy: .public)")
+
         // Force the dates to update
         eventToUpdate.startDate = startDate
         eventToUpdate.endDate = endDate
-        
-        print("📅 Event dates after setting: start=\(eventToUpdate.startDate?.description ?? "nil"), end=\(eventToUpdate.endDate?.description ?? "nil")")
+
+        Log.app.debug("Event dates after setting - start: \(eventToUpdate.startDate?.description ?? "nil", privacy: .public)")
+        Log.app.debug("Event dates after setting - end: \(eventToUpdate.endDate?.description ?? "nil", privacy: .public)")
         
         // Handle priority note without duplicating it
         var baseNotes = (eventToUpdate.notes ?? "")
@@ -1048,9 +1064,11 @@ struct TaskDetailView: View {
         
         do {
             try eventStore.save(eventToUpdate, span: .thisEvent, commit: true)
-            print("📅 Successfully updated calendar event with dates: start=\(eventToUpdate.startDate?.description ?? "nil"), end=\(eventToUpdate.endDate?.description ?? "nil")")
+            Log.app.debug("Successfully updated calendar event")
+            Log.app.debug("Updated event start: \(eventToUpdate.startDate?.description ?? "nil", privacy: .public)")
+            Log.app.debug("Updated event end: \(eventToUpdate.endDate?.description ?? "nil", privacy: .public)")
         } catch {
-            print("📅 Failed to update calendar event: \(error)")
+            Log.app.error("Failed to update calendar event: \(String(describing: error), privacy: .public)")
         }
     }
     
@@ -1058,7 +1076,7 @@ struct TaskDetailView: View {
         do {
             try eventStore.remove(event, span: .thisEvent, commit: true)
         } catch {
-            print("Failed to remove calendar event: \(error)")
+            Log.app.error("Failed to remove calendar event: \(String(describing: error), privacy: .public)")
         }
     }
     
@@ -1066,13 +1084,14 @@ struct TaskDetailView: View {
         // Since we only sync tasks with both start and end dates,
         // we can safely use them directly
         if let taskStart = task.startDate, let taskEnd = task.endDate {
-            print("📅 calculateEventDatesDirect: Using task dates - start: \(taskStart), end: \(taskEnd)")
+            Log.app.debug("calculateEventDatesDirect: Using task dates - start: \(taskStart, privacy: .public)")
+            Log.app.debug("calculateEventDatesDirect: Using task dates - end: \(taskEnd, privacy: .public)")
             return (taskStart, taskEnd)
         }
-        
+
         // Fallback (shouldn't happen given our new validation)
         let now = Date()
-        print("📅 calculateEventDatesDirect: WARNING - Using fallback dates")
+        Log.app.warning("calculateEventDatesDirect: WARNING - Using fallback dates")
         return (now, now.addingTimeInterval(3600))
     }
 
@@ -1083,7 +1102,10 @@ private struct LabelPickerSheet: View {
     let onCommit: (Set<Int>) -> Void
     let onCancel: () -> Void
 
-    init(availableLabels: [Label], initialSelected: Set<Int>, onCommit: @escaping (Set<Int>) -> Void, onCancel: @escaping () -> Void) {
+    init(availableLabels: [Label],
+         initialSelected: Set<Int>,
+         onCommit: @escaping (Set<Int>) -> Void,
+         onCancel: @escaping () -> Void) {
         self.availableLabels = availableLabels
         self._selected = State(initialValue: initialSelected)
         self.onCommit = onCommit
@@ -1108,8 +1130,12 @@ private struct LabelPickerSheet: View {
             }
             .navigationTitle(String(localized: "tasks.labels.select", comment: "Select labels"))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "common.cancel", comment: "Cancel"), action: onCancel) }
-                ToolbarItem(placement: .confirmationAction) { Button(String(localized: "common.done", comment: "Done")) { onCommit(selected) } }
+                ToolbarItem(placement: .cancellationAction) { 
+                    Button(String(localized: "common.cancel", comment: "Cancel"), action: onCancel) 
+                }
+                ToolbarItem(placement: .confirmationAction) { 
+                    Button(String(localized: "common.done", comment: "Done")) { onCommit(selected) } 
+                }
             }
         }
     }
@@ -1223,7 +1249,10 @@ private struct RepeatEditorSheet: View {
     let onCommit: (Int?, RepeatMode) -> Void
     let onCancel: () -> Void
     
-    init(repeatAfter: Int?, repeatMode: RepeatMode, onCommit: @escaping (Int?, RepeatMode) -> Void, onCancel: @escaping () -> Void) {
+    init(repeatAfter: Int?,
+         repeatMode: RepeatMode,
+         onCommit: @escaping (Int?, RepeatMode) -> Void,
+         onCancel: @escaping () -> Void) {
         self._mode = State(initialValue: repeatMode)
         self.onCommit = onCommit
         self.onCancel = onCancel
@@ -1301,7 +1330,7 @@ private struct RepeatEditorSheet: View {
                 // Custom interval
                 Section(String(localized: "tasks.repeat.custom", comment: "Custom Interval")) {
                     Toggle(String(localized: "tasks.repeat.useCustom", comment: "Use custom interval"), isOn: $useCustom)
-                        .onChange(of: useCustom) { newValue in
+                        .onChange(of: useCustom) { _, newValue in
                             if newValue {
                                 selectedPreset = ""
                             }

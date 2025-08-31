@@ -41,7 +41,8 @@ struct FavoritesViewWithMenu: View {
 
 #Preview {
     FavoritesViewWithMenu(
-        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }), // swiftlint:disable:this force_unwrapping // swiftlint:disable:this force_unwrapping
+        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+                            tokenProvider: { nil }),
         isMenuOpen: .constant(false)
     )
     .environmentObject(AppState())

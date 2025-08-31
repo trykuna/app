@@ -94,7 +94,9 @@ struct AttachmentsView: View {
 
     private func loadAttachments() async {
         #if DEBUG
-        Log.app.debug("AttachmentsView: Loading attachments for task id=\(task.id, privacy: .public)")
+        Log.app.debug(
+            "AttachmentsView: Loading attachments for task id=\(task.id, privacy: .public)"
+        )
         #endif
 
         do {
@@ -102,14 +104,20 @@ struct AttachmentsView: View {
             attachments = try await api.getTaskAttachments(taskId: task.id)
 
             #if DEBUG
-            Log.app.debug("AttachmentsView: Loaded \(attachments.count, privacy: .public) attachments")
+            Log.app.debug(
+                "AttachmentsView: Loaded \(attachments.count, privacy: .public) attachments"
+            )
             for attachment in attachments {
-                Log.app.debug("AttachmentsView: - \(attachment.fileName, privacy: .public) (ID: \(attachment.id, privacy: .public))")
+                Log.app.debug(
+                    "AttachmentsView: - \(attachment.fileName, privacy: .public) (ID: \(attachment.id, privacy: .public))" // swiftlint:disable:this line_length
+                )
             }
             #endif
         } catch {
             #if DEBUG
-            Log.app.error("AttachmentsView: Error loading attachments: \(String(describing: error), privacy: .public)")
+            Log.app.error(
+                "AttachmentsView: Error loading attachments: \(String(describing: error), privacy: .public)" // swiftlint:disable:this line_length
+            )
             #endif
 
             // Handle common "no attachments" scenarios gracefully
@@ -120,7 +128,9 @@ struct AttachmentsView: View {
                 // Task has no attachments - this is normal, not an error
                 attachments = []
                 #if DEBUG
-                Log.app.debug("AttachmentsView: Task id=\(task.id, privacy: .public) has no attachments (404/not found)")
+                Log.app.debug(
+                    "AttachmentsView: Task id=\(task.id, privacy: .public) has no attachments (404/not found)" // swiftlint:disable:this line_length
+                )
                 #endif
             } else {
                 // This is a real error that should be shown to the user
@@ -155,7 +165,9 @@ struct AttachmentsView: View {
 
         do {
             #if DEBUG
-            Log.app.debug("AttachmentsView: Starting download of \(attachment.fileName, privacy: .public)")
+            Log.app.debug(
+                "AttachmentsView: Starting download of \(attachment.fileName, privacy: .public)"
+            )
             #endif
 
             // Check file size before downloading to avoid memory issues
@@ -165,11 +177,18 @@ struct AttachmentsView: View {
             let data = try await api.downloadAttachment(taskId: task.id, attachmentId: attachment.id)
             
             if data.count > maxSizeInMemory {
-                Log.app.warning("AttachmentsView: Large attachment \(attachment.fileName), size: \(data.count) bytes")
+                Log.app.warning(
+                    "AttachmentsView: Large attachment \(attachment.fileName), size: \(data.count) bytes" // swiftlint:disable:this line_length
+                )
             }
 
             #if DEBUG
-            Log.app.debug("AttachmentsView: Downloaded \(attachment.fileName, privacy: .public), size: \(data.count, privacy: .public) bytes")
+            Log.app.debug(
+                "AttachmentsView: Downloaded \(attachment.fileName, privacy: .public)"
+            )
+            Log.app.debug(
+                "AttachmentsView: File size: \(data.count, privacy: .public) bytes"
+            )
             #endif
 
             _ = await MainActor.run {
@@ -177,7 +196,9 @@ struct AttachmentsView: View {
             }
         } catch {
             #if DEBUG
-            Log.app.error("AttachmentsView: Error downloading attachment: \(String(describing: error), privacy: .public)")
+            Log.app.error(
+                "AttachmentsView: Error downloading attachment: \(String(describing: error), privacy: .public)" // swiftlint:disable:this line_length
+            )
             #endif
             _ = await MainActor.run {
                 self.error = "Failed to download \(attachment.fileName): \(error.localizedDescription)"
@@ -274,7 +295,9 @@ struct AttachmentsView: View {
 struct AttachmentsView_Previews: PreviewProvider {
     static var previews: some View {
         let task = VikunjaTask(id: 1, title: "Demo")
-        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }) // swiftlint:disable:this force_unwrapping
+        let api = VikunjaAPI(
+            config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+            tokenProvider: { nil }) 
         AttachmentsView(task: task, api: api)
             .padding()
     }

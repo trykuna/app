@@ -102,8 +102,14 @@ struct LoginView: View {
                                     .foregroundColor(.secondary)
                                     .font(.footnote)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(String(localized: "auth.login.username_password", comment: "Explains what a username and password allows"))
-                                    Text(String(localized: "auth.login.api_token", comment: "Explains what an API token allows"))
+                                    Text(
+                                        String(localized: "auth.login.username_password",
+                                                comment: "Explains what a username and password allows")
+                                    )
+                                    Text(
+                                        String(localized: "auth.login.api_token",
+                                                comment: "Explains what an API token allows")
+                                    )
                                 }
                             }
                             .font(.footnote)
@@ -136,7 +142,11 @@ struct LoginView: View {
                                             .scaleEffect(0.8)
                                             .padding(.trailing, 4)
                                     }
-                                    Text(isLoggingIn ? String(localized: "auth.loggingIn", comment: "Logging in button text") : String(localized: "auth.logIn", comment: "Log in button text"))
+                                    Text(
+                                        isLoggingIn
+                                            ? String(localized: "auth.loggingIn", comment: "Logging in button text")
+                                            : String(localized: "auth.logIn", comment: "Log in button text")
+                                    )
                                 }
                             }
                             .buttonStyle(.borderedProminent)
@@ -157,7 +167,10 @@ struct LoginView: View {
                         // Section("Personal API Token") {
                         Section(String(localized: "auth.personalApiToken", comment: "Personal API token section")) {
                             // SecureField("API Token", text: $personalToken)
-                            SecureField(String(localized: "auth.login.apiToken.placeholder", comment: "Placeholder for API token field"), text: $personalToken)
+                            SecureField(
+                                String(localized: "auth.login.apiToken.placeholder", comment: "Placeholder for API token field"),
+                                        text: $personalToken
+                                )
                                 .textContentType(.password)
                                 .focused($focused, equals: .token)
                                 .submitLabel(.go)
@@ -171,7 +184,10 @@ struct LoginView: View {
                             HStack(alignment: .top, spacing: 6) {
                                 Image(systemName: "info.circle")
                                     .foregroundColor(.secondary)
-                                Text(String(localized: "auth.login.api_token_creation", comment: "Explains how to create a API Token in Vikunja"))
+                                Text(
+                                    String(localized: "auth.login.api_token_creation",
+                                            comment: "Explains how to create a API Token in Vikunja")
+                                )
                             }
                             .font(.footnote)
                             .foregroundColor(.secondary)

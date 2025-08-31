@@ -34,12 +34,14 @@ struct AboutView: View {
 
                 // Vikunja thanks
                 CardSection(title: "Vikunja") {
-                    Text(String(localized: "settings.about.vikunja.text", comment: "Text for about view"))
+                    Text(
+                        String(localized: "settings.about.vikunja.text", comment: "Text for about view")
+                    )
                         .fixedSize(horizontal: false, vertical: true)
                         .lineSpacing(2)
 
                     // Link styled as a row (no custom LinkRow)
-                    Link(destination: AppURLs.vikunja)) {
+                    Link(destination: AppURLs.vikunja) {
                         HStack(spacing: 12) {
                             Image(systemName: "globe")
                                 .imageScale(.medium)
@@ -63,11 +65,14 @@ struct AboutView: View {
                 CardSection(title: "Libraries & Tools") {
                     VStack(alignment: .leading, spacing: 10) {
                         // SwiftUI.Label("SwiftUI — Apple's native UI framework", systemImage: "square.stack.3d.up")
-                        SwiftUI.Label(String(localized: "about.framework.swiftui", comment: "SwiftUI framework description"), systemImage: "square.stack.3d.up")
+                        SwiftUI.Label(String(localized: "about.framework.swiftui", 
+                                                comment: "SwiftUI framework description"), systemImage: "square.stack.3d.up")
                         // SwiftUI.Label("Foundation — Core system services", systemImage: "shippingbox")
-                        SwiftUI.Label(String(localized: "about.framework.foundation", comment: "Foundation framework description"), systemImage: "shippingbox")
+                        SwiftUI.Label(String(localized: "about.framework.foundation", 
+                                                comment: "Foundation framework description"), systemImage: "shippingbox")
                         // SwiftUI.Label("Keychain Services — Secure credential storage", systemImage: "lock.circle")
-                        SwiftUI.Label(String(localized: "about.framework.keychain", comment: "Keychain services description"), systemImage: "lock.circle")
+                        SwiftUI.Label(String(localized: "about.framework.keychain",
+                                            comment: "Keychain services description"), systemImage: "lock.circle")
                     }
                     .labelStyle(.aboutBullet)
                 }
@@ -82,11 +87,13 @@ struct AboutView: View {
                 // Useful links / actions — replace URLs as needed
                 CardSection(title: "Links") {
                     VStack(spacing: 0) {
-                        LinkRowPrimitive(title: "Website", systemImage: "globe", url: URL(AppURLs.vikunja))
+                        LinkRowPrimitive(title: "Website", systemImage: "globe", url: AppURLs.vikunja)
                         Divider()
-                        LinkRowPrimitive(title: String(localized: "about.privacyPolicy", comment: "Privacy policy link"), systemImage: "hand.raised", url: URL(AppURLs.privacy))
+                        LinkRowPrimitive(title: String(
+                            localized: "about.privacyPolicy",
+                            comment: "Privacy policy link"), systemImage: "hand.raised", url: AppURLs.privacy)
                         Divider()
-                        LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: URL(AppURLs.license))
+                        LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: AppURLs.license)
                     }
                 }
 

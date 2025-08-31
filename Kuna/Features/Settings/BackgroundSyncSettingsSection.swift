@@ -29,28 +29,50 @@ struct BackgroundSyncSettingsSection: View {
                         .foregroundColor(.orange).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
                         // Text("Frequency").font(.body)
-                        Text(String(localized: "settings.backgroundSync.frequency.title", comment: "Title for background sync frequency"))
+                        Text(String(localized: "settings.backgroundSync.frequency.title",
+                                    comment: "Title for background sync frequency"))
                         // Text("How often to refresh tasks in background")
-                        Text(String(localized: "settings.backgroundSync.frequency.subtitle", comment: "Subtitle for background sync frequency"))
+                        Text(String(localized: "settings.backgroundSync.frequency.subtitle",
+                                    comment: "Subtitle for background sync frequency"))
                             .font(.caption).foregroundColor(.secondary)
                     }
                     Spacer()
                     Picker("", selection: $settings.backgroundSyncFrequency) {
-                        Text(String(localized: "settings.backgroundSync.frequency.15m", comment: "Frequency for background sync"))
-                        Text(String(localized: "settings.backgroundSync.frequency.30m", comment: "Frequency for background sync"))
-                        Text(String(localized: "settings.backgroundSync.frequency.1h", comment: "Frequency for background sync"))
-                        Text(String(localized: "settings.backgroundSync.frequency.1h", comment: "Frequency for background sync"))
-                        Text(String(localized: "settings.backgroundSync.frequency.6h", comment: "Frequency for background sync"))
-                        Text(String(localized: "settings.backgroundSync.frequency.12h", comment: "Frequency for background sync"))
-                        Text(String(localized: "settings.backgroundSync.frequency.24h", comment: "Frequency for background sync"))
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.15m", 
+                                   comment: "Frequency for background sync")
+                        )
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.30m", 
+                                   comment: "Frequency for background sync")
+                        )
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.1h", 
+                                   comment: "Frequency for background sync")
+                        )
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.1h", 
+                                   comment: "Frequency for background sync")
+                        )
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.6h", 
+                                   comment: "Frequency for background sync")
+                        )
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.12h", 
+                                   comment: "Frequency for background sync")
+                        )
+                        Text(
+                            String(localized: "settings.backgroundSync.frequency.24h", 
+                                   comment: "Frequency for background sync")
+                        )
                     }.pickerStyle(.menu)
                 }
                 HStack {
                     Image(systemName: notifications.authorizationStatus == .authorized ? "bell.badge.fill" : "bell.badge")
                         .foregroundColor(notifications.authorizationStatus == .authorized ? .green : .orange)
-                    // TODO: Localize
                     Text("settings.backgroundSync.notifications \(statusText)",
-                         comment: "Label in Background Sync settings showing the notifications status. Placeholder is the status text (e.g. Enabled, Disabled)")
+                            comment: "Placeholder is the status text (e.g. Enabled, Disabled)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
@@ -65,23 +87,28 @@ struct BackgroundSyncSettingsSection: View {
 
                 Toggle(isOn: $settings.notifyNewTasks) {
                     // SwiftUI.Label("Notify on new tasks", systemImage: "bell.badge")
-                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyNewTasks", comment: "Notify on new tasks toggle"), systemImage: "bell.badge")
+                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyNewTasks",
+                                        comment: "Notify on new tasks toggle"), systemImage: "bell.badge")
                 }
                 Toggle(isOn: $settings.notifyUpdatedTasks) {
                     // SwiftUI.Label("Notify on updated tasks", systemImage: "bell")
-                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyUpdatedTasks", comment: "Notify on updated tasks toggle"), systemImage: "bell")
+                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyUpdatedTasks",
+                                        comment: "Notify on updated tasks toggle"), systemImage: "bell")
                 }
                 Toggle(isOn: $settings.notifyAssignedToMe) {
                     // SwiftUI.Label("Notify when assigned to me", systemImage: "person.fill.badge.plus")
-                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyAssignedToMe", comment: "Notify when assigned to me toggle"), systemImage: "person.fill.badge.plus")
+                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyAssignedToMe",
+                                        comment: "Notify when assigned to me toggle"), systemImage: "person.fill.badge.plus")
                 }
                 Toggle(isOn: $settings.notifyLabelsUpdated) {
                     // SwiftUI.Label("Notify when watched labels change", systemImage: "tag")
-                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyWatchedLabels", comment: "Notify when watched labels change toggle"), systemImage: "tag")
+                    SwiftUI.Label(String(localized: "settings.backgroundSync.notifyWatchedLabels",
+                                        comment: "Notify when watched labels change toggle"), systemImage: "tag")
                 }
                 Toggle(isOn: $settings.notifyWithSummary) {
                     // SwiftUI.Label("Include summary notification", systemImage: "text.badge.star")
-                    SwiftUI.Label(String(localized: "settings.backgroundSync.includeSummary", comment: "Include summary notification toggle"), systemImage: "text.badge.star")
+                    SwiftUI.Label(String(localized: "settings.backgroundSync.includeSummary",
+                                        comment: "Include summary notification toggle"), systemImage: "text.badge.star")
                 }
 
                 if settings.notifyLabelsUpdated {
@@ -91,8 +118,8 @@ struct BackgroundSyncSettingsSection: View {
                                 .foregroundColor(.purple).font(.body)
                             VStack(alignment: .leading, spacing: 2) {
                                 // Text("Watched Labels").font(.body)
-                                Text(String(localized: "settings.backgroundSync.watchedLabels.title", comment: "Title for watched labels"))
-                                // TODO: Localize
+                                Text(String(localized: "settings.backgroundSync.watchedLabels.title",
+                                                comment: "Title for watched labels"))
                                 Text("common.selectedCount \(settings.watchedLabelIDs.count)",
                                      comment: "Number of labels selected")
                                     .font(.caption).foregroundColor(.secondary)
@@ -115,7 +142,7 @@ struct BackgroundSyncSettingsSection: View {
                     
                     if let lastAttempt = UserDefaults.standard.object(forKey: "lastBackgroundSyncAttempt") as? TimeInterval {
                         Text("settings.backgroundSync.lastAttempt \(Date(timeIntervalSince1970: lastAttempt).formatted())",
-                              comment: "Label in Background Sync settings showing the last attempt time. Placeholder is a formatted date")
+                                comment: "Background Sync last attempt time with formatted date placeholder")
 
                             .font(.caption2)
                             .foregroundColor(.secondary)
@@ -123,13 +150,14 @@ struct BackgroundSyncSettingsSection: View {
                     
                     if let lastSuccess = UserDefaults.standard.object(forKey: "lastBackgroundSyncSuccess") as? TimeInterval {
                         Text("settings.backgroundSync.lastSuccess \(Date(timeIntervalSince1970: lastSuccess).formatted())",
-                             comment: "Label in Background Sync settings showing the last successful sync time. Placeholder is a formatted date")
+                                comment: "Background Sync last success time with formatted date placeholder")
 
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
                     
-                    Button(String(localized: "settings.backgroundSync.debug.runSyncNow", comment: "Debug button to run sync now")) {
+                    Button(String(localized: "settings.backgroundSync.debug.runSyncNow",
+                                    comment: "Debug button to run sync now")) {
                         Task {
                             await BackgroundSyncService.shared.runSyncNowForTesting()
                         }
@@ -139,12 +167,12 @@ struct BackgroundSyncSettingsSection: View {
                 }
                 #endif
             }
-            // TODO: Localize
         } header: { 
             // Text("Background Sync & Notifications (Beta)")
             Text(String(localized: "settings.backgroundSync.header", comment: "Background sync settings header"))
         } footer: {
-            Text(String(localized: "settings.backgroundSync.footer", comment: "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."))
+            Text(String(localized: "settings.backgroundSync.footer",
+                        comment: "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."))
         }
         }
 

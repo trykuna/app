@@ -27,7 +27,8 @@ struct CreateLabelView: View {
                             
                             ZStack(alignment: .leading) {
                                 if title.isEmpty {
-                                    Text(String(localized: "labels.create.title.placeholder", comment: "Placeholder for label name field"))
+                                    Text(String(localized: "labels.create.title.placeholder",
+                                                comment: "Placeholder for label name field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -68,7 +69,8 @@ struct CreateLabelView: View {
                             ZStack(alignment: .topLeading) {
                                 if description.isEmpty {
                                     // Text("Add a description for this label")
-                                    Text(String(localized: "labels.create.description.placeholder", comment: "Placeholder for description field"))
+                                    Text(String(localized: "labels.create.description.placeholder",
+                                                comment: "Placeholder for description field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -160,5 +162,12 @@ struct CreateLabelView: View {
 }
 
 #Preview {
-    CreateLabelView(viewModel: LabelsViewModel(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }))) // swiftlint:disable:this force_unwrapping
+    CreateLabelView(
+        viewModel: LabelsViewModel(
+            api: VikunjaAPI(
+                config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+                tokenProvider: { nil }
+                )
+            )
+        )
 }

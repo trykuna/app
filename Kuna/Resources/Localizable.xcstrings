@@ -368,7 +368,7 @@
       }
     },
     "calendar.sync.switch %@" : {
-      "comment" : "Confirmation prompt when switching to a new calendar for sync. Placeholder is the new calendar’s title",
+      "comment" : "Confirmation prompt when switching to a new calendar for sync.",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1979,7 +1979,7 @@
       }
     },
     "settings.backgroundSync.lastAttempt %@" : {
-      "comment" : "Label in Background Sync settings showing the last attempt time. Placeholder is a formatted date",
+      "comment" : "Background Sync last attempt time with formatted date placeholder",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1990,7 +1990,7 @@
       }
     },
     "settings.backgroundSync.lastSuccess %@" : {
-      "comment" : "Label in Background Sync settings showing the last successful sync time. Placeholder is a formatted date",
+      "comment" : "Background Sync last success time with formatted date placeholder",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -2001,7 +2001,7 @@
       }
     },
     "settings.backgroundSync.notifications %@" : {
-      "comment" : "Label in Background Sync settings showing the notifications status. Placeholder is the status text (e.g. Enabled, Disabled)",
+      "comment" : "Placeholder is the status text (e.g. Enabled, Disabled)",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -2277,7 +2277,7 @@
       }
     },
     "settings.calendarSync.footer" : {
-      "comment" : "Title for safely sync your tasks with calendar apps kuna creates its own calendars and never touches your existing ones",
+      "comment" : "Footer explaining calendar sync safety - creates own calendars without touching existing ones",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3203,7 +3203,7 @@
       }
     },
     "settings.view.token.expiresIn %@" : {
-      "comment" : "Label in Settings showing when the JWT token expires. Placeholder is the formatted duration (e.g. '5 minutes')",
+      "comment" : "JWT token expiration label with formatted duration placeholder",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4227,7 +4227,7 @@
       }
     },
     "tasks.repeat.description %@" : {
-      "comment" : "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'",
+      "comment" : "Message in task details showing repeat schedule e.g. 'every day'",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

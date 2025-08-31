@@ -47,7 +47,7 @@ final class NotificationsManager: ObservableObject {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         center.add(request) { error in
             if let error {
-                Log.app.error("Notifications: Failed to schedule immediate notification: \(String(describing: error), privacy: .public)")
+                Log.app.error("Notifications: Failed to schedule immediate notification: \(String(describing: error), privacy: .public)") // swiftlint:disable:this line_length
             }
         }
     }

@@ -52,7 +52,7 @@ enum Keychain {
         let status = SecItemAdd(query as CFDictionary, nil)
         guard status == errSecSuccess else {
             let message = osStatusMessage(status)
-            Log.app.error("Keychain save failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)")
+            Log.app.error("Keychain save failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)") // swiftlint:disable:this line_length
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
         }
         // Update in-memory cache on success
@@ -88,7 +88,7 @@ enum Keychain {
             return .success(nil)
         default:
             let message = osStatusMessage(status)
-            Log.app.error("Keychain read failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)")
+            Log.app.error("Keychain read failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)") // swiftlint:disable:this line_length
             return .failure(.osStatus(status, message))
         }
     }
@@ -111,7 +111,7 @@ enum Keychain {
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess && status != errSecItemNotFound {
             let message = osStatusMessage(status)
-            Log.app.error("Keychain delete failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)")
+            Log.app.error("Keychain delete failed for account: \(account, privacy: .public) — status: \(status, privacy: .public) message: \(message, privacy: .public)") // swiftlint:disable:this line_length
         }
 //        cacheQueue.sync { cache.removeValue(forKey: account) }
     }

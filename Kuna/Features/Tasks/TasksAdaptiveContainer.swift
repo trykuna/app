@@ -131,7 +131,6 @@ struct TasksIPadSplitView: View {
         }
         .actionSheet(isPresented: $showingSort) {
             ActionSheet(
-                // TODO: Localize
                 // title: Text("Sort Tasks"),
                 title: Text(String(localized: "tasks.sort.title", comment: "Title for sort tasks")),
                 buttons: TaskSortOption.allCases.map { sortOption in
@@ -178,7 +177,9 @@ struct TasksIPadSplitView: View {
                         Button {
                             showingFilter = true
                         } label: {
-                            Image(systemName: currentFilter.hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                            Image(systemName: currentFilter.hasActiveFilters
+                                ? "line.3.horizontal.decrease.circle.fill"
+                                : "line.3.horizontal.decrease.circle")
                         }
                         .foregroundColor(currentFilter.hasActiveFilters ? .accentColor : .primary)
                         .accessibilityIdentifier("button.filter")
@@ -660,7 +661,9 @@ struct TaskDetailViewInner: View {
             .disabled(isUpdatingFavorite)
             
             // Edit/Done button
-            Button(isEditing ? String(localized: "common.done", comment: "Done button") : String(localized: "common.edit", comment: "Edit button")) {
+            Button(isEditing 
+                    ? String(localized: "common.done", comment: "Done button")
+                    : String(localized: "common.edit", comment: "Edit button")) {
                 if isEditing {
                     if hasChanges {
                         Task { await saveChanges() }
@@ -699,7 +702,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 if isEditing {
-                                    TextField(String(localized: "tasks.placeholder.title", comment: "Task Title"), text: $editedTitle)
+                                    TextField(String(localized: "tasks.placeholder.title",
+                                                    comment: "Task Title"), text: $editedTitle)
                                         .textFieldStyle(.plain)
                                         .font(.body)
                                         .onChange(of: editedTitle) { _, _ in
@@ -723,7 +727,12 @@ struct TaskDetailViewInner: View {
                                 
                                 if isEditing {
                                     // TextField("Add description...", text: $editedDescription, axis: .vertical)
-                                    TextField(String(localized: "tasks.details.description.placeholder", comment: "Placeholder for adding description"), text: $editedDescription, axis: .vertical)
+                                    TextField(
+                                        String(localized: "tasks.details.description.placeholder", 
+                                               comment: "Placeholder for adding description"),
+                                        text: $editedDescription,
+                                        axis: .vertical
+                                    )
                                         .textFieldStyle(.plain)
                                         .font(.body)
                                         .lineLimit(3...6)
@@ -736,7 +745,8 @@ struct TaskDetailViewInner: View {
                                             .font(.body)
                                     } else {
                                         // Text("No description")
-                                        Text(String(localized: "tasks.details.description.none", comment: "Title for no description"))
+                                        Text(String(localized: "tasks.details.description.none",
+                                                    comment: "Title for no description"))
                                             .font(.body)
                                             .foregroundColor(.secondary)
                                     }
@@ -767,7 +777,8 @@ struct TaskDetailViewInner: View {
                                 
                                 VStack(alignment: .leading, spacing: 4) {
                                     // Text("Start Date")
-                                    Text(String(localized: "tasks.details.dates.startDate.title", comment: "Title for start date"))
+                                    Text(String(localized: "tasks.details.dates.startDate.title",
+                                                comment: "Title for start date"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -775,9 +786,11 @@ struct TaskDetailViewInner: View {
                                         HStack {
                                             if editedStartDate != nil {
                                                 // DatePicker("Start Date", selection: Binding(
-                                                DatePicker(String(localized: "tasks.startDate", comment: "Start date picker"), selection: Binding(
-                                                    get: { editedStartDate ?? Date() },
-                                                    set: { editedStartDate = $0; hasChanges = true }
+                                                DatePicker(String(localized: "tasks.startDate",
+                                                                comment: "Start date picker"), 
+                                                        selection: Binding(
+                                                            get: { editedStartDate ?? Date() },
+                                                            set: { editedStartDate = $0; hasChanges = true }
                                                 ), displayedComponents: [.date, .hourAndMinute])
                                                 .labelsHidden()
                                                 .datePickerStyle(.compact)
@@ -791,7 +804,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.red)
                                             } else {
                                                 // Button("Add Start Date") {
-                                                Button(String(localized: "tasks.details.dates.startDate.add", comment: "Add start date")) {
+                                                Button(String(localized: "tasks.details.dates.startDate.add",
+                                                                comment: "Add start date")) {
                                                     editedStartDate = Date()
                                                     hasChanges = true
                                                 }
@@ -807,7 +821,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             // Text("No start date")
-                                            Text(String(localized: "tasks.details.dates.startDate.none", comment: "Title for no start date"))
+                                            Text(String(localized: "tasks.details.dates.startDate.none",
+                                                            comment: "Title for no start date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -850,7 +865,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.red)
                                             } else {
                                                 // Button("Add Due Date") {
-                                                Button(String(localized: "tasks.details.dates.dueDate.add", comment: "Add due date")) {
+                                                Button(String(localized: "tasks.details.dates.dueDate.add",
+                                                                comment: "Add due date")) {
                                                     editedDueDate = Date()
                                                     hasChanges = true
                                                 }
@@ -866,7 +882,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             // Text("No due date")
-                                            Text(String(localized: "tasks.details.dates.dueDate.none", comment: "Title for no due date"))
+                                            Text(String(localized: "tasks.details.dates.dueDate.none",
+                                                            comment: "Title for no due date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -909,7 +926,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.red)
                                             } else {
                                                 // Button("Add End Date") {
-                                                Button(String(localized: "tasks.details.dates.endDate.add", comment: "Add end date")) {
+                                                Button(String(localized: "tasks.details.dates.endDate.add",
+                                                                comment: "Add end date")) {
                                                     editedEndDate = Date()
                                                     hasChanges = true
                                                 }
@@ -925,7 +943,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             // Text("No end date")
-                                            Text(String(localized: "tasks.details.dates.endDate.none", comment: "Title for no end date"))
+                                            Text(String(localized: "tasks.details.dates.endDate.none",
+                                                            comment: "Title for no end date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -1035,13 +1054,22 @@ struct TaskDetailViewInner: View {
                                 
                                 if isEditing {
                                     // Picker("Priority", selection: $editedPriority) {
-                                    Picker(String(localized: "tasks.detail.priority.title", comment: "Priority picker"), selection: $editedPriority) {
-                                        Text(String(localized: "common.none", comment: "None priority")).tag(TaskPriority.unset)
-                                        Text(String(localized: "common.low", comment: "Low priority")).tag(TaskPriority.low)
-                                        Text(String(localized: "common.medium", comment: "Medium priority")).tag(TaskPriority.medium)
-                                        Text(String(localized: "common.high", comment: "High priority")).tag(TaskPriority.high)
-                                        Text(String(localized: "common.urgent", comment: "Urgent priority")).tag(TaskPriority.urgent)
-                                        Text(String(localized: "common.doNow", comment: "Do now priority")).tag(TaskPriority.doNow)
+                                    Picker(
+                                        String(localized: "tasks.detail.priority.title", comment: "Priority picker"),
+                                        selection: $editedPriority
+                                    ) {
+                                        Text(String(localized: "common.none",
+                                                    comment: "None priority")).tag(TaskPriority.unset)
+                                        Text(String(localized: "common.low",
+                                                    comment: "Low priority")).tag(TaskPriority.low)
+                                        Text(String(localized: "common.medium",
+                                                    comment: "Medium priority")).tag(TaskPriority.medium)
+                                        Text(String(localized: "common.high",
+                                                    comment: "High priority")).tag(TaskPriority.high)
+                                        Text(String(localized: "common.urgent",
+                                                    comment: "Urgent priority")).tag(TaskPriority.urgent)
+                                        Text(String(localized: "common.doNow",
+                                                    comment: "Do now priority")).tag(TaskPriority.doNow)
                                     }
                                     .pickerStyle(.menu)
                                     .onChange(of: editedPriority) { _, _ in
@@ -1165,7 +1193,9 @@ struct TaskDetailViewInner: View {
                                             .frame(width: 20, height: 20)
                                             .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 0.5))
                                         
-                                        Text(isEditing ? String(localized: "common.custom") : String(localized: "settings.display.colours.title"))
+                                        Text(isEditing 
+                                                ? String(localized: "common.custom")
+                                                : String(localized: "settings.display.colours.title"))
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                         
@@ -1725,7 +1755,11 @@ struct TaskDetailViewInner: View {
     @ViewBuilder 
     private var colorPickerSection: some View {
         // ColorPicker("Select Color", selection: $editedColor, supportsOpacity: false)
-        ColorPicker(String(localized: "tasks.colour.select", comment: "Select colour picker"), selection: $editedColor, supportsOpacity: false)
+        ColorPicker(
+            String(localized: "tasks.colour.select", comment: "Select colour picker"),
+            selection: $editedColor,
+            supportsOpacity: false
+        )
             .labelsHidden()
             .onChange(of: editedColor) { _, _ in
                 hasChanges = true
@@ -1739,7 +1773,16 @@ struct TaskDetailViewInner: View {
                 .font(.headline)
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 16) {
-                let colors = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.purple, Color.pink, Color.gray]
+                let colors = [
+                    Color.red,
+                    Color.orange,
+                    Color.yellow,
+                    Color.green,
+                    Color.blue,
+                    Color.purple,
+                    Color.pink,
+                    Color.gray
+                ]
                 ForEach(colors, id: \.self) { color in
                     Circle()
                         .fill(color)
@@ -1801,7 +1844,8 @@ struct TaskDetailViewInner: View {
                             .fontWeight(.semibold)
                         
                         // Text("Add reminders to get notified about this task")
-                        Text(String(localized: "tasks.details.reminders.description", comment: "Title for add reminders to get notified about this task"))
+                        Text(String(localized: "tasks.details.reminders.description",
+                                   comment: "Title for add reminders to get notified about this task"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -1819,7 +1863,11 @@ struct TaskDetailViewInner: View {
                             .font(.headline)
                         
                         // DatePicker("Reminder Date", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
-                        DatePicker(String(localized: "tasks.reminder.date", comment: "Reminder date picker"), selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                        DatePicker(
+                            String(localized: "tasks.reminder.date", comment: "Reminder date picker"),
+                            selection: $newReminderDate,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
                             .labelsHidden()
                             .datePickerStyle(.wheel)
                     }
@@ -1872,7 +1920,7 @@ struct TaskDetailViewInner: View {
                 } footer: {
                     if editedRepeatAfter > 0 {
                         Text("tasks.repeat.description \(formatRepeatDescription())",
-                             comment: "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'")
+                                comment: "Message in task details showing repeat schedule e.g. 'every day'")
                     } else {
                         // Text("Task will not repeat")
                         Text(String(localized: "tasks.details.repeat.none", comment: "Title for task will not repeat"))
@@ -2093,7 +2141,8 @@ struct CommentsContentView: View {
             
             HStack(alignment: .top, spacing: 12) {
                 // TextField("Add a comment...", text: $newCommentText, axis: .vertical)
-                TextField(String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
+                TextField(String(localized: "comments.add.placeholder",
+                                comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .lineLimit(1...6)
                 
@@ -2102,7 +2151,8 @@ struct CommentsContentView: View {
                     addComment()
                 } label: {
                     Image(systemName: "paperplane.fill")
-                        .foregroundColor(newCommentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .secondary : .accentColor)
+                        .foregroundColor(newCommentText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        .isEmpty ? .secondary : .accentColor)
                 }
                 .disabled(newCommentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAddingComment)
             }

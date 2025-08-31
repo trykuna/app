@@ -179,7 +179,8 @@ struct TaskRowView: View {
     let onToggle: (VikunjaTask) -> Void
     let onUpdate: ((VikunjaTask) -> Void)?
     
-    init(props: TaskRowProps, api: VikunjaAPI, onToggle: @escaping (VikunjaTask) -> Void, onUpdate: ((VikunjaTask) -> Void)? = nil) {
+    init(props: TaskRowProps, api: VikunjaAPI, onToggle: @escaping (VikunjaTask) -> Void,
+         onUpdate: ((VikunjaTask) -> Void)? = nil) {
         self.props = props
         self.api = api
         self.onToggle = onToggle

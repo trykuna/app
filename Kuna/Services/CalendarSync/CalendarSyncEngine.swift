@@ -137,46 +137,46 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
     }
 
     func disableSync(disposition: DisableDisposition) async throws {
-        Log.app.info("📅 Disabling sync with disposition: \(disposition)")
+        Log.app.info("Disabling sync with disposition: \(disposition)")
         
         // Ensure we have the current calendars loaded before performing cleanup
         if currentPrefs.isEnabled && !self.resolvedCalendars.isEmpty {
-            Log.app.info("📅 Using existing resolved calendars (\(self.resolvedCalendars.count))")
+            Log.app.info("Using existing resolved calendars (\(self.resolvedCalendars.count))")
         } else if currentPrefs.isValid {
-            Log.app.info("📅 Refreshing resolved calendars before cleanup")
+            Log.app.info("Refreshing resolved calendars before cleanup")
             try await refreshResolvedCalendars()
-            Log.app.info("📅 Refreshed calendars, now have \(self.resolvedCalendars.count)")
+            Log.app.info("Refreshed calendars, now have \(self.resolvedCalendars.count)")
         } else {
-            Log.app.warning("📅 No valid preferences found, proceeding with cleanup anyway")
+            Log.app.warning("No valid preferences found, proceeding with cleanup anyway")
         }
         
         switch disposition {
         case .keepEverything:
-            Log.app.info("📅 Keeping everything - just disabling sync")
+            Log.app.info("Keeping everything - just disabling sync")
             isEnabled = false
             
         case .removeKunaEvents:
-            Log.app.info("📅 Removing Kuna events, keeping calendars")
+            Log.app.info("Removing Kuna events, keeping calendars")
             try await removeKunaEvents()
             isEnabled = false
             
         case .archiveCalendars:
-            Log.app.info("📅 Archiving calendars")
+            Log.app.info("Archiving calendars")
             try await archiveCalendars()
             isEnabled = false
             
         case .deleteEverything:
-            Log.app.info("📅 Deleting everything - events and calendars")
+            Log.app.info("Deleting everything - events and calendars")
             try await deleteKunaCalendars()
             isEnabled = false
         }
 
         // Clear resolved calendars and reset prefs
-        Log.app.info("📅 Clearing resolved calendars and resetting preferences")
+        Log.app.info("Clearing resolved calendars and resetting preferences")
         resolvedCalendars.removeAll()
         currentPrefs = CalendarSyncPrefs()
         
-        Log.app.info("📅 Calendar sync disabled successfully")
+        Log.app.info("Calendar sync disabled successfully")
     }
 
     func resyncNow() async {
@@ -191,7 +191,7 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
     func handleEventStoreChanged() async {
         guard isEnabled, let api = api else { return }
         
-        Log.app.info("📅 EventStore changed notification received - calendar was modified externally")
+        Log.app.info("EventStore changed notification received - calendar was modified externally")
         
         // Debounce event store changes
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
@@ -211,7 +211,7 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
             // Then perform regular sync to update any other tasks
             await performSync(skipBidirectional: true) // Skip bidirectional since we just did it
         } catch {
-            Log.app.error("📅 Failed to handle event store change: \(error)")
+            Log.app.error("Failed to handle event store change: \(error)")
         }
     }
 
@@ -263,18 +263,18 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
             lastSyncDate = Date()
             UserDefaults.standard.set(lastSyncDate, forKey: "calendarSync.lastSyncDate")
 
-            Log.app.debug("📅 Sync completed — created: \(self.createdCount) • updated: \(self.updatedCount) • removed: \(self.removedCount)")
+            Log.app.debug("Sync completed — created: \(self.createdCount) • updated: \(self.updatedCount) • removed: \(self.removedCount)") // swiftlint:disable:this line_length
 
         } catch {
             syncErrors.append("Sync failed: \(error.localizedDescription)")
-            Log.app.error("📅 Sync error: \(error)")
+            Log.app.error("Sync error: \(error)")
         }
     }
 
     // MARK: - Bidirectional Sync (Calendar -> Kuna)
     
     private func detectAndApplyCalendarChanges(existingEvents: [EKEvent], api: VikunjaAPI) async {
-        Log.app.debug("📅 Checking for calendar changes to sync back to Kuna")
+        Log.app.debug("Checking for calendar changes to sync back to Kuna")
         
         var tasksToUpdate: [(taskID: Int, startDate: Date, endDate: Date)] = []
         
@@ -293,7 +293,7 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
                 let eventStartDate = event.startDate ?? Date()
                 let eventEndDate = event.endDate ?? Date()
                 
-                Log.app.debug("📅 Comparing task \(taskInfo.taskID) dates:")
+                Log.app.debug("Comparing task \(taskInfo.taskID) dates:")
                 Log.app.debug("  Task start: \(taskStartDate), Calendar start: \(eventStartDate)")
                 Log.app.debug("  Task end: \(taskEndDate), Calendar end: \(eventEndDate)")
                 
@@ -302,13 +302,13 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
                 let endDateChanged = abs(taskEndDate.timeIntervalSince(eventEndDate)) > 60
                 
                 if startDateChanged || endDateChanged {
-                    Log.app.info("📅 Detected change in task \(taskInfo.taskID):")
-                    Log.app.info("  Start changed: \(startDateChanged) (diff: \(abs(taskStartDate.timeIntervalSince(eventStartDate)))s)")
+                    Log.app.info("Detected change in task \(taskInfo.taskID):")
+                    Log.app.info("  Start changed: \(startDateChanged) (diff: \(abs(taskStartDate.timeIntervalSince(eventStartDate)))s)") // swiftlint:disable:this line_length
                     Log.app.info("  End changed: \(endDateChanged) (diff: \(abs(taskEndDate.timeIntervalSince(eventEndDate)))s)")
                     tasksToUpdate.append((taskID: taskInfo.taskID, startDate: eventStartDate, endDate: eventEndDate))
                 }
             } catch {
-                Log.app.error("📅 Failed to fetch task \(taskInfo.taskID) for comparison: \(error)")
+                Log.app.error("Failed to fetch task \(taskInfo.taskID) for comparison: \(error)")
             }
         }
         
@@ -324,15 +324,15 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
                 
                 // Save the updated task
                 _ = try await api.updateTask(updatedTask)
-                Log.app.info("📅 Updated task \(update.taskID) with new dates from calendar: start=\(update.startDate), end=\(update.endDate)")
+                Log.app.info("Updated task \(update.taskID) with new dates from calendar: start=\(update.startDate), end=\(update.endDate)") // swiftlint:disable:this line_length
             } catch {
-                Log.app.error("📅 Failed to update task \(update.taskID) with calendar changes: \(error)")
+                Log.app.error("Failed to update task \(update.taskID) with calendar changes: \(error)")
                 syncErrors.append("Failed to sync calendar changes for task \(update.taskID)")
             }
         }
         
         if !tasksToUpdate.isEmpty {
-            Log.app.info("📅 Applied \(tasksToUpdate.count) calendar changes back to Kuna")
+            Log.app.info("Applied \(tasksToUpdate.count) calendar changes back to Kuna")
         }
     }
 
@@ -666,58 +666,58 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
         let existingEvents = fetchExistingKunaEvents()
         
         guard !existingEvents.isEmpty else {
-            Log.app.info("📅 No Kuna events found to remove")
+            Log.app.info("No Kuna events found to remove")
             return
         }
         
-        Log.app.info("📅 Removing \(existingEvents.count) Kuna event(s)")
+        Log.app.info("Removing \(existingEvents.count) Kuna event(s)")
         
         for event in existingEvents {
-            Log.app.debug("📅 Removing event: '\(event.title ?? "Untitled")'")
+            Log.app.debug("Removing event: '\(event.title ?? "Untitled")'")
             try eventKitClient.remove(event: event)
         }
         
         try eventKitClient.commit()
-        Log.app.info("📅 Event removal committed")
+        Log.app.info("Event removal committed")
     }
 
     private func archiveCalendars() async throws {
         guard !resolvedCalendars.isEmpty else {
-            Log.app.warning("📅 No resolved calendars found to archive")
+            Log.app.warning("No resolved calendars found to archive")
             return
         }
         
-        Log.app.info("📅 Archiving \(self.resolvedCalendars.count) calendar(s)")
+        Log.app.info("Archiving \(self.resolvedCalendars.count) calendar(s)")
         
         for (_, calendar) in self.resolvedCalendars {
             let originalTitle = calendar.title
             if !originalTitle.hasSuffix(" (Archive)") {
                 calendar.title = "\(originalTitle) (Archive)"
-                Log.app.info("📅 Renamed calendar '\(originalTitle)' to '\(calendar.title)'")
+                Log.app.info("Renamed calendar '\(originalTitle)' to '\(calendar.title)'")
             } else {
-                Log.app.info("📅 Calendar '\(originalTitle)' already archived")
+                Log.app.info("Calendar '\(originalTitle)' already archived")
             }
         }
         
         try eventKitClient.commit()
-        Log.app.info("📅 Calendar archiving committed")
+        Log.app.info("Calendar archiving committed")
     }
     
     private func deleteKunaCalendars() async throws {
         guard !self.resolvedCalendars.isEmpty else {
-            Log.app.warning("📅 No resolved calendars found to delete")
+            Log.app.warning("No resolved calendars found to delete")
             return
         }
         
-        Log.app.info("📅 Deleting \(self.resolvedCalendars.count) Kuna calendar(s)")
+        Log.app.info("Deleting \(self.resolvedCalendars.count) Kuna calendar(s)")
         
         for (_, calendar) in self.resolvedCalendars {
-            Log.app.info("📅 Deleting calendar: '\(calendar.title)'")
+            Log.app.info("Deleting calendar: '\(calendar.title)'")
             try eventKitClient.remove(calendar: calendar)
         }
         
         try eventKitClient.commit()
-        Log.app.info("📅 Calendar deletion committed")
+        Log.app.info("Calendar deletion committed")
     }
 
     // MARK: - Helper Methods
@@ -742,7 +742,7 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
             let project = projects.first { $0.id == projectIDInt }
             return project?.title
         } catch {
-            Log.app.error("📅 Failed to fetch project name for \(projectID): \(error)")
+            Log.app.error("Failed to fetch project name for \(projectID): \(error)")
             return nil
         }
     }

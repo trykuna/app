@@ -60,7 +60,6 @@ struct AppIconView: View {
                                 .font(.headline)
                         }
                         
-                        // Text("Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches.")
                         Text(String(localized: "settings.appIcon.info.text", comment: "Text for app icon info"))
                             .font(.body)
                             .foregroundColor(.secondary)
