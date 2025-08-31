@@ -120,7 +120,7 @@ final class BackgroundSyncService: ObservableObject {
         let api = VikunjaAPI(config: .init(baseURL: apiBase), tokenProvider: { Keychain.readToken() })
         let settings = AppSettings.shared
         // Pagination window to avoid huge payloads
-        let _ = 200 // pageSize - kept for documentation but not currently used
+        _ = 200 // pageSize - kept for documentation but not currently used
 
         guard settings.backgroundSyncEnabled else { Log.app.debug("BG: runSync aborted — background sync disabled"); return }
 

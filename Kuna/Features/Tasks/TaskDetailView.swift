@@ -755,10 +755,10 @@ struct TaskDetailView: View {
         // Move buffered edits into the task
         task.description = editedDescription.isEmpty ? nil : editedDescription
 
-        let _ = Log.app.debug("🔍 Processing edit buffers:")
-        let _ = Log.app.debug("  - editStartDate: \(editStartDate?.description ?? "nil") (hasTime: \(startHasTime))")
-        let _ = Log.app.debug("  - editDueDate: \(editDueDate?.description ?? "nil") (hasTime: \(dueHasTime))")
-        let _ = Log.app.debug("  - editEndDate: \(editEndDate?.description ?? "nil") (hasTime: \(endHasTime))")
+        Log.app.debug("🔍 Processing edit buffers:")
+        Log.app.debug("  - editStartDate: \(editStartDate?.description ?? "nil") (hasTime: \(startHasTime))")
+        Log.app.debug("  - editDueDate: \(editDueDate?.description ?? "nil") (hasTime: \(dueHasTime))")
+        Log.app.debug("  - editEndDate: \(editEndDate?.description ?? "nil") (hasTime: \(endHasTime))")
         Log.app.debug("Using workaround repeat - taskRepeatAfter: \(taskRepeatAfter?.description ?? "nil", privacy: .public)")
         Log.app.debug("Using workaround repeat - taskRepeatMode: \(taskRepeatMode.displayName, privacy: .public)")
 

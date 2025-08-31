@@ -372,7 +372,7 @@ final class AppState: ObservableObject {
         for _ in 0..<3 {
             autoreleasepool {
                 // Create and release memory to trigger GC
-                let _ = Array(repeating: Data(count: 1024), count: 1000)
+                _ = Array(repeating: Data(count: 1024), count: 1000)
             }
         }
         

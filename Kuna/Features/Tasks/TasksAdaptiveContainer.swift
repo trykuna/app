@@ -221,16 +221,12 @@ struct TasksIPadSplitView: View {
     private var taskDetailView: some View {
         NavigationStack {
             if let task = selectedTask {
-                #if DEBUG
-                let _ = Log.app.debug("TasksIPadSplitView: Rendering TaskDetailView for task: \(task.title)")
-                #endif
                 // Extract just the content from TaskDetailView without the NavigationView wrapper
                 TaskDetailViewInner(
                     task: Binding(
                         get: { selectedTask! },
-                        set: { newTask in 
+                        set: { newTask in
                             selectedTask = newTask
-                            // Update the task in the VM when it's edited
                             if let index = vm.tasks.firstIndex(where: { $0.id == newTask.id }) {
                                 vm.tasks[index] = newTask
                             }
@@ -238,33 +234,41 @@ struct TasksIPadSplitView: View {
                     ),
                     api: api
                 ) { updatedTask in
-                    // Update the task in the VM when it's edited
                     if let index = vm.tasks.firstIndex(where: { $0.id == updatedTask.id }) {
                         vm.tasks[index] = updatedTask
-                        selectedTask = updatedTask // Keep selectedTask in sync
+                        selectedTask = updatedTask
                     }
                 }
                 .navigationTitle(task.title)
                 .navigationBarTitleDisplayMode(.large)
-            } else {
                 #if DEBUG
-                let _ = Log.app.debug("TasksIPadSplitView: No task selected, showing empty state")
+                .onAppear {
+                    Log.app.debug("TasksIPadSplitView: Rendering TaskDetailView for task: \(task.title)")
+                }
                 #endif
+
+            } else {
                 VStack(spacing: 20) {
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: 64))
                         .foregroundColor(.secondary)
-                    
-                    // Text("Select a task to view its details")
-                    Text(String(localized: "tasks.select.description", comment: "Title shown when no task is selected"))
+
+                    Text(String(localized: "tasks.select.description",
+                                comment: "Title shown when no task is selected"))
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemGroupedBackground))
+                #if DEBUG
+                .onAppear {
+                    Log.app.debug("TasksIPadSplitView: No task selected, showing empty state")
+                }
+                #endif
             }
         }
     }
+
     
     // MARK: - Empty State
     private var emptyState: some View {

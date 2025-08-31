@@ -355,7 +355,7 @@ final class TaskListVM: ObservableObject {
             if settings.calendarSyncEnabled && settings.autoSyncNewTasks {
                 let hasRequiredDates = newTask.startDate != nil || newTask.dueDate != nil || newTask.endDate != nil
                 if hasRequiredDates || !settings.syncTasksWithDatesOnly {
-                    let _ = await calendarSync.syncTaskToCalendar(newTask)
+                    _ = await calendarSync.syncTaskToCalendar(newTask)
                 }
             }
 

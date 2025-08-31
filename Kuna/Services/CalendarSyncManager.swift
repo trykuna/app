@@ -33,7 +33,7 @@ final class CalendarSyncManager: ObservableObject {
             await syncTasksToCalendar(tasks)
 
             // Step 3: Check for calendar changes and sync back to tasks (bidirectional)
-            let _ = await calendarSync.syncCalendarChangesToTasks(api: api)
+            _ = await calendarSync.syncCalendarChangesToTasks(api: api)
 
             // Step 4: Handle any conflicts
             await detectAndHandleConflicts(tasks: tasks, api: api)
@@ -64,7 +64,7 @@ final class CalendarSyncManager: ObservableObject {
                 guard hasRequiredDates else { continue }
             }
 
-            let _ = await calendarSync.syncTaskToCalendar(task)
+            _ = await calendarSync.syncTaskToCalendar(task)
         }
     }
 
@@ -196,7 +196,7 @@ final class CalendarSyncManager: ObservableObject {
             case .preferCalendar:
                 // Build updated task from event and push to server if changes exist
                 if let updated = calendarSync.buildUpdatedTaskFromEvent(task, event: ev) {
-                    do { let _ = try await api.updateTask(updated) } catch {
+                    do { _ = try await api.updateTask(updated) } catch {
                         calendarSync.syncErrors.append("Calendar->Task update failed: \(error.localizedDescription)")
                     }
                 }
