@@ -486,7 +486,7 @@ struct SettingsView_Previews: PreviewProvider {
         // Minimal preview harness with mock AppState and sample services
         let appState = AppState()
         // Provide a placeholder API so views relying on appState.api won’t crash in preview
-        appState.api = VikunjaAPI(config: .init(baseURL: URL(string: "https://preview.example.com/api/v1")!), tokenProvider: { nil })
+        appState.api = VikunjaAPI(config: .init(baseURL: URL(string: "https://preview.example.com/api/v1")!), tokenProvider: { nil }) // swiftlint:disable:this force_unwrapping
         appState.authenticationMethod = .personalToken
         AppSettings.shared.defaultSortOption = .dueDate
 

@@ -274,7 +274,7 @@ struct AttachmentsView: View {
 struct AttachmentsView_Previews: PreviewProvider {
     static var previews: some View {
         let task = VikunjaTask(id: 1, title: "Demo")
-        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }) // swiftlint:disable:this force_unwrapping
         AttachmentsView(task: task, api: api)
             .padding()
     }

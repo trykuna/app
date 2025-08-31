@@ -395,7 +395,7 @@ struct CommentBadge: View {
 struct CommentsView_Previews: PreviewProvider {
     static var previews: some View {
         let task = VikunjaTask(id: 1, title: "Sample Task")
-        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }) // swiftlint:disable:this force_unwrapping
         let commentCountManager = CommentCountManager(api: api)
         CommentsView(task: task, api: api, commentCountManager: commentCountManager)
     }

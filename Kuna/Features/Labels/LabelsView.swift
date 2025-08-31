@@ -190,5 +190,5 @@ struct LabelsView: View {
 }
 
 #Preview {
-    LabelsView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }))
+    LabelsView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })) // swiftlint:disable:this force_unwrapping
 }

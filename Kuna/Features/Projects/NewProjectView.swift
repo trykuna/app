@@ -89,6 +89,6 @@ struct NewProjectView: View {
 #Preview {
     NewProjectView(
         isPresented: .constant(true),
-        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }) // swiftlint:disable:this force_unwrapping
     )
 }

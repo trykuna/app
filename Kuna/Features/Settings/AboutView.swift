@@ -40,7 +40,7 @@ struct AboutView: View {
                         .lineSpacing(2)
 
                     // Link styled as a row (no custom LinkRow)
-                    Link(destination: URL(string: "https://vikunja.io")!) {
+                    Link(destination: AppURLs.vikunja)) {
                         HStack(spacing: 12) {
                             Image(systemName: "globe")
                                 .imageScale(.medium)
@@ -83,12 +83,11 @@ struct AboutView: View {
                 // Useful links / actions — replace URLs as needed
                 CardSection(title: "Links") {
                     VStack(spacing: 0) {
-                        LinkRowPrimitive(title: "Website", systemImage: "globe", url: URL(string: "https://vikunja.io")!)
+                        LinkRowPrimitive(title: "Website", systemImage: "globe", url: URL(AppURLs.vikunja))
                         Divider()
-                        // LinkRowPrimitive(title: "Privacy Policy", systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
-                        LinkRowPrimitive(title: String(localized: "about.privacyPolicy", comment: "Privacy policy link"), systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
+                        LinkRowPrimitive(title: String(localized: "about.privacyPolicy", comment: "Privacy policy link"), systemImage: "hand.raised", url: URL(AppURLs.privacy))
                         Divider()
-                        LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: URL(string: "https://example.com/licenses")!)
+                        LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: URL(AppURLs.license))
                     }
                 }
 

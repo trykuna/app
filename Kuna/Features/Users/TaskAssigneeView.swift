@@ -188,7 +188,7 @@ struct TaskAssigneeView: View {
             projectId: 1
         )),
         api: VikunjaAPI(
-            config: .init(baseURL: URL(string: "https://example.com")!),
+            config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
             tokenProvider: { nil }
         ),
         canManageUsers: true,

@@ -175,7 +175,7 @@ struct EditLabelView: View {
 
 #Preview {
     EditLabelView(
-        viewModel: LabelsViewModel(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })),
+        viewModel: LabelsViewModel(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })), // swiftlint:disable:this force_unwrapping
         label: Label(id: 1, title: "Sample Label", hexColor: "007AFF", description: "A sample label")
     )
 }

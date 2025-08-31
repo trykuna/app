@@ -140,7 +140,7 @@ struct SideMenuView: View {
 
 #Preview {
     SideMenuView(
-        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }),
+        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }), // swiftlint:disable:this force_unwrapping
         selectedMenuItem: .constant(.projects),
         isMenuOpen: .constant(true)
     )

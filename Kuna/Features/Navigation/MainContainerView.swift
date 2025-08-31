@@ -436,6 +436,6 @@ struct LabelsViewWithMenu: View {
 }
 
 #Preview {
-    MainContainerView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }))
+    MainContainerView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })) // swiftlint:disable:this force_unwrapping
         .environmentObject(AppState())
 }
