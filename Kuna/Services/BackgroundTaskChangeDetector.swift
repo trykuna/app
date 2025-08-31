@@ -64,7 +64,7 @@ final class BackgroundTaskChangeDetector {
 
         for t in tasks {
             // Track max cursor from updatedAt
-            var updatedISO: String? = nil
+            var updatedISO: String?
             if let u = t.updatedAt {
                 let s = iso.string(from: u)
                 updatedISO = s

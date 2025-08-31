@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 struct TaskAttachmentView: View {
     let task: VikunjaTask
     let api: VikunjaAPI
-    var onUpload: (() -> Void)? = nil
+    var onUpload: (() -> Void)?
 
     @State private var showingSourceDialog = false
     @State private var showPhotoPicker = false

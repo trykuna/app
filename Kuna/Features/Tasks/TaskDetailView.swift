@@ -52,7 +52,7 @@ struct TaskDetailView: View {
     @State private var selectedLabelIds: Set<Int> = []
     
     // WORKAROUND: Separate state for repeat values to bypass mutation issue
-    @State private var taskRepeatAfter: Int? = nil
+    @State private var taskRepeatAfter: Int?
     @State private var taskRepeatMode: RepeatMode = .afterAmount
 
     // Editing buffers for dates (decouple from task while editing)
@@ -65,7 +65,7 @@ struct TaskDetailView: View {
         Color.blue, Color.purple, Color.pink, Color.gray
     ]
 
-    init(task: VikunjaTask, api: VikunjaAPI, onUpdate: ((VikunjaTask) -> Void)? = nil) {
+    init(task: VikunjaTask, api: VikunjaAPI, onUpdate: ((VikunjaTask) -> Void)?) {
         self._task = State(initialValue: task)
         self.api = api
         self.onUpdate = onUpdate

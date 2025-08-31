@@ -107,7 +107,7 @@ final class TaskListVM: ObservableObject {
     @Published var error: String?
     @Published var isAddingTask = false
     @Published var hasMoreTasks = true // whether there are more pages at the end
-    @Published var totalTaskCount: Int? = nil // total tasks on server (from headers)
+    @Published var totalTaskCount: Int?// total tasks on server (from headers)
 
     private let api: VikunjaAPI
     private let projectId: Int
@@ -116,11 +116,11 @@ final class TaskListVM: ObservableObject {
     private var currentPage = 1 // next page to fetch at the end (kept for compatibility)
     private var firstLoadedPage = 1
     private var lastLoadedPage = 0
-    private var totalPages: Int? = nil
+    private var totalPages: Int?
 
     // Debounce for auto-load triggers
-    private var lastTopTriggerTaskId: Int? = nil
-    private var lastBottomTriggerTaskId: Int? = nil
+    private var lastTopTriggerTaskId: Int?
+    private var lastBottomTriggerTaskId: Int?
 
     // Paging config and memory cap
     private let tasksPerPage = 50

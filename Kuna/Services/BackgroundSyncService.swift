@@ -126,11 +126,11 @@ final class BackgroundSyncService: ObservableObject {
 
         let detector = BackgroundTaskChangeDetector.shared
         // Determine current user ID from token (sub) if available
-        var currentUserId: Int? = nil
+        var currentUserId: Int?
         if let token = Keychain.readToken(), 
-           let payload = try? JWTDecoder.decode(token), 
-           let sub = payload.sub, 
-           let id = Int(sub) {
+            let payload = try? JWTDecoder.decode(token), 
+            let sub = payload.sub, 
+            let id = Int(sub) {
             currentUserId = id
             Log.app.debug("BG: Current user ID: \(id)")
         } else {
