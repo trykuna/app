@@ -35,7 +35,7 @@ struct TasksSplitContainerView: View {
             sidebar
         } detail: {
             if let task = selectedTask {
-                TaskDetailView(task: task, api: api)
+                TaskDetailView(task: task, api: api, onUpdate: nil)
             } else {
                 if #available(iOS 17, *) {
                     // ContentUnavailableView("Select a task", systemImage: "square.and.pencil")

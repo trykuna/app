@@ -38,7 +38,7 @@ struct TaskDetailView_Previews: PreviewProvider {
         let appState = AppState()
         appState.api = api
 
-        return TaskDetailView(task: demoTask, api: api)
+        return TaskDetailView(task: demoTask, api: api, onUpdate: nil)
             .environmentObject(appState)
             .previewDisplayName("Task Detail (Demo)")
     }

@@ -96,12 +96,12 @@ struct MainContainerView: View {
                     // Present task detail by pushing into a temp navigation
                     // We can route via a sheet for simplicity
                     await MainActor.run {
-                        let taskView = TaskDetailView(task: task, api: api)
+                        let taskView = TaskDetailView(task: task, api: api, onUpdate: nil)
                         let hosting = UIHostingController(rootView: taskView)
 
                         // Use modern window scene API instead of deprecated UIApplication.shared.windows
                         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let window = windowScene.windows.first {
+                            let window = windowScene.windows.first {
                             window.rootViewController?.present(hosting, animated: true)
                         }
                     }

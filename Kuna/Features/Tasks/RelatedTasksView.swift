@@ -36,7 +36,7 @@ struct RelatedTasksView: View {
                 }
             }
             .navigationDestination(item: $navSelection) { t in
-                TaskDetailView(task: t, api: api)
+                TaskDetailView(task: t, api: api, onUpdate: nil)
             }
         }
         .onAppear { Task { await refresh() } }
