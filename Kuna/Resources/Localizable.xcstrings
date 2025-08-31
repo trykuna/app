@@ -32,6 +32,9 @@
     "%lld%%" : {
       "shouldTranslate" : false
     },
+    "1" : {
+
+    },
     "about.framework.foundation" : {
       "comment" : "Foundation framework description",
       "localizations" : {
@@ -4201,6 +4204,28 @@
         }
       }
     },
+    "tasks.repeat.custom" : {
+      "comment" : "Custom Interval",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Interval"
+          }
+        }
+      }
+    },
+    "tasks.repeat.daily" : {
+      "comment" : "Daily",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily"
+          }
+        }
+      }
+    },
     "tasks.repeat.description %@" : {
       "comment" : "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'",
       "localizations" : {
@@ -4208,6 +4233,105 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This task will repeat %@"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.daily" : {
+      "comment" : "Daily",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXDays" : {
+      "comment" : "Every X days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every X days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXDaysDecimal" : {
+      "comment" : "Every %.1f days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every %.1f days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXHours" : {
+      "comment" : "Every X hours",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every X hours"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXWeeks" : {
+      "comment" : "Every X weeks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every X weeks"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.hourly" : {
+      "comment" : "Hourly",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hourly"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.monthly" : {
+      "comment" : "Every 30 days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.weekly" : {
+      "comment" : "Weekly",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly"
+          }
+        }
+      }
+    },
+    "tasks.repeat.every" : {
+      "comment" : "Every",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every"
           }
         }
       }
@@ -4226,6 +4350,7 @@
     },
     "tasks.repeat.intervalSeconds" : {
       "comment" : "Interval in seconds",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4236,7 +4361,7 @@
       }
     },
     "tasks.repeat.mode" : {
-      "comment" : "Repeat mode",
+      "comment" : "Repeat Mode",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4247,7 +4372,7 @@
       }
     },
     "tasks.repeat.mode.picker" : {
-      "comment" : "Repeat mode",
+      "comment" : "When to repeat",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4268,13 +4393,36 @@
         }
       }
     },
+    "tasks.repeat.monthly" : {
+      "comment" : "Every 30 days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 days"
+          }
+        }
+      }
+    },
     "tasks.repeat.placeholder" : {
       "comment" : "e.g. 86400 for daily",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "e.g. 86400 for daily"
+          }
+        }
+      }
+    },
+    "tasks.repeat.presets" : {
+      "comment" : "Quick Options",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick Options"
           }
         }
       }
@@ -4292,7 +4440,7 @@
       }
     },
     "tasks.repeat.title" : {
-      "comment" : "Repeat",
+      "comment" : "Repeat Task",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4309,6 +4457,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unit"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.days" : {
+      "comment" : "Days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.hours" : {
+      "comment" : "Hours",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hours"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.months" : {
+      "comment" : "Months",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Months"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.weeks" : {
+      "comment" : "Weeks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeks"
+          }
+        }
+      }
+    },
+    "tasks.repeat.useCustom" : {
+      "comment" : "Use custom interval",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use custom interval"
+          }
+        }
+      }
+    },
+    "tasks.repeat.weekly" : {
+      "comment" : "Weekly",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly"
           }
         }
       }

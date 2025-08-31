@@ -49,6 +49,10 @@ struct TaskDetailView: View {
     @State private var showingRemindersEditor = false
     @State private var showingRepeatEditor = false
     @State private var selectedLabelIds: Set<Int> = []
+    
+    // WORKAROUND: Separate state for repeat values to bypass mutation issue
+    @State private var taskRepeatAfter: Int? = nil
+    @State private var taskRepeatMode: RepeatMode = .afterAmount
 
     // Editing buffers for dates (decouple from task while editing)
     @State private var editStartDate: Date?
@@ -66,6 +70,49 @@ struct TaskDetailView: View {
         self.onUpdate = onUpdate
         self._editedDescription = State(initialValue: task.description ?? "")
         self._commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
+        // Initialize workaround repeat values
+        self._taskRepeatAfter = State(initialValue: task.repeatAfter)
+        self._taskRepeatMode = State(initialValue: task.repeatMode)
+    }
+    
+    // Helper function to format repeat intervals
+    private func formatRepeatInterval(_ seconds: Int) -> String {
+        switch seconds {
+        case 86400:
+            return String(localized: "tasks.repeat.display.daily", comment: "Daily")
+        case 604800:
+            return String(localized: "tasks.repeat.display.weekly", comment: "Weekly")
+        case 2592000:
+            return String(localized: "tasks.repeat.display.monthly", comment: "Every 30 days")
+        default:
+            // Convert to most appropriate unit
+            if seconds % 604800 == 0 {
+                let weeks = seconds / 604800
+                if weeks == 1 {
+                    return String(localized: "tasks.repeat.display.weekly", comment: "Weekly")
+                } else {
+                    return String(localized: "tasks.repeat.display.everyXWeeks", comment: "Every X weeks").replacingOccurrences(of: "X", with: "\(weeks)")
+                }
+            } else if seconds % 86400 == 0 {
+                let days = seconds / 86400
+                if days == 1 {
+                    return String(localized: "tasks.repeat.display.daily", comment: "Daily")
+                } else {
+                    return String(localized: "tasks.repeat.display.everyXDays", comment: "Every X days").replacingOccurrences(of: "X", with: "\(days)")
+                }
+            } else if seconds % 3600 == 0 {
+                let hours = seconds / 3600
+                if hours == 1 {
+                    return String(localized: "tasks.repeat.display.hourly", comment: "Hourly")
+                } else {
+                    return String(localized: "tasks.repeat.display.everyXHours", comment: "Every X hours").replacingOccurrences(of: "X", with: "\(hours)")
+                }
+            } else {
+                // Fallback - show in days with decimal
+                let days = Double(seconds) / 86400.0
+                return String(format: String(localized: "tasks.repeat.display.everyXDaysDecimal", comment: "Every %.1f days"), days)
+            }
+        }
     }
 
     var body: some View {
@@ -268,11 +315,23 @@ struct TaskDetailView: View {
         }
         .sheet(isPresented: $showingRepeatEditor) {
             RepeatEditorSheet(
-                repeatAfter: task.repeatAfter,
-                repeatMode: task.repeatMode,
+                repeatAfter: taskRepeatAfter,  // Use workaround state
+                repeatMode: taskRepeatMode,     // Use workaround state
                 onCommit: { newAfter, newMode in
+                    print("🔄 RepeatEditorSheet onCommit: newAfter=\(newAfter?.description ?? "nil"), newMode=\(newMode)")
+                    print("🔄 BEFORE: taskRepeatAfter=\(taskRepeatAfter?.description ?? "nil"), taskRepeatMode=\(taskRepeatMode)")
+                    
+                    // WORKAROUND: Update the separate state variables
+                    taskRepeatAfter = newAfter
+                    taskRepeatMode = newMode
+                    
+                    print("🔄 AFTER setting workaround state: taskRepeatAfter=\(taskRepeatAfter?.description ?? "nil"), taskRepeatMode=\(taskRepeatMode)")
+                    
+                    // Also try to update task (even though we know it fails)
                     task.repeatAfter = newAfter
                     task.repeatMode = newMode
+                    print("🔄 Task values (will be wrong): task.repeatAfter=\(task.repeatAfter?.description ?? "nil"), task.repeatMode=\(task.repeatMode)")
+                    
                     hasChanges = true
                     showingRepeatEditor = false
                 },
@@ -483,8 +542,8 @@ struct TaskDetailView: View {
             Text(String(localized: "tasks.details.repeat.title", comment: "Repeat"))
                 .font(.body).fontWeight(.medium)
             Spacer()
-            if let repeatAfter = task.repeatAfter, repeatAfter > 0 {
-                Text(task.repeatMode.displayName).foregroundColor(.secondary)
+            if let repeatAfter = taskRepeatAfter, repeatAfter > 0 {
+                Text(formatRepeatInterval(repeatAfter)).foregroundColor(.secondary)
             } else {
                 Text(String(localized: "common.never", comment: "Never")).foregroundColor(.secondary.opacity(0.6))
             }
@@ -492,10 +551,14 @@ struct TaskDetailView: View {
                 Image(systemName: "chevron.right").foregroundColor(.secondary.opacity(0.6)).font(.caption)
             }
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isEditing {
+                showingRepeatEditor = true
+            }
+        }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .contentShape(Rectangle())
-        .onTapGesture { if isEditing { showingRepeatEditor = true } }
     }
 
     private var labelsRow: some View {
@@ -687,8 +750,9 @@ struct TaskDetailView: View {
         print("  - editStartDate: \(editStartDate?.description ?? "nil") (hasTime: \(startHasTime))")
         print("  - editDueDate: \(editDueDate?.description ?? "nil") (hasTime: \(dueHasTime))")
         print("  - editEndDate: \(editEndDate?.description ?? "nil") (hasTime: \(endHasTime))")
+        print("🔄 Using workaround repeat values: taskRepeatAfter=\(taskRepeatAfter?.description ?? "nil"), taskRepeatMode=\(taskRepeatMode)")
 
-        // Create a completely new task instance to send to API
+        // Create a completely new task instance to send to API using workaround values
         let taskToSave = VikunjaTask(
             id: task.id,
             title: task.title,
@@ -702,8 +766,8 @@ struct TaskDetailView: View {
             priority: task.priority,
             percentDone: task.percentDone,
             hexColor: task.hexColor,
-            repeatAfter: task.repeatAfter,
-            repeatMode: task.repeatMode,
+            repeatAfter: taskRepeatAfter,
+            repeatMode: taskRepeatMode,
             assignees: task.assignees,
             createdBy: task.createdBy,
             projectId: task.projectId,
@@ -724,6 +788,7 @@ struct TaskDetailView: View {
             print("  - Start: \(taskToSave.startDate?.description ?? "nil")")
             print("  - Due: \(taskToSave.dueDate?.description ?? "nil")")
             print("  - End: \(taskToSave.endDate?.description ?? "nil")")
+            print("🔄 Saving task with repeat values: repeatAfter=\(taskToSave.repeatAfter?.description ?? "nil"), repeatMode=\(taskToSave.repeatMode)")
             
             // Test what gets encoded
             if let encoded = try? JSONEncoder.vikunja.encode(taskToSave),
@@ -738,6 +803,7 @@ struct TaskDetailView: View {
             print("  - Start: \(updatedTask.startDate?.description ?? "nil")")
             print("  - Due: \(updatedTask.dueDate?.description ?? "nil")")
             print("  - End: \(updatedTask.endDate?.description ?? "nil")")
+            print("🔄 API returned repeat values: repeatAfter=\(updatedTask.repeatAfter?.description ?? "nil"), repeatMode=\(updatedTask.repeatMode)")
             
             // Update the edit buffers FIRST (these are what get displayed)
             editStartDate = updatedTask.startDate
@@ -754,6 +820,9 @@ struct TaskDetailView: View {
             
             // Then update the task
             task = updatedTask
+            // Also update our workaround variables to stay in sync
+            taskRepeatAfter = updatedTask.repeatAfter
+            taskRepeatMode = updatedTask.repeatMode ?? .afterAmount
             
             hasChanges = false
             isEditing = false
@@ -1121,45 +1190,206 @@ private struct RemindersEditorSheet: View {
 }
 
 private struct RepeatEditorSheet: View {
-    @State var repeatAfterText: String
+    enum IntervalUnit: String, CaseIterable {
+        case hours = "Hours"
+        case days = "Days"
+        case weeks = "Weeks"
+        case months = "Months"
+        
+        var seconds: Int {
+            switch self {
+            case .hours: return 3600
+            case .days: return 86400
+            case .weeks: return 604800
+            case .months: return 2592000 // 30 days approximation
+            }
+        }
+        
+        var localizedName: String {
+            switch self {
+            case .hours: return String(localized: "tasks.repeat.unit.hours", comment: "Hours")
+            case .days: return String(localized: "tasks.repeat.unit.days", comment: "Days")
+            case .weeks: return String(localized: "tasks.repeat.unit.weeks", comment: "Weeks")
+            case .months: return String(localized: "tasks.repeat.unit.months", comment: "Months")
+            }
+        }
+    }
+    
+    @State private var selectedPreset: String = ""
+    @State private var customValue: String = "1"
+    @State private var customUnit: IntervalUnit = .days
+    @State private var useCustom: Bool = false
     @State var mode: RepeatMode
+    
     let onCommit: (Int?, RepeatMode) -> Void
     let onCancel: () -> Void
-
+    
     init(repeatAfter: Int?, repeatMode: RepeatMode, onCommit: @escaping (Int?, RepeatMode) -> Void, onCancel: @escaping () -> Void) {
-        self._repeatAfterText = State(initialValue: repeatAfter.map(String.init) ?? "")
         self._mode = State(initialValue: repeatMode)
         self.onCommit = onCommit
         self.onCancel = onCancel
+        
+        // Initialize state based on existing value
+        if let seconds = repeatAfter, seconds > 0 {
+            // Check if it matches a preset
+            switch seconds {
+            case 86400:
+                self._selectedPreset = State(initialValue: "daily")
+                self._useCustom = State(initialValue: false)
+            case 604800:
+                self._selectedPreset = State(initialValue: "weekly")
+                self._useCustom = State(initialValue: false)
+            case 2592000:
+                self._selectedPreset = State(initialValue: "monthly")
+                self._useCustom = State(initialValue: false)
+            default:
+                // Convert to most appropriate unit
+                self._useCustom = State(initialValue: true)
+                if seconds % 604800 == 0 {
+                    self._customValue = State(initialValue: String(seconds / 604800))
+                    self._customUnit = State(initialValue: .weeks)
+                } else if seconds % 86400 == 0 {
+                    self._customValue = State(initialValue: String(seconds / 86400))
+                    self._customUnit = State(initialValue: .days)
+                } else if seconds % 3600 == 0 {
+                    self._customValue = State(initialValue: String(seconds / 3600))
+                    self._customUnit = State(initialValue: .hours)
+                } else {
+                    // Default to days
+                    self._customValue = State(initialValue: String(seconds / 86400))
+                    self._customUnit = State(initialValue: .days)
+                }
+            }
+        }
     }
-
+    
     var body: some View {
         NavigationView {
             Form {
-                Section(String(localized: "tasks.repeat.mode", comment: "Repeat mode")) {
-                    Picker(String(localized: "tasks.repeat.mode.picker", comment: "Repeat mode"), selection: $mode) {
+                // Preset options
+                Section(String(localized: "tasks.repeat.presets", comment: "Quick Options")) {
+                    HStack(spacing: 12) {
+                        PresetButton(
+                            title: String(localized: "tasks.repeat.daily", comment: "Daily"),
+                            isSelected: selectedPreset == "daily" && !useCustom,
+                            action: {
+                                selectedPreset = "daily"
+                                useCustom = false
+                            }
+                        )
+                        
+                        PresetButton(
+                            title: String(localized: "tasks.repeat.weekly", comment: "Weekly"),
+                            isSelected: selectedPreset == "weekly" && !useCustom,
+                            action: {
+                                selectedPreset = "weekly"
+                                useCustom = false
+                            }
+                        )
+                        
+                        PresetButton(
+                            title: String(localized: "tasks.repeat.monthly", comment: "Every 30 days"),
+                            isSelected: selectedPreset == "monthly" && !useCustom,
+                            action: {
+                                selectedPreset = "monthly"
+                                useCustom = false
+                            }
+                        )
+                    }
+                    .padding(.vertical, 8)
+                }
+                
+                // Custom interval
+                Section(String(localized: "tasks.repeat.custom", comment: "Custom Interval")) {
+                    Toggle(String(localized: "tasks.repeat.useCustom", comment: "Use custom interval"), isOn: $useCustom)
+                        .onChange(of: useCustom) { newValue in
+                            if newValue {
+                                selectedPreset = ""
+                            }
+                        }
+                    
+                    if useCustom {
+                        HStack {
+                            Text(String(localized: "tasks.repeat.every", comment: "Every"))
+                            TextField("1", text: $customValue)
+                                .keyboardType(.numberPad)
+                                .frame(width: 60)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            
+                            Picker(String(localized: "tasks.repeat.unit", comment: "Unit"), selection: $customUnit) {
+                                ForEach(IntervalUnit.allCases, id: \.self) { unit in
+                                    Text(unit.localizedName).tag(unit)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                        }
+                    }
+                }
+                
+                // Repeat mode
+                Section(header: Text(String(localized: "tasks.repeat.mode", comment: "Repeat Mode")),
+                       footer: Text(mode.description).font(.caption).foregroundColor(.secondary)) {
+                    Picker(String(localized: "tasks.repeat.mode.picker", comment: "When to repeat"), selection: $mode) {
                         ForEach(RepeatMode.allCases) { m in
                             Text(m.displayName).tag(m)
                         }
                     }
-                }
-                Section(String(localized: "tasks.repeat.intervalSeconds", comment: "Interval in seconds")) {
-                    TextField(String(localized: "tasks.repeat.placeholder", comment: "e.g. 86400 for daily"),
-                              text: $repeatAfterText)
-                        .keyboardType(.numberPad)
+                    .pickerStyle(DefaultPickerStyle())
                 }
             }
-            .navigationTitle(String(localized: "tasks.repeat.title", comment: "Repeat"))
+            .navigationTitle(String(localized: "tasks.repeat.title", comment: "Repeat Task"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button(String(localized: "common.cancel", comment: "Cancel"), action: onCancel) }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(String(localized: "common.cancel", comment: "Cancel"), action: onCancel)
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "common.done", comment: "Done")) {
-                        let val = Int(repeatAfterText)
-                        onCommit(val, mode)
+                        let seconds: Int?
+                        
+                        if useCustom {
+                            // Calculate seconds from custom value
+                            if let value = Int(customValue), value > 0 {
+                                seconds = value * customUnit.seconds
+                            } else {
+                                seconds = nil
+                            }
+                        } else {
+                            // Use preset value
+                            switch selectedPreset {
+                            case "daily": seconds = 86400
+                            case "weekly": seconds = 604800
+                            case "monthly": seconds = 2592000
+                            default: seconds = nil
+                            }
+                        }
+                        
+                        onCommit(seconds, mode)
                     }
                 }
             }
         }
+    }
+}
+
+// Helper view for preset buttons
+private struct PresetButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+                .background(isSelected ? Color.accentColor : Color.secondary.opacity(0.2))
+                .foregroundColor(isSelected ? .white : .primary)
+                .cornerRadius(8)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
