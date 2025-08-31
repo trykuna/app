@@ -44,9 +44,9 @@ final class KunaModelTests: XCTestCase {
         XCTAssertFalse(task.hasAttachments)
         
         // Test with attachments - create a simple attachment via JSON decoding
-        let attachmentJSON = """
+        let attachmentJSON = Data("""
         {"id": 1, "file_name": "test.pdf"}
-        """.data(using: .utf8)!
+        """.utf8)
         let attachment = try! JSONDecoder().decode(TaskAttachment.self, from: attachmentJSON)
         task.attachments = [attachment]
         XCTAssertTrue(task.hasAttachments)
@@ -86,9 +86,9 @@ final class KunaModelTests: XCTestCase {
     // MARK: - Project Tests
     
     func testProjectInitialization() {
-        let projectJSON = """
+        let projectJSON = Data("""
         {"id": 1, "title": "Test Project", "description": "A test project"}
-        """.data(using: .utf8)!
+        """.utf8)
         
         let project = try! JSONDecoder().decode(Project.self, from: projectJSON)
         
@@ -98,9 +98,9 @@ final class KunaModelTests: XCTestCase {
     }
     
     func testProjectCodable() throws {
-        let projectJSON = """
+        let projectJSON = Data("""
         {"id": 42, "title": "My Project", "description": "Project description"}
-        """.data(using: .utf8)!
+        """.utf8)
         
         let project = try JSONDecoder().decode(Project.self, from: projectJSON)
         
@@ -191,9 +191,9 @@ final class KunaModelTests: XCTestCase {
     // MARK: - TaskAttachment Tests
     
     func testTaskAttachmentProperties() {
-        let attachmentJSON = """
+        let attachmentJSON = Data("""
         {"id": 1, "file_name": "document.pdf"}
-        """.data(using: .utf8)!
+        """.utf8)
         
         let attachment = try! JSONDecoder().decode(TaskAttachment.self, from: attachmentJSON)
         
