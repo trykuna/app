@@ -551,7 +551,7 @@ final class KunaUITests: XCTestCase {
                 if app.staticTexts["TASK INFO"].exists { return true }
                 if app.staticTexts["SCHEDULING"].exists { return true }
                 if app.staticTexts["ORGANIZATION"].exists { return true }
-                let indicators = ["Title","Description","Priority","Due Date","Start Date","End Date","Project","Labels"]
+                let indicators = ["Title", "Description", "Priority", "Due Date", "Start Date", "End Date", "Project", "Labels"]
                 for ind in indicators { if app.staticTexts[ind].exists { return true } }
             }
             RunLoop.current.run(until: Date().addingTimeInterval(0.1))
@@ -687,7 +687,7 @@ private func openSettingsRow(titled wantedTitle: String, in app: XCUIApplication
         ? app.sheets.firstMatch
         : (app.scrollViews.firstMatch.exists ? app.scrollViews.firstMatch : app)
 
-    let ids = ["settings.displayOptions","settings.display","settings.appearance","Display Options","Display options","Display"]
+    let ids = ["settings.displayOptions", "settings.display", "settings.appearance", "Display Options", "Display options", "Display"]
     for id in ids {
         let btn = container.buttons.matching(identifier: id).firstMatch
         if btn.exists && btn.isHittable { btn.tap(); return }
