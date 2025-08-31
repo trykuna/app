@@ -1,0 +1,65 @@
+---
+# Lint only these paths
+included:
+  - Kuna
+  - KunaUnitTests
+  - KunaUITests
+  - KunaWidget
+
+# Common folders to ignore
+excluded:
+  - Carthage
+  - Pods
+  - DerivedData
+  - Scripts
+  - .build
+
+# Make output show inline in GitHub checks
+reporter: github-actions-logging
+
+# Turn off a couple of noisy rules (adjust to taste)
+disabled_rules:
+  - trailing_whitespace
+  - identifier_name
+
+# Turn on stricter rules that catch AI slip-ups
+opt_in_rules:
+  - force_unwrapping
+  - force_cast
+  - file_length
+  - function_body_length
+  - type_body_length
+  - cyclomatic_complexity
+  - nesting
+  - redundant_optional_initialization
+  - unused_declaration
+  - empty_count
+  - explicit_self
+  - yoda_condition
+  - fatal_error_message
+  - discouraged_direct_init
+  - todo
+
+# Reasonable thresholds
+line_length: 130
+type_body_length:
+  - 400 # warning
+  - 600 # error
+file_length:
+  warning: 500
+  error: 900
+function_body_length:
+  - 60
+  - 100
+cyclomatic_complexity:
+  - 12
+  - 18
+
+# Exempt some unit-test naming noise
+identifier_name:
+  excluded:
+    - id
+    - x
+    - y
+    - i
+    - j
