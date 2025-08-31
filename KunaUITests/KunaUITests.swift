@@ -300,7 +300,8 @@ final class KunaUITests: XCTestCase {
             let row = projectRows.element(boundBy: i)
             if row.exists && row.staticTexts[name].exists && row.isHittable { row.tap(); return true }
         }
-        if app.cells.staticTexts[name].exists && app.cells.staticTexts[name].isHittable { app.cells.staticTexts[name].tap(); return true }
+        if app.cells.staticTexts[name].exists
+            && app.cells.staticTexts[name].isHittable { app.cells.staticTexts[name].tap(); return true }
         if app.staticTexts[name].exists && app.staticTexts[name].isHittable { app.staticTexts[name].tap(); return true }
 
         let containers = scrollableContainers(in: app)
