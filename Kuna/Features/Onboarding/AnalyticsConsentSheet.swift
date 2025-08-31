@@ -73,4 +73,3 @@ struct AnalyticsConsentSheet: View {
         dismiss()
     }
 }
-

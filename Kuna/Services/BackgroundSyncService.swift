@@ -203,4 +203,3 @@ final class BackgroundSyncService: ObservableObject {
     #endif
 
 }
-

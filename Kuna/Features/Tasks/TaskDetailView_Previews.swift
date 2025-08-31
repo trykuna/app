@@ -44,4 +44,3 @@ struct TaskDetailView_Previews: PreviewProvider {
     }
 }
 #endif
-

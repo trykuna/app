@@ -312,7 +312,6 @@ struct FavoriteTaskRow: View {
     }
 }
 
-
 #Preview {
     NavigationStack {
         FavoritesView(api: VikunjaAPI(

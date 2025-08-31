@@ -17,4 +17,3 @@ extension UIApplication {
         return base
     }
 }
-

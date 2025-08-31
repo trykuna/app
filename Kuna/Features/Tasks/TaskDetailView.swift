@@ -1442,4 +1442,3 @@ private func hasTime(_ date: Date?) -> Bool {
 }
 
 private func dateOrToday(_ date: Date?) -> Date? { date ?? Date().startOfDayLocal }
-

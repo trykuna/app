@@ -160,8 +160,5 @@ struct BackgroundSyncSettingsSection: View {
         case .ephemeral: return "Ephemeral"
         @unknown default: return "Unknown"
         }
-    }
-
-    
+    }    
 }
-

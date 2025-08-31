@@ -1344,4 +1344,3 @@ extension VikunjaAPI {
         return results
     }
 }
-

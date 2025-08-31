@@ -111,4 +111,3 @@ struct TaskPickerSheet: View {
         }
     }
 }
-
