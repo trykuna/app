@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 struct TaskAttachmentView: View {
     let task: VikunjaTask
     let api: VikunjaAPI
-    var onUpload: (() -> Void)?
+    var onUpload: (() -> Void)? = nil // swiftlint:disable:this redundant_optional_initialization
 
     @State private var showingSourceDialog = false
     @State private var showPhotoPicker = false
