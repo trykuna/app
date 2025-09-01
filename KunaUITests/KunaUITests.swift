@@ -291,8 +291,8 @@ final class KunaUITests: XCTestCase {
         guard !availableProjects.isEmpty else {
             XCTFail("No projects found on the Projects screen"); return
         }
-        for projectName in availableProjects {
-            if tryOpenProject(named: projectName, in: app) { return }
+        for projectName in availableProjects where tryOpenProject(named: projectName, in: app) {
+            return
         }
         XCTFail("Could not open any project. Preferred: '\(preferredName)', Available: \(availableProjects)")
     }
@@ -356,8 +356,8 @@ final class KunaUITests: XCTestCase {
         if tryOpenProject(named: preferred, in: app) { return preferred }
         let availableProjects = discoverAvailableProjects(in: app)
         guard !availableProjects.isEmpty else { XCTFail("No projects found on the Projects screen"); return preferred }
-        for projectName in availableProjects {
-            if tryOpenProject(named: projectName, in: app) { return projectName }
+        for projectName in availableProjects where tryOpenProject(named: projectName, in: app) {
+            return projectName
         }
         XCTFail("Could not open any project. Preferred: '\(preferred)', Available: \(availableProjects)")
         return preferred
@@ -368,8 +368,8 @@ final class KunaUITests: XCTestCase {
         if tryOpenTaskOnPhone(named: preferred, in: app) { return preferred }
         let availableTasks = discoverAvailableTasksOnPhone(in: app)
         guard !availableTasks.isEmpty else { XCTFail("No tasks found in the task list"); return preferred }
-        for taskName in availableTasks {
-            if tryOpenTaskOnPhone(named: taskName, in: app) { return taskName }
+        for taskName in availableTasks where tryOpenTaskOnPhone(named: taskName, in: app) {
+            return taskName
         }
         XCTFail("Could not open any task. Preferred: '\(preferred)', Available: \(availableTasks)")
         return preferred
@@ -380,8 +380,8 @@ final class KunaUITests: XCTestCase {
         if trySelectTask(named: preferred, in: app) { return preferred }
         let availableTasks = discoverAvailableTasks(in: app)
         guard !availableTasks.isEmpty else { XCTFail("No tasks found in iPad split view"); return preferred }
-        for taskName in availableTasks {
-            if trySelectTask(named: taskName, in: app) { return taskName }
+        for taskName in availableTasks where trySelectTask(named: taskName, in: app) {
+            return taskName
         }
         XCTFail("Could not select any task in iPad split view. Preferred: '\(preferred)', Available: \(availableTasks)")
         return preferred
@@ -556,7 +556,7 @@ final class KunaUITests: XCTestCase {
                 if app.staticTexts["SCHEDULING"].exists { return true }
                 if app.staticTexts["ORGANIZATION"].exists { return true }
                 let indicators = ["Title", "Description", "Priority", "Due Date", "Start Date", "End Date", "Project", "Labels"]
-                for ind in indicators { if app.staticTexts[ind].exists { return true } }
+                for ind in indicators where app.staticTexts[ind].exists { return true }
             }
             RunLoop.current.run(until: Date().addingTimeInterval(0.1))
         } while Date() < end
@@ -602,8 +602,8 @@ final class KunaUITests: XCTestCase {
 
         let availableTasks = discoverAvailableTasks(in: app)
         guard !availableTasks.isEmpty else { XCTFail("No tasks found in iPad split view"); return }
-        for taskName in availableTasks {
-            if trySelectTask(named: taskName, in: app) { return }
+        for taskName in availableTasks where trySelectTask(named: taskName, in: app) {
+            return
         }
 
         let allTexts = app.staticTexts.allElementsBoundByIndex
