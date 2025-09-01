@@ -14,6 +14,9 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         
         // Save original preferences to restore later
         originalPrefs = appSettings.calendarSyncPrefs
+        
+        // Clear UserDefaults to avoid test interference
+        UserDefaults.standard.removeObject(forKey: "calendarSync.prefs")
     }
     
     override func tearDown() async throws {
@@ -83,7 +86,11 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         
         // Try to decode the data
         let decoder = JSONDecoder()
-        let decodedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: data!)
+        guard let data = data else {
+            XCTFail("Data should not be nil")
+            return
+        }
+        let decodedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: data)
         XCTAssertEqual(decodedPrefs, testPrefs)
     }
     
@@ -109,7 +116,11 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         XCTAssertNotNil(storedData)
         
         let decoder = JSONDecoder()
-        let loadedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: storedData!)
+        guard let storedData = storedData else {
+            XCTFail("Stored data should not be nil")
+            return
+        }
+        let loadedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: storedData)
         XCTAssertEqual(loadedPrefs, testPrefs)
         
         // Test that setting the preferences through AppSettings works
@@ -123,21 +134,38 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         // Test that changes to calendar sync preferences integrate properly
         // with other settings
         
+        // Reset to a clean state
+        appSettings.calendarSyncPrefs = CalendarSyncPrefs()
+        
         // Initially disabled
         XCTAssertFalse(appSettings.calendarSyncPrefs.isEnabled)
         
-        // Enable calendar sync with preferences
-        var newPrefs = appSettings.calendarSyncPrefs
-        newPrefs.isEnabled = true
-        newPrefs.mode = .single
-        newPrefs.selectedProjectIDs = ["1"]
-        newPrefs.singleCalendar = KunaCalendarRef(name: "Kuna", identifier: "test-cal")
+        // Create new preferences with explicit values
+        let testCalendar = KunaCalendarRef(name: "Kuna", identifier: "test-cal")
+        let newPrefs = CalendarSyncPrefs(
+            isEnabled: true,
+            mode: .single,
+            selectedProjectIDs: [],
+            singleCalendar: testCalendar,
+            projectCalendars: [:],
+            version: 1
+        )
         
+        // Verify the preferences are valid before setting them
+        XCTAssertTrue(newPrefs.isValid, "New preferences should be valid before setting")
+        XCTAssertNotNil(newPrefs.singleCalendar, "Single calendar should be set")
+        
+        // Set the preferences
         appSettings.calendarSyncPrefs = newPrefs
         
-        // Verify integration
-        XCTAssertTrue(appSettings.calendarSyncPrefs.isEnabled)
-        XCTAssertTrue(appSettings.calendarSyncPrefs.isValid)
+        // Verify integration - read back the preferences
+        let savedPrefs = appSettings.calendarSyncPrefs
+        XCTAssertTrue(savedPrefs.isEnabled, "Preferences should be enabled")
+        XCTAssertEqual(savedPrefs.mode, .single, "Mode should be single")
+        XCTAssertNotNil(savedPrefs.singleCalendar, "Single calendar should not be nil")
+        XCTAssertEqual(savedPrefs.singleCalendar?.name, "Kuna", "Calendar name should match")
+        XCTAssertEqual(savedPrefs.singleCalendar?.identifier, "test-cal", "Calendar identifier should match")
+        XCTAssertTrue(savedPrefs.isValid, "Saved preferences should be valid")
     }
     
     func testCalendarSyncPrefsVersionHandling() {

@@ -64,7 +64,7 @@ final class BackgroundTaskChangeDetector {
 
         for t in tasks {
             // Track max cursor from updatedAt
-            var updatedISO: String? = nil
+            var updatedISO: String?
             if let u = t.updatedAt {
                 let s = iso.string(from: u)
                 updatedISO = s
@@ -84,7 +84,7 @@ final class BackgroundTaskChangeDetector {
                     summary.newTasks.append(t)
                     isNewTask = true
                 }
-            } else if let s = updatedISO, s > lastSeen! {
+            } else if let s = updatedISO, let last = lastSeen, s > last {
                 summary.updatedTasks.append(t)
                 isUpdatedTask = true
             }
@@ -136,8 +136,7 @@ final class BackgroundTaskChangeDetector {
             state.lastSeenUpdatedISO = Dictionary(uniqueKeysWithValues: Array(sortedEntries.prefix(100)))
             
             saveState(state)
-            Log.app.debug("BackgroundTaskChangeDetector: Trimmed task tracking from \(oldCount) to \(state.lastSeenUpdatedISO.count) entries")
+            Log.app.debug("BackgroundTaskChangeDetector: Trimmed task tracking from \(oldCount) to \(state.lastSeenUpdatedISO.count) entries") // swiftlint:disable:this line_length
         }
     }
 }
-

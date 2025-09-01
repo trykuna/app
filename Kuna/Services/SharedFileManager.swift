@@ -14,13 +14,17 @@ class SharedFileManager {
 
     // Use a shared location that both iOS and watchOS simulators can access
     private var sharedDirectory: URL {
-        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let sharedPath = documentsPath.appendingPathComponent("VikunjaShared")
+        let fm = fileManager
+        // Returns a single URL and creates the base folder if needed.
+        let base = (try? fm.url(for: .applicationSupportDirectory,
+                                in: .userDomainMask,
+                                appropriateFor: nil,
+                                create: true))
+                ?? fm.temporaryDirectory
 
-        // Create directory if it doesn't exist
-        try? fileManager.createDirectory(at: sharedPath, withIntermediateDirectories: true)
-
-        return sharedPath
+        let dir = base.appendingPathComponent("VikunjaShared", isDirectory: true)
+        try? fm.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+        return dir
     }
 
     private var projectsFile: URL {

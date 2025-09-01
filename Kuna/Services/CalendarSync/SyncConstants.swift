@@ -141,11 +141,21 @@ extension Date {
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter.string(from: self)
     }
-
+    
     var startOfDayLocal: Date {
         return Calendar.current.startOfDay(for: self)
     }
-
+    
+    var startOfDayUTC: Date {
+        let calendar = Calendar(identifier: .gregorian)
+        guard let utcTimeZone = TimeZone(secondsFromGMT: 0) else { return self }
+        var components = calendar.dateComponents(in: utcTimeZone, from: self)
+        components.hour = 0
+        components.minute = 0
+        components.second = 0
+        return calendar.date(from: components) ?? self
+    }
+    
     var dateOnlyUTC: Date {
         let calendar = Calendar(identifier: .gregorian)
         let components = calendar.dateComponents([.year, .month, .day], from: self)

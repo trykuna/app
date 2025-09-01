@@ -60,7 +60,10 @@ struct SmallWidgetProvider: AppIntentTimelineProvider {
             WidgetTask(id: 1, title: "Review Project", dueDate: Date(), isOverdue: false, priority: .high),
             WidgetTask(id: 2, title: "Team Meeting", dueDate: Date(), isOverdue: true, priority: .medium),
             WidgetTask(id: 3, title: "Update Documentation", dueDate: Date(), isOverdue: false, priority: .low)
-        ], projectName: configuration.project?.displayName ?? "All Projects", configuredPriority: configuration.priorityFilter?.priority, projectId: configuration.project?.projectId)
+        ], 
+        projectName: configuration.project?.displayName ?? "All Projects",
+        configuredPriority: configuration.priorityFilter?.priority,
+        projectId: configuration.project?.projectId)
     }
 
     func timeline(for configuration: ProjectSelectionConfiguration, in context: Context) async -> Timeline<SimpleEntry> {
@@ -541,7 +544,7 @@ struct LargeWidgetView: View {
             
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(Array(tasks.enumerated()), id: \.offset) { index, task in
+                    ForEach(Array(tasks.enumerated()), id: \.offset) { _, task in
                         HStack(spacing: 8) {
                             Circle()
                                 .strokeBorder(task.isOverdue ? Color.red : Color.gray, lineWidth: 2)

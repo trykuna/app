@@ -4,7 +4,6 @@ import SwiftUI
 // Global helper for UI tests to disable animations
 private let animationsEnabled: Bool = !ProcessInfo.processInfo.arguments.contains("-UITestsNoAnimations")
 
-
 struct MainContainerView: View {
     let api: VikunjaAPI
     @EnvironmentObject var appState: AppState
@@ -17,7 +16,7 @@ struct MainContainerView: View {
     private let menuWidth: CGFloat = 280
 
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             ZStack {
                 // Main content
                 contentView
@@ -97,17 +96,19 @@ struct MainContainerView: View {
                     // Present task detail by pushing into a temp navigation
                     // We can route via a sheet for simplicity
                     await MainActor.run {
-                        let taskView = TaskDetailView(task: task, api: api)
+                        let taskView = TaskDetailView(task: task, api: api, onUpdate: nil)
                         let hosting = UIHostingController(rootView: taskView)
 
                         // Use modern window scene API instead of deprecated UIApplication.shared.windows
                         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let window = windowScene.windows.first {
+                            let window = windowScene.windows.first {
                             window.rootViewController?.present(hosting, animated: true)
                         }
                     }
                 } catch {
-                    Log.app.error("DeepLink: Failed to open task id=\(id, privacy: .public): \(String(describing: error), privacy: .public)")
+                    Log.app.error(
+                        "DeepLink: Failed to open task id=\(id, privacy: .public): \(String(describing: error), privacy: .public)"
+                    )
                 }
                 await MainActor.run { appState.deepLinkTaskId = nil }
             }
@@ -300,7 +301,8 @@ struct LabelsViewWithMenu: View {
                 }
             }
             // .alert("Delete Label", isPresented: $showingDeleteAlert) {
-            .alert(String(localized: "labels.delete.title", comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
+            .alert(String(localized: "labels.delete.title",
+                            comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
                 // Button("Cancel", role: .cancel) { }
                 Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
                 // Button("Delete", role: .destructive) {
@@ -313,7 +315,6 @@ struct LabelsViewWithMenu: View {
                 }
             } message: {
                 if let label = labelToDelete {
-                    // TODO: Localize
                     Text("labels.delete.confirmation \(label.title)",
                          comment: "Confirmation prompt when deleting a label. The placeholder is the label’s title")
 
@@ -436,6 +437,14 @@ struct LabelsViewWithMenu: View {
 }
 
 #Preview {
-    MainContainerView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }))
-        .environmentObject(AppState())
+    MainContainerView(
+        api: VikunjaAPI(
+            config: .init(
+                baseURL: URL(string: "https://example.com")! // swiftlint:disable:this force_unwrapping
+            ),
+            tokenProvider: { nil }
+        )
+    )
+    .environmentObject(AppState())
 }
+

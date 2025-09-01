@@ -49,7 +49,8 @@ struct CalendarSyncOnboardingView: View {
             }
             .padding()
             // .navigationTitle("Calendar Sync Setup")
-            .navigationTitle(String(localized: "settings.calendarSync.setup.title", comment: "Calendar sync setup navigation title"))
+            .navigationTitle(String(localized: "settings.calendarSync.setup.title",
+                                    comment: "Calendar sync setup navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -130,7 +131,9 @@ struct CalendarSyncOnboardingView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     FeatureRow(icon: "shield.checkered", title: "Safe Sync", description: "Only touches Kuna-created calendars")
                     FeatureRow(icon: "arrow.2.circlepath", title: "Two-way Sync", description: "Tasks and events stay in sync")
-                    FeatureRow(icon: "folder.badge.gearshape", title: "Project Filtering", description: "Choose which projects to sync")
+                    FeatureRow(icon: "folder.badge.gearshape",
+                                title: "Project Filtering",
+                                description: "Choose which projects to sync")
                 }
                 .padding(.top)
             }
@@ -175,15 +178,18 @@ struct CalendarSyncOnboardingView: View {
                     .fontWeight(.semibold)
                 
                 Text(selectedMode == .single ? 
-                     String(localized: "settings.calendarSync.projectSelection.single", comment: "Choose which projects to include in your Kuna calendar") :
-                     String(localized: "settings.calendarSync.projectSelection.perProject", comment: "Choose which projects to create calendars for"))
+                    String(localized: "settings.calendarSync.projectSelection.single",
+                            comment: "Choose which projects to include in your Kuna calendar") :
+                    String(localized: "settings.calendarSync.projectSelection.perProject",
+                            comment: "Choose which projects to create calendars for"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
             }
             
             VStack(spacing: 12) {
                 HStack {
-                    Button(selectedProjectIDs.count == projects.count ? String(localized: "common.deselectAll") : String(localized: "common.selectAll")) {
+                    Button(selectedProjectIDs.count == projects.count
+                            ? String(localized: "common.deselectAll") : String(localized: "common.selectAll")) {
                         if selectedProjectIDs.count == projects.count {
                             selectedProjectIDs.removeAll()
                         } else {
@@ -247,7 +253,6 @@ struct CalendarSyncOnboardingView: View {
                     .foregroundColor(.secondary)
             }
             
-            // TODO: Localize
             VStack(spacing: 16) {
                 ConfirmationRow(
                     title: "Sync Mode",

@@ -1,0 +1,45 @@
+---
+name: SwiftLint
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/swiftlint.yml'
+      - '.swiftlint.yml'
+      - '**/*.swift'
+
+jobs:
+  swiftlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Lint only files changed in the PR (no --strict)
+      - name: SwiftLint (changed files only)
+        uses: norio-nomura/action-swiftlint@3.2.1
+        env:
+          DIFF_BASE: ${{ github.base_ref }}
+
+  codeql:
+    if: ${{ github.event.pull_request.head.repo.fork == false }} # skip forks if you want
+    name: CodeQL (Swift)
+    runs-on: macos-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: swift
+      - name: Build for CodeQL
+        run: |
+          xcodebuild \
+            -project "Kuna.xcodeproj" \
+            -scheme "Kuna" \
+            -destination "generic/platform=iOS" \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build | xcpretty && exit ${PIPESTATUS[0]}
+      - uses: github/codeql-action/analyze@v3

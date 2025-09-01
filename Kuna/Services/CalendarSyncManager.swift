@@ -33,7 +33,7 @@ final class CalendarSyncManager: ObservableObject {
             await syncTasksToCalendar(tasks)
 
             // Step 3: Check for calendar changes and sync back to tasks (bidirectional)
-            let _ = await calendarSync.syncCalendarChangesToTasks(api: api)
+            _ = await calendarSync.syncCalendarChangesToTasks(api: api)
 
             // Step 4: Handle any conflicts
             await detectAndHandleConflicts(tasks: tasks, api: api)
@@ -44,7 +44,6 @@ final class CalendarSyncManager: ObservableObject {
                     await resolveConflict(conflict, resolution: CalendarSyncService.SyncConflictResolution.preferNewest, api: api)
                 }
             }
-
 
             // Update last sync date
             lastSyncDate = Date()
@@ -65,7 +64,7 @@ final class CalendarSyncManager: ObservableObject {
                 guard hasRequiredDates else { continue }
             }
 
-            let _ = await calendarSync.syncTaskToCalendar(task)
+            _ = await calendarSync.syncTaskToCalendar(task)
         }
     }
 
@@ -156,7 +155,8 @@ final class CalendarSyncManager: ObservableObject {
         return conflicts.first ?? .title // Return the first conflict type
     }
 
-    func resolveConflict(_ conflict: SyncConflict, resolution: CalendarSyncService.SyncConflictResolution, api: VikunjaAPI) async {
+    func resolveConflict(
+        _ conflict: SyncConflict, resolution: CalendarSyncService.SyncConflictResolution, api: VikunjaAPI) async {
         guard let calendar = calendarSync.selectedCalendar else {
             syncConflicts.removeAll { $0.id == conflict.id }
             return
@@ -166,8 +166,10 @@ final class CalendarSyncManager: ObservableObject {
             let task = try await api.getTask(taskId: conflict.taskId)
 
             // Find the matching event via URL scheme
-            let window = DateInterval(start: Date().addingTimeInterval(-365*24*60*60), end: Date().addingTimeInterval(365*24*60*60))
-            let predicate = calendarSync.eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: [calendar])
+            let window = DateInterval(
+                start: Date().addingTimeInterval(-365*24*60*60), end: Date().addingTimeInterval(365*24*60*60))
+            let predicate = calendarSync.eventStore.predicateForEvents(
+                withStart: window.start, end: window.end, calendars: [calendar])
             let event = calendarSync.eventStore.events(matching: predicate).first { ev in
                 ev.url?.absoluteString == "kuna://task/\(conflict.taskId)"
             }
@@ -194,7 +196,7 @@ final class CalendarSyncManager: ObservableObject {
             case .preferCalendar:
                 // Build updated task from event and push to server if changes exist
                 if let updated = calendarSync.buildUpdatedTaskFromEvent(task, event: ev) {
-                    do { let _ = try await api.updateTask(updated) } catch {
+                    do { _ = try await api.updateTask(updated) } catch {
                         calendarSync.syncErrors.append("Calendar->Task update failed: \(error.localizedDescription)")
                     }
                 }

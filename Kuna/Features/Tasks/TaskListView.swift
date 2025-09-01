@@ -25,7 +25,13 @@ struct FlowLayout: Layout {
             spacing: spacing
         )
         for (index, subview) in subviews.enumerated() {
-            subview.place(at: CGPoint(x: bounds.minX + result.frames[index].minX, y: bounds.minY + result.frames[index].minY), proposal: .unspecified)
+            subview.place(
+                at: CGPoint(
+                    x: bounds.minX + result.frames[index].minX,
+                    y: bounds.minY + result.frames[index].minY
+                ),
+                proposal: .unspecified
+            )
         }
     }
 }
@@ -101,7 +107,7 @@ final class TaskListVM: ObservableObject {
     @Published var error: String?
     @Published var isAddingTask = false
     @Published var hasMoreTasks = true // whether there are more pages at the end
-    @Published var totalTaskCount: Int? = nil // total tasks on server (from headers)
+    @Published var totalTaskCount: Int?// total tasks on server (from headers)
 
     private let api: VikunjaAPI
     private let projectId: Int
@@ -110,11 +116,11 @@ final class TaskListVM: ObservableObject {
     private var currentPage = 1 // next page to fetch at the end (kept for compatibility)
     private var firstLoadedPage = 1
     private var lastLoadedPage = 0
-    private var totalPages: Int? = nil
+    private var totalPages: Int?
 
     // Debounce for auto-load triggers
-    private var lastTopTriggerTaskId: Int? = nil
-    private var lastBottomTriggerTaskId: Int? = nil
+    private var lastTopTriggerTaskId: Int?
+    private var lastBottomTriggerTaskId: Int?
 
     // Paging config and memory cap
     private let tasksPerPage = 50
@@ -209,7 +215,7 @@ final class TaskListVM: ObservableObject {
                     // Adjust firstLoadedPage if we dropped a full page (or more)
                     let pagesDropped = Int(ceil(Double(excessCount) / Double(tasksPerPage)))
                     self.firstLoadedPage = max(self.firstLoadedPage + pagesDropped, 1)
-                    Log.app.debug("TaskListVM: Trimmed \(excessCount) old tasks, keeping \(self.tasks.count). Window pages=\(self.firstLoadedPage)-\(self.lastLoadedPage)")
+                    Log.app.debug("TaskListVM: Trimmed \(excessCount) old tasks, keeping \(self.tasks.count). Window pages=\(self.firstLoadedPage)-\(self.lastLoadedPage)") // swiftlint:disable:this line_length
                 }
             }
 
@@ -225,8 +231,7 @@ final class TaskListVM: ObservableObject {
                 // Also write to shared file for watch
                 SharedFileManager.shared.writeTasks(tasks, for: projectId)
             }
-        }
-        catch {
+        } catch {
             let ms = Date().timeIntervalSince(t0) * 1000
             Analytics.track("Task.Fetch.ListView", parameters: [
                 "duration_ms": String(Int(ms)),
@@ -314,12 +319,14 @@ final class TaskListVM: ObservableObject {
     func toggleFavorite(_ task: VikunjaTask) async {
         do {
             #if DEBUG
-            Log.app.debug("TaskListView: Toggling favorite for task id=\(task.id, privacy: .public) title=\(task.title, privacy: .public) current=\(task.isFavorite, privacy: .public)")
+            Log.app.debug("TaskListView: Toggling favorite for task id=\(task.id, privacy: .public) title=\(task.title, privacy: .public) current=\(task.isFavorite, privacy: .public)") // swiftlint:disable:this line_length
             #endif
             let updated = try await api.toggleTaskFavorite(task: task)
             if let i = tasks.firstIndex(where: { $0.id == task.id }) {
                 #if DEBUG
-                Log.app.debug("TaskListView: Task id=\(task.id, privacy: .public) favorite -> \(updated.isFavorite, privacy: .public)")
+                Log.app.debug(
+                    "TaskListView: Task id=\(task.id, privacy: .public) favorite -> \(updated.isFavorite, privacy: .public)"
+                )
                 #endif
                 tasks[i] = updated
                 // Update widget cache after favorite change
@@ -327,7 +334,9 @@ final class TaskListVM: ObservableObject {
             }
         } catch {
             #if DEBUG
-            Log.app.error("TaskListView: Error toggling favorite for task id=\(task.id, privacy: .public): \(String(describing: error), privacy: .public)")
+            Log.app.error(
+                "TaskListView: Error toggling favorite for task id=\(task.id, privacy: .public): \(String(describing: error), privacy: .public)" // swiftlint:disable:this line_length
+            )
             #endif
             self.error = error.localizedDescription
         }
@@ -345,7 +354,7 @@ final class TaskListVM: ObservableObject {
             if settings.calendarSyncEnabled && settings.autoSyncNewTasks {
                 let hasRequiredDates = newTask.startDate != nil || newTask.dueDate != nil || newTask.endDate != nil
                 if hasRequiredDates || !settings.syncTasksWithDatesOnly {
-                    let _ = await calendarSync.syncTaskToCalendar(newTask)
+                    _ = await calendarSync.syncTaskToCalendar(newTask)
                 }
             }
 
@@ -353,6 +362,14 @@ final class TaskListVM: ObservableObject {
             WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
         } catch {
             self.error = error.localizedDescription
+        }
+    }
+    
+    func updateTask(_ updatedTask: VikunjaTask) {
+        if let index = tasks.firstIndex(where: { $0.id == updatedTask.id }) {
+            tasks[index] = updatedTask
+            // Update widget cache after task update
+            WidgetCacheWriter.writeWidgetSnapshot(from: tasks, projectId: projectId)
         }
     }
 }
@@ -524,7 +541,6 @@ struct TaskListView: View {
                             .lineLimit(2)
                     }
                 }
-
 
             }
             .padding(.horizontal, 16)
@@ -760,7 +776,11 @@ struct TaskListView: View {
                     Button {
                         showingFilter = true
                     } label: {
-                        Image(systemName: currentFilter.hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                        Image(
+                            systemName: currentFilter.hasActiveFilters
+                                ? "line.3.horizontal.decrease.circle.fill"
+                                : "line.3.horizontal.decrease.circle"
+                        )
                     }
                     .foregroundColor(currentFilter.hasActiveFilters ? .accentColor : .primary)
                     .accessibilityIdentifier("button.filter")
@@ -824,7 +844,9 @@ struct TaskListView: View {
             currentSort = newSortOption
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didReceiveMemoryWarningNotification)) { _ in
-            Log.app.warning("TaskListView: Received memory warning - reducing task list size")
+            Log.app.warning(
+                "TaskListView: Received memory warning - reducing task list size"
+            )
             if vm.tasks.count > 5 {
                 let keepCount = 5
                 vm.tasks = Array(vm.tasks.prefix(keepCount))
@@ -874,6 +896,9 @@ struct TaskListView: View {
                         if !UIAccessibility.isReduceMotionEnabled { confettiTrigger.toggle() }
                     }
                 }
+            },
+            onUpdate: { updatedTask in
+                vm.updateTask(updatedTask)
             }
         )
 
@@ -903,7 +928,9 @@ struct TaskListView: View {
                 Task {
                     do {
                         try await api.deleteTask(taskId: t.id)
-                        await vm.load(queryItems: currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : [], resetPagination: true) // Refresh the task list
+                        await vm.load(queryItems: currentFilter.hasActiveFilters 
+                            ? currentFilter.toQueryItems()
+                            : [], resetPagination: true) // Refresh the task list
                     } catch {
                         vm.error = error.localizedDescription
                     }

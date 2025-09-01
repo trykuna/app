@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 
 /// Picks the right container for the current size class.
 /// - iPhone: TaskListView (pushes detail)
@@ -77,29 +78,29 @@ struct TasksIPadSplitView: View {
         }
         .onChange(of: vm.tasks) { _, newTasks in
             #if DEBUG
-            print("TasksIPadSplitView: Tasks changed, count: \(newTasks.count)")
-            print("TasksIPadSplitView: Current selectedTask: \(selectedTask?.title ?? "nil")")
+            Log.app.debug("TasksIPadSplitView: Tasks changed, count: \(newTasks.count)")
+            Log.app.debug("TasksIPadSplitView: Current selectedTask: \(selectedTask?.title ?? "nil")")
             #endif
             
             // Auto-select first task if none selected and we have tasks
             if selectedTask == nil && !newTasks.isEmpty {
                 selectedTask = newTasks.first
                 #if DEBUG
-                print("TasksIPadSplitView: Auto-selected first task: \(selectedTask?.title ?? "nil")")
+                Log.app.debug("TasksIPadSplitView: Auto-selected first task: \(selectedTask?.title ?? "nil")")
                 #endif
             }
             // If current selection exists, update it with the latest data
             else if let current = selectedTask, let updatedTask = newTasks.first(where: { $0.id == current.id }) {
                 selectedTask = updatedTask
                 #if DEBUG
-                print("TasksIPadSplitView: Updated selectedTask with fresh data: \(updatedTask.title)")
+                Log.app.debug("TasksIPadSplitView: Updated selectedTask with fresh data: \(updatedTask.title)")
                 #endif
             }
             // If current selection is no longer valid, select first available task
             else if let current = selectedTask, !newTasks.contains(where: { $0.id == current.id }) {
                 selectedTask = newTasks.first
                 #if DEBUG
-                print("TasksIPadSplitView: Previous selection invalid, selected: \(selectedTask?.title ?? "nil")")
+                Log.app.debug("TasksIPadSplitView: Previous selection invalid, selected: \(selectedTask?.title ?? "nil")")
                 #endif
             }
         }
@@ -130,7 +131,6 @@ struct TasksIPadSplitView: View {
         }
         .actionSheet(isPresented: $showingSort) {
             ActionSheet(
-                // TODO: Localize
                 // title: Text("Sort Tasks"),
                 title: Text(String(localized: "tasks.sort.title", comment: "Title for sort tasks")),
                 buttons: TaskSortOption.allCases.map { sortOption in
@@ -177,7 +177,9 @@ struct TasksIPadSplitView: View {
                         Button {
                             showingFilter = true
                         } label: {
-                            Image(systemName: currentFilter.hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                            Image(systemName: currentFilter.hasActiveFilters
+                                ? "line.3.horizontal.decrease.circle.fill"
+                                : "line.3.horizontal.decrease.circle")
                         }
                         .foregroundColor(currentFilter.hasActiveFilters ? .accentColor : .primary)
                         .accessibilityIdentifier("button.filter")
@@ -219,16 +221,12 @@ struct TasksIPadSplitView: View {
     private var taskDetailView: some View {
         NavigationStack {
             if let task = selectedTask {
-                #if DEBUG
-                let _ = print("TasksIPadSplitView: Rendering TaskDetailView for task: \(task.title)")
-                #endif
                 // Extract just the content from TaskDetailView without the NavigationView wrapper
                 TaskDetailViewInner(
                     task: Binding(
-                        get: { selectedTask! },
-                        set: { newTask in 
+                        get: { selectedTask ?? task },
+                        set: { newTask in
                             selectedTask = newTask
-                            // Update the task in the VM when it's edited
                             if let index = vm.tasks.firstIndex(where: { $0.id == newTask.id }) {
                                 vm.tasks[index] = newTask
                             }
@@ -236,34 +234,41 @@ struct TasksIPadSplitView: View {
                     ),
                     api: api
                 ) { updatedTask in
-                    // Update the task in the VM when it's edited
                     if let index = vm.tasks.firstIndex(where: { $0.id == updatedTask.id }) {
                         vm.tasks[index] = updatedTask
-                        selectedTask = updatedTask // Keep selectedTask in sync
+                        selectedTask = updatedTask
                     }
                 }
                 .navigationTitle(task.title)
                 .navigationBarTitleDisplayMode(.large)
-            } else {
                 #if DEBUG
-                let _ = print("TasksIPadSplitView: No task selected, showing empty state")
+                .onAppear {
+                    Log.app.debug("TasksIPadSplitView: Rendering TaskDetailView for task: \(task.title)")
+                }
                 #endif
+
+            } else {
                 VStack(spacing: 20) {
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: 64))
                         .foregroundColor(.secondary)
-                    
-                    // Text("Select a task to view its details")
-                    Text(String(localized: "tasks.select.description", comment: "Title shown when no task is selected"))
+
+                    Text(String(localized: "tasks.select.description",
+                                comment: "Title shown when no task is selected"))
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemGroupedBackground))
+                #if DEBUG
+                .onAppear {
+                    Log.app.debug("TasksIPadSplitView: No task selected, showing empty state")
+                }
+                #endif
             }
         }
     }
-    
+
     // MARK: - Empty State
     private var emptyState: some View {
         VStack(spacing: 20) {
@@ -331,11 +336,11 @@ struct TasksIPadSplitView: View {
                     )
                     .onTapGesture {
                         #if DEBUG
-                        print("TasksIPadSplitView: Tapped task: \(task.title)")
+                        Log.app.debug("TasksIPadSplitView: Tapped task: \(task.title)")
                         #endif
                         selectedTask = task
                         #if DEBUG
-                        print("TasksIPadSplitView: Selected task set to: \(selectedTask?.title ?? "nil")")
+                        Log.app.debug("TasksIPadSplitView: Selected task set to: \(selectedTask?.title ?? "nil")")
                         #endif
                     }
                     .onAppear {
@@ -587,7 +592,7 @@ struct TaskDetailViewInner: View {
             initializeEditingState()
             Task { await loadAvailableLabels() }
         }
-        .onChange(of: task) { _, newTask in
+        .onChange(of: task) { _, _ in
             initializeEditingState()
         }
         .alert(String(localized: "common.error"), isPresented: .constant(updateError != nil)) {
@@ -620,7 +625,7 @@ struct TaskDetailViewInner: View {
             // This helps ensure sidebar accessibility is restored
             DispatchQueue.main.async {
                 #if DEBUG
-                print("Comments sheet dismissed - navigation state should be reset")
+                Log.app.debug("Comments sheet dismissed - navigation state should be reset")
                 #endif
             }
         }) {
@@ -633,7 +638,7 @@ struct TaskDetailViewInner: View {
             // Reset navigation state after related tasks sheet dismissal
             DispatchQueue.main.async {
                 #if DEBUG
-                print("Related tasks sheet dismissed - navigation state should be reset")
+                Log.app.debug("Related tasks sheet dismissed - navigation state should be reset")
                 #endif
             }
         }) {
@@ -659,7 +664,9 @@ struct TaskDetailViewInner: View {
             .disabled(isUpdatingFavorite)
             
             // Edit/Done button
-            Button(isEditing ? String(localized: "common.done", comment: "Done button") : String(localized: "common.edit", comment: "Edit button")) {
+            Button(isEditing 
+                    ? String(localized: "common.done", comment: "Done button")
+                    : String(localized: "common.edit", comment: "Edit button")) {
                 if isEditing {
                     if hasChanges {
                         Task { await saveChanges() }
@@ -698,7 +705,8 @@ struct TaskDetailViewInner: View {
                                     .frame(width: 24)
                                 
                                 if isEditing {
-                                    TextField(String(localized: "tasks.placeholder.title", comment: "Task Title"), text: $editedTitle)
+                                    TextField(String(localized: "tasks.placeholder.title",
+                                                    comment: "Task Title"), text: $editedTitle)
                                         .textFieldStyle(.plain)
                                         .font(.body)
                                         .onChange(of: editedTitle) { _, _ in
@@ -722,7 +730,12 @@ struct TaskDetailViewInner: View {
                                 
                                 if isEditing {
                                     // TextField("Add description...", text: $editedDescription, axis: .vertical)
-                                    TextField(String(localized: "tasks.details.description.placeholder", comment: "Placeholder for adding description"), text: $editedDescription, axis: .vertical)
+                                    TextField(
+                                        String(localized: "tasks.details.description.placeholder", 
+                                               comment: "Placeholder for adding description"),
+                                        text: $editedDescription,
+                                        axis: .vertical
+                                    )
                                         .textFieldStyle(.plain)
                                         .font(.body)
                                         .lineLimit(3...6)
@@ -735,7 +748,8 @@ struct TaskDetailViewInner: View {
                                             .font(.body)
                                     } else {
                                         // Text("No description")
-                                        Text(String(localized: "tasks.details.description.none", comment: "Title for no description"))
+                                        Text(String(localized: "tasks.details.description.none",
+                                                    comment: "Title for no description"))
                                             .font(.body)
                                             .foregroundColor(.secondary)
                                     }
@@ -766,7 +780,8 @@ struct TaskDetailViewInner: View {
                                 
                                 VStack(alignment: .leading, spacing: 4) {
                                     // Text("Start Date")
-                                    Text(String(localized: "tasks.details.dates.startDate.title", comment: "Title for start date"))
+                                    Text(String(localized: "tasks.details.dates.startDate.title",
+                                                comment: "Title for start date"))
                                         .font(.body)
                                         .fontWeight(.medium)
                                     
@@ -774,9 +789,11 @@ struct TaskDetailViewInner: View {
                                         HStack {
                                             if editedStartDate != nil {
                                                 // DatePicker("Start Date", selection: Binding(
-                                                DatePicker(String(localized: "tasks.startDate", comment: "Start date picker"), selection: Binding(
-                                                    get: { editedStartDate ?? Date() },
-                                                    set: { editedStartDate = $0; hasChanges = true }
+                                                DatePicker(String(localized: "tasks.startDate",
+                                                                comment: "Start date picker"), 
+                                                        selection: Binding(
+                                                            get: { editedStartDate ?? Date() },
+                                                            set: { editedStartDate = $0; hasChanges = true }
                                                 ), displayedComponents: [.date, .hourAndMinute])
                                                 .labelsHidden()
                                                 .datePickerStyle(.compact)
@@ -790,7 +807,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.red)
                                             } else {
                                                 // Button("Add Start Date") {
-                                                Button(String(localized: "tasks.details.dates.startDate.add", comment: "Add start date")) {
+                                                Button(String(localized: "tasks.details.dates.startDate.add",
+                                                                comment: "Add start date")) {
                                                     editedStartDate = Date()
                                                     hasChanges = true
                                                 }
@@ -806,7 +824,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             // Text("No start date")
-                                            Text(String(localized: "tasks.details.dates.startDate.none", comment: "Title for no start date"))
+                                            Text(String(localized: "tasks.details.dates.startDate.none",
+                                                            comment: "Title for no start date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -849,7 +868,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.red)
                                             } else {
                                                 // Button("Add Due Date") {
-                                                Button(String(localized: "tasks.details.dates.dueDate.add", comment: "Add due date")) {
+                                                Button(String(localized: "tasks.details.dates.dueDate.add",
+                                                                comment: "Add due date")) {
                                                     editedDueDate = Date()
                                                     hasChanges = true
                                                 }
@@ -865,7 +885,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             // Text("No due date")
-                                            Text(String(localized: "tasks.details.dates.dueDate.none", comment: "Title for no due date"))
+                                            Text(String(localized: "tasks.details.dates.dueDate.none",
+                                                            comment: "Title for no due date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -908,7 +929,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.red)
                                             } else {
                                                 // Button("Add End Date") {
-                                                Button(String(localized: "tasks.details.dates.endDate.add", comment: "Add end date")) {
+                                                Button(String(localized: "tasks.details.dates.endDate.add",
+                                                                comment: "Add end date")) {
                                                     editedEndDate = Date()
                                                     hasChanges = true
                                                 }
@@ -924,7 +946,8 @@ struct TaskDetailViewInner: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             // Text("No end date")
-                                            Text(String(localized: "tasks.details.dates.endDate.none", comment: "Title for no end date"))
+                                            Text(String(localized: "tasks.details.dates.endDate.none",
+                                                            comment: "Title for no end date"))
                                                 .font(.callout)
                                                 .foregroundColor(.secondary)
                                         }
@@ -1034,13 +1057,22 @@ struct TaskDetailViewInner: View {
                                 
                                 if isEditing {
                                     // Picker("Priority", selection: $editedPriority) {
-                                    Picker(String(localized: "tasks.detail.priority.title", comment: "Priority picker"), selection: $editedPriority) {
-                                        Text(String(localized: "common.none", comment: "None priority")).tag(TaskPriority.unset)
-                                        Text(String(localized: "common.low", comment: "Low priority")).tag(TaskPriority.low)
-                                        Text(String(localized: "common.medium", comment: "Medium priority")).tag(TaskPriority.medium)
-                                        Text(String(localized: "common.high", comment: "High priority")).tag(TaskPriority.high)
-                                        Text(String(localized: "common.urgent", comment: "Urgent priority")).tag(TaskPriority.urgent)
-                                        Text(String(localized: "common.doNow", comment: "Do now priority")).tag(TaskPriority.doNow)
+                                    Picker(
+                                        String(localized: "tasks.detail.priority.title", comment: "Priority picker"),
+                                        selection: $editedPriority
+                                    ) {
+                                        Text(String(localized: "common.none",
+                                                    comment: "None priority")).tag(TaskPriority.unset)
+                                        Text(String(localized: "common.low",
+                                                    comment: "Low priority")).tag(TaskPriority.low)
+                                        Text(String(localized: "common.medium",
+                                                    comment: "Medium priority")).tag(TaskPriority.medium)
+                                        Text(String(localized: "common.high",
+                                                    comment: "High priority")).tag(TaskPriority.high)
+                                        Text(String(localized: "common.urgent",
+                                                    comment: "Urgent priority")).tag(TaskPriority.urgent)
+                                        Text(String(localized: "common.doNow",
+                                                    comment: "Do now priority")).tag(TaskPriority.doNow)
                                     }
                                     .pickerStyle(.menu)
                                     .onChange(of: editedPriority) { _, _ in
@@ -1164,7 +1196,9 @@ struct TaskDetailViewInner: View {
                                             .frame(width: 20, height: 20)
                                             .overlay(Circle().stroke(Color.primary.opacity(0.2), lineWidth: 0.5))
                                         
-                                        Text(isEditing ? String(localized: "common.custom") : String(localized: "settings.display.colours.title"))
+                                        Text(isEditing 
+                                                ? String(localized: "common.custom")
+                                                : String(localized: "settings.display.colours.title"))
                                             .font(.callout)
                                             .foregroundColor(.secondary)
                                         
@@ -1724,7 +1758,11 @@ struct TaskDetailViewInner: View {
     @ViewBuilder 
     private var colorPickerSection: some View {
         // ColorPicker("Select Color", selection: $editedColor, supportsOpacity: false)
-        ColorPicker(String(localized: "tasks.colour.select", comment: "Select colour picker"), selection: $editedColor, supportsOpacity: false)
+        ColorPicker(
+            String(localized: "tasks.colour.select", comment: "Select colour picker"),
+            selection: $editedColor,
+            supportsOpacity: false
+        )
             .labelsHidden()
             .onChange(of: editedColor) { _, _ in
                 hasChanges = true
@@ -1738,7 +1776,16 @@ struct TaskDetailViewInner: View {
                 .font(.headline)
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 16) {
-                let colors = [Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.purple, Color.pink, Color.gray]
+                let colors = [
+                    Color.red,
+                    Color.orange,
+                    Color.yellow,
+                    Color.green,
+                    Color.blue,
+                    Color.purple,
+                    Color.pink,
+                    Color.gray
+                ]
                 ForEach(colors, id: \.self) { color in
                     Circle()
                         .fill(color)
@@ -1800,7 +1847,8 @@ struct TaskDetailViewInner: View {
                             .fontWeight(.semibold)
                         
                         // Text("Add reminders to get notified about this task")
-                        Text(String(localized: "tasks.details.reminders.description", comment: "Title for add reminders to get notified about this task"))
+                        Text(String(localized: "tasks.details.reminders.description",
+                                   comment: "Title for add reminders to get notified about this task"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -1818,7 +1866,11 @@ struct TaskDetailViewInner: View {
                             .font(.headline)
                         
                         // DatePicker("Reminder Date", selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
-                        DatePicker(String(localized: "tasks.reminder.date", comment: "Reminder date picker"), selection: $newReminderDate, displayedComponents: [.date, .hourAndMinute])
+                        DatePicker(
+                            String(localized: "tasks.reminder.date", comment: "Reminder date picker"),
+                            selection: $newReminderDate,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
                             .labelsHidden()
                             .datePickerStyle(.wheel)
                     }
@@ -1871,7 +1923,7 @@ struct TaskDetailViewInner: View {
                 } footer: {
                     if editedRepeatAfter > 0 {
                         Text("tasks.repeat.description \(formatRepeatDescription())",
-                             comment: "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'")
+                                comment: "Message in task details showing repeat schedule e.g. 'every day'")
                     } else {
                         // Text("Task will not repeat")
                         Text(String(localized: "tasks.details.repeat.none", comment: "Title for task will not repeat"))
@@ -2092,7 +2144,8 @@ struct CommentsContentView: View {
             
             HStack(alignment: .top, spacing: 12) {
                 // TextField("Add a comment...", text: $newCommentText, axis: .vertical)
-                TextField(String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
+                TextField(String(localized: "comments.add.placeholder",
+                                comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .lineLimit(1...6)
                 
@@ -2101,7 +2154,8 @@ struct CommentsContentView: View {
                     addComment()
                 } label: {
                     Image(systemName: "paperplane.fill")
-                        .foregroundColor(newCommentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .secondary : .accentColor)
+                        .foregroundColor(newCommentText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        .isEmpty ? .secondary : .accentColor)
                 }
                 .disabled(newCommentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAddingComment)
             }
@@ -2160,4 +2214,3 @@ struct CommentsContentView: View {
         }
     }
 }
-

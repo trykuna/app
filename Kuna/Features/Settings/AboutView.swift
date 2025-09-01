@@ -34,13 +34,14 @@ struct AboutView: View {
 
                 // Vikunja thanks
                 CardSection(title: "Vikunja") {
-                    // Text("Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist.")
-                    Text(String(localized: "settings.about.vikunja.text", comment: "Text for about view"))
+                    Text(
+                        String(localized: "settings.about.vikunja.text", comment: "Text for about view")
+                    )
                         .fixedSize(horizontal: false, vertical: true)
                         .lineSpacing(2)
 
                     // Link styled as a row (no custom LinkRow)
-                    Link(destination: URL(string: "https://vikunja.io")!) {
+                    Link(destination: AppURLs.vikunja) {
                         HStack(spacing: 12) {
                             Image(systemName: "globe")
                                 .imageScale(.medium)
@@ -64,11 +65,14 @@ struct AboutView: View {
                 CardSection(title: "Libraries & Tools") {
                     VStack(alignment: .leading, spacing: 10) {
                         // SwiftUI.Label("SwiftUI — Apple's native UI framework", systemImage: "square.stack.3d.up")
-                        SwiftUI.Label(String(localized: "about.framework.swiftui", comment: "SwiftUI framework description"), systemImage: "square.stack.3d.up")
+                        SwiftUI.Label(String(localized: "about.framework.swiftui", 
+                                                comment: "SwiftUI framework description"), systemImage: "square.stack.3d.up")
                         // SwiftUI.Label("Foundation — Core system services", systemImage: "shippingbox")
-                        SwiftUI.Label(String(localized: "about.framework.foundation", comment: "Foundation framework description"), systemImage: "shippingbox")
+                        SwiftUI.Label(String(localized: "about.framework.foundation", 
+                                                comment: "Foundation framework description"), systemImage: "shippingbox")
                         // SwiftUI.Label("Keychain Services — Secure credential storage", systemImage: "lock.circle")
-                        SwiftUI.Label(String(localized: "about.framework.keychain", comment: "Keychain services description"), systemImage: "lock.circle")
+                        SwiftUI.Label(String(localized: "about.framework.keychain",
+                                            comment: "Keychain services description"), systemImage: "lock.circle")
                     }
                     .labelStyle(.aboutBullet)
                 }
@@ -83,12 +87,13 @@ struct AboutView: View {
                 // Useful links / actions — replace URLs as needed
                 CardSection(title: "Links") {
                     VStack(spacing: 0) {
-                        LinkRowPrimitive(title: "Website", systemImage: "globe", url: URL(string: "https://vikunja.io")!)
+                        LinkRowPrimitive(title: "Website", systemImage: "globe", url: AppURLs.vikunja)
                         Divider()
-                        // LinkRowPrimitive(title: "Privacy Policy", systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
-                        LinkRowPrimitive(title: String(localized: "about.privacyPolicy", comment: "Privacy policy link"), systemImage: "hand.raised", url: URL(string: "https://example.com/privacy")!)
+                        LinkRowPrimitive(title: String(
+                            localized: "about.privacyPolicy",
+                            comment: "Privacy policy link"), systemImage: "hand.raised", url: AppURLs.privacy)
                         Divider()
-                        LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: URL(string: "https://example.com/licenses")!)
+                        LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: AppURLs.license)
                     }
                 }
 

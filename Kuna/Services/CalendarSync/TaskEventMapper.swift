@@ -32,7 +32,6 @@ struct TaskEventMapper {
             comps.queryItems = [URLQueryItem(name: "project", value: String(task.projectId))]
             event.url = comps.url
 
-
         // --- Reminders ---
         event.alarms = task.reminders.map { r in
             let offsetFromStart = event.isAllDay ? r.relativeSeconds : (r.relativeSeconds + 3600)
@@ -74,7 +73,7 @@ struct TaskEventMapper {
         guard let url = event.url,
               url.scheme == SyncConst.scheme,
               url.host == SyncConst.hostTask else { return nil }
-        let _ = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        _ = URLComponents(url: url, resolvingAgainstBaseURL: false)
         // path last component is the task id
         if let last = url.path.split(separator: "/").last {
             return String(last)

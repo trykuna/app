@@ -177,10 +177,19 @@ struct TaskRowView: View {
     let props: TaskRowProps
     let api: VikunjaAPI
     let onToggle: (VikunjaTask) -> Void
+    let onUpdate: ((VikunjaTask) -> Void)?
+    
+    init(props: TaskRowProps, api: VikunjaAPI, onToggle: @escaping (VikunjaTask) -> Void,
+         onUpdate: ((VikunjaTask) -> Void)? = nil) {
+        self.props = props
+        self.api = api
+        self.onToggle = onToggle
+        self.onUpdate = onUpdate
+    }
 
     var body: some View {
         // Keep the whole row tappable via NavigationLink...
-        NavigationLink(destination: TaskDetailView(task: props.t, api: api)) {
+        NavigationLink(destination: TaskDetailView(task: props.t, api: api, onUpdate: onUpdate)) {
             HStack(spacing: 8) {
                 // Important: use EquatableView so SwiftUI can skip updates
                 EquatableView(content: TaskRowContent(props: props, api: api, onToggle: onToggle))

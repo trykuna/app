@@ -59,4 +59,3 @@ private func sha256(_ input: String) -> String {
     let hashed = SHA256.hash(data: inputData)
     return hashed.compactMap { String(format: "%02x", $0) }.joined()
 }
-

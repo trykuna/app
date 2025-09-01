@@ -94,7 +94,6 @@ struct SideMenuView: View {
         .accessibilityIdentifier("SideMenu")
     }
 
-    
     private func menuItem(_ item: MenuItem) -> some View {
         Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {
@@ -140,7 +139,10 @@ struct SideMenuView: View {
 
 #Preview {
     SideMenuView(
-        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }),
+        api: VikunjaAPI(
+            config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+            tokenProvider: { nil }
+        ),
         selectedMenuItem: .constant(.projects),
         isMenuOpen: .constant(true)
     )

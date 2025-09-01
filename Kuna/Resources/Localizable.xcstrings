@@ -32,6 +32,9 @@
     "%lld%%" : {
       "shouldTranslate" : false
     },
+    "1" : {
+
+    },
     "about.framework.foundation" : {
       "comment" : "Foundation framework description",
       "localizations" : {
@@ -100,7 +103,7 @@
       }
     },
     "add.title %@" : {
-      "comment" : "Button label to add an item with the given title",
+      "comment" : "Add title",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -365,7 +368,7 @@
       }
     },
     "calendar.sync.switch %@" : {
-      "comment" : "Confirmation prompt when switching to a new calendar for sync. Placeholder is the new calendar’s title",
+      "comment" : "Confirmation prompt when switching to a new calendar for sync.",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -530,7 +533,7 @@
       }
     },
     "common.cancel" : {
-      "comment" : "Cancel button",
+      "comment" : "Cancel\nCancel button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -541,7 +544,7 @@
       }
     },
     "common.close" : {
-      "comment" : "Close button",
+      "comment" : "Close",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -552,7 +555,7 @@
       }
     },
     "common.colour" : {
-      "comment" : "Label for colour picker\nTitle for color\nTitle for colour",
+      "comment" : "Colour\nLabel for colour picker\nTitle for color",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -640,7 +643,7 @@
       }
     },
     "common.date" : {
-      "comment" : "Date label",
+      "comment" : "Date",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -651,7 +654,7 @@
       }
     },
     "common.dateAndTime" : {
-      "comment" : "Date and time label",
+      "comment" : "Date & time",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -716,7 +719,7 @@
       }
     },
     "common.done" : {
-      "comment" : "Dismisses a modal sheet\nDone button",
+      "comment" : "Dismisses a modal sheet\nDone\nDone button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -912,7 +915,7 @@
       }
     },
     "common.never" : {
-      "comment" : "Never value\nTitle for never",
+      "comment" : "Never\nTitle for never",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -923,7 +926,7 @@
       }
     },
     "common.none" : {
-      "comment" : "None priority\nNone value\nTitle for none",
+      "comment" : "None\nNone priority\nTitle for none",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -934,7 +937,7 @@
       }
     },
     "common.notSet" : {
-      "comment" : "Not set label",
+      "comment" : "Not set",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -945,7 +948,7 @@
       }
     },
     "common.ok" : {
-      "comment" : "OK button",
+      "comment" : "OK\nOK button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1035,7 +1038,7 @@
       }
     },
     "common.save" : {
-      "comment" : "Save button",
+      "comment" : "Save\nSave button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1212,7 +1215,7 @@
       }
     },
     "common.title" : {
-      "comment" : "Title for title",
+      "comment" : "Title",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1525,7 +1528,7 @@
       }
     },
     "labels.title" : {
-      "comment" : "Labels menu item\nLabels navigation title\nTitle for labels\nTitle for labels view",
+      "comment" : "Labels\nLabels menu item\nLabels navigation title\nTitle for labels\nTitle for labels view",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1976,7 +1979,7 @@
       }
     },
     "settings.backgroundSync.lastAttempt %@" : {
-      "comment" : "Label in Background Sync settings showing the last attempt time. Placeholder is a formatted date",
+      "comment" : "Background Sync last attempt time with formatted date placeholder",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1987,7 +1990,7 @@
       }
     },
     "settings.backgroundSync.lastSuccess %@" : {
-      "comment" : "Label in Background Sync settings showing the last successful sync time. Placeholder is a formatted date",
+      "comment" : "Background Sync last success time with formatted date placeholder",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1998,7 +2001,7 @@
       }
     },
     "settings.backgroundSync.notifications %@" : {
-      "comment" : "Label in Background Sync settings showing the notifications status. Placeholder is the status text (e.g. Enabled, Disabled)",
+      "comment" : "Placeholder is the status text (e.g. Enabled, Disabled)",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -2274,7 +2277,7 @@
       }
     },
     "settings.calendarSync.footer" : {
-      "comment" : "Title for safely sync your tasks with calendar apps kuna creates its own calendars and never touches your existing ones",
+      "comment" : "Footer explaining calendar sync safety - creates own calendars without touching existing ones",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3200,7 +3203,7 @@
       }
     },
     "settings.view.token.expiresIn %@" : {
-      "comment" : "Label in Settings showing when the JWT token expires. Placeholder is the formatted duration (e.g. '5 minutes')",
+      "comment" : "JWT token expiration label with formatted duration placeholder",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3344,7 +3347,7 @@
       }
     },
     "tasks.detail.description.placeholder" : {
-      "comment" : "Placeholder text for description",
+      "comment" : "Description",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3355,7 +3358,7 @@
       }
     },
     "tasks.detail.dueDate" : {
-      "comment" : "Due date title",
+      "comment" : "Due date",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3366,7 +3369,7 @@
       }
     },
     "tasks.detail.endDate" : {
-      "comment" : "End date title",
+      "comment" : "End date",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3377,7 +3380,7 @@
       }
     },
     "tasks.detail.priority.title" : {
-      "comment" : "Priority picker\nPriority title",
+      "comment" : "Priority\nPriority picker",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3388,7 +3391,7 @@
       }
     },
     "tasks.detail.progress.title" : {
-      "comment" : "Progress title",
+      "comment" : "Progress",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3399,7 +3402,7 @@
       }
     },
     "tasks.detail.reminders.none" : {
-      "comment" : "No reminders label",
+      "comment" : "No reminders",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3575,7 +3578,7 @@
       }
     },
     "tasks.details.description.title" : {
-      "comment" : "Title for description",
+      "comment" : "Description",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3641,7 +3644,7 @@
       }
     },
     "tasks.details.reminders.add" : {
-      "comment" : "Add reminder button",
+      "comment" : "Add reminder\nAdd reminder button",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3696,7 +3699,7 @@
       }
     },
     "tasks.details.reminders.title" : {
-      "comment" : "Title for reminders",
+      "comment" : "Reminders\nTitle for reminders",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3740,7 +3743,7 @@
       }
     },
     "tasks.details.repeat.title" : {
-      "comment" : "Title for repeat",
+      "comment" : "Repeat\nTitle for repeat",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4179,7 +4182,7 @@
       }
     },
     "tasks.reminders.title" : {
-      "comment" : "Reminders navigation title",
+      "comment" : "Reminders\nReminders navigation title",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4201,13 +4204,134 @@
         }
       }
     },
+    "tasks.repeat.custom" : {
+      "comment" : "Custom Interval",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Interval"
+          }
+        }
+      }
+    },
+    "tasks.repeat.daily" : {
+      "comment" : "Daily",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily"
+          }
+        }
+      }
+    },
     "tasks.repeat.description %@" : {
-      "comment" : "Message in task details showing repeat schedule. Placeholder is the repeat description, e.g. 'every day'",
+      "comment" : "Message in task details showing repeat schedule e.g. 'every day'",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "This task will repeat %@"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.daily" : {
+      "comment" : "Daily",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXDays" : {
+      "comment" : "Every X days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every X days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXDaysDecimal" : {
+      "comment" : "Every %.1f days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every %.1f days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXHours" : {
+      "comment" : "Every X hours",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every X hours"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.everyXWeeks" : {
+      "comment" : "Every X weeks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every X weeks"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.hourly" : {
+      "comment" : "Hourly",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hourly"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.monthly" : {
+      "comment" : "Every 30 days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.display.weekly" : {
+      "comment" : "Weekly",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly"
+          }
+        }
+      }
+    },
+    "tasks.repeat.every" : {
+      "comment" : "Every",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every"
           }
         }
       }
@@ -4225,7 +4349,8 @@
       }
     },
     "tasks.repeat.intervalSeconds" : {
-      "comment" : "Interval in seconds section",
+      "comment" : "Interval in seconds",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4236,7 +4361,7 @@
       }
     },
     "tasks.repeat.mode" : {
-      "comment" : "Repeat mode section",
+      "comment" : "Repeat Mode",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4247,7 +4372,7 @@
       }
     },
     "tasks.repeat.mode.picker" : {
-      "comment" : "Repeat mode picker",
+      "comment" : "When to repeat",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4268,13 +4393,36 @@
         }
       }
     },
+    "tasks.repeat.monthly" : {
+      "comment" : "Every 30 days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 days"
+          }
+        }
+      }
+    },
     "tasks.repeat.placeholder" : {
       "comment" : "e.g. 86400 for daily",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "e.g. 86400 for daily"
+          }
+        }
+      }
+    },
+    "tasks.repeat.presets" : {
+      "comment" : "Quick Options",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick Options"
           }
         }
       }
@@ -4292,7 +4440,7 @@
       }
     },
     "tasks.repeat.title" : {
-      "comment" : "Repeat navigation title",
+      "comment" : "Repeat Task",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4309,6 +4457,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unit"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.days" : {
+      "comment" : "Days",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Days"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.hours" : {
+      "comment" : "Hours",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hours"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.months" : {
+      "comment" : "Months",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Months"
+          }
+        }
+      }
+    },
+    "tasks.repeat.unit.weeks" : {
+      "comment" : "Weeks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeks"
+          }
+        }
+      }
+    },
+    "tasks.repeat.useCustom" : {
+      "comment" : "Use custom interval",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use custom interval"
+          }
+        }
+      }
+    },
+    "tasks.repeat.weekly" : {
+      "comment" : "Weekly",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly"
           }
         }
       }
@@ -4426,7 +4640,7 @@
       }
     },
     "tasks.sync.autoSave" : {
-      "comment" : "Title for this task will sync automatically on save",
+      "comment" : "Auto sync on save",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4436,8 +4650,20 @@
         }
       }
     },
+    "tasks.sync.needBothDates" : {
+      "comment" : "Needs both start and end dates",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar sync requires both start and end dates"
+          }
+        }
+      }
+    },
     "tasks.sync.noDates" : {
-      "comment" : "Title for task has no dates to sync",
+      "comment" : "No dates to sync",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

@@ -151,9 +151,9 @@ engine.setAPI(mockAPI)
 ### Debug Information
 
 The engine provides detailed logging:
-- `📅 Pull sync completed for window: ...`
-- `📅 Push sync completed, processed X changes`
-- `📅 Processed patch for task X`
+- `Pull sync completed for window: ...`
+- `Push sync completed, processed X changes`
+- `Processed patch for task X`
 
 ### Error Handling
 

@@ -40,7 +40,10 @@ final class EventKitClientTests: XCTestCase {
     // MARK: - Calendar Management Tests
     
     func testEnsureCalendarCreation() throws {
-        let source = mockClient.writableSource()!
+        guard let source = mockClient.writableSource() else {
+            XCTFail("Should have a writable source")
+            return
+        }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
         XCTAssertEqual(calendar.title, "Test Calendar")
@@ -49,7 +52,10 @@ final class EventKitClientTests: XCTestCase {
     }
     
     func testCalendarsRetrieval() throws {
-        let source = mockClient.writableSource()!
+        guard let source = mockClient.writableSource() else {
+            XCTFail("Should have a writable source")
+            return
+        }
         let calendar1 = try mockClient.ensureCalendar(named: "Calendar 1", in: source)
         let calendar2 = try mockClient.ensureCalendar(named: "Calendar 2", in: source)
         
@@ -62,7 +68,10 @@ final class EventKitClientTests: XCTestCase {
     // MARK: - Event Operations Tests
     
     func testEventSaveSuccess() throws {
-        let source = mockClient.writableSource()!
+        guard let source = mockClient.writableSource() else {
+            XCTFail("Should have a writable source")
+            return
+        }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
         let event = EKEvent(eventStore: mockClient.store)
@@ -90,7 +99,10 @@ final class EventKitClientTests: XCTestCase {
     
     func testEventRemoval() throws {
         // First add an event
-        let source = mockClient.writableSource()!
+        guard let source = mockClient.writableSource() else {
+            XCTFail("Should have a writable source")
+            return
+        }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
         let event = EKEvent(eventStore: mockClient.store)
@@ -122,7 +134,10 @@ final class EventKitClientTests: XCTestCase {
     // MARK: - Event Filtering Tests
     
     func testEventsInDateRange() throws {
-        let source = mockClient.writableSource()!
+        guard let source = mockClient.writableSource() else {
+            XCTFail("Should have a writable source")
+            return
+        }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
         let now = Date()

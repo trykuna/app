@@ -30,7 +30,7 @@ struct TaskDetailView_Previews: PreviewProvider {
 
         // Minimal API stub just to satisfy the view; does not perform real network calls in preview.
         let api = VikunjaAPI(
-            config: VikunjaConfig(baseURL: URL(string: "https://example.com/api/v1")!),
+            config: VikunjaConfig(baseURL: URL(string: "https://example.com/api/v1")!), // swiftlint:disable:this force_unwrapping
             tokenProvider: { nil }
         )
 
@@ -38,10 +38,9 @@ struct TaskDetailView_Previews: PreviewProvider {
         let appState = AppState()
         appState.api = api
 
-        return TaskDetailView(task: demoTask, api: api)
+        return TaskDetailView(task: demoTask, api: api, onUpdate: nil)
             .environmentObject(appState)
             .previewDisplayName("Task Detail (Demo)")
     }
 }
 #endif
-

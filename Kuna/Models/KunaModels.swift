@@ -449,13 +449,13 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         let projectIdVal = projectId
 
         if let favoriteValue = try? container.decodeIfPresent(Bool.self, forKey: .isFavorite) {
-            Log.app.debug("Decoded isFavorite for task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public): \(favoriteValue, privacy: .public)")
+            Log.app.debug("Decoded isFavorite for task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public): \(favoriteValue, privacy: .public)") // swiftlint:disable:this line_length
         } else {
-            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no isFavorite field, defaulting to false")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no isFavorite field, defaulting to false") // swiftlint:disable:this line_length
         }
 
         if let projectIdValue = projectIdVal {
-            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) belongs to project ID: \(projectIdValue, privacy: .public)")
+            Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) belongs to project ID: \(projectIdValue, privacy: .public)") // swiftlint:disable:this line_length
         } else {
             Log.app.debug("Task id=\(idVal, privacy: .public) title=\(titleVal, privacy: .public) has no project ID")
         }
@@ -512,7 +512,6 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         self.relations = relations
     }
 
-
     // Custom encoder
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -530,16 +529,23 @@ struct VikunjaTask: Identifiable, Decodable, Encodable {
         // Handle date encoding
         let formatter = ISO8601DateFormatter()
 
+        // Always encode dates - use "0001-01-01T00:00:00Z" for nil dates to clear them
         if let dueDate = dueDate {
             try container.encode(formatter.string(from: dueDate), forKey: .dueDate)
+        } else {
+            try container.encode("0001-01-01T00:00:00Z", forKey: .dueDate)
         }
 
         if let startDate = startDate {
             try container.encode(formatter.string(from: startDate), forKey: .startDate)
+        } else {
+            try container.encode("0001-01-01T00:00:00Z", forKey: .startDate)
         }
 
         if let endDate = endDate {
             try container.encode(formatter.string(from: endDate), forKey: .endDate)
+        } else {
+            try container.encode("0001-01-01T00:00:00Z", forKey: .endDate)
         }
 
         try container.encodeIfPresent(labels, forKey: .labels)
@@ -557,7 +563,6 @@ extension VikunjaTask: Hashable {
     static func == (lhs: VikunjaTask, rhs: VikunjaTask) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
-
 
 struct TasksResponse {
     let tasks: [VikunjaTask]
@@ -645,7 +650,6 @@ struct TaskAttachment: Identifiable, Decodable {
         }
     }
 }
-
 
 // MARK: - Task Relations
 enum TaskRelationKind: String, CaseIterable, Codable, Identifiable {
@@ -758,7 +762,6 @@ extension TaskRelation {
         self.otherTask = otherTask
     }
 }
-
 
 // MARK: - Calendar Sync Models
 enum CalendarSyncMode: String, Codable, CaseIterable {

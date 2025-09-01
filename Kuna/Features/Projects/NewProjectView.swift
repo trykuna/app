@@ -72,10 +72,14 @@ struct NewProjectView: View {
         
         Task {
             do {
-                let _ = try await api.createProject(
-                    title: projectTitle.trimmingCharacters(in: .whitespacesAndNewlines),
-                    description: projectDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : projectDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+                let trimmedTitle = projectTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+                let trimmedDescription = projectDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                _ = try await api.createProject(
+                    title: trimmedTitle,
+                    description: trimmedDescription.isEmpty ? nil : trimmedDescription
                 )
+                
                 isCreating = false
                 isPresented = false
             } catch {
@@ -83,12 +87,16 @@ struct NewProjectView: View {
                 isCreating = false
             }
         }
+
     }
 }
 
 #Preview {
     NewProjectView(
         isPresented: .constant(true),
-        api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+        api: VikunjaAPI(
+            config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+            tokenProvider: { nil }
+        )
     )
 }

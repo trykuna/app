@@ -38,7 +38,8 @@ struct EditLabelView: View {
                             ZStack(alignment: .leading) {
                                 if title.isEmpty {
                                     // Text("Enter label name")
-                                    Text(String(localized: "labels.edit.title.placeholder", comment: "Placeholder for label name field"))
+                                    Text(String(localized: "labels.edit.title.placeholder",
+                                                comment: "Placeholder for label name field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -79,7 +80,8 @@ struct EditLabelView: View {
                             ZStack(alignment: .topLeading) {
                                 if description.isEmpty {
                                     // Text("Add a description for this label")
-                                    Text(String(localized: "labels.edit.description.placeholder", comment: "Placeholder for description field"))
+                                    Text(String(localized: "labels.edit.description.placeholder",
+                                                comment: "Placeholder for description field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
@@ -175,7 +177,12 @@ struct EditLabelView: View {
 
 #Preview {
     EditLabelView(
-        viewModel: LabelsViewModel(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })),
+        viewModel: LabelsViewModel(
+            api: VikunjaAPI(
+                config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+                tokenProvider: { nil }
+            )
+        ),
         label: Label(id: 1, title: "Sample Label", hexColor: "007AFF", description: "A sample label")
     )
 }

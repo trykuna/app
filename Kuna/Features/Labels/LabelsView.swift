@@ -55,7 +55,8 @@ struct LabelsView: View {
                 }
             }
             // .alert("Delete Label", isPresented: $showingDeleteAlert) {
-            .alert(String(localized: "labels.delete.title", comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
+            .alert(String(localized: "labels.delete.title",
+                        comment: "Delete label alert title"), isPresented: $showingDeleteAlert) {
                 // Button("Cancel", role: .cancel) { }
                 Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
                 // Button("Delete", role: .destructive) {
@@ -190,5 +191,12 @@ struct LabelsView: View {
 }
 
 #Preview {
-    LabelsView(api: VikunjaAPI(config: .init(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil }))
+    LabelsView(
+        api: VikunjaAPI(
+            config: .init(
+                baseURL: URL(string: "https://example.com")! // swiftlint:disable:this force_unwrapping
+            ),
+            tokenProvider: { nil }
+        )
+    )
 }

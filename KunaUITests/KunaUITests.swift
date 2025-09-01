@@ -173,7 +173,6 @@ final class KunaUITests: XCTestCase {
         XCTAssertTrue(waitForNavTitle("Display Options", in: app, timeout: 6))
     }
 
-
     // MARK: - Device Detection
 
     private func detectIPad(_ app: XCUIApplication) -> Bool {
@@ -188,8 +187,11 @@ final class KunaUITests: XCTestCase {
         _ = app.wait(for: .runningForeground, timeout: 3)
         let allowButton = app.buttons["Allow Anonymous Analytics"]
         let denyButton  = app.buttons["No Thanks"]
-        if denyButton.waitForHittable(timeout: 1.5) { denyButton.tap() }
-        else if allowButton.waitForHittable(timeout: 1.0) { allowButton.tap() }
+        if denyButton.waitForHittable(timeout: 1.5) { 
+            denyButton.tap()
+        } else if allowButton.waitForHittable(timeout: 1.0) { 
+            allowButton.tap()
+        }
     }
 
     // MARK: - Sidebar / Login helpers
@@ -289,8 +291,8 @@ final class KunaUITests: XCTestCase {
         guard !availableProjects.isEmpty else {
             XCTFail("No projects found on the Projects screen"); return
         }
-        for projectName in availableProjects {
-            if tryOpenProject(named: projectName, in: app) { return }
+        for projectName in availableProjects where tryOpenProject(named: projectName, in: app) {
+            return
         }
         XCTFail("Could not open any project. Preferred: '\(preferredName)', Available: \(availableProjects)")
     }
@@ -301,7 +303,8 @@ final class KunaUITests: XCTestCase {
             let row = projectRows.element(boundBy: i)
             if row.exists && row.staticTexts[name].exists && row.isHittable { row.tap(); return true }
         }
-        if app.cells.staticTexts[name].exists && app.cells.staticTexts[name].isHittable { app.cells.staticTexts[name].tap(); return true }
+        if app.cells.staticTexts[name].exists
+            && app.cells.staticTexts[name].isHittable { app.cells.staticTexts[name].tap(); return true }
         if app.staticTexts[name].exists && app.staticTexts[name].isHittable { app.staticTexts[name].tap(); return true }
 
         let containers = scrollableContainers(in: app)
@@ -353,8 +356,8 @@ final class KunaUITests: XCTestCase {
         if tryOpenProject(named: preferred, in: app) { return preferred }
         let availableProjects = discoverAvailableProjects(in: app)
         guard !availableProjects.isEmpty else { XCTFail("No projects found on the Projects screen"); return preferred }
-        for projectName in availableProjects {
-            if tryOpenProject(named: projectName, in: app) { return projectName }
+        for projectName in availableProjects where tryOpenProject(named: projectName, in: app) {
+            return projectName
         }
         XCTFail("Could not open any project. Preferred: '\(preferred)', Available: \(availableProjects)")
         return preferred
@@ -365,8 +368,8 @@ final class KunaUITests: XCTestCase {
         if tryOpenTaskOnPhone(named: preferred, in: app) { return preferred }
         let availableTasks = discoverAvailableTasksOnPhone(in: app)
         guard !availableTasks.isEmpty else { XCTFail("No tasks found in the task list"); return preferred }
-        for taskName in availableTasks {
-            if tryOpenTaskOnPhone(named: taskName, in: app) { return taskName }
+        for taskName in availableTasks where tryOpenTaskOnPhone(named: taskName, in: app) {
+            return taskName
         }
         XCTFail("Could not open any task. Preferred: '\(preferred)', Available: \(availableTasks)")
         return preferred
@@ -377,8 +380,8 @@ final class KunaUITests: XCTestCase {
         if trySelectTask(named: preferred, in: app) { return preferred }
         let availableTasks = discoverAvailableTasks(in: app)
         guard !availableTasks.isEmpty else { XCTFail("No tasks found in iPad split view"); return preferred }
-        for taskName in availableTasks {
-            if trySelectTask(named: taskName, in: app) { return taskName }
+        for taskName in availableTasks where trySelectTask(named: taskName, in: app) {
+            return taskName
         }
         XCTFail("Could not select any task in iPad split view. Preferred: '\(preferred)', Available: \(availableTasks)")
         return preferred
@@ -552,8 +555,8 @@ final class KunaUITests: XCTestCase {
                 if app.staticTexts["TASK INFO"].exists { return true }
                 if app.staticTexts["SCHEDULING"].exists { return true }
                 if app.staticTexts["ORGANIZATION"].exists { return true }
-                let indicators = ["Title","Description","Priority","Due Date","Start Date","End Date","Project","Labels"]
-                for ind in indicators { if app.staticTexts[ind].exists { return true } }
+                let indicators = ["Title", "Description", "Priority", "Due Date", "Start Date", "End Date", "Project", "Labels"]
+                for ind in indicators where app.staticTexts[ind].exists { return true }
             }
             RunLoop.current.run(until: Date().addingTimeInterval(0.1))
         } while Date() < end
@@ -599,8 +602,8 @@ final class KunaUITests: XCTestCase {
 
         let availableTasks = discoverAvailableTasks(in: app)
         guard !availableTasks.isEmpty else { XCTFail("No tasks found in iPad split view"); return }
-        for taskName in availableTasks {
-            if trySelectTask(named: taskName, in: app) { return }
+        for taskName in availableTasks where trySelectTask(named: taskName, in: app) {
+            return
         }
 
         let allTexts = app.staticTexts.allElementsBoundByIndex
@@ -688,7 +691,7 @@ private func openSettingsRow(titled wantedTitle: String, in app: XCUIApplication
         ? app.sheets.firstMatch
         : (app.scrollViews.firstMatch.exists ? app.scrollViews.firstMatch : app)
 
-    let ids = ["settings.displayOptions","settings.display","settings.appearance","Display Options","Display options","Display"]
+    let ids = ["settings.displayOptions", "settings.display", "settings.appearance", "Display Options", "Display options", "Display"]
     for id in ids {
         let btn = container.buttons.matching(identifier: id).firstMatch
         if btn.exists && btn.isHittable { btn.tap(); return }

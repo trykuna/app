@@ -145,7 +145,7 @@ final class UtilityTests: XCTestCase {
         XCTAssertNotNil(decoder)
         
         // Test date decoding
-        let dateJSON = "\"2021-01-01T00:00:00Z\"".data(using: .utf8)!
+        let dateJSON = Data("\"2021-01-01T00:00:00Z\"".utf8)
         let decodedDate = try? decoder.decode(Date.self, from: dateJSON)
         XCTAssertNotNil(decodedDate)
         

@@ -6,6 +6,8 @@ struct RootView: View {
     @StateObject private var settings = AppSettings.shared
     @State private var showAnalyticsConsent = false
 
+    private let privacyUrl = URL(string: "https://trykuna.app/privacy.html")! // swiftlint:disable:this force_unwrapping
+
     var body: some View {
         Group {
             if app.isAuthenticated, let api = app.api {
@@ -16,7 +18,7 @@ struct RootView: View {
         }
         .onAppear(perform: maybeShowAnalyticsConsent)
         .sheet(isPresented: $showAnalyticsConsent) {
-            AnalyticsConsentSheet(privacyURL: URL(string: "https://systemsmystery.tech/privacy")!)
+            AnalyticsConsentSheet(privacyURL: privacyUrl)
                 .environmentObject(settings)
         }
     }

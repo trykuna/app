@@ -69,7 +69,7 @@ final class EnumTests: XCTestCase {
         XCTAssertEqual(decoded, priority)
         
         // Test decoding from raw value
-        let rawData = "3".data(using: .utf8)!
+        let rawData = Data("3".utf8)
         let decodedFromRaw = try JSONDecoder().decode(TaskPriority.self, from: rawData)
         XCTAssertEqual(decodedFromRaw, .high)
     }
@@ -188,11 +188,11 @@ final class EnumTests: XCTestCase {
     
     func testInvalidEnumDecoding() {
         // Test decoding invalid TaskPriority values
-        let invalidPriorityData = "99".data(using: .utf8)!
+        let invalidPriorityData = Data("99".utf8)
         XCTAssertThrowsError(try JSONDecoder().decode(TaskPriority.self, from: invalidPriorityData))
         
         // Test decoding invalid TaskRelationKind - should fall back to .unknown rather than throw
-        let invalidRelationData = "\"invalid_relation\"".data(using: .utf8)!
+        let invalidRelationData = Data("\"invalid_relation\"".utf8)
         let decoded = try? JSONDecoder().decode(TaskRelationKind.self, from: invalidRelationData)
         XCTAssertEqual(decoded, .unknown)
     }

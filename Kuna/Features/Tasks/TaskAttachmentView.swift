@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 struct TaskAttachmentView: View {
     let task: VikunjaTask
     let api: VikunjaAPI
-    var onUpload: (() -> Void)? = nil
+    var onUpload: (() -> Void)? = nil // swiftlint:disable:this redundant_optional_initialization
 
     @State private var showingSourceDialog = false
     @State private var showPhotoPicker = false
@@ -37,9 +37,14 @@ struct TaskAttachmentView: View {
             }
             .buttonStyle(.plain)
             // .confirmationDialog("Add Attachment", isPresented: $showingSourceDialog) {
-            .confirmationDialog(String(localized: "tasks.details.attachments.add", comment: "Add attachment dialog title"), isPresented: $showingSourceDialog) {
+            .confirmationDialog(
+                String(localized: "tasks.details.attachments.add", comment: "Add attachment dialog title"),
+                isPresented: $showingSourceDialog
+            ) {
                 // Button("Photo Library") { showPhotoPicker = true }
-                Button(String(localized: "tasks.attachment.photoLibrary", comment: "Photo library button")) { showPhotoPicker = true }
+                Button(
+                    String(localized: "tasks.attachment.photoLibrary", comment: "Photo library button")
+                ) { showPhotoPicker = true }
                 // Button("Files") { showFileImporter = true }
                 Button(String(localized: "tasks.attachment.files", comment: "Files button")) { showFileImporter = true }
             }
@@ -142,7 +147,8 @@ struct TaskAttachmentView: View {
 
                     #if DEBUG
                     Log.app.debug("TaskAttachmentView: File data loaded, size: \(data.count, privacy: .public) bytes")
-                    Log.app.debug("TaskAttachmentView: File name: \(url.lastPathComponent, privacy: .public), MIME: \(mime, privacy: .public)")
+                    Log.app.debug("TaskAttachmentView: File name: \(url.lastPathComponent, privacy: .public)")
+                    Log.app.debug("TaskAttachmentView: MIME type: \(mime, privacy: .public)")
                     #endif
 
                     await MainActor.run {
@@ -174,7 +180,8 @@ struct TaskAttachmentView: View {
         }
 
         // Ensure filename has an extension
-        let finalFilename = ensureFileExtension(customFilename, mimeType: pendingUploadMimeType, originalName: pendingUploadOriginalName)
+        let finalFilename = ensureFileExtension(
+            customFilename, mimeType: pendingUploadMimeType, originalName: pendingUploadOriginalName)
 
         Task {
             do {
@@ -188,7 +195,8 @@ struct TaskAttachmentView: View {
                 Log.app.debug("TaskAttachmentView: Starting upload with custom filename: \(finalFilename, privacy: .public)")
                 #endif
 
-                try await api.uploadAttachment(taskId: task.id, fileName: finalFilename, data: data, mimeType: pendingUploadMimeType)
+                try await api.uploadAttachment(
+                    taskId: task.id, fileName: finalFilename, data: data, mimeType: pendingUploadMimeType)
 
                 #if DEBUG
                 Log.app.debug("TaskAttachmentView: Upload completed successfully")
@@ -250,7 +258,11 @@ struct TaskAttachmentView: View {
 struct TaskAttachmentView_Previews: PreviewProvider {
     static var previews: some View {
         let task = VikunjaTask(id: 1, title: "Demo")
-        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+        let api = VikunjaAPI(
+            config: VikunjaConfig(
+                baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+                tokenProvider: { nil }
+            )
         TaskAttachmentView(task: task, api: api)
             .padding()
     }

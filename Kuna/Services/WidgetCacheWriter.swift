@@ -24,7 +24,7 @@ class WidgetCacheWriter {
     private static let maxCachedTasks = 50 // Reasonable limit for widget display
     
     static func writeWidgetSnapshot(from tasks: [VikunjaTask], projectId: Int) {
-        Log.widget.debug("Writing widget snapshot: tasks=\(tasks.count, privacy: .public) projectId=\(projectId, privacy: .public)")
+        Log.widget.debug("Writing widget snapshot: tasks=\(tasks.count, privacy: .public) projectId=\(projectId, privacy: .public)") // swiftlint:disable:this line_length
         
         // Check if App Group is configured
         guard UserDefaults(suiteName: appGroupID) != nil else {
@@ -132,7 +132,7 @@ class WidgetCacheWriter {
             if let readBack = defaults.data(forKey: projectsKey) {
                 Log.widget.debug("Wrote projects snapshot to App Group (\(readBack.count, privacy: .public) bytes)")
                 #if DEBUG
-                Log.widget.debug("Available keys after write: \(Array(defaults.dictionaryRepresentation().keys), privacy: .public)")
+                Log.widget.debug("Available keys after write: \(Array(defaults.dictionaryRepresentation().keys), privacy: .public)") // swiftlint:disable:this line_length
                 #endif
             } else {
                 Log.widget.error("Failed to read back written projects data")

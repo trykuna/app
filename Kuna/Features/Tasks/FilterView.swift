@@ -18,7 +18,8 @@ struct FilterView: View {
                 // Section("Quick Filters") {
                 Section(String(localized: "tasks.filter.quickFilters", comment: "Quick filters section")) {
                     // Picker("Quick Filter", selection: $filter.quickFilter) {
-                    Picker(String(localized: "tasks.filter.quickFilter", comment: "Quick filter picker"), selection: $filter.quickFilter) {
+                    Picker(String(localized: "tasks.filter.quickFilter",
+                                    comment: "Quick filter picker"), selection: $filter.quickFilter) {
                         ForEach(TaskFilter.QuickFilterType.allCases, id: \.self) { quickFilter in
                             HStack {
                                 Image(systemName: quickFilter.systemImage)
@@ -34,15 +35,18 @@ struct FilterView: View {
                 // Section("Status") {
                 Section(String(localized: "tasks.filter.status", comment: "Status section")) {
                     // Toggle("Show Completed Tasks", isOn: $filter.showCompleted)
-                    Toggle(String(localized: "tasks.filter.showCompleted", comment: "Show completed tasks toggle"), isOn: $filter.showCompleted)
+                    Toggle(String(localized: "tasks.filter.showCompleted",
+                                    comment: "Show completed tasks toggle"), isOn: $filter.showCompleted)
                     // Toggle("Show Incomplete Tasks", isOn: $filter.showIncomplete)
-                    Toggle(String(localized: "tasks.filter.showIncomplete", comment: "Show incomplete tasks toggle"), isOn: $filter.showIncomplete)
+                    Toggle(String(localized: "tasks.filter.showIncomplete",
+                                    comment: "Show incomplete tasks toggle"), isOn: $filter.showIncomplete)
                 }
                 
                 // Priority Section
                 Section {
                     // Toggle("Filter by Priority", isOn: $filter.filterByPriority)
-                    Toggle(String(localized: "tasks.filter.byPriority", comment: "Filter by priority toggle"), isOn: $filter.filterByPriority)
+                    Toggle(String(localized: "tasks.filter.byPriority",
+                                    comment: "Filter by priority toggle"), isOn: $filter.filterByPriority)
                     
                     if filter.filterByPriority {
                         HStack {
@@ -79,7 +83,8 @@ struct FilterView: View {
                 // Progress Section
                 Section {
                     // Toggle("Filter by Progress", isOn: $filter.filterByProgress)
-                    Toggle(String(localized: "tasks.filter.byProgress", comment: "Filter by progress toggle"), isOn: $filter.filterByProgress)
+                    Toggle(String(localized: "tasks.filter.byProgress",
+                                    comment: "Filter by progress toggle"), isOn: $filter.filterByProgress)
                     
                     if filter.filterByProgress {
                         VStack(alignment: .leading, spacing: 8) {
@@ -108,7 +113,8 @@ struct FilterView: View {
                 // Due Date Section
                 Section {
                     // Toggle("Filter by Due Date", isOn: $filter.filterByDueDate)
-                    Toggle(String(localized: "tasks.filter.byDueDate", comment: "Filter by due date toggle"), isOn: $filter.filterByDueDate)
+                    Toggle(String(localized: "tasks.filter.byDueDate",
+                                    comment: "Filter by due date toggle"), isOn: $filter.filterByDueDate)
                     
                     if filter.filterByDueDate {
                         // DatePicker("From", selection: Binding(
@@ -137,10 +143,16 @@ struct FilterView: View {
                 // Labels Section
                 Section {
                     // Toggle("Filter by Labels", isOn: $filter.filterByLabels)
-                    Toggle(String(localized: "tasks.filter.byLabels", comment: "Filter by labels toggle"), isOn: $filter.filterByLabels)
+                    Toggle(String(localized: "tasks.filter.byLabels",
+                                    comment: "Filter by labels toggle"), isOn: $filter.filterByLabels)
                     
                     if filter.filterByLabels {
-                        NavigationLink(String.localizedStringWithFormat(String(localized: "Required Labels (%lld)", comment: "Required labels with count"), filter.requiredLabelIds.count)) {
+                        NavigationLink(
+                            String.localizedStringWithFormat(
+                                String(localized: "Required Labels (%lld)", comment: "Required labels with count"),
+                                filter.requiredLabelIds.count
+                            )
+                        ) {
                             LabelSelectionView(
                                 title: "Required Labels",
                                 availableLabels: availableLabels,
@@ -149,7 +161,12 @@ struct FilterView: View {
                             )
                         }
                         
-                        NavigationLink(String.localizedStringWithFormat(String(localized: "Excluded Labels (%lld)", comment: "Excluded labels with count"), filter.excludedLabelIds.count)) {
+                        NavigationLink(
+                            String.localizedStringWithFormat(
+                                String(localized: "Excluded Labels (%lld)", comment: "Excluded labels with count"),
+                                filter.excludedLabelIds.count
+                            )
+                        ) {
                             LabelSelectionView(
                                 title: "Excluded Labels",
                                 availableLabels: availableLabels,

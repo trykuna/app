@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 
 /// iPad split view: sidebar = tasks, detail = TaskDetailView.
 struct TasksSplitContainerView: View {
@@ -18,13 +19,13 @@ struct TasksSplitContainerView: View {
     private var selectedTask: VikunjaTask? {
         guard let id = selection else { 
             #if DEBUG
-            print("TasksSplitContainer: No selection")
+            Log.app.debug("TasksSplitContainer: No selection")
             #endif
             return nil 
         }
         let task = vm.tasks.first(where: { $0.id == id })
         #if DEBUG
-        print("TasksSplitContainer: Looking for task id \(id), found: \(task?.title ?? "nil")")
+        Log.app.debug("TasksSplitContainer: Looking for task id \(id), found: \(task?.title ?? "nil")")
         #endif
         return task
     }
@@ -34,11 +35,12 @@ struct TasksSplitContainerView: View {
             sidebar
         } detail: {
             if let task = selectedTask {
-                TaskDetailView(task: task, api: api)
+                TaskDetailView(task: task, api: api, onUpdate: nil)
             } else {
                 if #available(iOS 17, *) {
                     // ContentUnavailableView("Select a task", systemImage: "square.and.pencil")
-                    ContentUnavailableView(String(localized: "tasks.select.title", comment: "Title for select a task"), systemImage: "square.and.pencil")
+                    ContentUnavailableView(String(localized: "tasks.select.title",
+                                                    comment: "Title for select a task"), systemImage: "square.and.pencil")
                 } else {
                     // Text("Select a task")
                     Text(String(localized: "tasks.select.title", comment: "Title for select a task"))
@@ -54,7 +56,7 @@ struct TasksSplitContainerView: View {
             columnVisibility = .all
             selection = vm.tasks.first?.id
             #if DEBUG
-            print("TasksSplitContainer: Loaded \(vm.tasks.count) tasks, selected: \(String(describing: selection))")
+            Log.app.debug("TasksSplitContainer: Loaded \(vm.tasks.count) tasks, selected: \(String(describing: selection))")
             #endif
         }
         .onChange(of: vm.tasks) { _, new in

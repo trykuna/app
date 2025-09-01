@@ -17,4 +17,3 @@ enum LogConfig {
     static let verboseNetwork = false
     #endif
 }
-

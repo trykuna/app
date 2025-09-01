@@ -16,7 +16,6 @@ struct AppIconTestView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                // TODO: Localize
                 Text("settings.icon.current \(iconManager.currentIcon.displayName)",
                      comment: "Label showing the current app icon name")
 

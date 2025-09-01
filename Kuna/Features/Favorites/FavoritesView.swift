@@ -16,54 +16,68 @@ struct FavoritesView: View {
         _commentCountManager = StateObject(wrappedValue: CommentCountManager(api: api))
     }
 
-    var body: some View {
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView().scaleEffect(1.2)
+            Text(String(localized: "favorites.loading", comment: "Label shown when loading favorites"))
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var contentView: some View {
         Group {
             if isLoading && favoriteTasks.isEmpty {
-                VStack(spacing: 16) {
-                    ProgressView().scaleEffect(1.2)
-                    // Text("Loading favorites…").foregroundColor(.secondary)
-                    Text(String(localized: "favorites.loading", comment: "Label shown when loading favorites"))
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                loadingView
             } else if favoriteTasks.isEmpty {
                 emptyStateView
             } else {
                 taskListView
             }
         }
-        .navigationTitle(String(localized: "common.favorites"))
-        .navigationBarTitleDisplayMode(.large)
-        .accessibilityIdentifier("screen.favorites")
-        .onAppear {
-            loadFavorites()
-            if AppSettings.shared.showCommentCounts {
-                commentCountManager.loadCommentCounts(for: favoriteTasks.map { $0.id })
+    }
+    
+    private var errorBinding: Binding<Bool> {
+        Binding(
+            get: { error != nil },
+            set: { if !$0 { error = nil } }
+        )
+    }
+    
+    var body: some View {
+        contentView
+            .navigationTitle(String(localized: "common.favorites"))
+            .navigationBarTitleDisplayMode(.large)
+            .accessibilityIdentifier("screen.favorites")
+            .onAppear {
+                loadFavorites()
+                if AppSettings.shared.showCommentCounts {
+                    let taskIds = favoriteTasks.map { $0.id }
+                    commentCountManager.loadCommentCounts(for: taskIds)
+                }
             }
-        }
-        .onChange(of: favoriteTasks.map { $0.id }) { _, newIds in
-            if AppSettings.shared.showCommentCounts {
-                commentCountManager.loadCommentCounts(for: newIds)
+            .onChange(of: favoriteTasks.map { $0.id }) { _, newIds in
+                if AppSettings.shared.showCommentCounts {
+                    commentCountManager.loadCommentCounts(for: newIds)
+                }
             }
-        }
-        .alert(String(localized: "common.error"),
-               isPresented: Binding(
-                get: { error != nil },
-                set: { if !$0 { error = nil } }
-               )
-        ) {
-            // Button("OK") { error = nil }
-            Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
-            // Button("Retry") { loadFavorites() }
-            Button(String(localized: "common.retry", comment: "Retry button")) { loadFavorites() }
-        } message: {
-            if let error { Text(error) }
-        }
-        .sheet(isPresented: $showingTaskDetail) {
-            if let task = selectedTask {
-                TaskDetailView(task: task, api: api)
+            .alert(String(localized: "common.error"), isPresented: errorBinding) {
+                Button(String(localized: "common.ok", comment: "OK button")) { 
+                    error = nil 
+                }
+                Button(String(localized: "common.retry", comment: "Retry button")) { 
+                    loadFavorites() 
+                }
+            } message: {
+                if let error { 
+                    Text(error) 
+                }
             }
-        }
+            .sheet(isPresented: $showingTaskDetail) {
+                if let task = selectedTask {
+                    TaskDetailView(task: task, api: api, onUpdate: nil)
+                }
+            }
     }
 
     private var emptyStateView: some View {
@@ -275,12 +289,14 @@ struct FavoriteTaskRow: View {
         Task {
             do {
                 #if DEBUG
-                Log.app.debug("FavoritesView: Toggling favorite for task id=\(task.id, privacy: .public) title=\(task.title, privacy: .public)")
+                Log.app.debug("FavoritesView: Toggling favorite for task id=\(task.id, privacy: .public)")
+                Log.app.debug("FavoritesView: Task title=\(task.title, privacy: .public)")
                 #endif
                 let updated = try await api.toggleTaskFavorite(task: task)
                 await MainActor.run {
                     #if DEBUG
-                    Log.app.debug("FavoritesView: Task id=\(task.id, privacy: .public) favorite -> \(updated.isFavorite, privacy: .public)")
+                    Log.app.debug("FavoritesView: Task id=\(task.id, privacy: .public)")
+                    Log.app.debug("FavoritesView: Favorite status=\(updated.isFavorite, privacy: .public)")
                     #endif
                     onTaskUpdated(updated)
                     isUpdatingFavorite = false
@@ -288,7 +304,8 @@ struct FavoriteTaskRow: View {
             } catch {
                 await MainActor.run {
                     #if DEBUG
-                    Log.app.error("FavoritesView: Error toggling favorite for task id=\(task.id, privacy: .public): \(String(describing: error), privacy: .public)")
+                    Log.app.error("FavoritesView: Error toggling favorite for task id=\(task.id, privacy: .public)")
+                    Log.app.error("FavoritesView: Error details: \(String(describing: error), privacy: .public)")
                     #endif
                     isUpdatingFavorite = false
                 }
@@ -312,11 +329,10 @@ struct FavoriteTaskRow: View {
     }
 }
 
-
 #Preview {
     NavigationStack {
         FavoritesView(api: VikunjaAPI(
-            config: .init(baseURL: URL(string: "https://example.com")!),
+            config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
             tokenProvider: { nil }
         ))
     }

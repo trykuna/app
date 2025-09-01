@@ -114,7 +114,11 @@ struct CommentsView: View {
             
             HStack(spacing: 12) {
                 // TextField("Add a comment...", text: $newCommentText, axis: .vertical)
-                TextField(String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"), text: $newCommentText, axis: .vertical)
+                TextField(
+                    String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"),
+                    text: $newCommentText,
+                    axis: .vertical
+                )
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(1...4)
                 
@@ -266,14 +270,18 @@ struct CommentRowView: View {
         .background(Color(.systemGray6))
         .cornerRadius(12)
         // .confirmationDialog("Delete Comment", isPresented: $showingDeleteConfirmation) {
-        .confirmationDialog(String(localized: "comments.delete.title", comment: "Delete comment dialog title"), isPresented: $showingDeleteConfirmation) {
+        .confirmationDialog(
+            String(localized: "comments.delete.title", comment: "Delete comment dialog title"),
+            isPresented: $showingDeleteConfirmation
+        ) {
             // Button("Delete", role: .destructive) {
             Button(String(localized: "common.delete", comment: "Delete button"), role: .destructive) {
                 deleteComment()
             }
             Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) { }
         } message: {
-            Text(String(localized: "comments.delete.confirmation", comment: "Title for are you sure you want to delete this comment"))
+            Text(String(localized: "comments.delete.confirmation",
+                        comment: "Title for are you sure you want to delete this comment"))
         }
     }
     
@@ -326,7 +334,9 @@ struct CommentsButtonView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text(commentCount == 0 ? String(localized: "tasks.comments.none", comment: "No comments yet") : "\(commentCount) comment\(commentCount == 1 ? "" : "s")")
+                        Text(commentCount == 0
+                                ? String(localized: "tasks.comments.none", comment: "No comments yet")
+                                : "\(commentCount) comment\(commentCount == 1 ? "" : "s")")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -395,7 +405,11 @@ struct CommentBadge: View {
 struct CommentsView_Previews: PreviewProvider {
     static var previews: some View {
         let task = VikunjaTask(id: 1, title: "Sample Task")
-        let api = VikunjaAPI(config: VikunjaConfig(baseURL: URL(string: "https://example.com")!), tokenProvider: { nil })
+        let api = VikunjaAPI(
+            config: VikunjaConfig(
+                baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
+                tokenProvider: { nil }
+            ) 
         let commentCountManager = CommentCountManager(api: api)
         CommentsView(task: task, api: api, commentCountManager: commentCountManager)
     }

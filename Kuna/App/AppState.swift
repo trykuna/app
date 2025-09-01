@@ -26,7 +26,6 @@ final class AppState: ObservableObject {
     @Published var tokenExpirationDate: Date?
     @Published var deepLinkTaskId: Int?
 
-
     init() {
         // Initialize all properties first
         self.isAuthenticated = false
@@ -61,7 +60,9 @@ final class AppState: ObservableObject {
                 self.tokenExpirationDate = try? JWTDecoder.getExpirationDate(from: token)
             } catch {
                 // Invalid stored URL, clear credentials
-                Log.app.error("Error building API URL from stored server URL; clearing credentials")
+                Log.app.error(
+                    "Error building API URL from stored server URL; clearing credentials"
+                )
                 Keychain.clearAll()
                 self.api = nil
                 self.isAuthenticated = false
@@ -155,7 +156,9 @@ final class AppState: ObservableObject {
 
         #if DEBUG
         if let expDate = expirationDate {
-            Log.app.debug("TOTP Token expires at: \(expDate, privacy: .public)")
+            Log.app.debug(
+                "TOTP Token expires at: \(expDate, privacy: .public)"
+            )
         } else {
             Log.app.debug("Could not decode TOTP token expiration")
         }
@@ -270,7 +273,9 @@ final class AppState: ObservableObject {
 
         #if DEBUG
         if let expDate = expirationDate {
-            Log.app.debug("Token refreshed, new expiration: \(expDate, privacy: .public)")
+            Log.app.debug(
+                "Token refreshed, new expiration: \(expDate, privacy: .public)"
+            )
         } else {
             Log.app.debug("Token refreshed but could not decode expiration")
         }
@@ -313,7 +318,9 @@ final class AppState: ObservableObject {
         let currentPeak = UserDefaults.standard.object(forKey: "peakMemoryUsage") as? UInt64 ?? 0
         if resident > currentPeak {
             UserDefaults.standard.set(resident, forKey: "peakMemoryUsage")
-            Log.app.debug("New peak memory usage: \(resident / 1024 / 1024)MB")
+            Log.app.debug(
+                "New peak memory usage: \(resident / 1024 / 1024)MB"
+            )
         }
     }
     
@@ -361,12 +368,11 @@ final class AppState: ObservableObject {
         // Clear UserDefaults cache that might be holding data
         UserDefaults.standard.synchronize()
         
-        
         // Multiple rounds of garbage collection
         for _ in 0..<3 {
             autoreleasepool {
                 // Create and release memory to trigger GC
-                let _ = Array(repeating: Data(count: 1024), count: 1000)
+                _ = Array(repeating: Data(count: 1024), count: 1000)
             }
         }
         
@@ -376,7 +382,9 @@ final class AppState: ObservableObject {
     // Clean up memory on memory warnings
     func handleMemoryWarning() {
         self.memoryWarningCount += 1
-        Log.app.warning("AppState: Handling memory warning #\(self.memoryWarningCount)")
+        Log.app.warning(
+            "AppState: Handling memory warning #\(self.memoryWarningCount)"
+        )
         
         // Clear any cached data we might have
         self.deepLinkTaskId = nil

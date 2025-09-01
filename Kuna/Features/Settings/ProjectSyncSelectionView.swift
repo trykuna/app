@@ -31,10 +31,12 @@ struct ProjectSyncSelectionView: View {
                                 .font(.body)
                             VStack(alignment: .leading, spacing: 2) {
                                 // Text("Sync All Projects")
-                                Text(String(localized: "settings.calendarSync.projects.syncAll.title", comment: "Title for sync all projects"))
+                                Text(String(localized: "settings.calendarSync.projects.syncAll.title",
+                                            comment: "Title for sync all projects"))
                                     .font(.body)
                                 // Text("Automatically include all current and future projects")
-                                Text(String(localized: "settings.calendarSync.projects.syncAll.subtitle", comment: "Subtitle for sync all projects"))
+                                Text(String(localized: "settings.calendarSync.projects.syncAll.subtitle",
+                                            comment: "Subtitle for sync all projects"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -46,10 +48,12 @@ struct ProjectSyncSelectionView: View {
                 } footer: {
                     if settings.syncAllProjects {
                         // Text("All projects will be synced to your calendar.")
-                        Text(String(localized: "settings.calendarSync.projects.syncAll.allProjects.title", comment: "Title for all projects will be synced to your calendar"))
+                        Text(String(localized: "settings.calendarSync.projects.syncAll.allProjects.title",
+                                    comment: "Title for all projects will be synced to your calendar"))
                     } else {
                         // Text("Select specific projects below to sync to your calendar.")
-                        Text(String(localized: "settings.calendarSync.projects.syncAll.specificProjects.title", comment: "Title for select specific projects below to sync to your calendar"))
+                        Text(String(localized: "settings.calendarSync.projects.syncAll.specificProjects.title",
+                                    comment: "Title for select specific projects below to sync to your calendar"))
                     }
                 }
                 
@@ -96,7 +100,6 @@ struct ProjectSyncSelectionView: View {
                             Text(String(localized: "settings.calendarSync.projects.title", comment: "Title for select projects"))
                             Spacer()
                             if !isLoading && !projects.isEmpty {
-                                // TODO: Localize
                                 Text("common.selectedCount \(settings.selectedProjectsForSync.count)",
                                      comment: "Number of projects selected for sync")
                                     .font(.caption)
@@ -106,7 +109,8 @@ struct ProjectSyncSelectionView: View {
                     } footer: {
                         if !settings.selectedProjectsForSync.isEmpty {
                             // Text("Tasks from selected projects will appear in your calendar.")
-                            Text(String(localized: "settings.calendarSync.projects.selectedProjects.title", comment: "Title for tasks from selected projects will appear in your calendar"))
+                            Text(String(localized: "settings.calendarSync.projects.selectedProjects.title",
+                                        comment: "Title for tasks from selected projects will appear in your calendar"))
                         }
                     }
                 }
