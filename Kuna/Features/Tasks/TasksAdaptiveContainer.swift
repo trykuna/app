@@ -269,7 +269,6 @@ struct TasksIPadSplitView: View {
         }
     }
 
-    
     // MARK: - Empty State
     private var emptyState: some View {
         VStack(spacing: 20) {

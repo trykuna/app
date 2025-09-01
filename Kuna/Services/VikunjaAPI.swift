@@ -969,7 +969,6 @@ final class VikunjaAPI {
         body.append(Data("\r\n".utf8))
         body.append(Data("--\(boundary)--\r\n".utf8))
 
-
         req.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
 
         #if DEBUG
