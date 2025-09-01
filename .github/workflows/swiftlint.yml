@@ -36,7 +36,10 @@ jobs:
       - name: Build for CodeQL
         run: |
           xcodebuild \
+            -project "Kuna.xcodeproj" \
             -scheme "Kuna" \
             -destination "generic/platform=iOS" \
-            -configuration Debug build | xcpretty && exit ${PIPESTATUS[0]}
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build | xcpretty && exit ${PIPESTATUS[0]}
       - uses: github/codeql-action/analyze@v3
