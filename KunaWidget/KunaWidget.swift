@@ -544,7 +544,7 @@ struct LargeWidgetView: View {
             
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(Array(tasks.enumerated()), id: \.offset) { index, task in
+                    ForEach(Array(tasks.enumerated()), id: \.offset) { _, task in
                         HStack(spacing: 8) {
                             Circle()
                                 .strokeBorder(task.isOverdue ? Color.red : Color.gray, lineWidth: 2)

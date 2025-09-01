@@ -296,7 +296,7 @@ struct CalendarSyncView: View {
     private var errorsSection: some View {
         if !engine.syncErrors.isEmpty || !calendarSync.syncErrors.isEmpty {
             Section(String(localized: "settings.calendarSync.errors.title", comment: "Title for recent errors")) {
-                ForEach(Array((engine.syncErrors + calendarSync.syncErrors).enumerated()), id: \.offset) { index, err in
+                ForEach(Array((engine.syncErrors + calendarSync.syncErrors).enumerated()), id: \.offset) { _, err in
                     Text(err)
                         .font(.caption)
                         .foregroundColor(.red)

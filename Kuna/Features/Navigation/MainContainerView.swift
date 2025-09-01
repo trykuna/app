@@ -16,7 +16,7 @@ struct MainContainerView: View {
     private let menuWidth: CGFloat = 280
 
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             ZStack {
                 // Main content
                 contentView

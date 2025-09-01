@@ -593,7 +593,7 @@ struct TaskDetailViewInner: View {
             initializeEditingState()
             Task { await loadAvailableLabels() }
         }
-        .onChange(of: task) { _, newTask in
+        .onChange(of: task) { _, _ in
             initializeEditingState()
         }
         .alert(String(localized: "common.error"), isPresented: .constant(updateError != nil)) {
