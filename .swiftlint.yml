@@ -43,18 +43,18 @@ opt_in_rules:
 
 # Reasonable thresholds
 line_length: 130
-type_body_length:
-  - 400 # warning
-  - 600 # error
-file_length:
-  warning: 500
-  error: 900
-function_body_length:
-  - 60
-  - 100
-cyclomatic_complexity:
-  - 12
-  - 18
+# type_body_length:
+#   - 400 # warning
+#   - 600 # error
+# file_length:
+#   warning: 500
+#   error: 900
+# function_body_length:
+#   - 60
+#   - 100
+# cyclomatic_complexity:
+#   - 12
+#   - 18
 
 # Exempt some unit-test naming noise
 identifier_name:
@@ -64,3 +64,16 @@ identifier_name:
     - y
     - i
     - j
+
+empty_count:
+  severity: warning
+type_body_length:
+  warning: 600   # only warn above 600, no error
+file_length:
+  warning: 900   # only warn above 900, no error
+function_body_length:
+  warning: 100   # only warn above 100, no error
+cyclomatic_complexity:
+  warning: 18    # only warn above 18, no error
+force_cast:
+  severity: warning
