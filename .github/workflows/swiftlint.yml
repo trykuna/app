@@ -21,25 +21,66 @@ jobs:
           DIFF_BASE: ${{ github.base_ref }}
 
   codeql:
-    if: ${{ github.event.pull_request.head.repo.fork == false }} # skip forks if you want
+    if: ${{ github.event.pull_request.head.repo.fork == false }}
     name: CodeQL (Swift)
     runs-on: macos-latest
     permissions:
       actions: read
       contents: read
       security-events: write
+
     steps:
       - uses: actions/checkout@v4
+
+      # Initialize CodeQL for Swift in MANUAL build mode and run broader query suites
       - uses: github/codeql-action/init@v3
         with:
           languages: swift
+          build-mode: manual
+          queries: security-extended,security-and-quality
+
+      # If you use a workspace (SPM/CocoaPods), prefer -workspace over -project
+      # Build for iOS Simulator, disable signing, and write derived data to a temp folder.
       - name: Build for CodeQL
         run: |
-          xcodebuild \
-            -project "Kuna.xcodeproj" \
-            -scheme "Kuna" \
-            -destination "generic/platform=iOS" \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO \
-            build | xcpretty && exit ${PIPESTATUS[0]}
+          set -eo pipefail
+          DERIVED="$RUNNER_TEMP/DerivedData"
+          if [ -f "Kuna.xcworkspace/contents.xcworkspacedata" ]; then
+            xcodebuild \
+              -workspace "Kuna.xcworkspace" \
+              -scheme "Kuna" \
+              -sdk iphonesimulator \
+              -destination 'platform=iOS Simulator,name=iPhone 15' \
+              -configuration Debug \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_IDENTITY="" \
+              -derivedDataPath "$DERIVED" \
+              build | xcpretty
+          else
+            xcodebuild \
+              -project "Kuna.xcodeproj" \
+              -scheme "Kuna" \
+              -sdk iphonesimulator \
+              -destination 'platform=iOS Simulator,name=iPhone 15' \
+              -configuration Debug \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_IDENTITY="" \
+              -derivedDataPath "$DERIVED" \
+              build | xcpretty
+          fi
+
+      # Analyze and upload SARIF to the Security tab and PR checks
       - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:swift"
+
+      # (Optional) keep artifacts for debugging if you still see no results
+      - name: Upload build logs (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-build-logs
+          path: ${{ runner.temp }}/DerivedData/Logs/Build
+          if-no-files-found: ignore
