@@ -1,0 +1,16 @@
+lane :tests do
+    devices_env = ENV["DEVICES"]
+    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
+
+    scan(
+        scheme: "Kuna",
+        project: "Kuna.xcodeproj",
+        devices: devices,                 # runs once per device
+        clean: true,
+        result_bundle: true,
+        code_coverage: true,
+        testplan: "UnitTestPlan",         # you have it set as default; ok to keep or remove
+        output_types: "junit,json",       # -> fastlane/test_output/…
+        output_directory: "fastlane/test_output"
+    )
+end

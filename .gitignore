@@ -1,2 +1,8 @@
 # Ignore the actual local config with credentials, but allow the template
 UITests.local.xcconfig.local
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/test_output/
+# Fastlane test artifacts
+fastlane/test_output/
