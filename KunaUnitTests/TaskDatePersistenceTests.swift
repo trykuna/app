@@ -39,7 +39,11 @@ final class TaskDatePersistenceTests: XCTestCase {
 
         // Then: The start date should be saved
         XCTAssertNotNil(savedTask.startDate)
-        XCTAssertEqual(savedTask.startDate!.timeIntervalSince1970,
+        guard let startDate = savedTask.startDate else {
+            XCTFail("Start date should not be nil")
+            return
+        }
+        XCTAssertEqual(startDate.timeIntervalSince1970,
                       newStartDate.timeIntervalSince1970,
                       accuracy: 1.0)
         XCTAssertTrue(mockAPI.updateTaskCalled)
@@ -64,10 +68,14 @@ final class TaskDatePersistenceTests: XCTestCase {
 
         // Then: The due date should be saved
         XCTAssertNotNil(savedTask.dueDate)
-        XCTAssertEqual(savedTask.dueDate!.timeIntervalSince1970,
+        guard let dueDate = savedTask.dueDate else {
+            XCTFail("Due date should not be nil")
+            return
+        }
+        XCTAssertEqual(dueDate.timeIntervalSince1970,
                       newDueDate.timeIntervalSince1970,
                       accuracy: 1.0)
-        XCTAssertNotEqual(savedTask.dueDate!.timeIntervalSince1970,
+        XCTAssertNotEqual(dueDate.timeIntervalSince1970,
                          originalDueDate.timeIntervalSince1970,
                          accuracy: 1.0)
     }
@@ -90,7 +98,11 @@ final class TaskDatePersistenceTests: XCTestCase {
 
         // Then: The end date should be saved
         XCTAssertNotNil(savedTask.endDate)
-        XCTAssertEqual(savedTask.endDate!.timeIntervalSince1970,
+        guard let endDate = savedTask.endDate else {
+            XCTFail("End date should not be nil")
+            return
+        }
+        XCTAssertEqual(endDate.timeIntervalSince1970,
                       newEndDate.timeIntervalSince1970,
                       accuracy: 1.0)
     }
@@ -126,9 +138,15 @@ final class TaskDatePersistenceTests: XCTestCase {
         XCTAssertNotNil(savedTask.dueDate)
         XCTAssertNotNil(savedTask.endDate)
 
-        XCTAssertEqual(savedTask.startDate!.timeIntervalSince1970, newStartDate.timeIntervalSince1970, accuracy: 1.0)
-        XCTAssertEqual(savedTask.dueDate!.timeIntervalSince1970, newDueDate.timeIntervalSince1970, accuracy: 1.0)
-        XCTAssertEqual(savedTask.endDate!.timeIntervalSince1970, newEndDate.timeIntervalSince1970, accuracy: 1.0)
+        guard let startDate = savedTask.startDate,
+              let dueDate = savedTask.dueDate,
+              let endDate = savedTask.endDate else {
+            XCTFail("All dates should not be nil")
+            return
+        }
+        XCTAssertEqual(startDate.timeIntervalSince1970, newStartDate.timeIntervalSince1970, accuracy: 1.0)
+        XCTAssertEqual(dueDate.timeIntervalSince1970, newDueDate.timeIntervalSince1970, accuracy: 1.0)
+        XCTAssertEqual(endDate.timeIntervalSince1970, newEndDate.timeIntervalSince1970, accuracy: 1.0)
     }
     
     func testDateClearingIsSaved() async throws {
@@ -328,7 +346,11 @@ final class TaskDatePersistenceTests: XCTestCase {
 
         // Then: Both date and recurring should be saved
         XCTAssertNotNil(savedTask.dueDate)
-        XCTAssertEqual(savedTask.dueDate!.timeIntervalSince1970, newDueDate.timeIntervalSince1970, accuracy: 1.0)
+        guard let dueDate = savedTask.dueDate else {
+            XCTFail("Due date should not be nil")
+            return
+        }
+        XCTAssertEqual(dueDate.timeIntervalSince1970, newDueDate.timeIntervalSince1970, accuracy: 1.0)
         XCTAssertEqual(savedTask.repeatAfter, dailyRepeat)
         XCTAssertEqual(savedTask.repeatMode, RepeatMode.fromCurrentDate)
     }
@@ -397,8 +419,6 @@ final class TaskDatePersistenceTests: XCTestCase {
         )
     }
 }
-
-
 
 // MARK: - VikunjaTask Copy Extension
 

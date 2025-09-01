@@ -148,7 +148,8 @@ extension Date {
     
     var startOfDayUTC: Date {
         let calendar = Calendar(identifier: .gregorian)
-        var components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: self)
+        guard let utcTimeZone = TimeZone(secondsFromGMT: 0) else { return self }
+        var components = calendar.dateComponents(in: utcTimeZone, from: self)
         components.hour = 0
         components.minute = 0
         components.second = 0

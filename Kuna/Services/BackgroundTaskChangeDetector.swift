@@ -84,7 +84,7 @@ final class BackgroundTaskChangeDetector {
                     summary.newTasks.append(t)
                     isNewTask = true
                 }
-            } else if let s = updatedISO, s > lastSeen! {
+            } else if let s = updatedISO, let last = lastSeen, s > last {
                 summary.updatedTasks.append(t)
                 isUpdatedTask = true
             }

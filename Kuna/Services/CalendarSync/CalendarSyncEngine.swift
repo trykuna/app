@@ -593,7 +593,7 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
     // MARK: - Mode Switching Logic
 
     private func switchMode(from oldMode: CalendarSyncMode, to newMode: CalendarSyncMode, 
-                           oldCalendars: [String: EKCalendar], newCalendars: [String: EKCalendar]) async throws {
+                            oldCalendars: [String: EKCalendar], newCalendars: [String: EKCalendar]) async throws {
         let existingEvents = fetchExistingKunaEvents()
         
         switch (oldMode, newMode) {
@@ -603,7 +603,10 @@ final class CalendarSyncEngine: ObservableObject, CalendarSyncEngineType {
             
         case (.perProject, .single):
             // Move events from per-project calendars to single calendar
-            try await moveEventsFromPerProjectToSingle(events: existingEvents, singleCalendar: newCalendars["single"]!)
+            guard let singleCalendar = newCalendars["single"] else {
+                throw EventKitError.calendarNotFound
+            }
+            try await moveEventsFromPerProjectToSingle(events: existingEvents, singleCalendar: singleCalendar)
             
         case (.single, .single), (.perProject, .perProject):
             // Same mode, but potentially different calendars or projects

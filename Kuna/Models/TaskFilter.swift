@@ -156,8 +156,13 @@ struct TaskFilter: Codable, Equatable {
         let now = Date()
         let calendar = Calendar.current
         let todayStart = calendar.startOfDay(for: now)
-        let todayEnd = calendar.date(byAdding: .day, value: 1, to: todayStart)!
-        let weekEnd = calendar.date(byAdding: .day, value: 7, to: todayStart)!
+
+        guard
+            let todayEnd = calendar.date(byAdding: .day, value: 1, to: todayStart),
+            let weekEnd = calendar.date(byAdding: .day, value: 7, to: todayStart)
+        else {
+            return tasks
+        }
 
         switch filter {
         case .all:

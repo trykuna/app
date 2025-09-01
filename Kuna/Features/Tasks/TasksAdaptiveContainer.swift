@@ -224,7 +224,7 @@ struct TasksIPadSplitView: View {
                 // Extract just the content from TaskDetailView without the NavigationView wrapper
                 TaskDetailViewInner(
                     task: Binding(
-                        get: { selectedTask! },
+                        get: { selectedTask ?? task },
                         set: { newTask in
                             selectedTask = newTask
                             if let index = vm.tasks.firstIndex(where: { $0.id == newTask.id }) {

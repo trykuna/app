@@ -86,7 +86,11 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         
         // Try to decode the data
         let decoder = JSONDecoder()
-        let decodedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: data!)
+        guard let data = data else {
+            XCTFail("Data should not be nil")
+            return
+        }
+        let decodedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: data)
         XCTAssertEqual(decodedPrefs, testPrefs)
     }
     
@@ -112,7 +116,11 @@ final class AppSettingsCalendarSyncTests: XCTestCase {
         XCTAssertNotNil(storedData)
         
         let decoder = JSONDecoder()
-        let loadedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: storedData!)
+        guard let storedData = storedData else {
+            XCTFail("Stored data should not be nil")
+            return
+        }
+        let loadedPrefs = try decoder.decode(CalendarSyncPrefs.self, from: storedData)
         XCTAssertEqual(loadedPrefs, testPrefs)
         
         // Test that setting the preferences through AppSettings works

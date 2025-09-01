@@ -440,7 +440,7 @@ struct LabelsViewWithMenu: View {
     MainContainerView(
         api: VikunjaAPI(
             config: .init(
-                baseURL: URL(string: "https://example.com")!
+                baseURL: URL(string: "https://example.com")! // swiftlint:disable:this force_unwrapping
             ),
             tokenProvider: { nil }
         )

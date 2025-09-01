@@ -25,7 +25,10 @@ final class TaskDetailViewDateTests: XCTestCase {
     
     func testTaskDetailViewSavesDateChanges() async throws {
         // Given: A task with no dates
-        var editedTask = testTask!
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
         XCTAssertNil(editedTask.startDate)
         XCTAssertNil(editedTask.dueDate)
         XCTAssertNil(editedTask.endDate)
@@ -55,11 +58,17 @@ final class TaskDetailViewDateTests: XCTestCase {
         XCTAssertNotNil(updatedTask.dueDate)
         XCTAssertNotNil(updatedTask.endDate)
         
-        XCTAssertEqual(updatedTask.startDate!.timeIntervalSince1970,
+        guard let startDate = updatedTask.startDate,
+              let dueDate = updatedTask.dueDate,
+              let endDate = updatedTask.endDate else {
+            XCTFail("All dates should not be nil")
+            return
+        }
+        XCTAssertEqual(startDate.timeIntervalSince1970,
                       expectedStartDate.timeIntervalSince1970, accuracy: 1.0)
-        XCTAssertEqual(updatedTask.dueDate!.timeIntervalSince1970,
+        XCTAssertEqual(dueDate.timeIntervalSince1970,
                       expectedDueDate.timeIntervalSince1970, accuracy: 1.0)
-        XCTAssertEqual(updatedTask.endDate!.timeIntervalSince1970,
+        XCTAssertEqual(endDate.timeIntervalSince1970,
                       expectedEndDate.timeIntervalSince1970, accuracy: 1.0)
         
         XCTAssertTrue(mockAPI.updateTaskCalled, "API updateTask should have been called")
@@ -67,7 +76,10 @@ final class TaskDetailViewDateTests: XCTestCase {
     
     func testTaskDetailViewSavesRecurringChanges() async throws {
         // Given: A task with no recurring settings
-        var editedTask = testTask!
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
         XCTAssertNil(editedTask.repeatAfter)
         XCTAssertEqual(editedTask.repeatMode, .afterAmount) // Default value
         
@@ -98,8 +110,11 @@ final class TaskDetailViewDateTests: XCTestCase {
     
     func testTaskDetailViewHandlesDateValidation() async throws {
         // Given: A task being edited
-        var editedTask = testTask!
-        
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
+
         // When: We set invalid date order (start after due)
         let baseTime = Date()
         let invalidStartDate = baseTime.addingTimeInterval(7200) // 2 hours from now
@@ -119,23 +134,34 @@ final class TaskDetailViewDateTests: XCTestCase {
         let updatedTask = try await saveTaskChanges(editedTask, using: mockAPI)
         
         // Then: The dates should be saved as provided (no client-side validation)
-        XCTAssertEqual(updatedTask.startDate!.timeIntervalSince1970,
+        guard let startDate = updatedTask.startDate,
+              let dueDate = updatedTask.dueDate else {
+            XCTFail("Dates should not be nil")
+            return
+        }
+        XCTAssertEqual(startDate.timeIntervalSince1970,
                       invalidStartDate.timeIntervalSince1970, accuracy: 1.0)
-        XCTAssertEqual(updatedTask.dueDate!.timeIntervalSince1970,
+        XCTAssertEqual(dueDate.timeIntervalSince1970,
                       validDueDate.timeIntervalSince1970, accuracy: 1.0)
     }
     
     func testTaskDetailViewPreservesTimeComponents() async throws {
         // Given: A task with specific time components
-        var editedTask = testTask!
-        
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
+
         // Create dates with specific times (not just start of day)
         let calendar = Calendar.current
         let dateComponents = DateComponents(
             year: 2024, month: 3, day: 15,
             hour: 14, minute: 30, second: 45
         )
-        let specificDateTime = calendar.date(from: dateComponents)!
+        guard let specificDateTime = calendar.date(from: dateComponents) else {
+            XCTFail("Should be able to create date from components")
+            return
+        }
         
         editedTask.dueDate = specificDateTime
         
@@ -150,12 +176,16 @@ final class TaskDetailViewDateTests: XCTestCase {
         
         // Then: The exact time should be preserved
         XCTAssertNotNil(updatedTask.dueDate)
-        XCTAssertEqual(updatedTask.dueDate!.timeIntervalSince1970,
+        guard let dueDate = updatedTask.dueDate else {
+            XCTFail("Due date should not be nil")
+            return
+        }
+        XCTAssertEqual(dueDate.timeIntervalSince1970,
                       specificDateTime.timeIntervalSince1970, accuracy: 1.0)
-        
+
         // Verify specific time components are preserved
-        let savedComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], 
-                                                    from: updatedTask.dueDate!)
+        let savedComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second],
+                                                    from: dueDate)
         XCTAssertEqual(savedComponents.year, 2024)
         XCTAssertEqual(savedComponents.month, 3)
         XCTAssertEqual(savedComponents.day, 15)
@@ -166,7 +196,10 @@ final class TaskDetailViewDateTests: XCTestCase {
     
     func testTaskDetailViewClearsRecurringSettings() async throws {
         // Given: A task with existing recurring settings
-        var editedTask = testTask!
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
         editedTask.repeatAfter = 86400 // Daily
         editedTask.repeatMode = .afterAmount
         
@@ -227,15 +260,21 @@ final class TaskDetailViewDateTests: XCTestCase {
     
     func testTaskDetailViewHandlesDateTimeZones() async throws {
         // Given: A task being edited in a specific timezone
-        var editedTask = testTask!
-        
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
+
         // Create a date with timezone consideration
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         formatter.timeZone = TimeZone(identifier: "America/New_York")
-        
+
         let dateString = "2024-03-15 14:30:00 -0500" // EDT time
-        let specificDate = formatter.date(from: dateString)!
+        guard let specificDate = formatter.date(from: dateString) else {
+            XCTFail("Should be able to create date from string")
+            return
+        }
         
         editedTask.dueDate = specificDate
         
@@ -250,7 +289,11 @@ final class TaskDetailViewDateTests: XCTestCase {
         
         // Then: The timezone information should be preserved
         XCTAssertNotNil(updatedTask.dueDate)
-        XCTAssertEqual(updatedTask.dueDate!.timeIntervalSince1970,
+        guard let dueDate = updatedTask.dueDate else {
+            XCTFail("Due date should not be nil")
+            return
+        }
+        XCTAssertEqual(dueDate.timeIntervalSince1970,
                       specificDate.timeIntervalSince1970, accuracy: 1.0)
     }
     
@@ -260,7 +303,10 @@ final class TaskDetailViewDateTests: XCTestCase {
         // This test simulates the RepeatEditorSheet -> TaskDetailView -> API flow
         
         // Given: A task with no recurring settings
-        var editedTask = testTask!
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
         XCTAssertNil(editedTask.repeatAfter)
         
         // Simulate RepeatEditorSheet returning new values
@@ -290,7 +336,10 @@ final class TaskDetailViewDateTests: XCTestCase {
     
     func testTaskDetailViewHandlesSaveFailure() async throws {
         // Given: A task with date changes
-        var editedTask = testTask!
+        guard var editedTask = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
         editedTask.dueDate = Date()
         
         // When: The save operation fails
@@ -349,7 +398,10 @@ extension TaskDetailViewDateTests {
     
     func testTaskDateEncodingForAPI() throws {
         // Given: A task with various dates set
-        var task = testTask!
+        guard var task = testTask else {
+            XCTFail("Test task should not be nil")
+            return
+        }
         let baseTime = Date()
         task.startDate = baseTime
         task.dueDate = baseTime.addingTimeInterval(3600)
@@ -366,13 +418,17 @@ extension TaskDetailViewDateTests {
         
         let jsonString = String(data: encodedData, encoding: .utf8)
         XCTAssertNotNil(jsonString)
-        
+        guard let jsonString = jsonString else {
+            XCTFail("JSON string should not be nil")
+            return
+        }
+
         // Verify dates are included in JSON
-        XCTAssertTrue(jsonString!.contains("start_date") || jsonString!.contains("startDate"))
-        XCTAssertTrue(jsonString!.contains("due_date") || jsonString!.contains("dueDate"))
-        XCTAssertTrue(jsonString!.contains("end_date") || jsonString!.contains("endDate"))
-        XCTAssertTrue(jsonString!.contains("repeat_after") || jsonString!.contains("repeatAfter"))
-        XCTAssertTrue(jsonString!.contains("repeat_mode") || jsonString!.contains("repeatMode"))
+        XCTAssertTrue(jsonString.contains("start_date") || jsonString.contains("startDate"))
+        XCTAssertTrue(jsonString.contains("due_date") || jsonString.contains("dueDate"))
+        XCTAssertTrue(jsonString.contains("end_date") || jsonString.contains("endDate"))
+        XCTAssertTrue(jsonString.contains("repeat_after") || jsonString.contains("repeatAfter"))
+        XCTAssertTrue(jsonString.contains("repeat_mode") || jsonString.contains("repeatMode"))
     }
     
     func testTaskDateDecodingFromAPI() throws {
@@ -395,7 +451,10 @@ extension TaskDetailViewDateTests {
         }
         """
         
-        let jsonData = jsonString.data(using: .utf8)!
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            XCTFail("Should be able to create data from JSON string")
+            return
+        }
         
         // When: We decode the task
         let decoder = JSONDecoder.vikunja
@@ -410,8 +469,12 @@ extension TaskDetailViewDateTests {
         
         // Verify date parsing is correct
         let calendar = Calendar.current
-        let dueComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], 
-                                                  from: decodedTask.dueDate!)
+        guard let dueDate = decodedTask.dueDate else {
+            XCTFail("Due date should not be nil")
+            return
+        }
+        let dueComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute],
+                                                  from: dueDate)
         XCTAssertEqual(dueComponents.year, 2024)
         XCTAssertEqual(dueComponents.month, 3)
         XCTAssertEqual(dueComponents.day, 15)

@@ -32,7 +32,7 @@ final class KunaModelTests: XCTestCase {
         XCTAssertFalse(task.hasCustomColor)
     }
     
-    func testVikunjaTaskHasAttachments() {
+    func testVikunjaTaskHasAttachments() throws {
         var task = createSampleTask()
         
         // Test with nil attachments
@@ -47,7 +47,7 @@ final class KunaModelTests: XCTestCase {
         let attachmentJSON = Data("""
         {"id": 1, "file_name": "test.pdf"}
         """.utf8)
-        let attachment = try! JSONDecoder().decode(TaskAttachment.self, from: attachmentJSON)
+        let attachment = try JSONDecoder().decode(TaskAttachment.self, from: attachmentJSON)
         task.attachments = [attachment]
         XCTAssertTrue(task.hasAttachments)
     }
@@ -85,12 +85,12 @@ final class KunaModelTests: XCTestCase {
     
     // MARK: - Project Tests
     
-    func testProjectInitialization() {
+    func testProjectInitialization() throws {
         let projectJSON = Data("""
         {"id": 1, "title": "Test Project", "description": "A test project"}
         """.utf8)
         
-        let project = try! JSONDecoder().decode(Project.self, from: projectJSON)
+        let project = try JSONDecoder().decode(Project.self, from: projectJSON)
         
         XCTAssertEqual(project.id, 1)
         XCTAssertEqual(project.title, "Test Project")
@@ -190,12 +190,12 @@ final class KunaModelTests: XCTestCase {
     
     // MARK: - TaskAttachment Tests
     
-    func testTaskAttachmentProperties() {
+    func testTaskAttachmentProperties() throws {
         let attachmentJSON = Data("""
         {"id": 1, "file_name": "document.pdf"}
         """.utf8)
         
-        let attachment = try! JSONDecoder().decode(TaskAttachment.self, from: attachmentJSON)
+        let attachment = try JSONDecoder().decode(TaskAttachment.self, from: attachmentJSON)
         
         XCTAssertEqual(attachment.id, 1)
         XCTAssertEqual(attachment.fileName, "document.pdf")

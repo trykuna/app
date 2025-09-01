@@ -325,7 +325,11 @@ final class TaskEventMapperTests: XCTestCase {
         XCTAssertEqual(event.url?.path, "/42")
         
         // Check query parameter for project
-        let components = URLComponents(url: event.url!, resolvingAgainstBaseURL: false)
+        guard let url = event.url else {
+            XCTFail("Event URL should not be nil")
+            return
+        }
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         let projectParam = components?.queryItems?.first { $0.name == "project" }
         XCTAssertEqual(projectParam?.value, "123")
     }
