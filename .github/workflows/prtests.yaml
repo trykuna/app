@@ -1,6 +1,10 @@
 ---
 name: PR Tests
 
+permissions:
+  checks: write
+  pull-requests: write
+
 on:
   pull_request:
     paths:
@@ -66,6 +70,6 @@ jobs:
       # Publish JUnit so failures are annotated on the PR (inline)
       - name: Publish Unit Test Results
         if: always()
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        uses: EnricoMi/publish-unit-test-result-action/macos@v2
         with:
           files: "fastlane/test_output/*.xml"
