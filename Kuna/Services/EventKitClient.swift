@@ -98,6 +98,8 @@ final class EventKitClientLive: EventKitClient {
 
 // MARK: - Mock Implementation for Testing
 
+// MARK: - Mock Implementation for Testing
+
 final class EventKitClientMock: EventKitClient {
     var store: EKEventStore = EKEventStore()
     
