@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		791AF2D52E591BB100FDBDB7 /* UITests.local.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */; };
 		791F94922E578264004CC4E5 /* UnitTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 791F94912E578264004CC4E5 /* UnitTestPlan.xctestplan */; };
 		79AE791D2E51F6D4001FCABD /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE791C2E51F6D4001FCABD /* ConfettiSwiftUI */; };
 		79AE7A7D2E533CF0001FCABD /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = 79AE7A7C2E533CF0001FCABD /* TelemetryClient */; };
@@ -78,24 +77,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7940D1752E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaUnitTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				CalendarSyncEngineTests.swift,
-				CalendarSyncModelsTests.swift,
-				EventKitClientTests.swift,
-			);
-			target = 791F947F2E57821A004CC4E5 /* KunaUnitTests */;
-		};
-		7940D1762E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaEventKitTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				CalendarSyncEngineTests.swift,
-				CalendarSyncModelsTests.swift,
-				EventKitClientTests.swift,
-			);
-			target = 7940D16B2E66FC0000C134C8 /* KunaEventKitTests */;
-		};
 		79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -120,10 +101,6 @@
 		};
 		7940D16D2E66FC0000C134C8 /* KunaEventKitTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7940D1752E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaUnitTests" target */,
-				7940D1762E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaEventKitTests" target */,
-			);
 			path = KunaEventKitTests;
 			sourceTree = "<group>";
 		};
@@ -430,7 +407,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				791AF2D52E591BB100FDBDB7 /* UITests.local.xcconfig in Resources */,
 				791F94922E578264004CC4E5 /* UnitTestPlan.xctestplan in Resources */,
 				79F311F12E5E7F0700DC0500 /* crowdin.yml in Resources */,
 			);
@@ -603,6 +579,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -669,6 +646,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

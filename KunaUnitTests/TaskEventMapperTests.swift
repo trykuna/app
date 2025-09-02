@@ -137,11 +137,10 @@ final class TaskEventMapperTests: XCTestCase {
     
     // MARK: - Task to Event Mapping Tests
     
-    func testApplyTaskToEventAllDay() {
+    func testApplyTaskToEventAllDay() throws {
         // Skip if EventKit is not available
         guard isEventKitAvailable else {
-            XCTSkip("EventKit not available in test environment")
-            return
+            throw XCTSkip("EventKit not available in test environment")
         }
         
         // Create test data - use a fixed date to avoid timezone issues
@@ -189,11 +188,10 @@ final class TaskEventMapperTests: XCTestCase {
         }
     }
     
-    func testApplyTaskToEventTimed() {
+    func testApplyTaskToEventTimed() throws {
         // Skip if EventKit is not available
         guard isEventKitAvailable else {
-            XCTSkip("EventKit not available in test environment")
-            return
+            throw XCTSkip("EventKit not available in test environment")
         }
         
         let dueDate = Date().addingTimeInterval(3600) // 1 hour from now
@@ -232,11 +230,10 @@ final class TaskEventMapperTests: XCTestCase {
         }
     }
     
-    func testApplyTaskToEventWithReminders() {
+    func testApplyTaskToEventWithReminders() throws {
         // Skip if EventKit is not available
         guard isEventKitAvailable else {
-            XCTSkip("EventKit not available in test environment")
-            return
+            throw XCTSkip("EventKit not available in test environment")
         }
         
         let dueDate = Date().addingTimeInterval(3600)

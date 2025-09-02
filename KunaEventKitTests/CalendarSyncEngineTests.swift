@@ -41,7 +41,7 @@ final class CalendarSyncEngineTests: XCTestCase {
         mockEventKitClient.shouldThrowOnAccess = false
         
         // Complete onboarding
-        try await engine.onboardingComplete(
+        _ = try await engine.onboardingComplete(
             mode: .single,
             selectedProjectIDs: ["1", "2"]
         )
@@ -60,7 +60,7 @@ final class CalendarSyncEngineTests: XCTestCase {
         mockEventKitClient.shouldThrowOnAccess = false
         
         // Complete onboarding
-        try await engine.onboardingComplete(
+        _ = try await engine.onboardingComplete(
             mode: .perProject,
             selectedProjectIDs: ["1", "2"]
         )
@@ -77,7 +77,7 @@ final class CalendarSyncEngineTests: XCTestCase {
         mockEventKitClient.shouldThrowOnAccess = true
         
         do {
-            try await engine.onboardingComplete(
+            _ = try await engine.onboardingComplete(
                 mode: .single,
                 selectedProjectIDs: ["1"]
             )
@@ -100,7 +100,7 @@ final class CalendarSyncEngineTests: XCTestCase {
         
         // Setup and enable sync
         mockEventKitClient.shouldThrowOnAccess = false
-        try await engine.onboardingComplete(
+        _ = try await engine.onboardingComplete(
             mode: .single,
             selectedProjectIDs: ["1"]
         )

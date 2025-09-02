@@ -350,7 +350,7 @@ final class TaskDetailViewDateTests: XCTestCase {
             _ = try await saveTaskChanges(editedTask, using: mockAPI)
             XCTFail("Expected error to be thrown")
         } catch {
-            XCTAssertTrue(error is MockAPIError)
+            XCTAssertTrue(error is MockUpdateError)
         }
         
         XCTAssertTrue(mockAPI.updateTaskCalled, "API should have been attempted")
