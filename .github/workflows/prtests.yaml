@@ -38,6 +38,7 @@ jobs:
       - name: Run tests (Fastlane)
         env:
           DEVICES: "iPhone 16"
+          CI: "true"
         run: bundle exec fastlane tests
 
       # Convert coverage to a human-readable summary (optional)
