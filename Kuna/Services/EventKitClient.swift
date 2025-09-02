@@ -98,6 +98,8 @@ final class EventKitClientLive: EventKitClient {
 
 // MARK: - Mock Implementation for Testing
 
+// MARK: - Mock Implementation for Testing
+
 final class EventKitClientMock: EventKitClient {
     var store: EKEventStore = EKEventStore()
     
@@ -112,111 +114,115 @@ final class EventKitClientMock: EventKitClient {
         let identifier: String
         let name: String
         let source: String
+        let calendar: EKCalendar
     }
     
     struct MockEvent {
         let title: String
-        let calendar: String
+        let calendarID: String
         let start: Date
         let end: Date
         let url: URL?
     }
     
     func requestAccess() async throws {
-        if shouldThrowOnAccess {
-            throw EventKitError.accessDenied
-        }
+        if shouldThrowOnAccess { throw EventKitError.accessDenied }
     }
     
     func writableSource() -> EKSource? {
-        // Return a mock source for testing
+        // Good-enough test source
         return store.sources.first ?? store.defaultCalendarForNewEvents?.source
     }
-    
+
     func ensureCalendar(named: String, in source: EKSource) throws -> EKCalendar {
+        // Return an existing one by name to keep tests idempotent
+        if let existing = mockCalendars.values.first(where: { $0.name == named }) {
+            return existing.calendar
+        }
+        
         let calendar = EKCalendar(for: .event, eventStore: store)
         calendar.title = named
         calendar.source = source
-        
-        // Store in mock registry
-        mockCalendars[calendar.calendarIdentifier] = MockCalendar(
-            identifier: calendar.calendarIdentifier,
+
+        // Synthesize a stable fake identifier (real one is empty until saved to system)
+        let fakeID = "mock-\(UUID().uuidString)"
+        calendar.setValue(fakeID, forKey: "calendarIdentifier") // KVC ok in tests
+
+        mockCalendars[fakeID] = MockCalendar(
+            identifier: fakeID,
             name: named,
-            source: source.title
+            source: source.title,
+            calendar: calendar
         )
-        
+
         return calendar
     }
-    
+
     func calendars(for identifiers: [String]) -> [EKCalendar] {
-        return identifiers.compactMap { identifier in
-            guard mockCalendars[identifier] != nil else { return nil }
-            let calendar = EKCalendar(for: .event, eventStore: store)
-            return calendar
-        }
+        // Return the exact stored calendars so identity comparisons (===) can work
+        identifiers.compactMap { mockCalendars[$0]?.calendar }
     }
-    
+
     func events(in calendars: [EKCalendar], start: Date, end: Date) -> [EKEvent] {
-        return mockEvents.compactMap { mockEvent in
-            guard mockEvent.start >= start && mockEvent.end <= end else { return nil }
-            let event = EKEvent(eventStore: store)
-            event.title = mockEvent.title
-            event.startDate = mockEvent.start
-            event.endDate = mockEvent.end
-            event.url = mockEvent.url
-            return event
-        }
+        // Compare by our fake identifiers (works even if callers pass reconstructed calendars)
+        let idSet = Set(calendars.map { $0.calendarIdentifier })
+        return mockEvents
+            .filter { ev in idSet.contains(ev.calendarID) && ev.start >= start && ev.end <= end }
+            .map { ev in
+                let e = EKEvent(eventStore: store)
+                e.title = ev.title
+                e.startDate = ev.start
+                e.endDate = ev.end
+                e.url = ev.url
+                return e
+            }
     }
     
     func save(event: EKEvent) throws {
-        if let error = saveError {
-            throw error
-        }
-        
-        // Add to mock events
-        if let title = event.title, let start = event.startDate, let end = event.endDate {
-            mockEvents.append(MockEvent(
-                title: title,
-                calendar: event.calendar?.calendarIdentifier ?? "",
-                start: start,
-                end: end,
-                url: event.url
-            ))
-        }
+        if let error = saveError { throw error }
+        guard let start = event.startDate, let end = event.endDate else { throw EventKitError.saveFailed }
+
+        // Prefer identifier; fall back to identity mapping if needed
+        let calID = event.calendar?.calendarIdentifier
+            ?? mockCalendars.first(where: { $0.value.calendar === event.calendar })?.key
+            ?? "unknown"
+
+        mockEvents.append(MockEvent(
+            title: event.title ?? "",
+            calendarID: calID,
+            start: start,
+            end: end,
+            url: event.url
+        ))
     }
     
     func remove(event: EKEvent) throws {
-        if let error = removeError {
-            throw error
-        }
-        
-        // Remove from mock events
-        if let title = event.title {
-            mockEvents.removeAll { $0.title == title }
-        }
+        if let error = removeError { throw error }
+        mockEvents.removeAll { $0.title == event.title }
     }
     
     func remove(calendar: EKCalendar) throws {
-        if let error = removeError {
-            throw error
+        if let error = removeError { throw error }
+        let calID = calendar.calendarIdentifier
+            .ifEmpty(or: mockCalendars.first(where: { $0.value.calendar === calendar })?.key)
+
+        if let calID {
+            mockCalendars.removeValue(forKey: calID)
+            mockEvents.removeAll { $0.calendarID == calID }
         }
-        
-        // Remove from mock calendars
-        let calendarId = calendar.calendarIdentifier
-        mockCalendars = mockCalendars.filter { _, mockCalendar in
-            mockCalendar.identifier != calendarId
-        }
-        
-        // Remove all events from this calendar
-        mockEvents.removeAll { $0.calendar == calendarId }
     }
     
     func commit() throws {
-        if let error = commitError {
-            throw error
-        }
+        if let error = commitError { throw error }
+        // No-op in the mock
     }
 }
+
+// Small helper for convenience
+private extension String {
+    func ifEmpty(or fallback: String?) -> String? { isEmpty ? fallback : self }
+}
+
 
 // MARK: - EventKit Errors
 
