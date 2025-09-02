@@ -10,8 +10,9 @@ lane :tests do
         result_bundle: true,
         code_coverage: true,
         testplan: "UnitTestPlan",         # you have it set as default; ok to keep or remove
-        output_types: "junit,json",       # -> fastlane/test_output/…
+        output_types: "junit",
         output_directory: "fastlane/test_output",
+        output_files: "junit.xml",
         skip_testing: ["KunaEventKitTests"]
     )
 end
