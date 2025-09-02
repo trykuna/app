@@ -26,6 +26,13 @@
 			remoteGlobalIDString = 7947454C2E4F6C1200C7A1D4;
 			remoteInfo = Kuna;
 		};
+		7940D1702E66FC0000C134C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 794745452E4F6C1200C7A1D4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7947454C2E4F6C1200C7A1D4;
+			remoteInfo = Kuna;
+		};
 		79CC51332E553BA800ACDCC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 794745452E4F6C1200C7A1D4 /* Project object */;
@@ -60,6 +67,7 @@
 		791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UITests.local.xcconfig; sourceTree = "<group>"; };
 		791F94802E57821A004CC4E5 /* KunaUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KunaUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		791F94912E578264004CC4E5 /* UnitTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTestPlan.xctestplan; sourceTree = "<group>"; };
+		7940D16C2E66FC0000C134C8 /* KunaEventKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KunaEventKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7947454D2E4F6C1200C7A1D4 /* Kuna.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kuna.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KunaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		79CC51252E553BA600ACDCC3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -70,6 +78,24 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7940D1752E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaUnitTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CalendarSyncEngineTests.swift,
+				CalendarSyncModelsTests.swift,
+				EventKitClientTests.swift,
+			);
+			target = 791F947F2E57821A004CC4E5 /* KunaUnitTests */;
+		};
+		7940D1762E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaEventKitTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CalendarSyncEngineTests.swift,
+				CalendarSyncModelsTests.swift,
+				EventKitClientTests.swift,
+			);
+			target = 7940D16B2E66FC0000C134C8 /* KunaEventKitTests */;
+		};
 		79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -90,6 +116,15 @@
 		791F94812E57821A004CC4E5 /* KunaUnitTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = KunaUnitTests;
+			sourceTree = "<group>";
+		};
+		7940D16D2E66FC0000C134C8 /* KunaEventKitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7940D1752E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaUnitTests" target */,
+				7940D1762E66FC0A00C134C8 /* Exceptions for "KunaEventKitTests" folder in "KunaEventKitTests" target */,
+			);
+			path = KunaEventKitTests;
 			sourceTree = "<group>";
 		};
 		7947454F2E4F6C1200C7A1D4 /* Kuna */ = {
@@ -117,6 +152,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		791F947D2E57821A004CC4E5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7940D1692E66FC0000C134C8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -162,6 +204,7 @@
 				79CC51292E553BA600ACDCC3 /* KunaWidget */,
 				791F94812E57821A004CC4E5 /* KunaUnitTests */,
 				79F856D82E57C5710028165E /* KunaUITests */,
+				7940D16D2E66FC0000C134C8 /* KunaEventKitTests */,
 				79CC51242E553BA600ACDCC3 /* Frameworks */,
 				7947454E2E4F6C1200C7A1D4 /* Products */,
 				791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */,
@@ -175,6 +218,7 @@
 				79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */,
 				791F94802E57821A004CC4E5 /* KunaUnitTests.xctest */,
 				79F856D72E57C5710028165E /* KunaUITests.xctest */,
+				7940D16C2E66FC0000C134C8 /* KunaEventKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,6 +256,29 @@
 			);
 			productName = KunaUnitTests;
 			productReference = 791F94802E57821A004CC4E5 /* KunaUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7940D16B2E66FC0000C134C8 /* KunaEventKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7940D1742E66FC0000C134C8 /* Build configuration list for PBXNativeTarget "KunaEventKitTests" */;
+			buildPhases = (
+				7940D1682E66FC0000C134C8 /* Sources */,
+				7940D1692E66FC0000C134C8 /* Frameworks */,
+				7940D16A2E66FC0000C134C8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7940D1712E66FC0000C134C8 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7940D16D2E66FC0000C134C8 /* KunaEventKitTests */,
+			);
+			name = KunaEventKitTests;
+			packageProductDependencies = (
+			);
+			productName = KunaEventKitTests;
+			productReference = 7940D16C2E66FC0000C134C8 /* KunaEventKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		7947454C2E4F6C1200C7A1D4 /* Kuna */ = {
@@ -300,6 +367,10 @@
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 7947454C2E4F6C1200C7A1D4;
 					};
+					7940D16B2E66FC0000C134C8 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 7947454C2E4F6C1200C7A1D4;
+					};
 					7947454C2E4F6C1200C7A1D4 = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -335,12 +406,20 @@
 				79CC51222E553BA600ACDCC3 /* KunaWidgetExtension */,
 				791F947F2E57821A004CC4E5 /* KunaUnitTests */,
 				79F856D62E57C5710028165E /* KunaUITests */,
+				7940D16B2E66FC0000C134C8 /* KunaEventKitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		791F947E2E57821A004CC4E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7940D16A2E66FC0000C134C8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -381,6 +460,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7940D1682E66FC0000C134C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		794745492E4F6C1200C7A1D4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -409,6 +495,11 @@
 			isa = PBXTargetDependency;
 			target = 7947454C2E4F6C1200C7A1D4 /* Kuna */;
 			targetProxy = 791F94842E57821A004CC4E5 /* PBXContainerItemProxy */;
+		};
+		7940D1712E66FC0000C134C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7947454C2E4F6C1200C7A1D4 /* Kuna */;
+			targetProxy = 7940D1702E66FC0000C134C8 /* PBXContainerItemProxy */;
 		};
 		79CC51342E553BA800ACDCC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -462,6 +553,42 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.KunaUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kuna.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kuna";
+			};
+			name = Release;
+		};
+		7940D1722E66FC0000C134C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9NK92GW676;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.KunaEventKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kuna.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kuna";
+			};
+			name = Debug;
+		};
+		7940D1732E66FC0000C134C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9NK92GW676;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.systemsmystery.KunaEventKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -778,6 +905,15 @@
 			buildConfigurations = (
 				791F94872E57821A004CC4E5 /* Debug */,
 				791F94882E57821A004CC4E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7940D1742E66FC0000C134C8 /* Build configuration list for PBXNativeTarget "KunaEventKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7940D1722E66FC0000C134C8 /* Debug */,
+				7940D1732E66FC0000C134C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
