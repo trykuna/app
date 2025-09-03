@@ -13,6 +13,13 @@
   },
   "testTargets" : [
     {
+      "target" : {
+        "containerPath" : "container:Kuna.xcodeproj",
+        "identifier" : "7940D16B2E66FC0000C134C8",
+        "name" : "KunaEventKitTests"
+      }
+    },
+    {
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Kuna.xcodeproj",

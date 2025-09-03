@@ -83,8 +83,8 @@ final class UtilityTests: XCTestCase {
         XCTAssertEqual(color1, color2)
         
         // Test different IDs return different colors (with high probability)
-        let colorA = Color.projectColor(for: 1)
-        let colorB = Color.projectColor(for: 2)
+        _ = Color.projectColor(for: 1)
+        _ = Color.projectColor(for: 2)
         // Note: There's a small chance these could be equal due to modulo operation
         // but it's very unlikely with the color palette size
         

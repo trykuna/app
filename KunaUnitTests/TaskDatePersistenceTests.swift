@@ -369,7 +369,7 @@ final class TaskDatePersistenceTests: XCTestCase {
             _ = try await mockAPI.updateTask(testTask)
             XCTFail("Expected error to be thrown")
         } catch {
-            XCTAssertTrue(error is MockAPIError)
+            XCTAssertTrue(error is MockUpdateError)
         }
     }
     
@@ -386,7 +386,7 @@ final class TaskDatePersistenceTests: XCTestCase {
             _ = try await mockAPI.updateTask(testTask)
             XCTFail("Expected error to be thrown")
         } catch {
-            XCTAssertTrue(error is MockAPIError)
+            XCTAssertTrue(error is MockUpdateError)
         }
     }
     
