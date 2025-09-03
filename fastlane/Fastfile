@@ -2,6 +2,7 @@ opt_out_usage
 default_platform(:ios)
 
 platform :ios do
+  desc "Run unit tests locally"
   lane :tests do
     devices_env = ENV["DEVICES"]
     devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
@@ -21,6 +22,7 @@ platform :ios do
     )
   end
 
+  desc "Run CI tests (JSON + coverage)"
   lane :ci_tests do
     devices_env = ENV["DEVICES"]
     devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
@@ -49,6 +51,7 @@ platform :ios do
     )
   end
 
+  desc "Build signed IPA for App Store"
   lane :build_ipa do
     ensure_git_status_clean
 
@@ -61,7 +64,7 @@ platform :ios do
       keychain_password: ENV["KEYCHAIN_PASSWORD"]
     )
 
-    # If you're bumping build numbers manually, DELETE this block.
+    # If you bump build numbers manually, remove this:
     increment_build_number(
       build_number: Time.now.to_i.to_s,
       xcodeproj: "Kuna.xcodeproj"
@@ -79,4 +82,21 @@ platform :ios do
     )
   end
 
+  desc "Upload the IPA to TestFlight"
   lane :upload_testflight do
+    # Uses the full JSON from FASTLANE_APP_STORE_CONNECT_API_KEY
+    api_key = app_store_connect_api_key(
+      json_key: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY"]
+    )
+
+    pilot(
+      api_key: api_key,
+      ipa: "fastlane/build/Kuna.ipa",
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,
+      distribute_external: false,
+      changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
+      groups: ["Internal Testers"]
+    )
+  end
+end
