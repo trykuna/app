@@ -7,3 +7,6 @@ fastlane/test_output/
 # Fastlane test artifacts
 fastlane/test_output/
 fastlane/build/
+.bundle/
+Gemfile.lock
+vendor/
