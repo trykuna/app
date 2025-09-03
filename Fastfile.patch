@@ -1,0 +1,83 @@
+--- a/Fastfile
++++ b/Fastfile
+@@
+ default_platform(:ios)
+ 
+ platform :ios do
+     desc "Run tests"
+     lane :ci_tests do
+-        scan(
+-            scheme: "Kuna",
+-            project: "Kuna.xcodeproj",
+-            devices: ["iPhone 16"],                 # runs once per device
+-            clean: true,
+-            result_bundle: true,
+-            code_coverage: true,
+-            testplan: "UnitTestPlan",         # you have it set as default; ok to keep or remove
+-            output_types: "junit",
+-            output_directory: "fastlane/test_output",
+-            output_files: "junit.xml",
++        # Auto-detect workspace vs project so CI doesn't break if you switch.
++        is_workspace = File.exist?("Kuna.xcworkspace/contents.xcworkspacedata")
++        scan(
++            scheme: "Kuna",
++            devices: ["iPhone 16"],
++            clean: true,
++            result_bundle: true,
++            code_coverage: true,
++            testplan: "UnitTestPlan",              # keep if you’re using it
++            output_types: "junit",
++            output_directory: "fastlane/test_output",
++            output_files: "junit.xml",
++            workspace: (is_workspace ? "Kuna.xcworkspace" : nil),
++            project:   (is_workspace ? nil : "Kuna.xcodeproj")
+         )
+     end
+ 
++    desc "Pull signing via match and build an App Store IPA"
++    lane :build_ipa do
++        # Use 'match' in read-only mode on CI. Run `fastlane match appstore` locally once to set it up.
++        match(
++            type: "appstore",
++            readonly: true,
++            git_url: ENV["MATCH_GIT_URL"],        # REQUIRED: private repo with certs/profiles
++            git_branch: ENV["MATCH_GIT_BRANCH"],  # optional
++            storage_mode: "git",
++            keychain_name: "login.keychain-db",
++            keychain_password: ENV["KEYCHAIN_PASSWORD"],  # REQUIRED on CI (any random string)
++            encryption_password: ENV["MATCH_PASSWORD"]     # REQUIRED: your match passphrase
++        )
++
++        is_workspace = File.exist?("Kuna.xcworkspace/contents.xcworkspacedata")
++        gym(
++            scheme: "Kuna",
++            configuration: "Release",
++            export_method: "app-store",
++            include_bitcode: false,
++            clean: true,
++            output_directory: "fastlane/build",
++            output_name: "Kuna.ipa",
++            workspace: (is_workspace ? "Kuna.xcworkspace" : nil),
++            project:   (is_workspace ? nil : "Kuna.xcodeproj")
++        )
++    end
++
+     desc "Upload the built IPA to TestFlight with release notes"
+     lane :upload_testflight do
+         # If you set FASTLANE_APP_STORE_CONNECT_API_KEY (JSON) in env, Fastlane will pick it up automatically.
+         pilot(
+             ipa: "fastlane/build/Kuna.ipa",
+             skip_waiting_for_build_processing: false,
+             distribute_external: true,
+             groups: ["Public Beta"],     # change or remove as you like
+             changelog: ENV["RELEASE_NOTES"] || "Automated build"
+         )
+     end
++
++    desc "End-to-end release: tests → build IPA → TestFlight"
++    lane :release do
++        ci_tests
++        build_ipa
++        upload_testflight
++    end
+ end

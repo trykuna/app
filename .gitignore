@@ -6,3 +6,4 @@ fastlane/Preview.html
 fastlane/test_output/
 # Fastlane test artifacts
 fastlane/test_output/
+fastlane/build/
