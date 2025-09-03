@@ -1,107 +1,82 @@
+opt_out_usage
 default_platform(:ios)
+
 platform :ios do
+  lane :tests do
+    devices_env = ENV["DEVICES"]
+    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
 
-    lane :tests do
-        devices_env = ENV["DEVICES"]
-        devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
+    scan(
+      scheme: "Kuna",
+      project: "Kuna.xcodeproj",
+      devices: devices,
+      clean: true,
+      result_bundle: true,
+      code_coverage: true,
+      testplan: "UnitTestPlan",
+      output_types: "junit",
+      output_directory: "fastlane/test_output",
+      output_files: "junit.xml",
+      skip_testing: ["KunaEventKitTests"]
+    )
+  end
 
-        scan(
-            scheme: "Kuna",
-            project: "Kuna.xcodeproj",
-            devices: devices,                 # runs once per device
-            clean: true,
-            result_bundle: true,
-            code_coverage: true,
-            testplan: "UnitTestPlan",         # you have it set as default; ok to keep or remove
-            output_types: "junit",
-            output_directory: "fastlane/test_output",
-            output_files: "junit.xml",
-            skip_testing: ["KunaEventKitTests"]
-        )
-    end
+  lane :ci_tests do
+    devices_env = ENV["DEVICES"]
+    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
 
-    lane :ci_tests do
-        # Run tests with CI-specific configuration
-        devices_env = ENV["DEVICES"]
-        devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
-        
-        scan(
-            scheme: "Kuna",
-            project: "Kuna.xcodeproj",
-            devices: devices,
-            clean: true,
-            result_bundle: true,
-            code_coverage: true,
-            testplan: "UnitTestPlan",
-            output_types: "junit,json",
-            output_directory: "fastlane/test_output",
-            output_files: "junit.xml,test_result.json",
-            skip_testing: ["KunaEventKitTests"],
-            fail_build: true,  # Fail CI if tests fail
-            xcargs: "-allowProvisioningUpdates"
-        )
-        
-        # Generate coverage report
-        xcov(
-            project: "Kuna.xcodeproj",
-            scheme: "Kuna",
-            output_directory: "fastlane/test_output",
-            minimum_coverage_percentage: 0.0  # Adjust as needed
-        )
-    end
+    scan(
+      scheme: "Kuna",
+      project: "Kuna.xcodeproj",
+      devices: devices,
+      clean: true,
+      result_bundle: true,
+      code_coverage: true,
+      testplan: "UnitTestPlan",
+      output_types: "junit,json",
+      output_directory: "fastlane/test_output",
+      output_files: "junit.xml,test_result.json",
+      skip_testing: ["KunaEventKitTests"],
+      fail_build: true,
+      xcargs: "-allowProvisioningUpdates"
+    )
 
-    lane :build_ipa do
-        # Ensure clean state
-        ensure_git_status_clean
-        
-        # Set up code signing with match
-        match(
-            type: "appstore",
-            readonly: true,
-            git_url: ENV["MATCH_GIT_URL"],
-            git_branch: ENV["MATCH_GIT_BRANCH"],
-            keychain_name: "build.keychain",
-            keychain_password: ENV["KEYCHAIN_PASSWORD"]
-        )
-        
-        # Increment build number (optional - for unique builds)
-        increment_build_number(
-            build_number: Time.now.to_i.to_s,  # Use timestamp for unique builds
-            xcodeproj: "Kuna.xcodeproj"
-        )
-        
-        # Build the IPA
-        gym(
-            scheme: "Kuna",
-            project: "Kuna.xcodeproj",
-            clean: true,
-            output_directory: "fastlane/build",
-            output_name: "Kuna.ipa",
-            export_method: "app-store",
-            include_bitcode: false,
-            include_symbols: true,
-            xcargs: "-allowProvisioningUpdates"
-        )
-    end
+    xcov(
+      project: "Kuna.xcodeproj",
+      scheme: "Kuna",
+      output_directory: "fastlane/test_output",
+      minimum_coverage_percentage: 0.0
+    )
+  end
 
-    lane :upload_testflight do
-        # Parse App Store Connect API Key from environment
-        api_key = app_store_connect_api_key(
-            key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-            issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
-            key_content: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY"],
-            is_key_content_base64: true,
-            in_house: false
-        )
-        
-        # Upload to TestFlight
-        pilot(
-            api_key: api_key,
-            ipa: "fastlane/build/Kuna.ipa",
-            skip_waiting_for_build_processing: true,
-            skip_submission: true,
-            distribute_external: false,
-            changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
-            groups: ["Internal Testers"]  # Adjust group names as needed
-        )
-    end
+  lane :build_ipa do
+    ensure_git_status_clean
+
+    match(
+      type: "appstore",
+      readonly: true,
+      git_url: ENV["MATCH_GIT_URL"],
+      git_branch: ENV["MATCH_GIT_BRANCH"],
+      keychain_name: "build.keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"]
+    )
+
+    # If you're bumping build numbers manually, DELETE this block.
+    increment_build_number(
+      build_number: Time.now.to_i.to_s,
+      xcodeproj: "Kuna.xcodeproj"
+    )
+
+    gym(
+      scheme: "Kuna",
+      project: "Kuna.xcodeproj",
+      clean: true,
+      output_directory: "fastlane/build",
+      output_name: "Kuna.ipa",
+      export_method: "app-store",
+      include_symbols: true,
+      xcargs: "-allowProvisioningUpdates"
+    )
+  end
+
+  lane :upload_testflight do
