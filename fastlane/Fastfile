@@ -1,132 +1,131 @@
 default_platform(:ios)
 
 platform :ios do
-    desc "Run unit tests locally"
-    lane :tests do
-        devices_env = ENV["DEVICES"]
-        devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
+  desc "Run unit tests locally"
+  lane :tests do
+    devices_env = ENV["DEVICES"]
+    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
 
-        scan(
-            scheme: "Kuna",
-            project: "Kuna.xcodeproj",
-            devices: devices,
-            clean: true,
-            result_bundle: true,
-            code_coverage: true,
-            testplan: "UnitTestPlan",
-            output_types: "junit",
-            output_directory: "fastlane/test_output",
-            output_files: "junit.xml",
-            skip_testing: ["KunaEventKitTests"]
-        )
-    end
+    scan(
+      scheme: "Kuna",
+      project: "Kuna.xcodeproj",
+      devices: devices,
+      clean: true,
+      result_bundle: true,
+      code_coverage: true,
+      testplan: "UnitTestPlan",
+      output_types: "junit",
+      output_directory: "fastlane/test_output",
+      output_files: "junit.xml",
+      skip_testing: ["KunaEventKitTests"]
+    )
+  end
 
-    desc "Run CI tests (JSON + coverage)"
-    lane :ci_tests do
-        devices_env = ENV["DEVICES"]
-        devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
+  desc "Run CI tests (JSON + coverage)"
+  lane :ci_tests do
+    devices_env = ENV["DEVICES"]
+    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
 
-        scan(
-            scheme: "Kuna",
-            project: "Kuna.xcodeproj",
-            devices: devices,
-            clean: true,
-            result_bundle: true,
-            code_coverage: true,
-            testplan: "UnitTestPlan",
-            output_types: "junit,json",
-            output_directory: "fastlane/test_output",
-            output_files: "junit.xml,test_result.json",
-            skip_testing: ["KunaEventKitTests"],
-            fail_build: true,
-            xcargs: "-allowProvisioningUpdates"
-        )
+    scan(
+      scheme: "Kuna",
+      project: "Kuna.xcodeproj",
+      devices: devices,
+      clean: true,
+      result_bundle: true,
+      code_coverage: true,
+      testplan: "UnitTestPlan",
+      output_types: "junit,json",
+      output_directory: "fastlane/test_output",
+      output_files: "junit.xml,test_result.json",
+      skip_testing: ["KunaEventKitTests"],
+      fail_build: true,
+      xcargs: "-allowProvisioningUpdates"
+    )
 
-        xcov(
-            project: "Kuna.xcodeproj",
-            scheme: "Kuna",
-            output_directory: "fastlane/test_output",
-            minimum_coverage_percentage: 0.0
-        )
-    end
+    xcov(
+      project: "Kuna.xcodeproj",
+      scheme: "Kuna",
+      output_directory: "fastlane/test_output",
+      minimum_coverage_percentage: 0.0
+    )
+  end
 
-    desc "Build signed IPA for App Store"
-    lane :build_ipa do
-        ensure_git_status_clean
+  desc "Build signed IPA for App Store"
+  lane :build_ipa do
+    ensure_git_status_clean
+    setup_ci # sets up keychain partition list for CI runners
 
-        match(
-            type: "appstore",
-            readonly: true,
-            storage_mode: "s3",
-            s3_bucket: ENV["MATCH_S3_BUCKET"],
-            s3_region: "eu-west-2",
-            s3_access_key: ENV["MATCH_S3_ACCESS_KEY_ID"],
-            s3_secret_access_key: ENV["MATCH_S3_SECRET_ACCESS_KEY"],
-            keychain_name: "build.keychain",
-            keychain_password: ENV["KEYCHAIN_PASSWORD"],
-            app_identifier: [
-                "tech.systemsmystery.kuna",
-                "tech.systemsmystery.kuna.KunaWidget"
-            ],
-            team_id: ENV["FASTLANE_TEAM_ID"]
-        )   
+    match(
+      type: "appstore",
+      readonly: false, # allow repair/regeneration if profiles went invalid
+      storage_mode: "s3",
+      s3_bucket: ENV["MATCH_S3_BUCKET"],
+      s3_region: "eu-west-2",
+      s3_access_key: ENV["MATCH_S3_ACCESS_KEY_ID"],
+      s3_secret_access_key: ENV["MATCH_S3_SECRET_ACCESS_KEY"],
+      keychain_name: "build.keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      app_identifier: [
+        "tech.systemsmystery.kuna",
+        "tech.systemsmystery.kuna.KunaWidget"
+      ],
+      team_id: ENV["FASTLANE_TEAM_ID"]
+    )
 
-        # Update code signing settings
-        update_code_signing_settings(
-            use_automatic_signing: false,
-            path: "Kuna.xcodeproj",
-            targets: ["Kuna", "KunaWidgetExtension"],
-            team_id: ENV["FASTLANE_TEAM_ID"],
-            profile_name: ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"],
-            bundle_identifier: "tech.systemsmystery.kuna",
-            code_sign_identity: "iPhone Distribution"
-        )
-        
-        update_code_signing_settings(
-            use_automatic_signing: false,
-            path: "Kuna.xcodeproj",
-            targets: ["KunaWidgetExtension"],
-            team_id: ENV["FASTLANE_TEAM_ID"],
-            profile_name: ENV["sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name"],
-            bundle_identifier: "tech.systemsmystery.kuna.KunaWidget",
-            code_sign_identity: "iPhone Distribution"
-        )
+    # Print the profile names for debugging
+    UI.message("App profile: #{ENV['sigh_tech.systemsmystery.kuna_appstore_profile-name']}")
+    UI.message("Widget profile: #{ENV['sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name']}")
 
-        gym(
-            scheme: "Kuna",
-            project: "Kuna.xcodeproj",
-            clean: true,
-            output_directory: "fastlane/build",
-            output_name: "Kuna.ipa",
-            export_method: "app-store",
-            include_symbols: true,
-            xcargs: "DEVELOPMENT_TEAM=#{ENV['FASTLANE_TEAM_ID']} CODE_SIGN_IDENTITY='iPhone Distribution'",
-            export_options: {
-                provisioningProfiles: {
-                    "tech.systemsmystery.kuna" =>
-                        ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"],
-                    "tech.systemsmystery.kuna.KunaWidget" =>
-                        ENV["sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name"]
-                }
-            }
-        )
-    end
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Kuna.xcodeproj",
+      targets: ["Kuna"],
+      team_id: ENV["FASTLANE_TEAM_ID"],
+      bundle_identifier: "tech.systemsmystery.kuna",
+      profile_name: ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"]
+    )
 
-    desc "Upload the IPA to TestFlight"
-    lane :upload_testflight do
-        # Uses the full JSON from FASTLANE_APP_STORE_CONNECT_API_KEY
-        api_key = app_store_connect_api_key(
-            json_key: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY"]
-        )
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Kuna.xcodeproj",
+      targets: ["KunaWidgetExtension"],
+      team_id: ENV["FASTLANE_TEAM_ID"],
+      bundle_identifier: "tech.systemsmystery.kuna.KunaWidget",
+      profile_name: ENV["sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name"]
+    )
 
-        pilot(
-            api_key: api_key,
-            ipa: "fastlane/build/Kuna.ipa",
-            skip_waiting_for_build_processing: true,
-            skip_submission: true,
-            distribute_external: false,
-            changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
-            groups: ["Internal Testers"]
-        )
-    end
+    build_app(
+      scheme: "Kuna",
+      project: "Kuna.xcodeproj",
+      clean: true,
+      output_directory: "fastlane/build",
+      output_name: "Kuna.ipa",
+      export_method: "app-store",
+      # Don’t force CODE_SIGN_IDENTITY, let Xcode pick Apple Distribution
+      xcargs: "CODE_SIGN_STYLE=Manual",
+      export_options: {
+        provisioningProfiles: {
+          "tech.systemsmystery.kuna" => ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"],
+          "tech.systemsmystery.kuna.KunaWidget" => ENV["sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name"]
+        }
+      }
+    )
+  end
+
+  desc "Upload the IPA to TestFlight"
+  lane :upload_testflight do
+    api_key = app_store_connect_api_key(
+      json_key: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY"]
+    )
+
+    pilot(
+      api_key: api_key,
+      ipa: "fastlane/build/Kuna.ipa",
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,
+      distribute_external: false,
+      changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
+      groups: ["Internal Testers"]
+    )
+  end
 end
