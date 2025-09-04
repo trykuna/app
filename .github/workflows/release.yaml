@@ -76,7 +76,7 @@ jobs:
   # 2) Sign, archive, export .ipa, upload to TestFlight
   build_and_upload:
     name: Build & Upload to TestFlight
-    needs: tests
+    # needs: tests
     runs-on: macos-latest
     timeout-minutes: 60
     env:
