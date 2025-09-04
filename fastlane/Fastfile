@@ -71,6 +71,25 @@ platform :ios do
             team_id: ENV["FASTLANE_TEAM_ID"]
         )   
 
+        # Update code signing settings
+        update_code_signing_settings(
+            use_automatic_signing: false,
+            path: "Kuna.xcodeproj",
+            targets: ["Kuna", "KunaWidgetExtension"],
+            team_id: ENV["FASTLANE_TEAM_ID"],
+            profile_name: ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"],
+            bundle_identifier: "tech.systemsmystery.kuna"
+        )
+        
+        update_code_signing_settings(
+            use_automatic_signing: false,
+            path: "Kuna.xcodeproj",
+            targets: ["KunaWidgetExtension"],
+            team_id: ENV["FASTLANE_TEAM_ID"],
+            profile_name: ENV["sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name"],
+            bundle_identifier: "tech.systemsmystery.kuna.KunaWidget"
+        )
+
         gym(
             scheme: "Kuna",
             project: "Kuna.xcodeproj",
@@ -79,7 +98,7 @@ platform :ios do
             output_name: "Kuna.ipa",
             export_method: "app-store",
             include_symbols: true,
-            xcargs: "-allowProvisioningUpdates DEVELOPMENT_TEAM=#{ENV['FASTLANE_TEAM_ID']}",
+            xcargs: "DEVELOPMENT_TEAM=#{ENV['FASTLANE_TEAM_ID']}",
             export_options: {
                 provisioningProfiles: {
                     "tech.systemsmystery.kuna" =>
