@@ -57,11 +57,18 @@ platform :ios do
 
     match(
       type: "appstore",
-      readonly: true,
-      git_url: ENV["MATCH_GIT_URL"],
-      git_branch: ENV["MATCH_GIT_BRANCH"],
+      readonly: false,
+      storage_mode: "s3",
+      s3_bucket: ENV["MATCH_S3_BUCKET"],
+      s3_region: "eu-west-2",
+      s3_access_key: ENV["MATCH_S3_ACCESS_KEY_ID"],
+      s3_secret_access_key: ENV["MATCH_S3_SECRET_ACCESS_KEY"],
       keychain_name: "build.keychain",
-      keychain_password: ENV["KEYCHAIN_PASSWORD"]
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      app_identifier: [
+        "tech.systemsmystery.kuna",
+        "tech.systemsmystery.kuna.KunaWidget"
+    ],
     )
 
     # If you bump build numbers manually, remove this:
@@ -71,16 +78,22 @@ platform :ios do
     )
 
     gym(
-      scheme: "Kuna",
-      project: "Kuna.xcodeproj",
-      clean: true,
-      output_directory: "fastlane/build",
-      output_name: "Kuna.ipa",
-      export_method: "app-store",
-      include_symbols: true,
-      xcargs: "-allowProvisioningUpdates"
+        scheme: "Kuna",
+        project: "Kuna.xcodeproj",
+        clean: true,
+        output_directory: "fastlane/build",
+        output_name: "Kuna.ipa",
+        export_method: "app-store",
+        include_symbols: true,
+        xcargs: "-allowProvisioningUpdates",
+        export_options: {
+            provisioningProfiles: {
+            "tech.systemsmystery.kuna" => "match AppStore tech.systemsmystery.kuna",
+            "tech.systemsmystery.kuna.KunaWidget" => "match AppStore tech.systemsmystery.kuna.KunaWidget"
+            }
+        }
     )
-  end
+    end
 
   desc "Upload the IPA to TestFlight"
   lane :upload_testflight do
