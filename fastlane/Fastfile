@@ -57,7 +57,7 @@ platform :ios do
 
     match(
       type: "appstore",
-      readonly: false,
+      readonly: true,
       storage_mode: "s3",
       s3_bucket: ENV["MATCH_S3_BUCKET"],
       s3_region: "eu-west-2",
