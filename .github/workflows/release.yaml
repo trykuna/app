@@ -81,8 +81,9 @@ jobs:
     timeout-minutes: 60
     env:
       FASTLANE_APP_STORE_CONNECT_API_KEY: ${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY }}
-      MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
-      MATCH_GIT_BRANCH: ${{ secrets.MATCH_GIT_BRANCH }}
+      MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
+      MATCH_S3_ACCESS_KEY_ID: ${{ secrets.MATCH_S3_ACCESS_KEY_ID }}
+      MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       # Optional release notes override
