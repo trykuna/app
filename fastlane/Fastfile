@@ -78,7 +78,8 @@ platform :ios do
             targets: ["Kuna", "KunaWidgetExtension"],
             team_id: ENV["FASTLANE_TEAM_ID"],
             profile_name: ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"],
-            bundle_identifier: "tech.systemsmystery.kuna"
+            bundle_identifier: "tech.systemsmystery.kuna",
+            code_sign_identity: "iPhone Distribution"
         )
         
         update_code_signing_settings(
@@ -87,7 +88,8 @@ platform :ios do
             targets: ["KunaWidgetExtension"],
             team_id: ENV["FASTLANE_TEAM_ID"],
             profile_name: ENV["sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name"],
-            bundle_identifier: "tech.systemsmystery.kuna.KunaWidget"
+            bundle_identifier: "tech.systemsmystery.kuna.KunaWidget",
+            code_sign_identity: "iPhone Distribution"
         )
 
         gym(
@@ -98,7 +100,7 @@ platform :ios do
             output_name: "Kuna.ipa",
             export_method: "app-store",
             include_symbols: true,
-            xcargs: "DEVELOPMENT_TEAM=#{ENV['FASTLANE_TEAM_ID']}",
+            xcargs: "DEVELOPMENT_TEAM=#{ENV['FASTLANE_TEAM_ID']} CODE_SIGN_IDENTITY='iPhone Distribution'",
             export_options: {
                 provisioningProfiles: {
                     "tech.systemsmystery.kuna" =>

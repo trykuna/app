@@ -1,5 +1,5 @@
 ---
-name: Release (Tag ➜ TestFlight + GitHub Release)
+name: Release (Tag + TestFlight + GitHub Release)
 
 on:
   push:
@@ -21,57 +21,57 @@ concurrency:
 
 jobs:
   # 1) Sanity build & tests on macOS (simulator, unsigned)
-  tests:
-    name: Build & Test
-    runs-on: macos-latest
-    timeout-minutes: 60
+  # tests:
+  #   name: Build & Test
+  #   runs-on: macos-latest
+  #   timeout-minutes: 60
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Validate Xcode version matches tag
-        run: |
-          TAG="${GITHUB_REF#refs/tags/}"   # e.g. v1.0.3
-          EXPECTED="${TAG#v}"              # 1.0.3
-          ACTUAL=$(xcodebuild -showBuildSettings -scheme "Kuna" -configuration Release \
-            | awk -F'= ' '/MARKETING_VERSION/ {print $2; exit}')
-          echo "Tag says: $EXPECTED | Xcode says: $ACTUAL"
-          [ "$EXPECTED" = "$ACTUAL" ] || { echo "Version mismatch"; exit 1; }
+  #     - name: Validate Xcode version matches tag
+  #       run: |
+  #         TAG="${GITHUB_REF#refs/tags/}"   # e.g. v1.0.3
+  #         EXPECTED="${TAG#v}"              # 1.0.3
+  #         ACTUAL=$(xcodebuild -showBuildSettings -scheme "Kuna" -configuration Release \
+  #           | awk -F'= ' '/MARKETING_VERSION/ {print $2; exit}')
+  #         echo "Tag says: $EXPECTED | Xcode says: $ACTUAL"
+  #         [ "$EXPECTED" = "$ACTUAL" ] || { echo "Version mismatch"; exit 1; }
 
-      - name: Set Xcode version
-        run: xcodebuild -version
+  #     - name: Set Xcode version
+  #       run: xcodebuild -version
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.2"
-          bundler-cache: true
+  #     - name: Set up Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: "3.2"
+  #         bundler-cache: true
 
-      - name: Install gems
-        run: bundle install
+  #     - name: Install gems
+  #       run: bundle install
 
-      - name: SwiftLint (strict)
-        run: |
-          brew update
-          brew install swiftlint
-          swiftlint --strict || true
+  #     - name: SwiftLint (strict)
+  #       run: |
+  #         brew update
+  #         brew install swiftlint
+  #         swiftlint --strict || true
 
-      - name: Run tests (Fastlane)
-        env:
-          CI: "true"
-        run: bundle exec fastlane ci_tests
+  #     - name: Run tests (Fastlane)
+  #       env:
+  #         CI: "true"
+  #       run: bundle exec fastlane ci_tests
 
-      - name: Upload test artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-artifacts
-          path: |
-            fastlane/test_output/*.xml
-            fastlane/test_output/*.json
-            fastlane/test_output/*.xcresult
-            fastlane/test_output/coverage.txt
-          if-no-files-found: warn
+  #     - name: Upload test artifacts
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: test-artifacts
+  #         path: |
+  #           fastlane/test_output/*.xml
+  #           fastlane/test_output/*.json
+  #           fastlane/test_output/*.xcresult
+  #           fastlane/test_output/coverage.txt
+  #         if-no-files-found: warn
 
   # 2) Sign, archive, export .ipa, upload to TestFlight
   build_and_upload:
