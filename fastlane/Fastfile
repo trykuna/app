@@ -128,7 +128,8 @@ platform :ios do
       skip_submission: true,
       distribute_external: false,
       changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
-      groups: ["Internal Testers"]
+      groups: ["Internal Testers"],
+      uses_non_exempt_encryption: false
     )
   end
 end
