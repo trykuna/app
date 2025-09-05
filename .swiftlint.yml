@@ -2,8 +2,6 @@
 # Lint only these paths
 included:
   - Kuna
-  - KunaUnitTests
-  - KunaUITests
   - KunaWidget
 
 # Common folders to ignore
