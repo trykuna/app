@@ -765,8 +765,8 @@ extension TaskRelation {
 
 // MARK: - Calendar Sync Models
 enum CalendarSyncMode: String, Codable, CaseIterable {
-    case single = "single"
-    case perProject = "perProject"
+    case single
+    case perProject
     
     var displayName: String {
         switch self {
@@ -786,11 +786,6 @@ enum CalendarSyncMode: String, Codable, CaseIterable {
 struct KunaCalendarRef: Codable, Hashable {
     var name: String
     var identifier: String
-    
-    init(name: String, identifier: String) {
-        self.name = name
-        self.identifier = identifier
-    }
 }
 
 struct CalendarSyncPrefs: Codable, Equatable {

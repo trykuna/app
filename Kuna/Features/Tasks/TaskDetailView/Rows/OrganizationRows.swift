@@ -3,7 +3,7 @@ import SwiftUI
 struct TaskLabelsRow: View {
     let isEditing: Bool
     let labels: [Label]?                 // pass task.labels
-    var onTap: (() -> Void)? = nil       // open label picker
+    var onTap: () -> Void
 
     var body: some View {
         HStack(alignment: .center) {
@@ -40,7 +40,7 @@ struct TaskLabelsRow: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .contentShape(Rectangle())
-        .onTapGesture { if isEditing { onTap?() } }
+        .onTapGesture { if isEditing { onTap() } }
     }
 }
 

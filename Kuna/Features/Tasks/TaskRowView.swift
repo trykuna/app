@@ -96,7 +96,8 @@ struct TaskRowContent: View, Equatable {
                             .accessibilityIdentifier("task.row.attachment")
                     }
 
-                    if props.showCommentCounts, let count = props.commentCount, count > 0 {
+                    // swiftlint:disable:next empty_count
+                    if props.showCommentCounts, let count = props.commentCount, count > 0 { 
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.caption2)
