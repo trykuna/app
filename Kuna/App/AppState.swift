@@ -39,25 +39,44 @@ final class AppState: ObservableObject {
             Log.app.debug("Found stored token at startup (value not logged)")
             do {
                 let apiURL = try Self.buildAPIURL(from: serverURLString)
-                self.api = VikunjaAPI(
-                    config: .init(baseURL: apiURL),
-                    tokenProvider: {
-                        let t = Keychain.readToken()
-                        // Do not log token values
-                        return t
-                    },
-                    tokenRefreshHandler: { [weak self] newToken in
-                        try await self?.refreshToken(newToken: newToken)
-                    },
-                    tokenRefreshFailureHandler: { [weak self] in
-                        self?.handleTokenRefreshFailure()
-                    }
-                )
-                self.isAuthenticated = true
                 // Determine authentication method from stored data
-                self.authenticationMethod = Keychain.readAuthMethod()
-                // Decode token to get expiration date
-                self.tokenExpirationDate = try? JWTDecoder.getExpirationDate(from: token)
+                let authMethod = Keychain.readAuthMethod()
+                self.authenticationMethod = authMethod
+                
+                // Only set refresh handlers for username/password auth (JWT tokens)
+                if authMethod == .usernamePassword {
+                    self.api = VikunjaAPI(
+                        config: .init(baseURL: apiURL),
+                        tokenProvider: {
+                            let t = Keychain.readToken()
+                            // Do not log token values
+                            return t
+                        },
+                        tokenRefreshHandler: { [weak self] newToken in
+                            try await self?.refreshToken(newToken: newToken)
+                        },
+                        tokenRefreshFailureHandler: { [weak self] in
+                            self?.handleTokenRefreshFailure()
+                        }
+                    )
+                    // Decode JWT token to get expiration date
+                    self.tokenExpirationDate = try? JWTDecoder.getExpirationDate(from: token)
+                } else {
+                    // Personal API token - no refresh needed
+                    self.api = VikunjaAPI(
+                        config: .init(baseURL: apiURL),
+                        tokenProvider: {
+                            let t = Keychain.readToken()
+                            // Do not log token values
+                            return t
+                        },
+                        tokenRefreshHandler: nil,
+                        tokenRefreshFailureHandler: nil
+                    )
+                    // Personal tokens don't have JWT expiration
+                    self.tokenExpirationDate = nil
+                }
+                self.isAuthenticated = true
             } catch {
                 // Invalid stored URL, clear credentials
                 Log.app.error(
@@ -204,6 +223,7 @@ final class AppState: ObservableObject {
         }
 
         // Create authenticated API instance
+        // Personal tokens don't need refresh handlers - they're static tokens
         self.api = VikunjaAPI(
             config: .init(baseURL: apiURL),
             tokenProvider: {
@@ -211,13 +231,8 @@ final class AppState: ObservableObject {
                 // Do not log token values
                 return t
             },
-            tokenRefreshHandler: { [weak self] newToken in
-                // Personal tokens don't refresh, but we include the handler for consistency
-                try await self?.refreshToken(newToken: newToken)
-            },
-            tokenRefreshFailureHandler: { [weak self] in
-                self?.handleTokenRefreshFailure()
-            }
+            tokenRefreshHandler: nil,  // Personal tokens don't refresh
+            tokenRefreshFailureHandler: nil  // No refresh means no failure handler needed
         )
 
         isAuthenticated = true
