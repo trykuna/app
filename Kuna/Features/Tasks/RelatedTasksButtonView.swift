@@ -17,8 +17,10 @@ struct RelatedTasksButtonView: View {
                     Text(String(localized: "tasks.details.relatedTasks.title", comment: "Title for related tasks"))
                         .font(.body)
                         .foregroundColor(.primary)
-                    let count = (task.relations ?? []).count
-                    Text(count == 0 ? String(localized: "tasks.related.none", comment: "No related tasks") : "\(count) related")
+                        let relations = task.relations ?? []
+                        Text(relations.isEmpty
+                                ? String(localized: "tasks.related.none", comment: "No related tasks")
+                                : "\(relations.count) related")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
