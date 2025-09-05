@@ -80,13 +80,15 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 60
     env:
-      FASTLANE_APP_STORE_CONNECT_API_KEY: ${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY }}
       MATCH_S3_BUCKET: ${{ secrets.MATCH_S3_BUCKET }}
       MATCH_S3_ACCESS_KEY_ID: ${{ secrets.MATCH_S3_ACCESS_KEY_ID }}
       MATCH_S3_SECRET_ACCESS_KEY: ${{ secrets.MATCH_S3_SECRET_ACCESS_KEY }}
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+      FASTLANE_APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.FASTLANE_APP_STORE_CONNECT_KEY_IDENTIFIER }}
+      FASTLANE_APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.FASTLANE_APP_STORE_CONNECT_ISSUER_ID }}
+      FASTLANE_APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.FASTLANE_APP_STORE_CONNECT_PRIVATE_KEY }}
       # Optional release notes override
       RELEASE_NOTES: ${{ github.event.head_commit.message }}
 
