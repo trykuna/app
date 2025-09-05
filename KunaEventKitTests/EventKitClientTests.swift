@@ -46,8 +46,7 @@ final class EventKitClientTests: XCTestCase {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
         
         guard let source = mockClient.writableSource() else {
-            XCTFail("Should have a writable source")
-            return
+            throw XCTSkip("No writable EventKit source available in test environment")
         }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
@@ -60,8 +59,7 @@ final class EventKitClientTests: XCTestCase {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
         
         guard let source = mockClient.writableSource() else {
-            XCTFail("Should have a writable source")
-            return
+            throw XCTSkip("No writable EventKit source available in test environment")
         }
         let calendar1 = try mockClient.ensureCalendar(named: "Calendar 1", in: source)
         let calendar2 = try mockClient.ensureCalendar(named: "Calendar 2", in: source)
@@ -78,8 +76,7 @@ final class EventKitClientTests: XCTestCase {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
         
         guard let source = mockClient.writableSource() else {
-            XCTFail("Should have a writable source")
-            return
+            throw XCTSkip("No writable EventKit source available in test environment")
         }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
@@ -111,8 +108,7 @@ final class EventKitClientTests: XCTestCase {
         
         // First add an event
         guard let source = mockClient.writableSource() else {
-            XCTFail("Should have a writable source")
-            return
+            throw XCTSkip("No writable EventKit source available in test environment")
         }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
@@ -148,8 +144,7 @@ final class EventKitClientTests: XCTestCase {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
         
         guard let source = mockClient.writableSource() else {
-            XCTFail("Should have a writable source")
-            return
+            throw XCTSkip("No writable EventKit source available in test environment")
         }
         let calendar = try mockClient.ensureCalendar(named: "Test Calendar", in: source)
         
