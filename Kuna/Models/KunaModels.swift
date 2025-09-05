@@ -823,7 +823,7 @@ struct CalendarSyncPrefs: Codable, Equatable {
             return singleCalendar != nil
         case .perProject:
             return !selectedProjectIDs.isEmpty && 
-                   selectedProjectIDs.allSatisfy { projectCalendars.keys.contains($0) }
+                    selectedProjectIDs.allSatisfy { projectCalendars.keys.contains($0) }
         }
     }
 }

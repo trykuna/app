@@ -447,4 +447,3 @@ struct LabelsViewWithMenu: View {
     )
     .environmentObject(AppState())
 }
-

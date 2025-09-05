@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct TaskTitleRow: View {
     let isEditing: Bool
     @Binding var title: String
@@ -52,4 +51,3 @@ struct TaskDescriptionRow: View {
         .padding(.vertical, 12)
     }
 }
-
