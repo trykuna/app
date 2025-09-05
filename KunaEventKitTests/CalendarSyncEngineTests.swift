@@ -37,6 +37,11 @@ final class CalendarSyncEngineTests: XCTestCase {
     func testOnboardingCompleteSingleMode() async throws {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
         
+        // Skip if no writable source is available
+        guard mockEventKitClient.writableSource() != nil else {
+            throw XCTSkip("No writable EventKit source available in test environment")
+        }
+        
         // Setup mock to succeed
         mockEventKitClient.shouldThrowOnAccess = false
         
@@ -55,6 +60,11 @@ final class CalendarSyncEngineTests: XCTestCase {
     
     func testOnboardingCompletePerProjectMode() async throws {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
+        
+        // Skip if no writable source is available
+        guard mockEventKitClient.writableSource() != nil else {
+            throw XCTSkip("No writable EventKit source available in test environment")
+        }
         
         // Setup mock to succeed
         mockEventKitClient.shouldThrowOnAccess = false
@@ -97,6 +107,11 @@ final class CalendarSyncEngineTests: XCTestCase {
     
     func testDisableSyncKeepEverything() async throws {
         try XCTSkipIf(Self.isCI, "EventKit tests are skipped in CI environment")
+        
+        // Skip if no writable source is available
+        guard mockEventKitClient.writableSource() != nil else {
+            throw XCTSkip("No writable EventKit source available in test environment")
+        }
         
         // Setup and enable sync
         mockEventKitClient.shouldThrowOnAccess = false
