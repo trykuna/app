@@ -11,7 +11,12 @@ class WidgetDataService {
         return await getTasks(projectId: nil, priorityFilter: nil, showTodayOnly: true, showOverdue: true)
     }
     
-    func getTasks(projectId: Int?, priorityFilter: WidgetTaskPriority?, showTodayOnly: Bool, showOverdue: Bool) async -> [WidgetTask] {
+    func getTasks(
+        projectId: Int?,
+        priorityFilter: WidgetTaskPriority?,
+        showTodayOnly: Bool,
+        showOverdue: Bool
+    ) async -> [WidgetTask] {
         // Fetch REAL data from API only
         do {
             let realTasks = try await fetchTasksFromAPI(projectId: projectId)

@@ -1,0 +1,13 @@
+---
+name: ❓ Question / Support
+description: Ask a question or request support
+title: "[Question]: "
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+    label: Your question
+    description: What do you need help with?
+    validations:
+      required: true

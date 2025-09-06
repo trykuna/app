@@ -1,0 +1,34 @@
+---
+- name: bug
+  color: d73a4a
+  description: Something isn’t working
+- name: enhancement
+  color: a2eeef
+  description: New feature or request
+- name: question
+  color: d4c5f9
+  description: Further information is requested
+- name: needs-info
+  color: fef2c0
+  description: Needs more details from reporter
+- name: good first issue
+  color: 7057ff
+  description: Good for newcomers
+- name: iPad
+  color: 0e8a16
+  description: iPad-specific work
+- name: widgets
+  color: 1d76db
+  description: Home/Lock Screen widgets
+- name: EventKit
+  color: c5def5
+  description: Calendar/Reminders integration
+- name: localization
+  color: e99695
+  description: String catalogs, translations
+- name: performance
+  color: 5319e7
+  description: Speed or memory improvements
+- name: iOS-version
+  color: 0366d6
+  description: OS-specific behavior

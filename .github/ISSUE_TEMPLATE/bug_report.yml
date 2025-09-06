@@ -1,0 +1,73 @@
+---
+name: 🐞 Bug report
+description: File a bug report to help us improve Kuna
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+    value: |
+      Thanks for taking the time to fill out a bug report!
+  - type: textarea
+    id: description
+    attributes:
+    label: Describe the bug
+    description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+    label: Steps to reproduce
+    description: How can we reproduce this issue?
+    placeholder: |
+      1. Go to '...'
+      2. Tap on '...'
+      3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+    label: Expected behavior
+    description: What should happen?
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+    label: Device & iOS version
+    description: e.g., iPhone 16 Pro Max, iOS 18.0
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+    label: App version / build
+    description: From Settings → Kuna → About (or TestFlight build number)
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+    label: Logs / screenshots
+    description: If applicable, add screenshots or logs. Redact private data.
+  - type: dropdown
+    id: regress
+    attributes:
+    label: Regression?
+    options:
+      - Unknown
+      - Not a regression
+      - Regressed from a previous version
+    validations:
+    required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+    label: Pre‑submission checks
+    options:
+      - label: I searched existing issues
+        required: true
+      - label: I can reproduce this on the latest release/TestFlight
+        required: true

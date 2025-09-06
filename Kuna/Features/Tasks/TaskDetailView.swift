@@ -130,7 +130,10 @@ struct TaskDetailView: View {
                             VStack(spacing: 0) {
                                 TaskTitleRow(isEditing: isEditing, title: $task.title, hasChanges: $hasChanges)
                                 Divider().padding(.leading, 16)
-                                TaskDescriptionRow(isEditing: isEditing, editedDescription: $editedDescription, taskDescription: task.description, hasChanges: $hasChanges)
+                                TaskDescriptionRow(isEditing: isEditing,
+                                                    editedDescription: $editedDescription,
+                                                    taskDescription: task.description,
+                                                    hasChanges: $hasChanges)
                             }
                             .settingsCardStyle()
                         }
@@ -144,12 +147,17 @@ struct TaskDetailView: View {
                                 Divider().padding(.leading, 50)
                                 endDateRow
                                 Divider().padding(.leading, 16)
-                                TaskRemindersRow(isEditing: isEditing, remindersCount: task.reminders?.count ?? 0, onTap: { showingRepeatEditor = true})
+                                TaskRemindersRow(
+                                    isEditing: isEditing,
+                                    remindersCount: task.reminders?.count ?? 0,
+                                    onTap: { showingRepeatEditor = true })
                                 Divider().padding(.leading, 16)
                                 TaskRepeatRow(isEditing: isEditing,
-                                              repeatAfter: taskRepeatAfter,
-                                              displayText: taskRepeatAfter.flatMap { $0 > 0 ? formatRepeatInterval($0) : nil } ?? "",
-                                              onTap: { showingRepeatEditor = true })
+                                                repeatAfter: taskRepeatAfter,
+                                                displayText: taskRepeatAfter.flatMap { 
+                                                    $0 > 0 ? formatRepeatInterval($0) : nil 
+                                                } ?? "",
+                                                onTap: { showingRepeatEditor = true })
                             }
                             .settingsCardStyle()
                         }
@@ -355,7 +363,6 @@ struct TaskDetailView: View {
         // Only sync if task has BOTH start and end dates
         task.startDate != nil && task.endDate != nil
     }
-
 
     private func reloadTask() async {
         do {

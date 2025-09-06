@@ -85,12 +85,19 @@ struct SmallWidgetProvider: AppIntentTimelineProvider {
         }
         
         let projectName = configuration.project?.displayName ?? "All Projects"
-        let entry = SimpleEntry(date: Date(), tasks: tasks, projectName: projectName, configuredPriority: configuration.priorityFilter?.priority, projectId: configuration.project?.projectId)
+        let entry = SimpleEntry(date: Date(),
+                                tasks: tasks,
+                                projectName: projectName,
+                                configuredPriority: configuration.priorityFilter?.priority,
+                                projectId: configuration.project?.projectId)
         let timeline = Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(3600))) // Refresh hourly
         return timeline
     }
     
-    private func filterTasks(from items: [SharedTaskSnapshot.Item], configuration: ProjectSelectionConfiguration) -> [WidgetTask] {
+    private func filterTasks(
+        from items: [SharedTaskSnapshot.Item], 
+        configuration: ProjectSelectionConfiguration
+    ) -> [WidgetTask] {
         var filteredItems = items
         
         // Filter by project
@@ -145,7 +152,9 @@ struct MediumWidgetProvider: AppIntentTimelineProvider {
             WidgetTask(id: 2, title: "Team Meeting", dueDate: Date(), isOverdue: true, priority: .medium),
             WidgetTask(id: 3, title: "Update Documentation", dueDate: Date(), isOverdue: false, priority: .low),
             WidgetTask(id: 4, title: "Bug Fix", dueDate: Date(), isOverdue: false, priority: .urgent)
-        ], projectName: configuration.project?.displayName ?? "All Projects", configuredPriority: nil, projectId: configuration.project?.projectId)
+        ], 
+        projectName: configuration.project?.displayName ?? "All Projects",
+        configuredPriority: nil, projectId: configuration.project?.projectId)
     }
 
     func timeline(for configuration: ProjectOnlyConfiguration, in context: Context) async -> Timeline<SimpleEntry> {
@@ -167,12 +176,19 @@ struct MediumWidgetProvider: AppIntentTimelineProvider {
         }
         
         let projectName = configuration.project?.displayName ?? "All Projects"
-        let entry = SimpleEntry(date: Date(), tasks: tasks, projectName: projectName, configuredPriority: nil, projectId: configuration.project?.projectId)
+        let entry = SimpleEntry(date: Date(),
+                                tasks: tasks,
+                                projectName: projectName,
+                                configuredPriority: nil,
+                                projectId: configuration.project?.projectId)
         let timeline = Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(3600))) // Refresh hourly
         return timeline
     }
     
-    private func filterTasksByProject(from items: [SharedTaskSnapshot.Item], configuration: ProjectOnlyConfiguration) -> [WidgetTask] {
+    private func filterTasksByProject(
+        from items: [SharedTaskSnapshot.Item], 
+        configuration: ProjectOnlyConfiguration
+    ) -> [WidgetTask] {
         var filteredItems = items
         
         // Filter by project only (no priority filter)
@@ -220,7 +236,7 @@ struct WidgetTask {
     let priority: WidgetTaskPriority
 }
 
-struct KunaWidgetEntryView : View {
+struct KunaWidgetEntryView: View {
     var entry: SimpleEntry
     @Environment(\.widgetFamily) var family
 
