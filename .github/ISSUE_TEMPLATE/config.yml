@@ -1,0 +1,19 @@
+---
+blank_issues_enabled: false
+
+contact_links:
+  - name: 💬 Q&A — GitHub Discussions
+    url: https://github.com/trykuna/app/discussions
+    about: Ask general questions or start a discussion about Kuna.
+
+  - name: 📚 Docs & FAQ
+    url: https://trykuna.app
+    about: Read the FAQ, setup guides, and troubleshooting tips.
+
+  - name: 🧪 TestFlight Feedback
+    url: https://testflight.apple.com/join/8c1JPE4r
+    about: If you’re testing via TestFlight, you can submit feedback/screenshots here.
+
+  - name: 🔒 Security Reports
+    url: https://github.com/trykuna/app/security/policy
+    about: Please read our security policy for reporting vulnerabilities.
