@@ -6,8 +6,8 @@ labels: [bug]
 body:
   - type: markdown
     attributes:
-    value: |
-      Thanks for taking the time to fill out a bug report!
+      value: |
+        Thanks for taking the time to fill out a bug report!
   - type: textarea
     id: description
     attributes:
@@ -61,7 +61,7 @@ body:
         - Not a regression
         - Regressed from a previous version
     validations:
-    required: true
+      required: true
   - type: checkboxes
     id: checks
     attributes:
