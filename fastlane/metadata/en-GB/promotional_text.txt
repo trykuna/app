@@ -1,0 +1,2 @@
+Kuna is a third-party client for Vikunja, designed to make managing your tasks on the go fast and simple.
+Independent from the Vikunja project.

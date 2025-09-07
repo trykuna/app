@@ -1,11 +1,9 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Run unit tests locally"
+  # ---------- Tests ----------
   lane :tests do
-    devices_env = ENV["DEVICES"]
-    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
-
+    devices = (ENV["DEVICES"]&.split(",")&.map(&:strip) || ["iPhone 16"])
     scan(
       scheme: "Kuna",
       project: "Kuna.xcodeproj",
@@ -21,11 +19,8 @@ platform :ios do
     )
   end
 
-  desc "Run CI tests (JSON + coverage)"
   lane :ci_tests do
-    devices_env = ENV["DEVICES"]
-    devices = devices_env ? devices_env.split(",").map(&:strip) : ["iPhone 16"]
-
+    devices = (ENV["DEVICES"]&.split(",")&.map(&:strip) || ["iPhone 16"])
     scan(
       scheme: "Kuna",
       project: "Kuna.xcodeproj",
@@ -41,7 +36,6 @@ platform :ios do
       fail_build: true,
       xcargs: "-allowProvisioningUpdates"
     )
-
     xcov(
       project: "Kuna.xcodeproj",
       scheme: "Kuna",
@@ -50,14 +44,14 @@ platform :ios do
     )
   end
 
-  desc "Build signed IPA for App Store"
+  # ---------- Build + Upload to TestFlight ----------
   lane :build_ipa do
     ensure_git_status_clean
-    setup_ci # sets up keychain partition list for CI runners
+    setup_ci
 
     match(
       type: "appstore",
-      readonly: true, # allow repair/regeneration if profiles went invalid
+      readonly: true,
       storage_mode: "s3",
       s3_bucket: ENV["MATCH_S3_BUCKET"],
       s3_region: "eu-west-2",
@@ -72,10 +66,6 @@ platform :ios do
       team_id: ENV["FASTLANE_TEAM_ID"]
     )
 
-    # Print the profile names for debugging
-    UI.message("App profile: #{ENV['sigh_tech.systemsmystery.kuna_appstore_profile-name']}")
-    UI.message("Widget profile: #{ENV['sigh_tech.systemsmystery.kuna.KunaWidget_appstore_profile-name']}")
-
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "Kuna.xcodeproj",
@@ -84,7 +74,6 @@ platform :ios do
       bundle_identifier: "tech.systemsmystery.kuna",
       profile_name: ENV["sigh_tech.systemsmystery.kuna_appstore_profile-name"]
     )
-
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "Kuna.xcodeproj",
@@ -101,7 +90,6 @@ platform :ios do
       output_directory: "fastlane/build",
       output_name: "Kuna.ipa",
       export_method: "app-store",
-      # Don’t force CODE_SIGN_IDENTITY, let Xcode pick Apple Distribution
       xcargs: "CODE_SIGN_STYLE=Manual",
       export_options: {
         provisioningProfiles: {
@@ -112,15 +100,13 @@ platform :ios do
     )
   end
 
-  desc "Upload the IPA to TestFlight"
   lane :upload_testflight do
     api_key = app_store_connect_api_key(
-        key_id: ENV["FASTLANE_APP_STORE_CONNECT_KEY_IDENTIFIER"],
-        issuer_id: ENV["FASTLANE_APP_STORE_CONNECT_ISSUER_ID"],
-        key_content: ENV["FASTLANE_APP_STORE_CONNECT_PRIVATE_KEY"],
-        is_key_content_base64: true
+      key_id: ENV["FASTLANE_APP_STORE_CONNECT_KEY_IDENTIFIER"],
+      issuer_id: ENV["FASTLANE_APP_STORE_CONNECT_ISSUER_ID"],
+      key_content: ENV["FASTLANE_APP_STORE_CONNECT_PRIVATE_KEY"],
+      is_key_content_base64: true
     )
-
     pilot(
       api_key: api_key,
       ipa: "fastlane/build/Kuna.ipa",
@@ -130,6 +116,110 @@ platform :ios do
       changelog: ENV["RELEASE_NOTES"] || "Bug fixes and improvements",
       groups: ["Internal Testers"],
       uses_non_exempt_encryption: false
+    )
+  end
+
+  # ---------- Helpers ----------
+  private_lane :_resolve_build_number do |options|
+    version = options[:version]
+    build   = options[:build]
+    UI.user_error!("Pass :version (e.g. 1.0.1)") unless version
+    next build.to_s if build && !build.to_s.empty?
+
+    latest = latest_testflight_build_number(
+      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+      version: version
+    )
+    UI.message("Using latest TestFlight build for #{version}: #{latest}")
+    latest.to_s
+  end
+
+  desc "Set App Store 'What's New' from fastlane/whatsnew/<version>[.txt]"
+  lane :whats_new do |opts|
+    require "fileutils"
+    require "fastlane_core"
+
+    version = opts[:version] or UI.user_error!("Pass :version")
+
+    fl_dir  = FastlaneCore::FastlaneFolder.path || File.join(Dir.pwd, "fastlane")
+    base    = File.join(fl_dir, "whatsnew")
+    onefile = File.expand_path(File.join(base, "#{version}.txt"))
+    perdir  = File.expand_path(File.join(base, version))
+
+    UI.message("Fastlane dir: #{fl_dir}")
+    UI.message("Looking for: #{onefile} or #{perdir}/<locale>.txt")
+    UI.message("Exists? file=#{File.exist?(onefile)} perdir=#{Dir.exist?(perdir)}")
+
+    read_notes = proc do |path|
+      text = File.read(path).strip
+      UI.user_error!("What's New empty: #{path}") if text.empty?
+      UI.user_error!("What's New > 4000 chars: #{path}") if text.length > 4000
+      text
+    end
+
+    if File.exist?(onefile)
+      set_changelog(
+        app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+        version: version,
+        changelog: read_notes.call(onefile)
+      )
+      UI.success("Set What's New for ALL locales from #{onefile}")
+    elsif Dir.exist?(perdir)
+      Dir.mktmpdir("whatsnew") do |tmp|
+        Dir[File.join(perdir, "*.txt")].each do |file|
+          locale = File.basename(file, ".txt")
+          dest   = File.join(tmp, locale)
+          FileUtils.mkdir_p(dest)
+          File.write(File.join(dest, "release_notes.txt"), read_notes.call(file))
+        end
+        deliver(
+          metadata_path: tmp,
+          skip_binary_upload: true,
+          skip_screenshots: true,
+          submit_for_review: false
+        )
+      end
+      UI.success("Set What's New PER-LOCALE from #{perdir}/")
+    else
+      UI.user_error!("No notes found. Create #{onefile} OR #{perdir}/<locale>.txt")
+    end
+  end
+
+
+  # ---------- Prepare & Submit ----------
+  desc "Prepare ASC submission with existing TestFlight build (no submit)"
+  lane :prepare_app_store_submission do |opts|
+    version = opts[:version] or UI.user_error!("Pass :version (e.g. 1.0.1)")
+    build   = _resolve_build_number(version: version, build: opts[:build])
+
+    upload_app_privacy_details_to_app_store(
+      json_path: "fastlane/app_privacy_details.json"
+    )
+
+    deliver(
+      app_version: version,
+      build_number: build,
+      submit_for_review: false,
+      skip_binary_upload: true,
+      skip_metadata: false,     # flip to false to push fastlane/metadata
+      skip_screenshots: true,  # flip to false to push fastlane/screenshots
+      skip_app_version_update: false
+    )
+  end
+
+  desc "Submit prepared version for review (no auto-release)"
+  lane :submit_for_review_manual do |opts|
+    version = opts[:version] or UI.user_error!("Pass :version")
+    build   = _resolve_build_number(version: version, build: opts[:build])
+
+    deliver(
+      app_version: version,
+      build_number: build,
+      submit_for_review: true,
+      automatic_release: false,
+      skip_binary_upload: true,
+      skip_metadata: false,
+      skip_screenshots: true
     )
   end
 end

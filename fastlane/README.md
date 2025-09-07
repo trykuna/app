@@ -13,21 +13,63 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### bump_version
+## iOS
+
+### ios tests
 
 ```sh
-[bundle exec] fastlane bump_version
+[bundle exec] fastlane ios tests
 ```
 
 
 
-### tests
+### ios ci_tests
 
 ```sh
-[bundle exec] fastlane tests
+[bundle exec] fastlane ios ci_tests
 ```
 
 
+
+### ios build_ipa
+
+```sh
+[bundle exec] fastlane ios build_ipa
+```
+
+
+
+### ios upload_testflight
+
+```sh
+[bundle exec] fastlane ios upload_testflight
+```
+
+
+
+### ios whats_new
+
+```sh
+[bundle exec] fastlane ios whats_new
+```
+
+Set App Store 'What's New' from fastlane/whatsnew/<version>[.txt]
+
+### ios prepare_app_store_submission
+
+```sh
+[bundle exec] fastlane ios prepare_app_store_submission
+```
+
+Prepare ASC submission with existing TestFlight build (no submit)
+
+### ios submit_for_review_manual
+
+```sh
+[bundle exec] fastlane ios submit_for_review_manual
+```
+
+Submit prepared version for review (no auto-release)
 
 ----
 

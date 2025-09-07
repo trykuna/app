@@ -1,0 +1,2 @@
+Kuna is a modern task manager for Vikunja — built for clarity, collaboration, and control.
+Organize projects, track tasks with priorities and due dates, and customize labels to match your workflow. Plan every detail with assignees, reminders, and scheduling. Manage dependencies so nothing slips through the cracks, collaborate with teammates through comments, and sync tasks with your calendar. Personalize your view with flexible display options and stay on top of your work — wherever you go.

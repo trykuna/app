@@ -1,0 +1,1 @@
+vikunja,task manager,to do,planner,productivity,checklist,open source,calendar,sync

@@ -10,3 +10,4 @@ fastlane/build/
 .bundle/
 Gemfile.lock
 vendor/
+fastlane/metadata/review_information/*.txt

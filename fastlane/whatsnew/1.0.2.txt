@@ -1,0 +1,1 @@
+This release fixes an issue with API tokens not working when trying to login.
