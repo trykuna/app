@@ -80,7 +80,6 @@
 		79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Resources/Localizable.xcstrings",
 				Info.plist,
 			);
 			target = 7947454C2E4F6C1200C7A1D4 /* Kuna */;
