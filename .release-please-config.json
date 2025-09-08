@@ -1,0 +1,15 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "changelog-path": "RELEASE_NOTES.md",
+      "include-v-in-tag": true,
+      "changelog-sections": [
+        { "type": "feat", "section": "Features", "hidden": false },
+        { "type": "fix", "section": "Bug Fixes", "hidden": false },
+        { "type": "perf", "section": "Performance", "hidden": false },
+        { "type": "refactor", "section": "Refactors", "hidden": false }
+      ]
+    }
+  }
+}
