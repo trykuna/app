@@ -8,7 +8,7 @@ struct MainContainerView: View {
     let api: VikunjaAPI
     @EnvironmentObject var appState: AppState
 
-    @State private var selectedMenuItem: SideMenuView.MenuItem = .projects
+    @State private var selectedMenuItem: SideMenuView.MenuItem = AppSettings.shared.defaultView == .overview ? .overview : .projects
     @State private var isMenuOpen = false
     @State private var showingNewProject = false
     @State private var showingSettings = false
@@ -118,6 +118,12 @@ struct MainContainerView: View {
     @ViewBuilder
     private var contentView: some View {
         switch selectedMenuItem {
+        case .overview:
+            OverviewView(
+                api: api,
+                isMenuOpen: $isMenuOpen
+            )
+                
         case .favorites:
             FavoritesViewWithMenu(
                 api: api,
@@ -146,6 +152,9 @@ struct MainContainerView: View {
 
     private func handleMenuSelection(_ menuItem: SideMenuView.MenuItem) {
         switch menuItem {
+        case .overview:
+            // Already handled by contentView
+            break
         case .favorites:
             // Already handled by contentView
             break

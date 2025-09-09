@@ -135,6 +135,23 @@ struct SettingsView: View {
                         .font(.caption)
                 }
             }
+            
+            HStack {
+                Image(systemName: "house")
+                    .foregroundColor(.orange).font(.body)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Default View").font(.body)
+                    Text("Which view opens when you launch the app")
+                        .font(.caption).foregroundColor(.secondary)
+                }
+                Spacer()
+                Picker("", selection: $settings.defaultView) {
+                    ForEach(AppSettings.DefaultView.allCases, id: \.self) { view in
+                        Text(view.displayName).tag(view)
+                    }
+                }
+                .pickerStyle(.menu)
+            }
         } header: { 
             // Text("Appearance")
             Text(String(localized: "settings.appearance.title", comment: "Settings section header for appearance"))

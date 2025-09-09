@@ -99,13 +99,13 @@
             "value" : ""
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : ""
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : ""
@@ -284,13 +284,13 @@
             "value" : "%lld"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%lld"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%lld"
@@ -715,7 +715,7 @@
             }
           }
         },
-        "nl" : {
+        "nb" : {
           "variations" : {
             "plural" : {
               "one" : {
@@ -733,7 +733,7 @@
             }
           }
         },
-        "no" : {
+        "nl" : {
           "variations" : {
             "plural" : {
               "one" : {
@@ -1097,13 +1097,13 @@
             "value" : "%lld%%"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%lld%%"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%lld%%"
@@ -1282,13 +1282,13 @@
             "value" : "1"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "1"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "1"
@@ -1473,13 +1473,13 @@
             "value" : "Foundation — Core system services"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Foundation — Core system services"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Foundation — Core system services"
@@ -1664,13 +1664,13 @@
             "value" : "Keychain Services — Secure credential storage"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Keychain Services — Secure credential storage"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Keychain Services — Secure credential storage"
@@ -1856,13 +1856,13 @@
             "value" : "SwiftUI — Apple's native UI framework"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "SwiftUI — Apple's native UI framework"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "SwiftUI — Apple's native UI framework"
@@ -2047,13 +2047,13 @@
             "value" : "Privacy Policy"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Privacy Policy"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Privacy Policy"
@@ -2238,13 +2238,13 @@
             "value" : "This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.\n\nBig thanks to ChatGPT for UI mockups and keeping things iOS‑native (and steering me away from \"1998 shareware\" vibes).\n\nAnd thanks to everyone who tested builds, gave feedback, and proved task apps can be fun. You're the real MVPs."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.\n\nBig thanks to ChatGPT for UI mockups and keeping things iOS‑native (and steering me away from \"1998 shareware\" vibes).\n\nAnd thanks to everyone who tested builds, gave feedback, and proved task apps can be fun. You're the real MVPs."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.\n\nBig thanks to ChatGPT for UI mockups and keeping things iOS‑native (and steering me away from \"1998 shareware\" vibes).\n\nAnd thanks to everyone who tested builds, gave feedback, and proved task apps can be fun. You're the real MVPs."
@@ -2429,13 +2429,13 @@
             "value" : "Special Thanks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Special Thanks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Special Thanks"
@@ -2514,6 +2514,9 @@
           }
         }
       }
+    },
+    "Add a new task" : {
+
     },
     "add.title %@" : {
       "comment" : "Add title",
@@ -2620,13 +2623,13 @@
             "value" : "Add %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add %@"
@@ -2811,13 +2814,13 @@
             "value" : "No attachments"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No attachments"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No attachments"
@@ -3002,13 +3005,13 @@
             "value" : "Logging In..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Logging In..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Logging In..."
@@ -3193,13 +3196,13 @@
             "value" : "Log In"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Log In"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Log In"
@@ -3384,13 +3387,13 @@
             "value" : "**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions."
@@ -3575,13 +3578,13 @@
             "value" : "In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token."
@@ -3766,13 +3769,13 @@
             "value" : "API Token"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "API Token"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "API Token"
@@ -3957,13 +3960,13 @@
             "value" : "Enter your server address — you don’t need to add `/api/v1`; the app will do that for you."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter your server address — you don’t need to add `/api/v1`; the app will do that for you."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter your server address — you don’t need to add `/api/v1`; the app will do that for you."
@@ -4148,13 +4151,13 @@
             "value" : "Server URL Help"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Server URL Help"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Server URL Help"
@@ -4339,13 +4342,13 @@
             "value" : "If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials."
@@ -4530,13 +4533,13 @@
             "value" : "**Username & Password**: Full access to all features including user management and task assignment."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "**Username & Password**: Full access to all features including user management and task assignment."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "**Username & Password**: Full access to all features including user management and task assignment."
@@ -4721,13 +4724,13 @@
             "value" : "Login Method"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Login Method"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Login Method"
@@ -4912,13 +4915,13 @@
             "value" : "Password"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Password"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Password"
@@ -5103,13 +5106,13 @@
             "value" : "Personal API Token"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Personal API Token"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Personal API Token"
@@ -5295,13 +5298,13 @@
             "value" : "Server"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Server"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Server"
@@ -5486,13 +5489,13 @@
             "value" : "The code will be submitted automatically when complete"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "The code will be submitted automatically when complete"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "The code will be submitted automatically when complete"
@@ -5677,13 +5680,13 @@
             "value" : "Enter the 6-digit code from your authenticator app"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter the 6-digit code from your authenticator app"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter the 6-digit code from your authenticator app"
@@ -5868,13 +5871,13 @@
             "value" : "Two-Factor Authentication"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Two-Factor Authentication"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Two-Factor Authentication"
@@ -6059,13 +6062,13 @@
             "value" : "Verify Code"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Verify Code"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Verify Code"
@@ -6250,13 +6253,13 @@
             "value" : "Verifying"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Verifying"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Verifying"
@@ -6441,13 +6444,13 @@
             "value" : "Username"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Username"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Username"
@@ -6632,13 +6635,13 @@
             "value" : "Username & Password"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Username & Password"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Username & Password"
@@ -6823,13 +6826,13 @@
             "value" : "Use Token"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use Token"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use Token"
@@ -7014,13 +7017,13 @@
             "value" : "Verification"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Verification"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Verification"
@@ -7205,13 +7208,13 @@
             "value" : "Switch to '%@' for future syncs? Existing events will remain in the current calendar."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch to '%@' for future syncs? Existing events will remain in the current calendar."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch to '%@' for future syncs? Existing events will remain in the current calendar."
@@ -7396,13 +7399,13 @@
             "value" : "Add a comment..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add a comment..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add a comment..."
@@ -7587,13 +7590,13 @@
             "value" : "Are you sure you want to delete this comment?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to delete this comment?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to delete this comment?"
@@ -7778,13 +7781,13 @@
             "value" : "Delete Comment"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Delete Comment"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Delete Comment"
@@ -7969,13 +7972,13 @@
             "value" : "Be the first to add a comment to this task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Be the first to add a comment to this task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Be the first to add a comment to this task"
@@ -8160,13 +8163,13 @@
             "value" : "Start the conversation by adding the first comment."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Start the conversation by adding the first comment."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Start the conversation by adding the first comment."
@@ -8351,13 +8354,13 @@
             "value" : "No Comments Yet"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Comments Yet"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Comments Yet"
@@ -8542,13 +8545,13 @@
             "value" : "Loading comments"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading comments"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading comments"
@@ -8733,13 +8736,13 @@
             "value" : "Comments"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Comments"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Comments"
@@ -8924,13 +8927,13 @@
             "value" : "About"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "About"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "About"
@@ -9115,13 +9118,13 @@
             "value" : "Account"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Account"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Account"
@@ -9306,13 +9309,13 @@
             "value" : "Add"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add"
@@ -9497,13 +9500,13 @@
             "value" : "Apply"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Apply"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Apply"
@@ -9688,13 +9691,13 @@
             "value" : "Back"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Back"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Back"
@@ -9879,13 +9882,13 @@
             "value" : "Calendar"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar"
@@ -10070,13 +10073,13 @@
             "value" : "Cancel"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Cancel"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Cancel"
@@ -10261,13 +10264,13 @@
             "value" : "Close"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Close"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Close"
@@ -10452,13 +10455,13 @@
             "value" : "Colour"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Colour"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Colour"
@@ -10643,13 +10646,13 @@
             "value" : "Current Colour"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Colour"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Colour"
@@ -10834,13 +10837,13 @@
             "value" : "Preset Colours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preset Colours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preset Colours"
@@ -11025,13 +11028,13 @@
             "value" : "Configuration"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Configuration"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Configuration"
@@ -11216,13 +11219,13 @@
             "value" : "Continue"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Continue"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Continue"
@@ -11407,13 +11410,13 @@
             "value" : "Create"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create"
@@ -11598,13 +11601,13 @@
             "value" : "Creating..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Creating..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Creating..."
@@ -11789,13 +11792,13 @@
             "value" : "Custom"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Custom"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Custom"
@@ -11980,13 +11983,13 @@
             "value" : "Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Date"
@@ -12171,13 +12174,13 @@
             "value" : "Date & Time"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Date & Time"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Date & Time"
@@ -12362,13 +12365,13 @@
             "value" : "Debug Info"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Debug Info"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Debug Info"
@@ -12553,13 +12556,13 @@
             "value" : "Delete"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Delete"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Delete"
@@ -12744,13 +12747,13 @@
             "value" : "Description (Optional)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Description (Optional)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Description (Optional)"
@@ -12934,13 +12937,13 @@
             "value" : "Deselect All"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Deselect All"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Deselect All"
@@ -13125,13 +13128,13 @@
             "value" : "Disabled"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disabled"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disabled"
@@ -13316,13 +13319,13 @@
             "value" : "Done"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Done"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Done"
@@ -13507,13 +13510,13 @@
             "value" : "DO NOW"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "DO NOW"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "DO NOW"
@@ -13698,13 +13701,13 @@
             "value" : "Edit"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Edit"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Edit"
@@ -13889,13 +13892,13 @@
             "value" : "Enable"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable"
@@ -14079,13 +14082,13 @@
             "value" : "Enable Repeat"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Repeat"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Repeat"
@@ -14270,13 +14273,13 @@
             "value" : "Error"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Error"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Error"
@@ -14461,13 +14464,13 @@
             "value" : "Error loading projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Error loading projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Error loading projects"
@@ -14651,13 +14654,13 @@
             "value" : "Favorites"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Favorites"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Favorites"
@@ -14842,13 +14845,13 @@
             "value" : "Filename"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filename"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filename"
@@ -15033,13 +15036,13 @@
             "value" : "From"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "From"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "From"
@@ -15224,13 +15227,13 @@
             "value" : "High"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "High"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "High"
@@ -15415,13 +15418,13 @@
             "value" : "Loading"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading"
@@ -15606,13 +15609,13 @@
             "value" : "Loading..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading..."
@@ -15797,13 +15800,13 @@
             "value" : "Low"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Low"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Low"
@@ -15988,13 +15991,13 @@
             "value" : "Max"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Max"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Max"
@@ -16179,13 +16182,13 @@
             "value" : "Medium"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Medium"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Medium"
@@ -16370,13 +16373,13 @@
             "value" : "Min"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Min"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Min"
@@ -16561,13 +16564,13 @@
             "value" : "Mode"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Mode"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Mode"
@@ -16752,13 +16755,13 @@
             "value" : "Neven"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Neven"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Neven"
@@ -16943,13 +16946,13 @@
             "value" : "None"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "None"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "None"
@@ -17134,13 +17137,13 @@
             "value" : "Not set"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Not set"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Not set"
@@ -17325,13 +17328,13 @@
             "value" : "OK"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "OK"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "OK"
@@ -17516,13 +17519,13 @@
             "value" : "Organisation"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Organisation"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Organisation"
@@ -17707,13 +17710,13 @@
             "value" : "Preview"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preview"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preview"
@@ -17899,13 +17902,13 @@
             "value" : "Privacy Policy"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Privacy Policy"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Privacy Policy"
@@ -18091,13 +18094,13 @@
             "value" : "Read-only"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Read-only"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Read-only"
@@ -18282,13 +18285,13 @@
             "value" : "Current Reminders"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Reminders"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Reminders"
@@ -18473,13 +18476,13 @@
             "value" : "Remove"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Remove"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Remove"
@@ -18664,13 +18667,13 @@
             "value" : "Retry"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Retry"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Retry"
@@ -18855,13 +18858,13 @@
             "value" : "Save"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Save"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Save"
@@ -19046,13 +19049,13 @@
             "value" : "Save Changes"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Save Changes"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Save Changes"
@@ -19237,13 +19240,13 @@
             "value" : "Saving"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Saving"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Saving"
@@ -19428,13 +19431,13 @@
             "value" : "Search"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search"
@@ -19618,13 +19621,13 @@
             "value" : "Select All"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select All"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select All"
@@ -19809,13 +19812,13 @@
             "value" : "%1$ld selected"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$ld selected"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$ld selected"
@@ -20000,13 +20003,13 @@
             "value" : "%@ selected"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%@ selected"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%@ selected"
@@ -20191,13 +20194,13 @@
             "value" : "Set Filename"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Set Filename"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Set Filename"
@@ -20382,13 +20385,13 @@
             "value" : "Sign Out"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sign Out"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sign Out"
@@ -20574,13 +20577,13 @@
             "value" : "Statistics"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Statistics"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Statistics"
@@ -20766,13 +20769,13 @@
             "value" : "Status"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Status"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Status"
@@ -20957,13 +20960,13 @@
             "value" : "Days"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Days"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Days"
@@ -21148,13 +21151,13 @@
             "value" : "Months"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Months"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Months"
@@ -21339,13 +21342,13 @@
             "value" : "Today, 12:00"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Today, 12:00"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Today, 12:00"
@@ -21530,13 +21533,13 @@
             "value" : "Weeks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weeks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weeks"
@@ -21721,13 +21724,13 @@
             "value" : "Years"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Years"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Years"
@@ -21912,13 +21915,13 @@
             "value" : "Title"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Title"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Title"
@@ -22103,13 +22106,13 @@
             "value" : "To"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "To"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "To"
@@ -22294,13 +22297,13 @@
             "value" : "Urgent"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Urgent"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Urgent"
@@ -22485,13 +22488,13 @@
             "value" : "Hello, world!"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hello, world!"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hello, world!"
@@ -22570,6 +22573,9 @@
           }
         }
       }
+    },
+    "Default View" : {
+
     },
     "Every %lld %@" : {
       "localizations" : {
@@ -22675,13 +22681,13 @@
             "value" : "Every %1$lld %2$@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every %1$lld %2$@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every %1$lld %2$@"
@@ -22866,13 +22872,13 @@
             "value" : "Excluded Labels (%lld)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Excluded Labels (%lld)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Excluded Labels (%lld)"
@@ -23057,13 +23063,13 @@
             "value" : "Tasks you mark as favorites will appear here for quick access"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tasks you mark as favorites will appear here for quick access"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tasks you mark as favorites will appear here for quick access"
@@ -23248,13 +23254,13 @@
             "value" : "Tap the star icon on any task to add it to favorites"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tap the star icon on any task to add it to favorites"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tap the star icon on any task to add it to favorites"
@@ -23439,13 +23445,13 @@
             "value" : "No Favorite Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Favorite Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Favorite Tasks"
@@ -23630,13 +23636,13 @@
             "value" : "Loading favorites"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading favorites"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading favorites"
@@ -23821,13 +23827,13 @@
             "value" : "Clear Dates"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Clear Dates"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Clear Dates"
@@ -24005,13 +24011,13 @@
             "value" : "https:​//tasks.example.com"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "https:​//tasks.example.com"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "https:​//tasks.example.com"
@@ -24190,13 +24196,13 @@
             "value" : "Kuna"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna"
@@ -24382,13 +24388,13 @@
             "value" : "Create Label"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create Label"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create Label"
@@ -24573,13 +24579,13 @@
             "value" : "Tap to choose a color"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tap to choose a color"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tap to choose a color"
@@ -24764,13 +24770,13 @@
             "value" : "Add a description for this label"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add a description for this label"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add a description for this label"
@@ -24955,13 +24961,13 @@
             "value" : "New Label"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "New Label"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "New Label"
@@ -25146,13 +25152,13 @@
             "value" : "Label Name"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Label Name"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Label Name"
@@ -25337,13 +25343,13 @@
             "value" : "Enter label name"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter label name"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter label name"
@@ -25528,13 +25534,13 @@
             "value" : "Are you sure you want to delete '%@'? This action cannot be undone."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to delete '%@'? This action cannot be undone."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to delete '%@'? This action cannot be undone."
@@ -25719,13 +25725,13 @@
             "value" : "Delete Label"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Delete Label"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Delete Label"
@@ -25910,13 +25916,13 @@
             "value" : "Tap to choose a colour"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tap to choose a colour"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tap to choose a colour"
@@ -26101,13 +26107,13 @@
             "value" : "Add a description for this label"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add a description for this label"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add a description for this label"
@@ -26292,13 +26298,13 @@
             "value" : "Edit Label"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Edit Label"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Edit Label"
@@ -26483,13 +26489,13 @@
             "value" : "Label Name"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Label Name"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Label Name"
@@ -26674,13 +26680,13 @@
             "value" : "Enter label name"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter label name"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter label name"
@@ -26865,13 +26871,13 @@
             "value" : "Create your first label to organize your tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create your first label to organize your tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create your first label to organize your tasks"
@@ -27056,13 +27062,13 @@
             "value" : "No Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Labels"
@@ -27247,13 +27253,13 @@
             "value" : "Loading labels..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading labels..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading labels..."
@@ -27438,13 +27444,13 @@
             "value" : "No Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Labels"
@@ -27629,13 +27635,13 @@
             "value" : "Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Labels"
@@ -27820,13 +27826,13 @@
             "value" : "Loading labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading labels"
@@ -28011,13 +28017,13 @@
             "value" : "Favorites"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Favorites"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Favorites"
@@ -28202,13 +28208,13 @@
             "value" : "Menu"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Menu"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Menu"
@@ -28288,8 +28294,11 @@
         }
       }
     },
+    "navigation.overview" : {
+      "comment" : "Overview\nOverview menu item\nOverview navigation title"
+    },
     "navigation.projects" : {
-      "comment" : "Projects menu item\nProjects navigation title",
+      "comment" : "Projects\nProjects menu item\nProjects navigation title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -28393,13 +28402,13 @@
             "value" : "Projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Projects"
@@ -28478,6 +28487,12 @@
           }
         }
       }
+    },
+    "No recent projects" : {
+
+    },
+    "No recent tasks" : {
+
     },
     "onboarding.analytics_consent.allow_button" : {
       "comment" : "Button for allowing analytics",
@@ -28584,13 +28599,13 @@
             "value" : "Allow Anonymous Analytics"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Allow Anonymous Analytics"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Allow Anonymous Analytics"
@@ -28775,13 +28790,13 @@
             "value" : "No Thanks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Thanks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Thanks"
@@ -28966,13 +28981,13 @@
             "value" : "We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features."
@@ -29157,13 +29172,13 @@
             "value" : "Help Improve Kuna"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Help Improve Kuna"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Help Improve Kuna"
@@ -29348,13 +29363,13 @@
             "value" : "This project doesn't have any tasks yet. Create your first task to get started!"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This project doesn't have any tasks yet. Create your first task to get started!"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This project doesn't have any tasks yet. Create your first task to get started!"
@@ -29539,13 +29554,13 @@
             "value" : "Project Details"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Project Details"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Project Details"
@@ -29730,13 +29745,13 @@
             "value" : "Project Name"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Project Name"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Project Name"
@@ -29921,13 +29936,13 @@
             "value" : "%1$ld of %2$ld selected"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$ld of %2$ld selected"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$ld of %2$ld selected"
@@ -30112,13 +30127,13 @@
             "value" : "Error loading projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Error loading projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Error loading projects"
@@ -30197,6 +30212,18 @@
           }
         }
       }
+    },
+    "Quick Add to" : {
+
+    },
+    "Quick Add to %@" : {
+
+    },
+    "Recent Projects" : {
+
+    },
+    "Recent tasks" : {
+
     },
     "Required Labels (%lld)" : {
       "comment" : "Required labels with count",
@@ -30303,13 +30330,13 @@
             "value" : "Required Labels (%lld)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Required Labels (%lld)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Required Labels (%lld)"
@@ -30494,13 +30521,13 @@
             "value" : "About"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "About"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "About"
@@ -30685,13 +30712,13 @@
             "value" : "Learn more"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Learn more"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Learn more"
@@ -30876,13 +30903,13 @@
             "value" : "Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist."
@@ -31067,13 +31094,13 @@
             "value" : "App Icon"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon"
@@ -31258,13 +31285,13 @@
             "value" : "Appearance"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Appearance"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Appearance"
@@ -31449,13 +31476,13 @@
             "value" : "Changing icon"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Changing icon"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Changing icon"
@@ -31640,13 +31667,13 @@
             "value" : "Current Icon"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Icon"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Icon"
@@ -31831,13 +31858,13 @@
             "value" : "Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches."
@@ -32022,13 +32049,13 @@
             "value" : "About App Icons"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "About App Icons"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "About App Icons"
@@ -32213,13 +32240,13 @@
             "value" : "Alternate icons are supported"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Alternate icons are supported"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Alternate icons are supported"
@@ -32404,13 +32431,13 @@
             "value" : "App Icon Test"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon Test"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon Test"
@@ -32595,13 +32622,13 @@
             "value" : "App Icon"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon"
@@ -32786,13 +32813,13 @@
             "value" : "Alternate icons are not supported"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Alternate icons are not supported"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Alternate icons are not supported"
@@ -32977,13 +33004,13 @@
             "value" : "Token expired"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Token expired"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Token expired"
@@ -33168,13 +33195,13 @@
             "value" : "Run Sync Now (Debug)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Run Sync Now (Debug)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Run Sync Now (Debug)"
@@ -33359,13 +33386,13 @@
             "value" : "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."
@@ -33550,13 +33577,13 @@
             "value" : "1 hour"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "1 hour"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "1 hour"
@@ -33741,13 +33768,13 @@
             "value" : "6 hours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "6 hours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "6 hours"
@@ -33932,13 +33959,13 @@
             "value" : "12 hours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "12 hours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "12 hours"
@@ -34123,13 +34150,13 @@
             "value" : "15 mins"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "15 mins"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "15 mins"
@@ -34314,13 +34341,13 @@
             "value" : "24 hours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "24 hours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "24 hours"
@@ -34505,13 +34532,13 @@
             "value" : "30 mins"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "30 mins"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "30 mins"
@@ -34696,13 +34723,13 @@
             "value" : "How often to refresh tasks in background"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "How often to refresh tasks in background"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "How often to refresh tasks in background"
@@ -34887,13 +34914,13 @@
             "value" : "Frequency"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Frequency"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Frequency"
@@ -35078,13 +35105,13 @@
             "value" : "Background Sync & Notifications (Beta)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Background Sync & Notifications (Beta)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Background Sync & Notifications (Beta)"
@@ -35269,13 +35296,13 @@
             "value" : "Include summary notification"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Include summary notification"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Include summary notification"
@@ -35460,13 +35487,13 @@
             "value" : "Last Attempt: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Last Attempt: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Last Attempt: %@"
@@ -35651,13 +35678,13 @@
             "value" : "Last Success: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Last Success: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Last Success: %@"
@@ -35842,13 +35869,13 @@
             "value" : "Notifications: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notifications: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notifications: %@"
@@ -36033,13 +36060,13 @@
             "value" : "Notify when assigned to me"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify when assigned to me"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify when assigned to me"
@@ -36224,13 +36251,13 @@
             "value" : "Notify on new tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify on new tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify on new tasks"
@@ -36415,13 +36442,13 @@
             "value" : "Notify on updated tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify on updated tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify on updated tasks"
@@ -36606,13 +36633,13 @@
             "value" : "Notify when watched labels change"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify when watched labels change"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Notify when watched labels change"
@@ -36797,13 +36824,13 @@
             "value" : "Sync tasks periodically in the background"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync tasks periodically in the background"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync tasks periodically in the background"
@@ -36988,13 +37015,13 @@
             "value" : "Background Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Background Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Background Sync"
@@ -37179,13 +37206,13 @@
             "value" : "Watched Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Watched Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Watched Labels"
@@ -37370,13 +37397,13 @@
             "value" : "To sync tasks with your calendar, please grant calendar access in Settings."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "To sync tasks with your calendar, please grant calendar access in Settings."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "To sync tasks with your calendar, please grant calendar access in Settings."
@@ -37561,13 +37588,13 @@
             "value" : "Calendar Access Required"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Access Required"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Access Required"
@@ -37752,13 +37779,13 @@
             "value" : "Advanced Options"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Advanced Options"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Advanced Options"
@@ -37943,13 +37970,13 @@
             "value" : "Calendar"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar"
@@ -38134,13 +38161,13 @@
             "value" : "Calendars"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendars"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendars"
@@ -38325,13 +38352,13 @@
             "value" : "Clear Errors"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Clear Errors"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Clear Errors"
@@ -38516,13 +38543,13 @@
             "value" : "Default calendar for all tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Default calendar for all tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Default calendar for all tasks"
@@ -38707,13 +38734,13 @@
             "value" : "Kuna Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna Tasks"
@@ -38899,13 +38926,13 @@
             "value" : "Sync tasks with your calendar app"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync tasks with your calendar app"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync tasks with your calendar app"
@@ -39090,13 +39117,13 @@
             "value" : "Disable Calendar Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disable Calendar Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disable Calendar Sync"
@@ -39281,13 +39308,13 @@
             "value" : "This will permanently delete all Kuna calendars and events"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This will permanently delete all Kuna calendars and events"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This will permanently delete all Kuna calendars and events"
@@ -39472,13 +39499,13 @@
             "value" : "Disable Calendar Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disable Calendar Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disable Calendar Sync"
@@ -39663,13 +39690,13 @@
             "value" : "What should happen to your existing calendars and events?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "What should happen to your existing calendars and events?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "What should happen to your existing calendars and events?"
@@ -39854,13 +39881,13 @@
             "value" : "Disable Calendar Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disable Calendar Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Disable Calendar Sync"
@@ -40045,13 +40072,13 @@
             "value" : "Enabled"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enabled"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enabled"
@@ -40236,13 +40263,13 @@
             "value" : "Enable Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Sync"
@@ -40427,13 +40454,13 @@
             "value" : "Recent Errors"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Recent Errors"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Recent Errors"
@@ -40618,13 +40645,13 @@
             "value" : "Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones."
@@ -40809,13 +40836,13 @@
             "value" : "Keep your tasks in sync with your calendar app"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Keep your tasks in sync with your calendar app"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Keep your tasks in sync with your calendar app"
@@ -41000,13 +41027,13 @@
             "value" : "Sync with Calendar"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync with Calendar"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync with Calendar"
@@ -41191,13 +41218,13 @@
             "value" : "How would you like to organize your synced tasks?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "How would you like to organize your synced tasks?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "How would you like to organize your synced tasks?"
@@ -41382,13 +41409,13 @@
             "value" : "Choose Sync Mode"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose Sync Mode"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose Sync Mode"
@@ -41573,13 +41600,13 @@
             "value" : "Calendar Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Sync"
@@ -41764,13 +41791,13 @@
             "value" : "Review your calendar sync configuration:"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Review your calendar sync configuration:"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Review your calendar sync configuration:"
@@ -41955,13 +41982,13 @@
             "value" : "Anonymous Analytics"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Anonymous Analytics"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Anonymous Analytics"
@@ -42146,13 +42173,13 @@
             "value" : "Calendar Selection"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Selection"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Selection"
@@ -42337,13 +42364,13 @@
             "value" : "Sync All Projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync All Projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync All Projects"
@@ -42528,13 +42555,13 @@
             "value" : "Select specific projects below to sync to your calendar."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select specific projects below to sync to your calendar."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select specific projects below to sync to your calendar."
@@ -42719,13 +42746,13 @@
             "value" : "Automatically include all current and future projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Automatically include all current and future projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Automatically include all current and future projects"
@@ -42910,13 +42937,13 @@
             "value" : "Sync All Projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync All Projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync All Projects"
@@ -43101,13 +43128,13 @@
             "value" : "Select Projects"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select Projects"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select Projects"
@@ -43292,13 +43319,13 @@
             "value" : "Choose which projects to create calendars for:"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose which projects to create calendars for:"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose which projects to create calendars for:"
@@ -43483,13 +43510,13 @@
             "value" : "Choose which projects to include in your Kuna calendar:"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose which projects to include in your Kuna calendar:"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose which projects to include in your Kuna calendar:"
@@ -43674,13 +43701,13 @@
             "value" : "Read-only"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Read-only"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Read-only"
@@ -43865,13 +43892,13 @@
             "value" : "Reconfigure"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reconfigure"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reconfigure"
@@ -44056,13 +44083,13 @@
             "value" : "Request Access"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Request Access"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Request Access"
@@ -44247,13 +44274,13 @@
             "value" : "Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown."
@@ -44438,13 +44465,13 @@
             "value" : "Choose Different Calendar"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose Different Calendar"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Choose Different Calendar"
@@ -44629,13 +44656,13 @@
             "value" : "Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar."
@@ -44820,13 +44847,13 @@
             "value" : "Calendar Selection"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Selection"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Selection"
@@ -45011,13 +45038,13 @@
             "value" : "Calendar Sync Setup"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Sync Setup"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Sync Setup"
@@ -45202,13 +45229,13 @@
             "value" : "Set up Calendar Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Set up Calendar Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Set up Calendar Sync"
@@ -45394,13 +45421,13 @@
             "value" : "Show Technical Details"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Technical Details"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Technical Details"
@@ -45585,13 +45612,13 @@
             "value" : "Statistics"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Statistics"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Statistics"
@@ -45776,13 +45803,13 @@
             "value" : "Status"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Status"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Status"
@@ -45967,13 +45994,13 @@
             "value" : "Last synced: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Last synced: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Last synced: %@"
@@ -46158,13 +46185,13 @@
             "value" : "Never synced"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Never synced"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Never synced"
@@ -46349,13 +46376,13 @@
             "value" : "Kuna creates its own calendars and never edits your existing ones."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna creates its own calendars and never edits your existing ones."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kuna creates its own calendars and never edits your existing ones."
@@ -46540,13 +46567,13 @@
             "value" : "Switch"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch"
@@ -46732,13 +46759,13 @@
             "value" : "Switch Calendar?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch Calendar?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch Calendar?"
@@ -46923,13 +46950,13 @@
             "value" : "Sync Now"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync Now"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync Now"
@@ -47114,13 +47141,13 @@
             "value" : "Technical Details"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Technical Details"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Technical Details"
@@ -47305,13 +47332,13 @@
             "value" : "Calendar Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar Sync"
@@ -47496,13 +47523,13 @@
             "value" : "Writable"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Writable"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Writable"
@@ -47687,13 +47714,13 @@
             "value" : "Authentication Method"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Authentication Method"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Authentication Method"
@@ -47878,13 +47905,13 @@
             "value" : "Connection"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Connection"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Connection"
@@ -48069,13 +48096,13 @@
             "value" : "No server configured"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No server configured"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No server configured"
@@ -48260,13 +48287,13 @@
             "value" : "Server"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Server"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Server"
@@ -48451,13 +48478,13 @@
             "value" : "Token Expiration"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Token Expiration"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Token Expiration"
@@ -48642,13 +48669,13 @@
             "value" : "The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication."
@@ -48833,13 +48860,13 @@
             "value" : "You can still create and manage your personal tasks with full functionality."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "You can still create and manage your personal tasks with full functionality."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "You can still create and manage your personal tasks with full functionality."
@@ -49024,13 +49051,13 @@
             "value" : "Why is user management limited?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Why is user management limited?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Why is user management limited?"
@@ -49215,13 +49242,13 @@
             "value" : "Requires username/password login"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Requires username/password login"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Requires username/password login"
@@ -49406,13 +49433,13 @@
             "value" : "Switch to Username/Password Login"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch to Username/Password Login"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Switch to Username/Password Login"
@@ -49597,13 +49624,13 @@
             "value" : "User Management"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "User Management"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "User Management"
@@ -49788,13 +49815,13 @@
             "value" : "Show paperclip icons for tasks with attachments"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show paperclip icons for tasks with attachments"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show paperclip icons for tasks with attachments"
@@ -49979,13 +50006,13 @@
             "value" : "Attachment Icons"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Attachment Icons"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Attachment Icons"
@@ -50170,13 +50197,13 @@
             "value" : "Show confetti when marking a task complete"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show confetti when marking a task complete"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show confetti when marking a task complete"
@@ -50361,13 +50388,13 @@
             "value" : "Celebration"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Celebration"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Celebration"
@@ -50552,13 +50579,13 @@
             "value" : "Celebrate Completion"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Celebrate Completion"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Celebrate Completion"
@@ -50743,13 +50770,13 @@
             "value" : "Use the default blue color for task color indicators"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use the default blue color for task color indicators"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use the default blue color for task color indicators"
@@ -50934,13 +50961,13 @@
             "value" : "Default Color Balls"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Default Color Balls"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Default Color Balls"
@@ -51125,13 +51152,13 @@
             "value" : "Display color indicators for all tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Display color indicators for all tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Display color indicators for all tasks"
@@ -51316,13 +51343,13 @@
             "value" : "Task Colours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task Colours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task Colours"
@@ -51507,13 +51534,13 @@
             "value" : "Show comment count badges on tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show comment count badges on tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show comment count badges on tasks"
@@ -51698,13 +51725,13 @@
             "value" : "Comment Counts"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Comment Counts"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Comment Counts"
@@ -51889,13 +51916,13 @@
             "value" : "Show a task's due date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show a task's due date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show a task's due date"
@@ -52080,13 +52107,13 @@
             "value" : "Due Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Due Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Due Date"
@@ -52271,13 +52298,13 @@
             "value" : "Show a task's end date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show a task's end date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show a task's end date"
@@ -52462,13 +52489,13 @@
             "value" : "End Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "End Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "End Date"
@@ -52653,13 +52680,13 @@
             "value" : "Task Dates"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task Dates"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task Dates"
@@ -52844,13 +52871,13 @@
             "value" : "Show a task's start date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show a task's start date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show a task's start date"
@@ -53035,13 +53062,13 @@
             "value" : "Control which elements are displayed in task lists. Changes apply to all task views."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Control which elements are displayed in task lists. Changes apply to all task views."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Control which elements are displayed in task lists. Changes apply to all task views."
@@ -53226,13 +53253,13 @@
             "value" : "Sample task title"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sample task title"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sample task title"
@@ -53417,13 +53444,13 @@
             "value" : "Live preview of task list appearance based on your settings."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Live preview of task list appearance based on your settings."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Live preview of task list appearance based on your settings."
@@ -53608,13 +53635,13 @@
             "value" : "Show priority indicators on tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show priority indicators on tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show priority indicators on tasks"
@@ -53799,13 +53826,13 @@
             "value" : "Priority Indicators"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Priority Indicators"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Priority Indicators"
@@ -53990,13 +54017,13 @@
             "value" : "Customize what appears on task lists"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Customize what appears on task lists"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Customize what appears on task lists"
@@ -54181,13 +54208,13 @@
             "value" : "Show whether a task is synced to Calendar"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show whether a task is synced to Calendar"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show whether a task is synced to Calendar"
@@ -54372,13 +54399,13 @@
             "value" : "Sync Status"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync Status"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sync Status"
@@ -54563,13 +54590,13 @@
             "value" : "Display Options"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Display Options"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Display Options"
@@ -54754,13 +54781,13 @@
             "value" : "Current Icon: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Icon: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Current Icon: %@"
@@ -54945,13 +54972,13 @@
             "value" : "Information"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Information"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Information"
@@ -55136,13 +55163,13 @@
             "value" : "Help improve the app by sending anonymous usage data"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Help improve the app by sending anonymous usage data"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Help improve the app by sending anonymous usage data"
@@ -55327,13 +55354,13 @@
             "value" : "Anonymous Analytics"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Anonymous Analytics"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Anonymous Analytics"
@@ -55518,13 +55545,13 @@
             "value" : "Privacy"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Privacy"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Privacy"
@@ -55709,13 +55736,13 @@
             "value" : "Processing"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Processing"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Processing"
@@ -55900,13 +55927,13 @@
             "value" : "Project Sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Project Sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Project Sync"
@@ -56091,13 +56118,13 @@
             "value" : "How tasks are sorted when you open a project"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "How tasks are sorted when you open a project"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "How tasks are sorted when you open a project"
@@ -56282,13 +56309,13 @@
             "value" : "Default Sort Order"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Default Sort Order"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Default Sort Order"
@@ -56473,13 +56500,13 @@
             "value" : "Settings"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Settings"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Settings"
@@ -56664,13 +56691,13 @@
             "value" : "Expires in %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Expires in %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Expires in %@"
@@ -56855,13 +56882,13 @@
             "value" : "Watched Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Watched Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Watched Labels"
@@ -56940,6 +56967,9 @@
           }
         }
       }
+    },
+    "Task '%@' added successfully!" : {
+
     },
     "tasks.add.title" : {
       "comment" : "Add task button",
@@ -57046,13 +57076,13 @@
             "value" : "Add Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Task"
@@ -57237,13 +57267,13 @@
             "value" : "Files"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Files"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Files"
@@ -57428,13 +57458,13 @@
             "value" : "Photo Library"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Photo Library"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Photo Library"
@@ -57619,13 +57649,13 @@
             "value" : "Upload"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Upload"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Upload"
@@ -57810,13 +57840,13 @@
             "value" : "Enter a custom name for '%@'"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter a custom name for '%@'"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter a custom name for '%@'"
@@ -58002,13 +58032,13 @@
             "value" : "Select Color"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select Color"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select Color"
@@ -58193,13 +58223,13 @@
             "value" : "No comments yet"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No comments yet"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No comments yet"
@@ -58384,13 +58414,13 @@
             "value" : "Add Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Task"
@@ -58575,13 +58605,13 @@
             "value" : "Create Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create Task"
@@ -58766,13 +58796,13 @@
             "value" : "Create First Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create First Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create First Task"
@@ -58957,13 +58987,13 @@
             "value" : "Create New Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create New Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create New Task"
@@ -59148,13 +59178,13 @@
             "value" : "Enter description"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter description"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter description"
@@ -59339,13 +59369,13 @@
             "value" : "Due Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Due Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Due Date"
@@ -59530,13 +59560,13 @@
             "value" : "End Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "End Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "End Date"
@@ -59721,13 +59751,13 @@
             "value" : "Priority"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Priority"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Priority"
@@ -59912,13 +59942,13 @@
             "value" : "Progress"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Progress"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Progress"
@@ -60103,13 +60133,13 @@
             "value" : "No reminders"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No reminders"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No reminders"
@@ -60294,13 +60324,13 @@
             "value" : "No assignees"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No assignees"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No assignees"
@@ -60485,13 +60515,13 @@
             "value" : "Assignees"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Assignees"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Assignees"
@@ -60676,13 +60706,13 @@
             "value" : "Add Attachment"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Attachment"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Attachment"
@@ -60867,13 +60897,13 @@
             "value" : "Add Attachment"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Attachment"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Attachment"
@@ -61058,13 +61088,13 @@
             "value" : "Add Due Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Due Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Due Date"
@@ -61249,13 +61279,13 @@
             "value" : "No due date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No due date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No due date"
@@ -61440,13 +61470,13 @@
             "value" : "Add due date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add due date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add due date"
@@ -61631,13 +61661,13 @@
             "value" : "Add End Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add End Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add End Date"
@@ -61822,13 +61852,13 @@
             "value" : "No end date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No end date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No end date"
@@ -62013,13 +62043,13 @@
             "value" : "Add end date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add end date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add end date"
@@ -62204,13 +62234,13 @@
             "value" : "Add Start Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Start Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add Start Date"
@@ -62395,13 +62425,13 @@
             "value" : "No start date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No start date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No start date"
@@ -62586,13 +62616,13 @@
             "value" : "Add start date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add start date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add start date"
@@ -62777,13 +62807,13 @@
             "value" : "No description"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No description"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No description"
@@ -62968,13 +62998,13 @@
             "value" : "Add description"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add description"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add description"
@@ -63159,13 +63189,13 @@
             "value" : "Description"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Description"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Description"
@@ -63350,13 +63380,13 @@
             "value" : "No labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No labels"
@@ -63541,13 +63571,13 @@
             "value" : "No priority"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No priority"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No priority"
@@ -63732,13 +63762,13 @@
             "value" : "Priority"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Priority"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Priority"
@@ -63923,13 +63953,13 @@
             "value" : "Progress"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Progress"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Progress"
@@ -64114,13 +64144,13 @@
             "value" : "Related Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Related Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Related Tasks"
@@ -64305,13 +64335,13 @@
             "value" : "Add reminder"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add reminder"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add reminder"
@@ -64496,13 +64526,13 @@
             "value" : "Add New Reminder"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add New Reminder"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add New Reminder"
@@ -64687,13 +64717,13 @@
             "value" : "Add reminders to get notified about this task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add reminders to get notified about this task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Add reminders to get notified about this task"
@@ -64878,13 +64908,13 @@
             "value" : "No Reminders"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Reminders"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Reminders"
@@ -65069,13 +65099,13 @@
             "value" : "No Reminders Set"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Reminders Set"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Reminders Set"
@@ -65260,13 +65290,13 @@
             "value" : "Reminders"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminders"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminders"
@@ -65451,13 +65481,13 @@
             "value" : "Repeat every:"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat every:"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat every:"
@@ -65642,13 +65672,13 @@
             "value" : "Task will not repeat"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task will not repeat"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task will not repeat"
@@ -65833,13 +65863,13 @@
             "value" : "Repeat Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Task"
@@ -66024,13 +66054,13 @@
             "value" : "Repeat"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat"
@@ -66215,13 +66245,13 @@
             "value" : "SCHEDULING"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "SCHEDULING"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "SCHEDULING"
@@ -66406,13 +66436,13 @@
             "value" : "Task Details"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task Details"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task Details"
@@ -66597,13 +66627,13 @@
             "value" : "Create your first task to get started!"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create your first task to get started!"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Create your first task to get started!"
@@ -66788,13 +66818,13 @@
             "value" : "No Tasks Yet"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Tasks Yet"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Tasks Yet"
@@ -66979,13 +67009,13 @@
             "value" : "Filter by Due Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Due Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Due Date"
@@ -67170,13 +67200,13 @@
             "value" : "Filter by Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Labels"
@@ -67361,13 +67391,13 @@
             "value" : "Filter by Priority"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Priority"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Priority"
@@ -67552,13 +67582,13 @@
             "value" : "Filter by Progress"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Progress"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter by Progress"
@@ -67743,13 +67773,13 @@
             "value" : "Max: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Max: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Max: %@"
@@ -67934,13 +67964,13 @@
             "value" : "Min: %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Min: %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Min: %@"
@@ -68126,13 +68156,13 @@
             "value" : "Quick Filter"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Quick Filter"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Quick Filter"
@@ -68318,13 +68348,13 @@
             "value" : "Quick Filters"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Quick Filters"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Quick Filters"
@@ -68509,13 +68539,13 @@
             "value" : "Reset All Filters"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reset All Filters"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reset All Filters"
@@ -68701,13 +68731,13 @@
             "value" : "Show Completed Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Completed Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Completed Tasks"
@@ -68893,13 +68923,13 @@
             "value" : "Show Incomplete Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Incomplete Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Incomplete Tasks"
@@ -69085,13 +69115,13 @@
             "value" : "Sort Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sort Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sort Tasks"
@@ -69276,13 +69306,13 @@
             "value" : "Status"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Status"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Status"
@@ -69467,13 +69497,13 @@
             "value" : "Filter Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Filter Tasks"
@@ -69658,13 +69688,13 @@
             "value" : "TASK INFO"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "TASK INFO"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "TASK INFO"
@@ -69850,13 +69880,13 @@
             "value" : "Select Labels"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select Labels"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select Labels"
@@ -70041,13 +70071,13 @@
             "value" : "Load earlier"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Load earlier"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Load earlier"
@@ -70232,13 +70262,13 @@
             "value" : "Load more"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Load more"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Load more"
@@ -70423,13 +70453,13 @@
             "value" : "Task List"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task List"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task List"
@@ -70614,13 +70644,13 @@
             "value" : "Loading tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading tasks"
@@ -70805,13 +70835,13 @@
             "value" : "Pick Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Pick Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Pick Task"
@@ -70996,13 +71026,13 @@
             "value" : "Pick Task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Pick Task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Pick Task"
@@ -71187,13 +71217,13 @@
             "value" : "Task title"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task title"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task title"
@@ -71378,13 +71408,13 @@
             "value" : "Min Priority"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Min Priority"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Min Priority"
@@ -71569,13 +71599,13 @@
             "value" : "Max Priority"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Max Priority"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Max Priority"
@@ -71760,13 +71790,13 @@
             "value" : "Loading related tasks..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading related tasks..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Loading related tasks..."
@@ -71951,13 +71981,13 @@
             "value" : "No related tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No related tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No related tasks"
@@ -72142,13 +72172,13 @@
             "value" : "Use the picker below to relate another task."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use the picker below to relate another task."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use the picker below to relate another task."
@@ -72333,13 +72363,13 @@
             "value" : "No Related Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Related Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No Related Tasks"
@@ -72525,13 +72555,13 @@
             "value" : "Related Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Related Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Related Tasks"
@@ -72716,13 +72746,13 @@
             "value" : "Kind"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kind"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Kind"
@@ -72908,13 +72938,13 @@
             "value" : "Reminder"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminder"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminder"
@@ -73100,13 +73130,13 @@
             "value" : "Reminder Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminder Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminder Date"
@@ -73292,13 +73322,13 @@
             "value" : "Reminders"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminders"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminders"
@@ -73483,13 +73513,13 @@
             "value" : "Reminders"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminders"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Reminders"
@@ -73675,13 +73705,13 @@
             "value" : "Repeat"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat"
@@ -73866,13 +73896,13 @@
             "value" : "Custom Interval"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Custom Interval"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Custom Interval"
@@ -74057,13 +74087,13 @@
             "value" : "Daily"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Daily"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Daily"
@@ -74248,13 +74278,13 @@
             "value" : "This task will repeat %@"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This task will repeat %@"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This task will repeat %@"
@@ -74439,13 +74469,13 @@
             "value" : "Daily"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Daily"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Daily"
@@ -74630,13 +74660,13 @@
             "value" : "Every X days"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every X days"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every X days"
@@ -74821,13 +74851,13 @@
             "value" : "Every %.1f days"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every %.1f days"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every %.1f days"
@@ -75012,13 +75042,13 @@
             "value" : "Every X hours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every X hours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every X hours"
@@ -75203,13 +75233,13 @@
             "value" : "Every X weeks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every X weeks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every X weeks"
@@ -75394,13 +75424,13 @@
             "value" : "Hourly"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hourly"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hourly"
@@ -75585,13 +75615,13 @@
             "value" : "Every 30 days"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every 30 days"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every 30 days"
@@ -75776,13 +75806,13 @@
             "value" : "Weekly"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weekly"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weekly"
@@ -75967,13 +75997,13 @@
             "value" : "Every"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every"
@@ -76159,13 +76189,13 @@
             "value" : "Repeat Interval"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Interval"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Interval"
@@ -76351,13 +76381,13 @@
             "value" : "Interval (seconds)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Interval (seconds)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Interval (seconds)"
@@ -76542,13 +76572,13 @@
             "value" : "Mode"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Mode"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Mode"
@@ -76733,13 +76763,13 @@
             "value" : "Mode"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Mode"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Mode"
@@ -76924,13 +76954,13 @@
             "value" : "Repeat Mode"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Mode"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Mode"
@@ -77115,13 +77145,13 @@
             "value" : "Every 30 days"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every 30 days"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Every 30 days"
@@ -77307,13 +77337,13 @@
             "value" : "e.g. 86400 for daily"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "e.g. 86400 for daily"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "e.g. 86400 for daily"
@@ -77498,13 +77528,13 @@
             "value" : "Quick Options"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Quick Options"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Quick Options"
@@ -77690,13 +77720,13 @@
             "value" : "Repeat Settings"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Settings"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat Settings"
@@ -77881,13 +77911,13 @@
             "value" : "Repeat"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Repeat"
@@ -78072,13 +78102,13 @@
             "value" : "Unit"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Unit"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Unit"
@@ -78263,13 +78293,13 @@
             "value" : "Days"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Days"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Days"
@@ -78454,13 +78484,13 @@
             "value" : "Hours"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hours"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hours"
@@ -78645,13 +78675,13 @@
             "value" : "Months"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Months"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Months"
@@ -78836,13 +78866,13 @@
             "value" : "Weeks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weeks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weeks"
@@ -79027,13 +79057,13 @@
             "value" : "Use custom interval"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use custom interval"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use custom interval"
@@ -79218,13 +79248,13 @@
             "value" : "Weekly"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weekly"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Weekly"
@@ -79409,13 +79439,13 @@
             "value" : "Sample task title"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sample task title"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sample task title"
@@ -79600,13 +79630,13 @@
             "value" : "Type part of a title or description to find a task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Type part of a title or description to find a task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Type part of a title or description to find a task"
@@ -79791,13 +79821,13 @@
             "value" : "No tasks found"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No tasks found"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No tasks found"
@@ -79982,13 +80012,13 @@
             "value" : "Search tasks..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search tasks..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search tasks..."
@@ -80173,13 +80203,13 @@
             "value" : "Search for tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search for tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search for tasks"
@@ -80365,13 +80395,13 @@
             "value" : "Select a task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select a task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select a task"
@@ -80556,13 +80586,13 @@
             "value" : "Select a task to view its details"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select a task to view its details"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select a task to view its details"
@@ -80747,13 +80777,13 @@
             "value" : "Select a task"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select a task"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Select a task"
@@ -80938,13 +80968,13 @@
             "value" : "Sort Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sort Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Sort Tasks"
@@ -81130,13 +81160,13 @@
             "value" : "Start Date"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Start Date"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Start Date"
@@ -81321,13 +81351,13 @@
             "value" : "This task will sync automatically on save"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This task will sync automatically on save"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "This task will sync automatically on save"
@@ -81512,13 +81542,13 @@
             "value" : "Calendar sync requires both start and end dates"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar sync requires both start and end dates"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Calendar sync requires both start and end dates"
@@ -81704,13 +81734,13 @@
             "value" : "Task has no dates to sync"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task has no dates to sync"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Task has no dates to sync"
@@ -81895,13 +81925,13 @@
             "value" : "Tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Tasks"
@@ -82086,13 +82116,13 @@
             "value" : "Find Users"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Find Users"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Find Users"
@@ -82277,13 +82307,13 @@
             "value" : "Enter a username or name to find users you can assign to tasks"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter a username or name to find users you can assign to tasks"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enter a username or name to find users you can assign to tasks"
@@ -82468,13 +82498,13 @@
             "value" : "Try a different search term"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Try a different search term"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Try a different search term"
@@ -82659,13 +82689,13 @@
             "value" : "No users found"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No users found"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No users found"
@@ -82850,13 +82880,13 @@
             "value" : "Search users..."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search users..."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search users..."
@@ -83041,13 +83071,13 @@
             "value" : "Search for '%@'"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search for '%@'"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search for '%@'"
@@ -83232,13 +83262,13 @@
             "value" : "Searching users"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Searching users"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Searching users"
@@ -83423,13 +83453,13 @@
             "value" : "Search for User"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search for User"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Search for User"
@@ -83508,6 +83538,9 @@
           }
         }
       }
+    },
+    "Which view opens when you launch the app" : {
+
     }
   },
   "version" : "1.0"

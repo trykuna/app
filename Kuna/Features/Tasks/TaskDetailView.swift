@@ -294,6 +294,7 @@ struct TaskDetailView: View {
             })
         }
         .onAppear {
+            AppSettings.shared.addRecentTask(task.id)
             // Initialize edit buffers
             editStartDate = task.startDate
             editDueDate = task.dueDate

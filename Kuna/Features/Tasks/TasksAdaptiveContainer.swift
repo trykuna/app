@@ -10,12 +10,17 @@ struct TasksAdaptiveContainer: View {
     let api: VikunjaAPI
 
     var body: some View {
-        if hSize == .compact {
-            // iPhone: Traditional navigation
-            TaskListView(project: project, api: api)
-        } else {
-            // iPad: Custom split view using HStack
-            TasksIPadSplitView(project: project, api: api)
+        Group {
+            if hSize == .compact {
+                // iPhone: Traditional navigation
+                TaskListView(project: project, api: api)
+            } else {
+                // iPad: Custom split view using HStack
+                TasksIPadSplitView(project: project, api: api)
+            }
+        }
+        .onAppear {
+            AppSettings.shared.addRecentProject(project.id)
         }
     }
 }
