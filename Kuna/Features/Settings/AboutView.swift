@@ -82,6 +82,25 @@ struct AboutView: View {
                     Text(String(localized: "about.specialThanks.message", comment: "Special thanks message from the developer"))
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(2)
+
+                    // Contributors link styled like the "Learn more" link
+                    NavigationLink(destination: ContributorsView()) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "heart.fill")
+                                .imageScale(.medium)
+                                .foregroundStyle(.secondary)
+                                .frame(width: 22)
+
+                            Text(String(localized: "settings.about.contributors", comment: "Contributors link"))
+                                .foregroundStyle(.primary)
+
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.tertiary)
+                                .font(.footnote)
+                        }
+                        .padding(.vertical, 8)
+                    }
                 }
 
                 // Useful links / actions — replace URLs as needed
@@ -94,6 +113,7 @@ struct AboutView: View {
                             comment: "Privacy policy link"), systemImage: "hand.raised", url: AppURLs.privacy)
                         Divider()
                         LinkRowPrimitive(title: "Licenses", systemImage: "doc.text.magnifyingglass", url: AppURLs.license)
+
                     }
                 }
 
