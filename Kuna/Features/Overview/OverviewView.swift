@@ -28,7 +28,9 @@ struct OverviewView: View {
                                     .font(.headline)
                                     .foregroundColor(.primary)
                                 
-                                Text(String(localized: "overview.apiToken.warning.message", comment: "Tasks will be added to your first project. API tokens cannot access user preferences."))
+                                Text(String(
+                                    localized: "overview.apiToken.warning.message",
+                                    comment: "API Token Warning"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                     .fixedSize(horizontal: false, vertical: true)
@@ -44,12 +46,16 @@ struct OverviewView: View {
                         Group {
                             if targetProjectName.isEmpty {
                                 HStack {
-                                    Text(String(localized: "overview.quickAddTo.noPlaceholder", comment: "Quick Add to (no placeholder)"))
+                                    Text(String(
+                                        localized: "overview.quickAddTo.noPlaceholder",
+                                        comment: "Quick Add to (no placeholder)"))
                                     ProgressView()
                                         .scaleEffect(0.7)
                                 }
                             } else {
-                                Text(String(localized: "settings.quickAddTo.project.withPlaceholder \(targetProjectName)", comment: "Quick Add to"))
+                                Text(String(
+                                    localized: "settings.quickAddTo.project.withPlaceholder \(targetProjectName)",
+                                    comment: "Quick Add to"))
                         }
                         }
                         .font(.headline)
@@ -73,7 +79,7 @@ struct OverviewView: View {
                     .cornerRadius(12)
                     
                     VStack(alignment: .leading, spacing: 12) {
-                        Text(String(localized: "overview.recentProjects", comment:"Recent Projects"))
+                        Text(String(localized: "overview.recentProjects", comment: "Recent Projects"))
                             .font(.headline)
                         
                         if AppSettings.shared.recentProjectIds.isEmpty {
@@ -120,7 +126,7 @@ struct OverviewView: View {
                         }
                     }) {
                         Image(systemName: "line.3.horizontal")
-                            .font(.system(size:18, weight: .medium))
+                            .font(.system(size: 18, weight: .medium))
                     }
                     .accessibilityLabel(String(localized: "navigation.menu", comment: "Menu button accessibility label"))
                 }
@@ -130,7 +136,10 @@ struct OverviewView: View {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
-                        Text(String(localized: "overview.taskAdded.success", defaultValue: "Task '\(lastCreatedTaskTitle)' added successfully!", comment: "Success message when task is added. The placeholder is the task title."))
+                        Text(String(
+                            localized: "overview.taskAdded.success",
+                            defaultValue: "Task '\(lastCreatedTaskTitle)' added successfully!",
+                            comment: "Success message when task is added. The placeholder is the task title."))
                             .font(.body)
                     }
                     .padding()
@@ -148,9 +157,7 @@ struct OverviewView: View {
                 
                 Task {
                     do {
-                        print("🔍 Fetching user and projects...")
                         let currentUser = try await api.getCurrentUser()
-                        print("👤 User ID: \(currentUser.id), Default Project ID: \(currentUser.defaultProjectId ?? -1)")
                         
                         // If we got here, we're using username/password auth
                         await MainActor.run {
@@ -159,25 +166,21 @@ struct OverviewView: View {
                         
                         if let defaultProjectId = currentUser.defaultProjectId {
                             let projects = try await api.fetchProjects()
-                            print("📁 Found \(projects.count) projects")
                             if let project = projects.first(where: { $0.id == defaultProjectId}) {
                                 await MainActor.run {
                                     targetProjectName = project.title
-                                    print("✅ Set target project to: \(project.title)")
                                 }
                             }
                         } else {
-                            print("⚠️ No default project, using first project")
                             let projects = try await api.fetchProjects()
                             if let firstProject = projects.first {
                                 await MainActor.run {
                                     targetProjectName = firstProject.title
-                                    print("✅ Set target project to: \(firstProject.title)")
                                 }
                             }
                         }
                     } catch {
-                        print("❌ Could not get user info (likely API token), falling back to first project")
+                        Log.app.debug("Overview: Could not get user info (likely API token), falling back to first project")
                         // Confirm we're using API token
                         await MainActor.run {
                             isUsingAPIToken = true
@@ -189,11 +192,10 @@ struct OverviewView: View {
                             if let firstProject = projects.first {
                                 await MainActor.run {
                                     targetProjectName = firstProject.title
-                                    print("✅ Fallback: Set target project to: \(firstProject.title)")
                                 }
                             }
                         } catch {
-                            print("❌ Could not fetch projects: \(error)")
+                            Log.app.error("Overview: Could not fetch projects: \(String(describing: error), privacy: .public)")
                         }
                     }
                 }
@@ -224,7 +226,8 @@ struct OverviewView: View {
                         }
                     }
                 } catch {
-                    print("Could not get user's default project: \(error)")
+                    Log.app.debug(
+                        "Overview: Could not get user's default project: \(String(describing: error), privacy: .public)")
                 }
                 // If no default project, use the first available project
                 if targetProjectId == nil {
@@ -237,7 +240,7 @@ struct OverviewView: View {
                 // Get all projects and select the first one if available
 
                 guard let projectId = targetProjectId else {
-                    print("No projects available")
+                    Log.app.warning("Overview: No projects available for task creation")
                     await MainActor.run {
                         isAddingTask = false
                     }
@@ -269,7 +272,7 @@ struct OverviewView: View {
                 }
             } catch {
                 // Set the status back to false if there is an error.
-                print("Failed to create task: \(error)")
+                Log.app.error("Overview: Failed to create task: \(String(describing: error), privacy: .public)")
                 await MainActor.run {
                     isAddingTask = false
                 }
@@ -330,7 +333,8 @@ struct RecentProjectRow: View {
                             AppSettings.shared.recentProjectIds.removeAll { $0 == projectId }
                         }
                     } catch {
-                        print("Failed to load project: \(error)")
+                        Log.app.debug(
+                            "Overview: Failed to load recent project \(projectId, privacy: .public): \(String(describing: error), privacy: .public)")
                         loadFailed = true
                     }
                     isLoading = false
@@ -388,7 +392,8 @@ struct RecentTaskRow: View {
                         let fetchedTask = try await api.getTask(taskId: taskId)
                         task = fetchedTask
                     } catch {
-                        print("Failed to load task: \(error)")
+                        Log.app.debug(
+                            "Overview: Failed to load recent task \(taskId, privacy: .public): \(String(describing: error), privacy: .public)")
                         loadFailed = true
                         // Remove from recent tasks since it no longer exists
                         AppSettings.shared.recentTaskIds.removeAll { $0 == taskId }

@@ -8,7 +8,9 @@ struct MainContainerView: View {
     let api: VikunjaAPI
     @EnvironmentObject var appState: AppState
 
-    @State private var selectedMenuItem: SideMenuView.MenuItem = AppSettings.shared.defaultView == .overview ? .overview : .projects
+    @State private var selectedMenuItem: SideMenuView.MenuItem = AppSettings.shared.defaultView == .overview 
+        ? .overview 
+        : .projects
     @State private var isMenuOpen = false
     @State private var showingNewProject = false
     @State private var showingSettings = false
