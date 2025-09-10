@@ -35,7 +35,21 @@ final class KunaUITests: XCTestCase {
         // Login if needed
         loginIfNeeded(app)
 
-        // Ensure we’re on Projects
+        // --- Overview Screen (if it's the default view) ---
+        // Check if we're on the Overview screen first
+        let overviewExists = app.staticTexts["Overview"].waitForExistence(timeout: 2) ||
+                             app.otherElements["screen.overview"].waitForExistence(timeout: 2)
+        
+        if overviewExists {
+            // We're on Overview - take a screenshot
+            snapshot("02-Overview")
+            
+            // Now navigate to Projects via sidebar
+            openSidebar(app)
+            tapSidebarItem("projects", app: app)
+        }
+
+        // Ensure we're on Projects
         ensureOnProjects(app)
 
         // Open project (fallbacks if the preferred one isn't present)
@@ -45,7 +59,7 @@ final class KunaUITests: XCTestCase {
         // Wait until the task list is visible (accept any task if specific one not found)
         XCTAssertTrue(waitForTask(named: detailTask, in: app, timeout: 10),
                       "Didn't enter \(projectName) task list")
-        snapshot("02-TaskList")
+        snapshot("03-TaskList")
 
         // Open the specific task (may fall back); on iPhone this now taps the chevron
         let actualTask = openTaskAndReturnName(preferred: detailTask, in: app)
@@ -53,13 +67,13 @@ final class KunaUITests: XCTestCase {
 
         // Ensure Task Details is shown
         XCTAssertTrue(waitForTaskDetails(in: app, timeout: 8), "Task details screen didn't appear")
-        snapshot("04-TaskDetails")
+        snapshot("05-TaskDetails")
 
         // --- Related Tasks screen ---
         openRow(titled: "Related Tasks", in: app)
         XCTAssertTrue(waitForNavTitle("Related Tasks", in: app, timeout: 6),
-                      "Related Tasks screen didn’t appear")
-        snapshot("05-RelatedTasks")
+                      "Related Tasks screen didn't appear")
+        snapshot("06-RelatedTasks")
 
         // Close Related Tasks via Done
         tapNavOrAnyButton("Done", app: app)
@@ -69,7 +83,7 @@ final class KunaUITests: XCTestCase {
         openRow(titled: "Comments", in: app)
         XCTAssertTrue(waitForNavTitle("Comments", in: app, timeout: 6),
                       "Comments screen didn't appear")
-        snapshot("06-Comments")
+        snapshot("07-Comments")
 
         tapNavOrAnyButton("Done", app: app)
         XCTAssertTrue(waitForTaskDetails(in: app, timeout: 4),
@@ -83,7 +97,7 @@ final class KunaUITests: XCTestCase {
         let labelsScreen = app.otherElements["screen.labels"].waitForExistence(timeout: 8) ||
                            app.staticTexts["Labels"].waitForExistence(timeout: 2)
         XCTAssertTrue(labelsScreen, "Labels screen didn't appear")
-        snapshot("03-LabelsView")
+        snapshot("04-LabelsView")
         
 //        // --- Favorites via sidebar ---
 //        openSidebar(app)
@@ -106,7 +120,7 @@ final class KunaUITests: XCTestCase {
 
         XCTAssertTrue(waitForNavTitle("Display Options", in: app, timeout: 6),
                       "Display Options screen didn’t appear")
-        snapshot("07-DisplayOptions")
+        snapshot("08-DisplayOptions")
 
         // AX dump on teardown for easier triage later
         addTeardownBlock {
