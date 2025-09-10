@@ -1366,7 +1366,8 @@
             "value" : "1"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "about.framework.foundation" : {
       "comment" : "Foundation framework description",
@@ -2514,9 +2515,6 @@
           }
         }
       }
-    },
-    "Add a new task" : {
-
     },
     "add.title %@" : {
       "comment" : "Add title",
@@ -15314,7 +15312,7 @@
       }
     },
     "common.loading" : {
-      "comment" : "Label shown when loading",
+      "comment" : "Label shown when loading\nLoading...",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16698,7 +16696,7 @@
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Neven"
+            "value" : "Never"
           }
         },
         "en-US" : {
@@ -16769,7 +16767,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Nigdy"
           }
         },
@@ -22574,9 +22572,6 @@
         }
       }
     },
-    "Default View" : {
-
-    },
     "Every %lld %@" : {
       "localizations" : {
         "af" : {
@@ -28295,7 +28290,15 @@
       }
     },
     "navigation.overview" : {
-      "comment" : "Overview\nOverview menu item\nOverview navigation title"
+      "comment" : "Overview\nOverview menu item\nOverview navigation title",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        }
+      }
     },
     "navigation.projects" : {
       "comment" : "Projects\nProjects menu item\nProjects navigation title",
@@ -28487,12 +28490,6 @@
           }
         }
       }
-    },
-    "No recent projects" : {
-
-    },
-    "No recent tasks" : {
-
     },
     "onboarding.analytics_consent.allow_button" : {
       "comment" : "Button for allowing analytics",
@@ -29254,6 +29251,128 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Help Improve Kuna"
+          }
+        }
+      }
+    },
+    "overview.addANewTask" : {
+      "comment" : "Add a new task",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a new task"
+          }
+        }
+      }
+    },
+    "overview.apiToken.warning.message" : {
+      "comment" : "Tasks will be added to your first project. API tokens cannot access user preferences.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks will be added to your first project. API tokens cannot access user preferences."
+          }
+        }
+      }
+    },
+    "overview.apiToken.warning.title" : {
+      "comment" : "API Token Notice",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API Token Notice"
+          }
+        }
+      }
+    },
+    "overview.noRecentProjects" : {
+      "comment" : "No recent projects",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recent projects"
+          }
+        }
+      }
+    },
+    "overview.noRecentTasks" : {
+      "comment" : "No recent tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recent tasks"
+          }
+        }
+      }
+    },
+    "overview.projectNotFound" : {
+      "comment" : "Project not found",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project not found"
+          }
+        }
+      }
+    },
+    "overview.quickAddTo.noPlaceholder" : {
+      "comment" : "Quick Add to (no placeholder)",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick add to"
+          }
+        }
+      }
+    },
+    "overview.recentProjects" : {
+      "comment" : "Recent Projects",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Projects"
+          }
+        }
+      }
+    },
+    "overview.recentTasks" : {
+      "comment" : "Recent tasks",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Tasks"
+          }
+        }
+      }
+    },
+    "overview.taskAdded.success" : {
+      "comment" : "Success message when task is added. The placeholder is the task title.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Task '%@' added successfully!"
+          }
+        }
+      }
+    },
+    "overview.taskNotFound" : {
+      "comment" : "Task not found",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task not found"
           }
         }
       }
@@ -30213,18 +30332,6 @@
         }
       }
     },
-    "Quick Add to" : {
-
-    },
-    "Quick Add to %@" : {
-
-    },
-    "Recent Projects" : {
-
-    },
-    "Recent tasks" : {
-
-    },
     "Required Labels (%lld)" : {
       "comment" : "Required labels with count",
       "localizations" : {
@@ -31176,6 +31283,28 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "App Icon"
+          }
+        }
+      }
+    },
+    "settings.appearance.defaultView.subtitle" : {
+      "comment" : "Which view opens when you launch the app",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which view opens when you launch the app"
+          }
+        }
+      }
+    },
+    "settings.appearance.defaultView.title" : {
+      "comment" : "Default View",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default View"
           }
         }
       }
@@ -56013,6 +56142,17 @@
         }
       }
     },
+    "settings.quickAddTo.project.withPlaceholder %@" : {
+      "comment" : "Quick Add to",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick add to %@"
+          }
+        }
+      }
+    },
     "settings.taskList.sortOrder.subtitle" : {
       "comment" : "Title for how tasks are sorted when you open a project",
       "localizations" : {
@@ -56967,9 +57107,6 @@
           }
         }
       }
-    },
-    "Task '%@' added successfully!" : {
-
     },
     "tasks.add.title" : {
       "comment" : "Add task button",
@@ -76275,198 +76412,6 @@
         }
       }
     },
-    "tasks.repeat.intervalSeconds" : {
-      "comment" : "Interval in seconds",
-      "extractionState" : "stale",
-      "localizations" : {
-        "af" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "ar" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "en-US" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Częstotliwość (sekundy)"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Interval (seconds)"
-          }
-        }
-      }
-    },
     "tasks.repeat.mode" : {
       "comment" : "Repeat Mode",
       "localizations" : {
@@ -77227,198 +77172,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Every 30 days"
-          }
-        }
-      }
-    },
-    "tasks.repeat.placeholder" : {
-      "comment" : "e.g. 86400 for daily",
-      "extractionState" : "stale",
-      "localizations" : {
-        "af" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "ar" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "en-US" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "np. 86400 dla codziennego"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "e.g. 86400 for daily"
           }
         }
       }
@@ -81628,198 +81381,6 @@
         }
       }
     },
-    "tasks.sync.noDates" : {
-      "comment" : "No dates to sync",
-      "extractionState" : "stale",
-      "localizations" : {
-        "af" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "ar" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "cs" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "en-US" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "he" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "hu" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zadanie nie ma dat do zsynchronizowania"
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "ro" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "sr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Task has no dates to sync"
-          }
-        }
-      }
-    },
     "tasks.title" : {
       "comment" : "Tasks",
       "localizations" : {
@@ -83538,9 +83099,6 @@
           }
         }
       }
-    },
-    "Which view opens when you launch the app" : {
-
     }
   },
   "version" : "1.0"

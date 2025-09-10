@@ -16,7 +16,7 @@ struct TaskAssigneeView: View {
         VStack(spacing: 0) {
             // Top “Assignees” row (matches your other rows)
             HStack {
-                // Text("Assignees")
+                
                 Text(String(localized: "tasks.details.assignees.title", comment: "Title for assignees"))
                     .font(.body)
                     .fontWeight(.medium)
@@ -25,7 +25,7 @@ struct TaskAssigneeView: View {
                 Spacer()
 
                 if assignees.isEmpty {
-                    // Text("None")
+                    
                     Text(String(localized: "common.none", comment: "Title for none"))
                         .foregroundColor(.secondary.opacity(0.6))
                 } else {
@@ -87,7 +87,7 @@ struct TaskAssigneeView: View {
             }
         }
         .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
-            // Button("OK") { error = nil }
+            
             Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
         } message: {
             if let error { Text(error) }

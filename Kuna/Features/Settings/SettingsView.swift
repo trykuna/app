@@ -44,7 +44,6 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                // Button("Done") { dismiss() }
                 Button(String(localized: "common.done", comment: "Done button")) { dismiss() }
             }
         }
@@ -67,17 +66,15 @@ struct SettingsView: View {
     
     @ViewBuilder
     private var privacySection: some View {
-        // Section(header: Text("Privacy")) {
+        
         Section(header: Text(String(localized: "settings.privacy.header", comment: "Privacy section header"))) {
             Toggle(isOn: analyticsBinding) {
                 HStack {
                     Image(systemName: "chart.bar.doc.horizontal")
                         .foregroundColor(.purple).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("Anonymous Analytics").font(.body)
                         Text(String(localized: "settings.privacy.analytics.title",
                                     comment: "Title for anonymous analytics")).font(.body)
-                        // Text("Help improve the app by sending anonymous usage data")
                         Text(String(localized: "settings.privacy.analytics.subtitle",
                                     comment: "Title for help improve the app by sending anonymous usage data"))
                     }
@@ -94,10 +91,8 @@ struct SettingsView: View {
                     Image(systemName: "eye")
                         .foregroundColor(.blue).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("Display Options").font(.body)
                         Text(String(localized: "settings.display.title",
                                     comment: "Title for display options")).font(.body)
-                        // Text("Customize what appears on task lists")
                         Text(String(localized: "settings.display.subtitle",
                                     comment: "Title for customize what appears on task lists"))
                             .font(.caption).foregroundColor(.secondary)
@@ -106,10 +101,8 @@ struct SettingsView: View {
                 }
             }
         } header: { 
-            // Text("Display Options")
             Text(String(localized: "settings.display.title", comment: "Display options settings header"))
         } footer: {
-            // Text("Control which elements are displayed in task lists. Changes apply to all task views.")
             Text(String(localized: "settings.display.footer",
                         comment: "Title for control which elements are displayed in task lists changes apply to all task views"))
         }
@@ -124,7 +117,6 @@ struct SettingsView: View {
                         .frame(width: 24, height: 24)
                         .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("App Icon").font(.body)
                         Text(String(localized: "settings.appearance.appIcon.title", comment: "Title for app icon")).font(.body)
                         Text(iconManager.currentIcon.displayName)
                             .font(.caption).foregroundColor(.secondary)
@@ -140,8 +132,8 @@ struct SettingsView: View {
                 Image(systemName: "house")
                     .foregroundColor(.orange).font(.body)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Default View").font(.body)
-                    Text("Which view opens when you launch the app")
+                    Text(String(localized: "settings.appearance.defaultView.title", comment: "Default View")).font(.body)
+                    Text(String(localized: "settings.appearance.defaultView.subtitle", comment: "Which view opens when you launch the app"))
                         .font(.caption).foregroundColor(.secondary)
                 }
                 Spacer()
@@ -153,7 +145,6 @@ struct SettingsView: View {
                 .pickerStyle(.menu)
             }
         } header: { 
-            // Text("Appearance")
             Text(String(localized: "settings.appearance.title", comment: "Settings section header for appearance"))
         }
     }
@@ -165,10 +156,8 @@ struct SettingsView: View {
                 Image(systemName: "arrow.up.arrow.down")
                     .foregroundColor(.orange).font(.body)
                 VStack(alignment: .leading, spacing: 2) {
-                    // Text("Default Sort Order").font(.body)
                     Text(String(localized: "settings.taskList.sortOrder.title",
                                 comment: "Title for default sort order")).font(.body)
-                    // Text("How tasks are sorted when you open a project")
                     Text(String(localized: "settings.taskList.sortOrder.subtitle",
                                 comment: "Title for how tasks are sorted when you open a project"))
                         .font(.caption).foregroundColor(.secondary)
@@ -216,7 +205,6 @@ struct SettingsView: View {
                     Spacer()
                     HStack(spacing: 4) {
                         if settings.calendarSyncPrefs.isEnabled {
-                            // Text("Enabled")
                             Text(String(localized: "settings.calendarSync.enabled.title", comment: "Title for enabled"))
                                 .font(.caption)
                                 .foregroundColor(.green)
@@ -229,7 +217,6 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
         } header: { 
-            // Text("Calendar Integration")
             Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar integration")) 
         } footer: {
             Text(String(localized: "settings.calendarSync.footer",
@@ -243,12 +230,10 @@ struct SettingsView: View {
             HStack(spacing: 12) {
                 LeadingIcon(systemName: "server.rack", color: .green)
                 VStack(alignment: .leading, spacing: 2) {
-                    // Text("Server").font(.body)
                     Text(String(localized: "settings.connection.server.title", comment: "Title for server")).font(.body)
                     if let serverURL = Keychain.readServerURL() {
                         Text(serverURL).font(.caption).foregroundColor(.secondary).lineLimit(1)
                     } else {
-                        // Text("No server configured")
                         Text(String(localized: "settings.connection.server.noServer.title",
                                     comment: "Title for no server configured"))
                             .font(.caption).foregroundColor(.secondary).italic()
@@ -265,10 +250,8 @@ struct SettingsView: View {
                     LeadingIcon(systemName: appState.canManageUsers ? "person.2.fill" : "person.2.slash",
                                 color: appState.canManageUsers ? .blue : .orange)
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("User Management").font(.body)
                         Text(String(localized: "settings.connection.userManagement.title",
                                     comment: "Title for user management")).font(.body)
-                        // Text(appState.canManageUsers ? "Available" : "Requires username/password login")
                         Text(String(localized: "settings.connection.userManagement.subtitle",
                                     comment: "Subtitle for user management"))
                             .font(.caption).foregroundColor(.secondary)
@@ -285,14 +268,12 @@ struct SettingsView: View {
                             Image(systemName: "lightbulb")
                                 .foregroundColor(.orange).font(.caption).padding(.top, 1)
                             VStack(alignment: .leading, spacing: 4) {
-                                // Text("Why is user management limited?")
                                 Text(String(localized: "settings.connection.userManagement.limited.title",
                                             comment: "Title for why is user management limited"))
                                     .font(.caption).fontWeight(.medium)
                                 Text(String(localized: "settings.connection.userManagement.limited.text",
                                             comment: "Text for why is user management limited"))
                                     .font(.caption2).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true)
-                                // Text("You can still create and manage your personal tasks with full functionality.")
                                 Text(String(localized: "settings.connection.userManagement.limited.text2",
                                             comment: "Text for why is user management limited"))
                                     .font(.caption2).foregroundColor(.secondary).fontWeight(.medium).padding(.top, 2)
@@ -302,7 +283,6 @@ struct SettingsView: View {
                                 }) {
                                     HStack(spacing: 4) {
                                         Image(systemName: "arrow.right.circle")
-                                        // Text("Switch to Username/Password Login")
                                         Text(String(localized:
                                                         "settings.connection.userManagement.switchToUsernamePassword.title",
                                                     comment: "Title for switch to username/password login"))
@@ -322,7 +302,6 @@ struct SettingsView: View {
             HStack(spacing: 12) {
                 LeadingIcon(systemName: appState.authenticationMethod?.systemImage ?? "questionmark.circle", color: .blue)
                 VStack(alignment: .leading, spacing: 2) {
-                    // Text("Authentication Method").font(.body)
                     Text(String(localized: "settings.connection.authMethod.title",
                                 comment: "Title for authentication method")).font(.body)
                     HStack(spacing: 4) {
@@ -345,7 +324,6 @@ struct SettingsView: View {
                     HStack(spacing: 12) {
                         LeadingIcon(systemName: "clock", color: .orange)
                         VStack(alignment: .leading, spacing: 2) {
-                            // Text("No server configured").font(.body)
                             Text(String(localized: "settings.connection.tokenExpiration.title",
                                         comment: "Title for token expiration")).font(.body)
                             let t = expirationDate.timeIntervalSinceNow
@@ -368,7 +346,6 @@ struct SettingsView: View {
                     }
             }
         } header: { 
-            // Text("Connection")
             Text(String(localized: "settings.connection.header", comment: "Connection settings header"))
         }
     }
@@ -383,7 +360,6 @@ struct SettingsView: View {
                     Text(String(localized: "common.about", comment: "About")).font(.body)
                 }
             }
-        // } header: { Text("Information") }
         } header: { Text(String(localized: "settings.information.header", comment: "Information section header")) }
     }
     
@@ -484,7 +460,6 @@ private struct PreviewTaskRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
-                    // Text("Sample task title")
                     Text(String(localized: "tasks.sample.title", comment: "Title for sample task"))
                         .foregroundStyle(.primary)
                         .lineLimit(1)
@@ -500,7 +475,6 @@ private struct PreviewTaskRow: View {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
                         .font(.caption)
-                    // Text("Today, 12:00")
                     Text(String(localized: "common.time.today1200", comment: "Title for today 12 00"))
                         .font(.caption)
                         .foregroundStyle(.secondary)

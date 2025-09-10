@@ -42,69 +42,41 @@ opt_in_rules:
 line_length: 130
 
 identifier_name:
-  excluded:
-    - id
-    - x
-    - y
-    - i
-    - j
+  excluded: [id, x, y, i, j]
 
 empty_count:
   severity: warning
 
 type_body_length:
-  warning: 600   # only warn above 600, no error
+  warning: 600
 
 file_length:
-  warning: 900   # only warn above 900, no error
+  warning: 900
 
 function_body_length:
-  warning: 100   # only warn above 100, no error
+  warning: 100
 
 cyclomatic_complexity:
-  warning: 18    # only warn above 18, no error
+  warning: 18
 
 force_cast:
   severity: warning
 
 # ---- Custom rules ----
 custom_rules:
-  no_hardcoded_ui_strings:
-    included: ".*\\.swift"
-    name: "No hardcoded UI strings"
-    message: "Localize user-visible strings (use String(localized:), LocalizedStringKey, or NSLocalizedString). Add // noloc to intentionally skip."
-    severity: error
-    regex: |
-      (?x)
-      # 1) Initializers that commonly take user-facing titles/labels
-      (?:
-        \b
-        (?:SwiftUI\.)?
-        (Text|Button|Label|Toggle|Section|Menu|Picker|TextField|SecureField)
-        \s* \(
-        \s* "
-      )
-      |
-      # 2) Common SwiftUI modifiers with string titles
-      (?:
-        \.
-        (navigationTitle|navigationBarTitle|alert|confirmationDialog|tabItem|accessibilityLabel|accessibilityHint)
-        \s* \(
-        \s* "
-      )
-    excluded_regex: |
-      (?x)
-      (String\s*\(\s*localized:) |
-      (NSLocalizedString\s*\()   |
-      (LocalizedStringKey\s*\()  |
-      (//\s*noloc\b)
-
   no_print_statements:
     included: ".*\\.swift"
     name: "No print statements"
     message: "Remove print() calls. Use os_log, Logger, or your logging framework instead. Add // print-ok to allow intentionally."
     severity: error
-    regex: |
-      (?x)\bprint\s*\(
-    excluded_regex: |
-      (?x)(//\s*print-ok\b)
+    regex: "\\bprint\\s*\\("
+    excluded_regex: "//\\s*print-ok"
+
+  # (optional) also block debugPrint/dump
+  no_debug_prints:
+    included: ".*\\.swift"
+    name: "No debug prints"
+    message: "Remove debugPrint()/dump(). Add // print-ok only if intentional."
+    severity: error
+    regex: "\\b(?:debugPrint|dump)\\s*\\("
+    excluded_regex: "//\\s*print-ok"

@@ -26,7 +26,6 @@ struct TaskDetailView: View {
     @State var availableLabels: [Label] = []
     @State var showingLabelPicker = false
 
-    // Section collapse states
     @State private var isTaskInfoExpanded = true
     @State private var isSchedulingExpanded = true
     @State private var isOrganizationExpanded = true

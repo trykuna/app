@@ -87,10 +87,10 @@ struct FavoritesView: View {
                 .foregroundColor(.secondary)
 
             VStack(spacing: 8) {
-                // Text("No Favorite Tasks")
+                
                 Text(String(localized: "favorites.empty.title", comment: "Title shown when there are no favorites"))
                     .font(.title2).fontWeight(.semibold)
-                // Text("Tasks you mark as favorites will appear here for quick access")
+                
                 Text(String(localized: "favorites.empty.subtitle", comment: "Subtitle shown when there are no favorites"))
                     .font(.body).foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -99,7 +99,7 @@ struct FavoritesView: View {
             VStack(spacing: 12) {
                 HStack(spacing: 8) {
                     Image(systemName: "star.fill").foregroundColor(.yellow)
-                    // Text("Tap the star icon on any task to add it to favorites")
+                    
                     Text(String(localized: "favorites.empty.tap_label", comment: "Label shown when there are no favorites"))
                         .font(.caption).foregroundColor(.secondary)
                 }

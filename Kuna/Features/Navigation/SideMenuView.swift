@@ -113,7 +113,6 @@ struct SideMenuView: View {
                     .foregroundColor(selectedMenuItem == item ? item.color : item.color.opacity(0.7))
                     .frame(width: 24, height: 24)
                 
-                // Text(item.rawValue)
                 Text(item.displayName)
                     .font(.body)
                     .fontWeight(selectedMenuItem == item ? .semibold : .regular)
