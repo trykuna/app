@@ -1,0 +1,15 @@
+{
+  "translators": [
+    {
+      "username": "Jakub Szymczak",
+      "languages": ["Polish"],
+      "flags": ["PL"]
+    }
+  ],
+  "featureContributors": [
+    {
+      "github": "SindreKjelsrud",
+      "type": "feature"
+    }
+  ]
+}
