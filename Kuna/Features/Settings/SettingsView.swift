@@ -133,7 +133,8 @@ struct SettingsView: View {
                     .foregroundColor(.orange).font(.body)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(String(localized: "settings.appearance.defaultView.title", comment: "Default View")).font(.body)
-                    Text(String(localized: "settings.appearance.defaultView.subtitle", comment: "Which view opens when you launch the app"))
+                    Text(String(localized: "settings.appearance.defaultView.subtitle",
+                                comment: "Which view opens when you launch the app"))
                         .font(.caption).foregroundColor(.secondary)
                 }
                 Spacer()
