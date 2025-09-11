@@ -13,7 +13,7 @@ struct RelatedTasksButtonView: View {
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    // Text("Related Tasks")
+                    
                     Text(String(localized: "tasks.details.relatedTasks.title", comment: "Title for related tasks"))
                         .font(.body)
                         .foregroundColor(.primary)

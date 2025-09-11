@@ -569,13 +569,12 @@ struct TaskListView: View {
                 .foregroundColor(.secondary)
 
             VStack(spacing: 8) {
-                // Text("No Tasks Yet")
+                
                 Text(String(localized: "tasks.empty.title", comment: "Title shown when there are no tasks"))
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(.primary)
 
-                // Text("This project doesn't have any tasks yet. Create your first task to get started!")
                 Text(String(localized: "projects.empty.tasks", comment: "Title shown when there are no tasks"))
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -588,7 +587,7 @@ struct TaskListView: View {
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
-                    // Text("Create First Task")
+                    
                     Text(String(localized: "tasks.create.first", comment: "Title for create first task"))
                 }
                 .font(.headline)
@@ -615,7 +614,7 @@ struct TaskListView: View {
         VStack {
             Spacer()
             VStack(alignment: .leading, spacing: 16) {
-                // Text("Create New Task")
+                
                 Text(String(localized: "tasks.create.new", comment: "Title for create new task"))
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -625,7 +624,7 @@ struct TaskListView: View {
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(2...4)
                 HStack(spacing: 12) {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         vm.isAddingTask = false
                         newTaskTitle = ""
@@ -633,7 +632,7 @@ struct TaskListView: View {
                     }
                     .buttonStyle(.bordered)
                     .frame(maxWidth: .infinity)
-                    // Button("Create Task") {
+                    
                     Button(String(localized: "tasks.create.button", comment: "Create task button")) {
                         Task {
                             await vm.createTask(
@@ -676,7 +675,7 @@ struct TaskListView: View {
                     } else if vm.canLoadPrevious {
                         HStack {
                             Spacer()
-                            // Button("Load earlier") {
+                            
                             Button(String(localized: "tasks.list.loadEarlier", comment: "Load earlier button")) {
                                 Task {
                                     let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
@@ -712,7 +711,7 @@ struct TaskListView: View {
                 } else if vm.hasMoreTasks {
                     HStack {
                         Spacer()
-                        // Button("Load more") {
+                        
                         Button(String(localized: "tasks.list.loadMore", comment: "Load more button")) {
                             Task {
                                 let query = currentFilter.hasActiveFilters ? currentFilter.toQueryItems() : []
@@ -737,14 +736,14 @@ struct TaskListView: View {
                     .textFieldStyle(.roundedBorder)
                     .lineLimit(2...4)
                 HStack {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         vm.isAddingTask = false
                         newTaskTitle = ""
                         newTaskDescription = ""
                     }
                     .buttonStyle(.bordered)
-                    // Button("Add Task") {
+                    
                     Button(String(localized: "tasks.create.add", comment: "Add task button")) {
                         Task {
                             await vm.createTask(

@@ -12,6 +12,7 @@ struct SideMenuView: View {
         case projects = "Projects"
         case labels = "Labels"
         case settings = "Settings"
+        case overview = "Overview"
 
         var systemImage: String {
             switch self {
@@ -19,6 +20,7 @@ struct SideMenuView: View {
             case .projects: return "folder"
             case .labels: return "tag"
             case .settings: return "gear"
+            case .overview: return "house"
             }
         }
 
@@ -28,6 +30,7 @@ struct SideMenuView: View {
             case .projects: return .blue
             case .labels: return .green
             case .settings: return .gray
+            case .overview: return .orange
             }
         }
         
@@ -37,6 +40,7 @@ struct SideMenuView: View {
             case .projects: return String(localized: "navigation.projects", comment: "Projects menu item")
             case .labels: return String(localized: "labels.title", comment: "Labels menu item")
             case .settings: return String(localized: "settings.title", comment: "Settings menu item")
+            case .overview: return String(localized: "navigation.overview", comment: "Overview menu item")
             }
         }
     }
@@ -77,7 +81,7 @@ struct SideMenuView: View {
             // Menu Items
             VStack(spacing: 0) {
                 // Main menu items
-                ForEach([MenuItem.favorites, MenuItem.projects, MenuItem.labels], id: \.self) { item in
+                ForEach([MenuItem.overview, MenuItem.favorites, MenuItem.projects, MenuItem.labels], id: \.self) { item in
                     menuItem(item)
                 }
                 
@@ -109,7 +113,6 @@ struct SideMenuView: View {
                     .foregroundColor(selectedMenuItem == item ? item.color : item.color.opacity(0.7))
                     .frame(width: 24, height: 24)
                 
-                // Text(item.rawValue)
                 Text(item.displayName)
                     .font(.body)
                     .fontWeight(selectedMenuItem == item ? .semibold : .regular)

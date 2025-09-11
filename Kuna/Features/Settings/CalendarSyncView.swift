@@ -26,7 +26,7 @@ struct CalendarSyncView: View {
                     
                     // ADVANCED (optional)
                     Section {
-                        // Toggle("Show Technical Details", isOn: $showAdvanced.animation())
+                        
                         Toggle(String(localized: "settings.calendarSync.showTechnicalDetails",
                                         comment: "Show technical details toggle"), isOn: $showAdvanced.animation())
                     }
@@ -37,13 +37,13 @@ struct CalendarSyncView: View {
                     introSection
                 }
             }
-            // .navigationTitle("Calendar Sync")
+            
             .navigationTitle(String(localized: "settings.calendarSync.navigationTitle",
                                         comment: "Calendar sync navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // Button("Done") { dismiss() }
+                    
                     Button(String(localized: "common.done", comment: "Done button")) { dismiss() }
                 }
             }
@@ -92,7 +92,7 @@ struct CalendarSyncView: View {
         Section {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    // Text("Calendar Sync")
+                    
                     Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar sync"))
                         .font(.headline)
                     Text(appSettings.calendarSyncPrefs.isEnabled
@@ -132,10 +132,10 @@ struct CalendarSyncView: View {
                         .font(.title2)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("Sync with Calendar")
+                        
                         Text(String(localized: "settings.calendarSync.intro.title", comment: "Title for sync with calendar"))
                             .font(.headline)
-                        // Text("Keep your tasks in sync with your calendar app")
+                        
                         Text(String(localized: "settings.calendarSync.intro.subtitle",
                                     comment: "Subtitle for sync with calendar"))
                             .font(.caption)
@@ -143,7 +143,6 @@ struct CalendarSyncView: View {
                     }
                 }
                 
-                // Button("Set up Calendar Sync") {
                 Button(String(localized: "settings.calendarSync.setupButton", comment: "Set up calendar sync button")) {
                     showOnboarding = true
                 }
@@ -158,7 +157,7 @@ struct CalendarSyncView: View {
     private var configurationSection: some View {
         Section(String(localized: "common.configuration", comment: "Configuration")) {
             HStack {
-                // Text("Mode")
+                
                 Text(String(localized: "settings.calendarSync.mode.title", comment: "Title for mode"))
                 Spacer()
                 Text(appSettings.calendarSyncPrefs.mode.displayName)
@@ -168,7 +167,7 @@ struct CalendarSyncView: View {
             HStack {
                 Text(String(localized: "settings.calendarSync.projects.title", comment: "Title for projects"))
                 Spacer()
-                // Text("common.selectedCount \(appSettings.calendarSyncPrefs.selectedProjectIDs.count)",
+                
                 //      comment: "Number of projects selected for calendar sync")
                 //     .foregroundColor(.secondary)
                 let count = appSettings.calendarSyncPrefs.selectedProjectIDs.count
@@ -185,7 +184,7 @@ struct CalendarSyncView: View {
             if appSettings.calendarSyncPrefs.mode == .single {
                 if let calendar = appSettings.calendarSyncPrefs.singleCalendar {
                     HStack {
-                        // Text("Calendar")
+                        
                         Text(String(localized: "settings.calendarSync.calendar.title", comment: "Title for calendar"))
                         Spacer()
                         Text(calendar.name)
@@ -194,7 +193,7 @@ struct CalendarSyncView: View {
                 }
             } else {
                 HStack {
-                    // Text("Calendars")
+                    
                     Text(String(localized: "settings.calendarSync.calendars.title", comment: "Title for calendars"))
                     Spacer()
                     let count = appSettings.calendarSyncPrefs.projectCalendars.count
@@ -203,7 +202,6 @@ struct CalendarSyncView: View {
                 }
             }
             
-            // Button("Reconfigure") {
             Button(String(localized: "settings.calendarSync.reconfigure", comment: "Reconfigure button")) {
                 showOnboarding = true
             }
@@ -224,7 +222,7 @@ struct CalendarSyncView: View {
     
     @ViewBuilder
     private var statusSection: some View {
-        // Section("Status") {
+        
         Section(String(localized: "settings.calendarSync.status", comment: "Status section")) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: statusIcon)
@@ -254,8 +252,7 @@ struct CalendarSyncView: View {
                     ProgressView().scaleEffect(0.8)
                 }
             }
-
-            // Button("Sync Now") {
+            
             Button(String(localized: "settings.calendarSync.syncNow", comment: "Sync now button")) {
                 Task { await engine.resyncNow() }
             }
@@ -301,7 +298,7 @@ struct CalendarSyncView: View {
                         .font(.caption)
                         .foregroundColor(.red)
                 }
-                // Button("Clear Errors") {
+                
                 Button(String(localized: "settings.calendarSync.clearErrors", comment: "Clear calendar sync errors button")) {
                     engine.syncErrors.removeAll()
                     calendarSync.syncErrors.removeAll()

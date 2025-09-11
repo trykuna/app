@@ -893,6 +893,27 @@ final class VikunjaAPI {
 
         return try JSONDecoder.vikunja.decode([VikunjaUser].self, from: data)
     }
+    
+    func getCurrentUser() async throws -> (id: Int, defaultProjectId: Int?) {
+        struct CurrentUser: Codable {
+            let id: Int
+            let username: String
+            let name: String?
+            let email: String?
+            let defaultProjectId: Int?
+            
+            enum CodingKeys: String, CodingKey {
+                case id, username, name, email
+                case defaultProjectId = "default_project_id"
+            }
+        }
+        
+        let data = try await request("/user", method: "GET")
+        
+        let user = try JSONDecoder().decode(CurrentUser.self, from: data)
+        return (id: user.id, defaultProjectId: user.defaultProjectId)
+        
+    }
 
     // MARK: - Attachments
 

@@ -31,13 +31,13 @@ struct EditLabelView: View {
                         
                         // Title field
                         VStack(alignment: .leading, spacing: 8) {
-                            // Text("Label Name")
+                            
                             Text(String(localized: "labels.edit.title.label", comment: "Label for label name field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .leading) {
                                 if title.isEmpty {
-                                    // Text("Enter label name")
+                                    
                                     Text(String(localized: "labels.edit.title.placeholder",
                                                 comment: "Placeholder for label name field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
@@ -54,7 +54,7 @@ struct EditLabelView: View {
                         
                         // Color picker
                         VStack(alignment: .leading, spacing: 8) {
-                            // Text("Color")
+                            
                             Text(String(localized: "common.colour", comment: "Label for colour picker"))
                                 .font(.headline)
                             
@@ -73,13 +73,13 @@ struct EditLabelView: View {
                         
                         // Description field
                         VStack(alignment: .leading, spacing: 8) {
-                            // Text("Description (Optional)")
+                            
                             Text(String(localized: "common.descriptionOptional", comment: "Label for description field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .topLeading) {
                                 if description.isEmpty {
-                                    // Text("Add a description for this label")
+                                    
                                     Text(String(localized: "labels.edit.description.placeholder",
                                                 comment: "Placeholder for description field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
@@ -104,7 +104,7 @@ struct EditLabelView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         dismiss()
                     }
@@ -112,7 +112,7 @@ struct EditLabelView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // Button("Save") {
+                    
                     Button(String(localized: "common.save", comment: "Save button")) {
                         updateLabel()
                     }

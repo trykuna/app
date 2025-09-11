@@ -48,7 +48,6 @@ struct AboutView: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 22)
 
-                            // Text("Learn more")
                             Text(String(localized: "settings.about.vikunja.link", comment: "Link for about view"))
                                 .foregroundStyle(.primary)
 
@@ -64,13 +63,13 @@ struct AboutView: View {
                 // Libraries & Tools
                 CardSection(title: "Libraries & Tools") {
                     VStack(alignment: .leading, spacing: 10) {
-                        // SwiftUI.Label("SwiftUI — Apple's native UI framework", systemImage: "square.stack.3d.up")
+                        
                         SwiftUI.Label(String(localized: "about.framework.swiftui", 
                                                 comment: "SwiftUI framework description"), systemImage: "square.stack.3d.up")
-                        // SwiftUI.Label("Foundation — Core system services", systemImage: "shippingbox")
+                        
                         SwiftUI.Label(String(localized: "about.framework.foundation", 
                                                 comment: "Foundation framework description"), systemImage: "shippingbox")
-                        // SwiftUI.Label("Keychain Services — Secure credential storage", systemImage: "lock.circle")
+                        
                         SwiftUI.Label(String(localized: "about.framework.keychain",
                                             comment: "Keychain services description"), systemImage: "lock.circle")
                     }
@@ -121,7 +120,7 @@ struct AboutView: View {
             }
             .padding(.bottom, 24)
         }
-        // .navigationTitle("About")
+        
         .navigationTitle(String(localized: "settings.about.title", comment: "Title for about view"))
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground))

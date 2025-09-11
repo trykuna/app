@@ -26,12 +26,12 @@ struct DisableCalendarSyncView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") { dismiss() }
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) { dismiss() }
                 }
             }
             .alert(String(localized: "common.error"), isPresented: .constant(errorMessage != nil)) {
-                // Button("OK") { errorMessage = nil }
+                
                 Button(String(localized: "common.ok", comment: "OK button")) { errorMessage = nil }
             } message: {
                 if let error = errorMessage {
@@ -48,12 +48,11 @@ struct DisableCalendarSyncView: View {
                 .foregroundColor(.orange)
             
             VStack(spacing: 8) {
-                // Text("Disable Calendar Sync")
+                
                 Text(String(localized: "settings.calendarSync.disable.title", comment: "Title for disable calendar sync"))
                     .font(.title2)
                     .fontWeight(.semibold)
                 
-                // Text("What should happen to your existing calendars and events?")
                 Text(String(localized: "settings.calendarSync.disable.subtitle", comment: "Subtitle for disable calendar sync"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -75,7 +74,7 @@ struct DisableCalendarSyncView: View {
     
     private var actionButtons: some View {
         VStack(spacing: 12) {
-            // Button("Disable Calendar Sync") {
+            
             Button(String(localized: "settings.calendarSync.disable.button", comment: "Disable calendar sync button")) {
                 disableSync()
             }
@@ -87,7 +86,7 @@ struct DisableCalendarSyncView: View {
                 HStack {
                     ProgressView()
                         .scaleEffect(0.8)
-                    // Text("Processing...")
+                    
                     Text(String(localized: "settings.processing.title", comment: "Title for processing"))
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -151,7 +150,7 @@ struct DispositionOptionCard: View {
                         .multilineTextAlignment(.leading)
                     
                     if disposition == .removeKunaEvents {
-                        // Text("⚠️ This will permanently delete all synced events")
+                        
                         Text(String(localized: "settings.calendarSync.disable.disposition.removeKunaEvents.title",
                                     comment: "Title for this will permanently delete all synced events"))
                             .font(.caption)
@@ -159,7 +158,7 @@ struct DispositionOptionCard: View {
                     }
                     
                     if disposition == .deleteEverything {
-                        // Text("🚨 This will permanently delete all Kuna calendars and events")
+                        
                         Text(String(localized: "settings.calendarSync.disable.disposition.deleteEverything.title",
                                     comment: "Title for this will permanently delete all kuna calendars and events"))
                             .font(.caption)

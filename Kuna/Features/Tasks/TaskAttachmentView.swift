@@ -26,7 +26,7 @@ struct TaskAttachmentView: View {
         VStack(spacing: 0) {
             Button(action: { showingSourceDialog = true }) {
                 HStack {
-                    // Text("Add Attachment")
+                    
                     Text(String(localized: "tasks.details.attachments.addTitle", comment: "Title for add attachment"))
                     Spacer()
                     Image(systemName: "paperclip")
@@ -41,11 +41,11 @@ struct TaskAttachmentView: View {
                 String(localized: "tasks.details.attachments.add", comment: "Add attachment dialog title"),
                 isPresented: $showingSourceDialog
             ) {
-                // Button("Photo Library") { showPhotoPicker = true }
+                
                 Button(
                     String(localized: "tasks.attachment.photoLibrary", comment: "Photo library button")
                 ) { showPhotoPicker = true }
-                // Button("Files") { showFileImporter = true }
+                
                 Button(String(localized: "tasks.attachment.files", comment: "Files button")) { showFileImporter = true }
             }
             .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhoto, matching: .images)
@@ -53,11 +53,11 @@ struct TaskAttachmentView: View {
             .alert(String(localized: "common.setFilename"), isPresented: $showingFilenameDialog) {
                 TextField(String(localized: "common.filename"), text: $customFilename)
                     .autocorrectionDisabled()
-                // Button("Upload") {
+                
                 Button(String(localized: "tasks.attachment.upload", comment: "Upload button")) {
                     performUpload()
                 }
-                // Button("Cancel", role: .cancel) {
+                
                 Button(String(localized: "common.cancel", comment: "Cancel button"), role: .cancel) {
                     clearPendingUpload()
                 }
