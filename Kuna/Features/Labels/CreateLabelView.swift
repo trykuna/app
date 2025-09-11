@@ -43,7 +43,7 @@ struct CreateLabelView: View {
                         
                         // Color picker
                         VStack(alignment: .leading, spacing: 8) {
-                            // Text("Color")
+                            
                             Text(String(localized: "common.colour", comment: "Label for colour picker"))
                                 .font(.headline)
                             
@@ -62,13 +62,13 @@ struct CreateLabelView: View {
                         
                         // Description field
                         VStack(alignment: .leading, spacing: 8) {
-                            // Text("Description (Optional)")
+                            
                             Text(String(localized: "common.descriptionOptional", comment: "Label for description field"))
                                 .font(.headline)
                             
                             ZStack(alignment: .topLeading) {
                                 if description.isEmpty {
-                                    // Text("Add a description for this label")
+                                    
                                     Text(String(localized: "labels.create.description.placeholder",
                                                 comment: "Placeholder for description field"))
                                         .foregroundColor(Color(UIColor.placeholderText))
@@ -93,7 +93,7 @@ struct CreateLabelView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         dismiss()
                     }
@@ -101,7 +101,7 @@ struct CreateLabelView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // Button("Create") {
+                    
                     Button(String(localized: "common.create", comment: "Create button")) {
                         createLabel()
                     }
@@ -117,7 +117,7 @@ struct CreateLabelView: View {
     
     private var labelPreview: some View {
         VStack(spacing: 8) {
-            // Text("Preview")
+            
             Text(String(localized: "common.preview", comment: "Label for label preview"))
                 .font(.caption)
                 .foregroundColor(.secondary)

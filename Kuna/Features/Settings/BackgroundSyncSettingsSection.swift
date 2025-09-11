@@ -14,9 +14,9 @@ struct BackgroundSyncSettingsSection: View {
                     Image(systemName: "arrow.clockwise.circle")
                         .foregroundColor(.blue).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("Background Sync").font(.body)
+                        
                         Text(String(localized: "settings.backgroundSync.title", comment: "Title for background sync"))
-                        // Text("Sync tasks periodically in the background")
+                        
                         Text(String(localized: "settings.backgroundSync.subtitle", comment: "Subtitle for background sync"))
                             .font(.caption).foregroundColor(.secondary)
                     }
@@ -28,10 +28,10 @@ struct BackgroundSyncSettingsSection: View {
                     Image(systemName: "timer")
                         .foregroundColor(.orange).font(.body)
                     VStack(alignment: .leading, spacing: 2) {
-                        // Text("Frequency").font(.body)
+                        
                         Text(String(localized: "settings.backgroundSync.frequency.title",
                                     comment: "Title for background sync frequency"))
-                        // Text("How often to refresh tasks in background")
+                        
                         Text(String(localized: "settings.backgroundSync.frequency.subtitle",
                                     comment: "Subtitle for background sync frequency"))
                             .font(.caption).foregroundColor(.secondary)
@@ -77,7 +77,7 @@ struct BackgroundSyncSettingsSection: View {
                         .foregroundColor(.secondary)
                     Spacer()
                     if notifications.authorizationStatus == .notDetermined || notifications.authorizationStatus == .denied {
-                        // Button("Enable") {
+                        
                         Button(String(localized: "common.enable", comment: "Enable button")) {
                             Task { _ = await notifications.requestAuthorizationIfNeeded() }
                         }
@@ -86,27 +86,27 @@ struct BackgroundSyncSettingsSection: View {
                 }
 
                 Toggle(isOn: $settings.notifyNewTasks) {
-                    // SwiftUI.Label("Notify on new tasks", systemImage: "bell.badge")
+                    
                     SwiftUI.Label(String(localized: "settings.backgroundSync.notifyNewTasks",
                                         comment: "Notify on new tasks toggle"), systemImage: "bell.badge")
                 }
                 Toggle(isOn: $settings.notifyUpdatedTasks) {
-                    // SwiftUI.Label("Notify on updated tasks", systemImage: "bell")
+                    
                     SwiftUI.Label(String(localized: "settings.backgroundSync.notifyUpdatedTasks",
                                         comment: "Notify on updated tasks toggle"), systemImage: "bell")
                 }
                 Toggle(isOn: $settings.notifyAssignedToMe) {
-                    // SwiftUI.Label("Notify when assigned to me", systemImage: "person.fill.badge.plus")
+                    
                     SwiftUI.Label(String(localized: "settings.backgroundSync.notifyAssignedToMe",
                                         comment: "Notify when assigned to me toggle"), systemImage: "person.fill.badge.plus")
                 }
                 Toggle(isOn: $settings.notifyLabelsUpdated) {
-                    // SwiftUI.Label("Notify when watched labels change", systemImage: "tag")
+                    
                     SwiftUI.Label(String(localized: "settings.backgroundSync.notifyWatchedLabels",
                                         comment: "Notify when watched labels change toggle"), systemImage: "tag")
                 }
                 Toggle(isOn: $settings.notifyWithSummary) {
-                    // SwiftUI.Label("Include summary notification", systemImage: "text.badge.star")
+                    
                     SwiftUI.Label(String(localized: "settings.backgroundSync.includeSummary",
                                         comment: "Include summary notification toggle"), systemImage: "text.badge.star")
                 }
@@ -117,7 +117,7 @@ struct BackgroundSyncSettingsSection: View {
                             Image(systemName: "tag")
                                 .foregroundColor(.purple).font(.body)
                             VStack(alignment: .leading, spacing: 2) {
-                                // Text("Watched Labels").font(.body)
+                                
                                 Text(String(localized: "settings.backgroundSync.watchedLabels.title",
                                                 comment: "Title for watched labels"))
                                 Text("common.selectedCount \(settings.watchedLabelIDs.count)",
@@ -168,7 +168,7 @@ struct BackgroundSyncSettingsSection: View {
                 #endif
             }
         } header: { 
-            // Text("Background Sync & Notifications (Beta)")
+            
             Text(String(localized: "settings.backgroundSync.header", comment: "Background sync settings header"))
         } footer: {
             Text(String(localized: "settings.backgroundSync.footer",

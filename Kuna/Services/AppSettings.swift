@@ -50,6 +50,57 @@ final class AppSettings: ObservableObject {
         }
     }
     
+    @Published var recentProjectIds: [Int] {
+        didSet {
+            UserDefaults.standard.set(recentProjectIds, forKey: "recentProjectIds")
+        }
+    }
+    
+    @Published var recentTaskIds: [Int] {
+        didSet {
+            UserDefaults.standard.set(recentTaskIds, forKey: "recentTaskIds")
+        }
+    }
+    
+    func addRecentProject(_ projectId: Int) {
+        // Remove if already exists, then add to the front
+        recentProjectIds.removeAll { $0 == projectId }
+        recentProjectIds.insert(projectId, at: 0)
+        
+        // Only keep the last 4
+        if recentProjectIds.count > 4 {
+            recentProjectIds = Array(recentProjectIds.prefix(4))
+        }
+    }
+    
+    func addRecentTask(_ taskId: Int) {
+        // Remove if already exists and add to the front
+        recentTaskIds.removeAll { $0 == taskId }
+        recentTaskIds.insert(taskId, at: 0)
+        
+        if recentTaskIds.count > 4 {
+            recentTaskIds = Array(recentTaskIds.prefix(4))
+        }
+    }
+    
+    @Published var defaultView: DefaultView {
+        didSet {
+            UserDefaults.standard.set(defaultView.rawValue, forKey: "defaultView")
+        }
+    }
+    
+    enum DefaultView: String, CaseIterable {
+        case projects = "projects"
+        case overview = "overview"
+        
+        var displayName: String {
+            switch self {
+            case .projects: return String(localized: "navigation.projects", comment: "Projects")
+            case .overview: return String(localized: "navigation.overview", comment: "Overview")
+            }
+        }
+    }
+    
     @Published var selectedProjectsForSync: Set<String> {
         didSet {
             UserDefaults.standard.set(Array(selectedProjectsForSync), forKey: "selectedProjectsForSync")
@@ -223,6 +274,12 @@ final class AppSettings: ObservableObject {
         self.notifyLabelsUpdated = UserDefaults.standard.object(forKey: "notifyLabelsUpdated") as? Bool ?? false
         self.watchedLabelIDs = (UserDefaults.standard.array(forKey: "watchedLabelIDs") as? [Int]) ?? []
         self.notifyWithSummary = UserDefaults.standard.object(forKey: "notifyWithSummary") as? Bool ?? true
+        
+        self.recentProjectIds = UserDefaults.standard.array(forKey: "recentProjectIds") as? [Int] ?? []
+        self.recentTaskIds = UserDefaults.standard.array(forKey: "recentTaskIds") as? [Int] ?? []
+        
+        let defaultViewString = UserDefaults.standard.string(forKey: "defaultView") ?? DefaultView.projects.rawValue
+        self.defaultView = DefaultView(rawValue: defaultViewString) ?? .projects
 
         // Load calendar sync preferences
         if let data = UserDefaults.standard.data(forKey: "calendarSync.prefs"),

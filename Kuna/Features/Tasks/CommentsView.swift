@@ -21,7 +21,7 @@ struct CommentsView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        // Text("Loading comments...")
+                        
                         Text(String(localized: "comments.loading", comment: "Label shown when loading comments"))
                             .foregroundColor(.secondary)
                     }
@@ -35,13 +35,13 @@ struct CommentsView: View {
                 // Add comment section
                 addCommentSection
             }
-            // .navigationTitle("Comments")
+            
             .navigationTitle(String(localized: "comments.title", comment: "Comments navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Done") {
+                    
                     Button(String(localized: "common.done", comment: "Done button")) {
                         dismiss()
                     }
@@ -52,7 +52,7 @@ struct CommentsView: View {
             loadComments()
         }
         .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
-            // Button("OK") {
+            
             Button(String(localized: "common.ok", comment: "OK button")) {
                 error = nil
             }
@@ -72,7 +72,7 @@ struct CommentsView: View {
                 .foregroundColor(.secondary)
             
             VStack(spacing: 8) {
-                // Text("No Comments Yet")
+                
                 Text(String(localized: "comments.empty.title", comment: "Title shown when there are no comments"))
                     .font(.title3)
                     .fontWeight(.semibold)
@@ -113,7 +113,7 @@ struct CommentsView: View {
             Divider()
             
             HStack(spacing: 12) {
-                // TextField("Add a comment...", text: $newCommentText, axis: .vertical)
+                
                 TextField(
                     String(localized: "comments.add.placeholder", comment: "Placeholder for adding a comment"),
                     text: $newCommentText,
@@ -274,7 +274,7 @@ struct CommentRowView: View {
             String(localized: "comments.delete.title", comment: "Delete comment dialog title"),
             isPresented: $showingDeleteConfirmation
         ) {
-            // Button("Delete", role: .destructive) {
+            
             Button(String(localized: "common.delete", comment: "Delete button"), role: .destructive) {
                 deleteComment()
             }
@@ -323,13 +323,13 @@ struct CommentsButtonView: View {
         }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    // Text("Comments")
+                    
                     Text(String(localized: "comments.title", comment: "Title for comments"))
                         .font(.body)
                         .foregroundColor(.primary)
 
                     if isLoadingCount {
-                        // Text("Loading...")
+                        
                         Text(String(localized: "common.loading.label", comment: "Label shown when loading"))
                             .font(.caption)
                             .foregroundColor(.secondary)

@@ -14,7 +14,7 @@ struct NewProjectView: View {
         NavigationView {
             Form {
                 Section {
-                    // TextField("Project Name", text: $projectTitle)
+                    
                     TextField(String(localized: "projects.new.name", comment: "Project name field"), text: $projectTitle)
                         .textInputAutocapitalization(.words)
                     
@@ -22,7 +22,7 @@ struct NewProjectView: View {
                         .lineLimit(3...6)
                         .textInputAutocapitalization(.sentences)
                 } header: {
-                    // Text("Project Details")
+                    
                     Text(String(localized: "projects.new.details.title", comment: "Title for new project view"))
                 }
                 
@@ -34,12 +34,12 @@ struct NewProjectView: View {
                     }
                 }
             }
-            // .navigationTitle("New Project")
+            
             .navigationTitle(String(localized: "projects.new.details.title", comment: "Title for new project view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
@@ -47,7 +47,7 @@ struct NewProjectView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // Button("Create") {
+                    
                     Button(String(localized: "common.create", comment: "Create button")) {
                         createProject()
                     }
