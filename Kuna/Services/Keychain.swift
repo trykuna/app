@@ -75,15 +75,20 @@ enum Keychain {
         var out: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &out)
         switch status {
+
         case errSecSuccess:
             if let data = out as? Data {
-                let value = String(decoding: data, as: UTF8.self)
+                guard let value = String(data: data, encoding: .utf8) else {
+                    Log.app.error("Keychain data for account \(account, privacy: .public) is not valid UTF-8")
+                    return .success(nil) // or return a failure if your API supports it
+                }
                 cacheQueue.sync { cache[account] = value }
                 return .success(value)
             } else {
                 Log.app.error("Keychain read returned success but no data for account: \(account, privacy: .public)")
                 return .success(nil)
             }
+
         case errSecItemNotFound:
             return .success(nil)
         default:
