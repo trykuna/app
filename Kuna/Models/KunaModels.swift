@@ -617,34 +617,31 @@ struct TaskComment: Identifiable, Decodable {
     }
 }
 
+private enum FileKeys: String, CodingKey {
+    case fileName = "file_name"
+    case name
+}
+
 struct TaskAttachment: Identifiable, Decodable {
     let id: Int
     let fileName: String
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id
         case fileName = "file_name"
         case file
     }
 
-    struct FileInfo: Decodable {
-        let fileName: String?
-        let name: String?
-
-        enum CodingKeys: String, CodingKey {
-            case fileName = "file_name"
-            case name
-        }
-    }
-
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(Int.self, forKey: .id)
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(Int.self, forKey: .id)
 
-        if let direct = try container.decodeIfPresent(String.self, forKey: .fileName) {
+        if let direct = try c.decodeIfPresent(String.self, forKey: .fileName) {
             fileName = direct
-        } else if let file = try container.decodeIfPresent(FileInfo.self, forKey: .file) {
-            fileName = file.fileName ?? file.name ?? ""
+        } else if let fileC = try? c.nestedContainer(keyedBy: FileKeys.self, forKey: .file) {
+            let f1 = try fileC.decodeIfPresent(String.self, forKey: .fileName)
+            let f2 = try fileC.decodeIfPresent(String.self, forKey: .name)
+            fileName = f1 ?? f2 ?? ""
         } else {
             fileName = ""
         }
