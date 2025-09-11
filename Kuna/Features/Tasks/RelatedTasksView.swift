@@ -21,12 +21,12 @@ struct RelatedTasksView: View {
                 content
                 addBar
             }
-            // .navigationTitle("Related Tasks")
+            
             .navigationTitle(String(localized: "tasks.related.title", comment: "Related tasks navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Done") { dismiss() }
+                    
                     Button(String(localized: "common.done", comment: "Done button")) { dismiss() }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -41,7 +41,7 @@ struct RelatedTasksView: View {
         }
         .onAppear { Task { await refresh() } }
         .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
-            // Button("OK") { error = nil }
+            
             Button(String(localized: "common.ok", comment: "OK button")) { error = nil }
         } message: { Text(error ?? "") }
     }
@@ -60,7 +60,7 @@ struct RelatedTasksView: View {
             VStack(spacing: 20) {
                 Spacer()
                 Image(systemName: "link").font(.system(size: 48)).foregroundColor(.secondary)
-                // Text("No Related Tasks").font(.title3).fontWeight(.semibold)
+                
                 Text(String(localized: "tasks.related.none.title", comment: "No related tasks title"))
                     .font(.title3)
                     .fontWeight(.semibold)
@@ -117,7 +117,7 @@ struct RelatedTasksView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 8) {
-                // Picker("Kind", selection: $selectedKind) {
+                
                 Picker(String(localized: "tasks.relation.kind", comment: "Relation kind picker"), selection: $selectedKind) {
                     ForEach(TaskRelationKind.allCases.filter { $0 != .unknown }, id: \.self) { kind in
                         Text(kind.displayName).tag(kind)
@@ -130,7 +130,7 @@ struct RelatedTasksView: View {
                 } label: {
                     HStack(spacing: 6) { 
                         Image(systemName: "text.magnifyingglass")
-                        // Text("Pick Task")
+                        
                         Text(String(localized: "tasks.picker.title", comment: "Pick task button"))
                     }
                 }

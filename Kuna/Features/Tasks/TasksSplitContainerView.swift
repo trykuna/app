@@ -42,7 +42,7 @@ struct TasksSplitContainerView: View {
                     ContentUnavailableView(String(localized: "tasks.select.title",
                                                     comment: "Title for select a task"), systemImage: "square.and.pencil")
                 } else {
-                    // Text("Select a task")
+                    
                     Text(String(localized: "tasks.select.title", comment: "Title for select a task"))
                         .font(.headline)
                         .foregroundStyle(.secondary)

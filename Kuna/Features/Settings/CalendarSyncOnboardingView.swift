@@ -48,18 +48,18 @@ struct CalendarSyncOnboardingView: View {
                 actionButtons
             }
             .padding()
-            // .navigationTitle("Calendar Sync Setup")
+            
             .navigationTitle(String(localized: "settings.calendarSync.setup.title",
                                     comment: "Calendar sync setup navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") { dismiss() }
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) { dismiss() }
                 }
             }
             .alert(String(localized: "common.error"), isPresented: .constant(errorMessage != nil)) {
-                // Button("OK") { errorMessage = nil }
+                
                 Button(String(localized: "common.ok", comment: "OK button")) { errorMessage = nil }
             } message: {
                 if let error = errorMessage {
@@ -118,12 +118,10 @@ struct CalendarSyncOnboardingView: View {
                 .foregroundColor(.blue)
             
             VStack(spacing: 16) {
-                // Text("Calendar Sync")
+                
                 Text(String(localized: "settings.calendarSync.title", comment: "Title for calendar sync"))
                     .font(.title)
                     .fontWeight(.bold)
-                
-                // Text("Kuna creates its own calendars and never edits your existing ones.")
                 Text(String(localized: "settings.calendarSync.subtitle", comment: "Subtitle for calendar sync"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -143,12 +141,10 @@ struct CalendarSyncOnboardingView: View {
     private var modeSelectionView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                // Text("Choose Sync Mode")
+                
                 Text(String(localized: "settings.calendarSync.mode.title", comment: "Title for choose sync mode"))
                     .font(.title2)
                     .fontWeight(.semibold)
-                
-                // Text("How would you like to organize your synced tasks?")
                 Text(String(localized: "settings.calendarSync.mode.subtitle", comment: "Subtitle for choose sync mode"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -242,12 +238,10 @@ struct CalendarSyncOnboardingView: View {
     private var confirmationView: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                // Text("Confirm Setup")
+                
                 Text(String(localized: "settings.calendarSync.onboarding.title", comment: "Title for confirm setup"))
                     .font(.title2)
                     .fontWeight(.semibold)
-                
-                // Text("Review your calendar sync configuration:")
                 Text(String(localized: "settings.calendarSync.onboarding.subtitle", comment: "Subtitle for confirm setup"))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -302,7 +296,7 @@ struct CalendarSyncOnboardingView: View {
     private var actionButtons: some View {
         HStack(spacing: 16) {
             if currentStep != .intro {
-                // Button("Back") {
+                
                 Button(String(localized: "common.back", comment: "Back button")) {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         currentStep = OnboardingStep(rawValue: currentStep.rawValue - 1) ?? .intro
@@ -313,7 +307,6 @@ struct CalendarSyncOnboardingView: View {
             
             Spacer()
             
-            // Button(currentStep == .confirmation ? "Enable Sync" : "Continue") {
             Button(currentStep == .confirmation ? 
                 String(localized: "settings.calendarSync.enableSync", comment: "Enable sync button") : 
                 String(localized: "common.continue", comment: "Continue button")) {

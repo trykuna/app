@@ -54,7 +54,6 @@ struct LoginView: View {
                     }
                     .listRowBackground(Color.clear)
 
-                    // Section("Server") {
                     Section(String(localized: "auth.server", comment: "Server section")) {
                         HStack {
                             ZStack(alignment: .leading) {
@@ -64,7 +63,7 @@ struct LoginView: View {
                                         .textSelection(.disabled)
                                         .allowsHitTesting(false)
                                 }
-                                TextField("", text: $serverURL)
+                                TextField("", text: $serverURL) // noloc
                                     .textInputAutocapitalization(.never)
                                     .autocorrectionDisabled()
                                     .keyboardType(.URL)
@@ -90,7 +89,6 @@ struct LoginView: View {
                     }
 
                     Section {
-                        // Picker("Login Method", selection: $mode) {
                         Picker(String(localized: "auth.loginMethod", comment: "Login method picker"), selection: $mode) {
                             ForEach(LoginMode.allCases) { Text($0.rawValue).tag($0) }
                         }
@@ -128,7 +126,6 @@ struct LoginView: View {
                                 .submitLabel(.next)
                                 .onSubmit { focused = .password }
 
-                            // SecureField("Password", text: $password)
                             SecureField(String(localized: "auth.password", comment: "Password field"), text: $password)
                                 .textContentType(.password)
                                 .focused($focused, equals: .password)
@@ -164,9 +161,9 @@ struct LoginView: View {
                             .fixedSize(horizontal: false, vertical: true)
                         }
                     } else {
-                        // Section("Personal API Token") {
+                        
                         Section(String(localized: "auth.personalApiToken", comment: "Personal API token section")) {
-                            // SecureField("API Token", text: $personalToken)
+                            
                             SecureField(
                                 String(localized: "auth.login.apiToken.placeholder", comment: "Placeholder for API token field"),
                                         text: $personalToken

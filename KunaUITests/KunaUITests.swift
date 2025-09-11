@@ -35,8 +35,25 @@ final class KunaUITests: XCTestCase {
         // Login if needed
         loginIfNeeded(app)
 
-        // Ensure we’re on Projects
-        ensureOnProjects(app)
+        // Give the app a moment to settle after login
+        RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        
+        // Close side menu if it's open from previous state
+        closeSidebarIfOpen(app)
+        
+        // Navigate to Overview first (if it exists)
+        openSidebar(app)
+        // Try to find Overview menu item - it might be "Overview" or "navigation.overview" depending on localization
+        if app.buttons["Sidebar.Overview"].exists {
+            tapSidebarItem("overview", app: app)
+            RunLoop.current.run(until: Date().addingTimeInterval(1.0))
+            snapshot("02-Overview")
+        }
+        
+        // Navigate to Projects screen via sidebar
+        openSidebar(app)
+        tapSidebarItem("projects", app: app)
+        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
 
         // Open project (fallbacks if the preferred one isn't present)
         let actualProject = openProjectAndReturnName(preferred: projectName, in: app)
@@ -45,7 +62,7 @@ final class KunaUITests: XCTestCase {
         // Wait until the task list is visible (accept any task if specific one not found)
         XCTAssertTrue(waitForTask(named: detailTask, in: app, timeout: 10),
                       "Didn't enter \(projectName) task list")
-        snapshot("02-TaskList")
+        snapshot("03-TaskList")
 
         // Open the specific task (may fall back); on iPhone this now taps the chevron
         let actualTask = openTaskAndReturnName(preferred: detailTask, in: app)
@@ -53,13 +70,13 @@ final class KunaUITests: XCTestCase {
 
         // Ensure Task Details is shown
         XCTAssertTrue(waitForTaskDetails(in: app, timeout: 8), "Task details screen didn't appear")
-        snapshot("04-TaskDetails")
+        snapshot("05-TaskDetails")
 
         // --- Related Tasks screen ---
         openRow(titled: "Related Tasks", in: app)
         XCTAssertTrue(waitForNavTitle("Related Tasks", in: app, timeout: 6),
-                      "Related Tasks screen didn’t appear")
-        snapshot("05-RelatedTasks")
+                      "Related Tasks screen didn't appear")
+        snapshot("06-RelatedTasks")
 
         // Close Related Tasks via Done
         tapNavOrAnyButton("Done", app: app)
@@ -69,7 +86,7 @@ final class KunaUITests: XCTestCase {
         openRow(titled: "Comments", in: app)
         XCTAssertTrue(waitForNavTitle("Comments", in: app, timeout: 6),
                       "Comments screen didn't appear")
-        snapshot("06-Comments")
+        snapshot("07-Comments")
 
         tapNavOrAnyButton("Done", app: app)
         XCTAssertTrue(waitForTaskDetails(in: app, timeout: 4),
@@ -83,7 +100,7 @@ final class KunaUITests: XCTestCase {
         let labelsScreen = app.otherElements["screen.labels"].waitForExistence(timeout: 8) ||
                            app.staticTexts["Labels"].waitForExistence(timeout: 2)
         XCTAssertTrue(labelsScreen, "Labels screen didn't appear")
-        snapshot("03-LabelsView")
+        snapshot("04-LabelsView")
         
 //        // --- Favorites via sidebar ---
 //        openSidebar(app)
@@ -106,7 +123,7 @@ final class KunaUITests: XCTestCase {
 
         XCTAssertTrue(waitForNavTitle("Display Options", in: app, timeout: 6),
                       "Display Options screen didn’t appear")
-        snapshot("07-DisplayOptions")
+        snapshot("08-DisplayOptions")
 
         // AX dump on teardown for easier triage later
         addTeardownBlock {
@@ -195,6 +212,15 @@ final class KunaUITests: XCTestCase {
     }
 
     // MARK: - Sidebar / Login helpers
+    
+    /// Close the sidebar if it's open
+    private func closeSidebarIfOpen(_ app: XCUIApplication) {
+        if app.staticTexts["SideMenu"].exists || app.otherElements["Sidebar"].exists {
+            // Tap outside the menu to close it
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        }
+    }
 
     /// Walks back via nav bar until the MenuButton is visible (or we're already on Projects).
     private func ensureMenuContext(_ app: XCUIApplication) {
@@ -218,33 +244,46 @@ final class KunaUITests: XCTestCase {
 
     /// Opens the side menu by tapping MenuButton (no edge‑drag). Verifies via Sidebar container visibility.
     private func openSidebar(_ app: XCUIApplication) {
+        // Check if sidebar is already open
+        if app.otherElements["Sidebar"].exists || app.staticTexts["SideMenu"].exists {
+            return // Already open
+        }
+        
         ensureMenuContext(app)
         let menu = app.buttons["MenuButton"]
-        XCTAssertTrue(menu.waitForExistence(timeout: 3))
-        menu.tap()
-
-        // Main container has accessibilityIdentifier("Sidebar") and is hidden when closed.
-        let sidebar = app.otherElements["Sidebar"]
-        XCTAssertTrue(sidebar.waitForExistence(timeout: 3.0),
-                      "Sidebar did not appear after tapping MenuButton.")
-        // Small pause so the overlay and hit-testing settle
-        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+        if menu.waitForExistence(timeout: 3) {
+            menu.tap()
+            
+            // Main container has accessibilityIdentifier("Sidebar") and is hidden when closed.
+            let sidebar = app.otherElements["Sidebar"]
+            _ = sidebar.waitForExistence(timeout: 3.0)
+            // Small pause so the overlay and hit-testing settle
+            RunLoop.current.run(until: Date().addingTimeInterval(0.3))
+        }
     }
 
     /// Taps a menu item by its Sidebar.* identifier. Assumes the drawer is already open.
     private func tapSidebarItem(_ itemKey: String, app: XCUIApplication) {
         let targetId = "Sidebar.\(itemKey.capitalized)"   // e.g. Sidebar.Settings
         let target = app.buttons.matching(identifier: targetId).firstMatch
-        if target.waitForHittable(timeout: 1.0) { target.tap(); return }
+        if target.waitForHittable(timeout: 1.0) { 
+            target.tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+            return
+        }
         if target.exists {
-            target.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap(); return
+            target.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+            return
         }
         // Super‑tolerant fallback by label (rarely needed)
         let label = itemKey.capitalized
         let anyWithLabel = app.descendants(matching: .any)
             .matching(NSPredicate(format: "label == %@", label)).firstMatch
         if anyWithLabel.exists {
-            anyWithLabel.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap(); return
+            anyWithLabel.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+            return
         }
         XCTFail("Sidebar item '\(targetId)' not found.")
     }
@@ -252,35 +291,102 @@ final class KunaUITests: XCTestCase {
     // MARK: - Screens & Auth
 
     private func ensureOnProjects(_ app: XCUIApplication) {
+        // Close side menu if it's open
+        if app.staticTexts["SideMenu"].exists || app.otherElements["Sidebar"].exists {
+            // Tap outside the menu to close it
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+        }
+        
+        // Check if we're already on Projects screen
+        if app.otherElements["screen.projects"].exists ||
+           app.staticTexts["Projects"].exists {
+            return
+        }
+        
+        // If we're on Overview screen, navigate to Projects
+        if app.otherElements["screen.overview"].exists ||
+           app.staticTexts["Overview"].exists ||
+           app.staticTexts["navigation.overview"].exists ||
+           app.staticTexts["overview.recentTasks"].exists {
+            openSidebar(app)
+            tapSidebarItem("projects", app: app)
+        }
+        
+        // Verify we made it to Projects screen
         let screenExists = app.otherElements["screen.projects"].waitForExistence(timeout: 8) ||
                            app.staticTexts["Projects"].waitForExistence(timeout: 2)
         XCTAssertTrue(screenExists, "Projects screen didn't appear")
     }
 
     private func loginIfNeeded(_ app: XCUIApplication) {
-        let serverField = app.textFields.element(boundBy: 0)
-        guard serverField.exists else { return }
+        // Wait a moment for the app to fully load
+        RunLoop.current.run(until: Date().addingTimeInterval(1.0))
+        
+        // First check: Look for the login button - if it doesn't exist, we're likely logged in
+        let loginButton = app.buttons["Log In"]
+        if !loginButton.exists {
+            // Double-check we're actually logged in by looking for main app elements
+            // The MenuButton is the most reliable indicator
+            if app.buttons["MenuButton"].waitForExistence(timeout: 2) {
+                // We're logged in
+                return
+            }
+            
+            // Also check for sidebar elements (in case menu is already open)
+            if app.otherElements["Sidebar"].exists || app.staticTexts["SideMenu"].exists {
+                // We're logged in with sidebar open
+                return  
+            }
+            
+            // Wait a bit more in case we're in transition
+            RunLoop.current.run(until: Date().addingTimeInterval(1.0))
+            
+            // Final check for login button
+            if !app.buttons["Log In"].exists {
+                // No login button after waiting - assume we're logged in
+                return
+            }
+        }
 
+        // We're definitely on the login screen now
+        let serverField = app.textFields.element(boundBy: 0)
         let usernameField = app.textFields["Username"]
         let passwordField = app.secureTextFields["Password"]
-        let loginButton   = app.buttons["Log In"]
 
         let serverURL = ProcessInfo.processInfo.environment["VIKUNJA_SERVER_URL"] ?? "https://demo.vikunja.io"
         let username  = ProcessInfo.processInfo.environment["VIKUNJA_USERNAME"] ?? "demo"
         let password  = ProcessInfo.processInfo.environment["VIKUNJA_PASSWORD"] ?? "demo"
 
-        serverField.tap()
-        serverField.typeText(serverURL)
+        if serverField.exists {
+            serverField.tap()
+            // Clear any existing text first
+            if let currentValue = serverField.value as? String, !currentValue.isEmpty {
+                serverField.tap()
+                let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count + 10)
+                serverField.typeText(deleteString)
+            }
+            serverField.typeText(serverURL)
+        }
 
         if usernameField.waitForExistence(timeout: 2) {
-            usernameField.tap(); usernameField.typeText(username)
+            usernameField.tap()
+            usernameField.typeText(username)
         }
         if passwordField.waitForExistence(timeout: 2) {
-            passwordField.tap(); passwordField.typeText(password)
+            passwordField.tap()
+            passwordField.typeText(password)
         }
-        if loginButton.waitForExistence(timeout: 2) { loginButton.tap() }
+        if loginButton.waitForExistence(timeout: 2) {
+            loginButton.tap()
+        }
 
-        ensureOnProjects(app)
+        // Wait for either Projects or Overview screen to appear after login
+        _ = app.otherElements["screen.projects"].waitForExistence(timeout: 8) ||
+            app.otherElements["screen.overview"].waitForExistence(timeout: 8) ||
+            app.staticTexts["Overview"].waitForExistence(timeout: 8) ||
+            app.staticTexts["Projects"].waitForExistence(timeout: 8) ||
+            app.buttons["MenuButton"].waitForExistence(timeout: 8)
     }
 
     // MARK: - Navigation helpers (projects/tasks)

@@ -26,7 +26,6 @@ struct TaskDetailView: View {
     @State var availableLabels: [Label] = []
     @State var showingLabelPicker = false
 
-    // Section collapse states
     @State private var isTaskInfoExpanded = true
     @State private var isSchedulingExpanded = true
     @State private var isOrganizationExpanded = true
@@ -294,6 +293,7 @@ struct TaskDetailView: View {
             })
         }
         .onAppear {
+            AppSettings.shared.addRecentTask(task.id)
             // Initialize edit buffers
             editStartDate = task.startDate
             editDueDate = task.dueDate

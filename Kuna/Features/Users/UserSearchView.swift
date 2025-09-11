@@ -62,7 +62,7 @@ struct UserSearchView: View {
                 if isSearching {
                     VStack(spacing: 16) {
                         ProgressView()
-                        // Text("Searching users...")
+                        
                         Text(String(localized: "users.search.searching", comment: "Label shown when searching users"))
                             .foregroundColor(.secondary)
                     }
@@ -73,11 +73,8 @@ struct UserSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        // Text("No users found")
                         Text(String(localized: "users.search.noResults.title", comment: "Title for no users found"))
                             .font(.headline)
-                        
-                        // Text("Try a different search term")
                         Text(String(localized: "users.search.noResults.suggestion", comment: "Try a different search term"))
                             .foregroundColor(.secondary)
                     }
@@ -88,14 +85,11 @@ struct UserSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.secondary)
                         
-                        // Text("Search for Users")
                         Text(String(localized: "users.search.title", comment: "Title for search for users"))
                             .font(.headline)
-                        
-                        // Text("Enter a username or name to find users you can assign to tasks")
                         Text(
                             String(localized: "users.search.description", 
-                                   comment: "Enter a username or name to find users you can assign to tasks")
+                                    comment: "Enter a username or name to find users you can assign to tasks")
                         )
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -114,19 +108,19 @@ struct UserSearchView: View {
                 
                 Spacer()
             }
-            // .navigationTitle("Find Users")
+            
             .navigationTitle(String(localized: "users.find.title", comment: "Find users navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
             }
             .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
-                // Button("OK") {
+                
                 Button(String(localized: "common.ok", comment: "OK button")) {
                     error = nil
                 }

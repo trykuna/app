@@ -14,7 +14,6 @@ struct AnalyticsConsentSheet: View {
                     .foregroundColor(.accentColor)
                     .padding(.top, 8)
 
-                // Text("Anonymous Analytics")
                 Text(String(localized: "onboarding.analytics_consent.title", comment: "Title for analytics consent sheet"))
                     .font(.title2).bold()
 
@@ -51,7 +50,7 @@ struct AnalyticsConsentSheet: View {
                 .padding(.bottom)
             }
             .padding()
-            // .navigationTitle("Help Improve Kuna")
+            
             .navigationTitle(String(localized: "onboarding.analytics_consent.title", 
                                     comment: "Title for analytics consent sheet"))
             .navigationBarTitleDisplayMode(.inline)

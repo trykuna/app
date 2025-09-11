@@ -24,12 +24,11 @@ struct TOTPView: View {
                         .foregroundColor(.blue)
                     
                     VStack(spacing: 8) {
-                        // Text("Two-Factor Authentication")
+                        
                         Text(String(localized: "auth.totp.title", comment: "Title for two-factor authentication view"))
                             .font(.title2)
                             .fontWeight(.semibold)
                         
-                        // Text("Enter the 6-digit code from your authenticator app")
                         Text(String(localized: "auth.totp.subtitle", comment: "Subtitle for two-factor authentication view"))
                             .font(.body)
                             .foregroundColor(.secondary)
@@ -76,7 +75,6 @@ struct TOTPView: View {
                             .stroke(totpFocused ? Color.accentColor : Color.clear, lineWidth: 2)
                     )
                     
-                    // Text("The code will be submitted automatically when complete")
                     Text(String(localized: "auth.totp.auto_submit",
                                 comment: "Label explaining that the code will be submitted automatically"))
                         .font(.caption)
@@ -87,7 +85,7 @@ struct TOTPView: View {
                 Spacer()
                 
                 // Manual submit button (in case auto-submit doesn't work)
-                // Button("Verify Code") {
+                
                 Button(String(localized: "auth.totp.verifyCode", comment: "Verify code button")) {
                     submitTOTP()
                 }
@@ -99,7 +97,7 @@ struct TOTPView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    // Button("Cancel") {
+                    
                     Button(String(localized: "common.cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
@@ -117,7 +115,7 @@ struct TOTPView: View {
                     VStack(spacing: 16) {
                         ProgressView()
                             .scaleEffect(1.2)
-                        // Text("Verifying...")
+                        
                         Text(String(localized: "auth.totp.verifying", comment: "Label shown when verifying two-factor code"))
                             .font(.headline)
                     }
