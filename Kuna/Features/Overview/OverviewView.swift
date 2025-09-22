@@ -128,6 +128,7 @@ struct OverviewView: View {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 18, weight: .medium))
                     }
+                    .accessibilityIdentifier("MenuButton")
                     .accessibilityLabel(String(localized: "navigation.menu", comment: "Menu button accessibility label"))
                 }
             }

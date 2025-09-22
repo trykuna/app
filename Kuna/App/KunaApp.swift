@@ -15,7 +15,7 @@ struct KunaApp: App {
 
         // Register background tasks as early as possible (Apple recommends during app launch)
         BackgroundSyncService.shared.register()
-        
+
         // Schedule initial background sync if enabled (skip during screenshot generation)
         if !isRunningForScreenshots {
             let settings = AppSettings.shared
@@ -23,9 +23,14 @@ struct KunaApp: App {
                 BackgroundSyncService.shared.scheduleNext(after: settings.backgroundSyncFrequency)
             }
         }
+        // Force deterministic start screen during Fastlane snapshot runs
+        if isRunningForScreenshots {
+            AppSettings.shared.defaultView = .projects
+        }
+
     }
     @StateObject private var appState = AppState()
-    
+
     // Check if running for fastlane screenshots
     private var isRunningForScreenshots: Bool {
         UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") ||
@@ -44,7 +49,7 @@ struct KunaApp: App {
                     // Rate limit memory warning handling to prevent infinite loops
                     let lastWarning = UserDefaults.standard.double(forKey: "lastMemoryWarningTime")
                     let now = Date().timeIntervalSince1970
-                    
+
                     // Only handle if it's been at least 5 seconds since last warning
                     guard now - lastWarning > 5.0 else {
                         Log.app.debug(
@@ -52,7 +57,7 @@ struct KunaApp: App {
                         )
                         return
                     }
-                    
+
                     UserDefaults.standard.set(now, forKey: "lastMemoryWarningTime")
                     Log.app.warning(
                         "App: Received memory warning - clearing caches"

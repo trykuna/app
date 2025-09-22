@@ -12,7 +12,13 @@
 
   },
   "testTargets" : [
-
+    {
+      "target" : {
+        "containerPath" : "container:Kuna.xcodeproj",
+        "identifier" : "79F856D62E57C5710028165E",
+        "name" : "KunaUITests"
+      }
+    }
   ],
   "version" : 1
 }

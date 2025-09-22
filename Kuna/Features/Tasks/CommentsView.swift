@@ -48,11 +48,12 @@ struct CommentsView: View {
                 }
             }
         }
+        .accessibilityIdentifier("screen.comments")
         .onAppear {
             loadComments()
         }
         .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
-            
+
             Button(String(localized: "common.ok", comment: "OK button")) {
                 error = nil
             }
@@ -351,6 +352,7 @@ struct CommentsButtonView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
         }
+        .accessibilityIdentifier("button.comments")
         .buttonStyle(.plain)
         .sheet(isPresented: $showingComments) {
             CommentsView(task: task, api: api, commentCountManager: commentCountManager)

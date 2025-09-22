@@ -1,32 +1,53 @@
 # Kuna App Store Screenshots Configuration
 
 # A list of devices you want to take the screenshots from
+# Running one at a time to avoid connection issues
 devices([
-  "iPhone 16 Pro Max",
   "iPhone 16 Pro",
+  "iPhone 16 Pro Max",
   "iPad Pro 13-inch (M4)"
 ])
+
+# Run tests sequentially for each device
+concurrent_simulators(false)
 
 # Languages for screenshots
 languages([
   "en-US"
 ])
 
-# The name of the scheme which contains the UI Tests
+# The name of the app scheme to run UI tests from
 scheme("KunaUITests")
+
+# Specific test to run (optional - comment out to run all tests)
+# only_testing(["KunaUITests/MinimalScreenshots/testMinimalScreenshots"])
+
+# Project file path
+project("./Kuna.xcodeproj")
 
 # Where should the resulting screenshots be stored?
 output_directory("./fastlane/screenshots")
 
 # Clear all previously generated screenshots before creating new ones
 clear_previous_screenshots(true)
+# Continue with other devices even if one fails
+stop_after_first_error(false)
+# Increase timeout for slower devices
+test_without_building(false)
+reinstall_app(true)
+app_identifier("tech.systemsmystery.Kuna")
+# Save xcodebuild logs and keep xcresult bundles with attachments
+buildlog_path("./fastlane/logs")
+result_bundle(true)
+
+
 
 # Set the status bar to 9:41 AM, and show full battery and reception
 override_status_bar(true)
 
 # Launch arguments to pass to the app
 launch_arguments([
-  "-FASTLANE_SNAPSHOT", 
+  "-FASTLANE_SNAPSHOT",
   "YES"
 ])
 

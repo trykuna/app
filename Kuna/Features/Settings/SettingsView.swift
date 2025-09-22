@@ -100,6 +100,7 @@ struct SettingsView: View {
                     Spacer()
                 }
             }
+            .accessibilityIdentifier("settings.displayOptions")
         } header: { 
             Text(String(localized: "settings.display.title", comment: "Display options settings header"))
         } footer: {

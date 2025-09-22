@@ -32,6 +32,7 @@ struct RelatedTasksButtonView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
         }
+        .accessibilityIdentifier("button.relatedTasks")
         .buttonStyle(.plain)
         .sheet(isPresented: $showing) {
             RelatedTasksView(task: $task, api: api)
