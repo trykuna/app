@@ -3,7 +3,7 @@ import SwiftUI
 typealias AsyncTask = Task
 
 extension TaskDetailView {
-    
+
     var sheetModifiers: some View {
         EmptyView()
             .sheet(isPresented: $showingLabelPicker) {
@@ -16,7 +16,7 @@ extension TaskDetailView {
                 repeatEditorSheet
             }
     }
-    
+
     private var labelPickerSheet: some View {
         LabelPickerSheet(
             availableLabels: availableLabels,
@@ -42,7 +42,7 @@ extension TaskDetailView {
             onCancel: { showingLabelPicker = false }
         )
     }
-    
+
     private var remindersEditorSheet: some View {
         RemindersEditorSheet(
             task: task,
@@ -54,7 +54,7 @@ extension TaskDetailView {
             onClose: { showingRemindersEditor = false }
         )
     }
-    
+
     private var repeatEditorSheet: some View {
         RepeatEditorSheet(
             repeatAfter: taskRepeatAfter,  // Use workaround state
@@ -64,20 +64,20 @@ extension TaskDetailView {
                 Log.app.debug("RepeatEditorSheet onCommit - newMode: \(newMode.displayName, privacy: .public)")
                 Log.app.debug("BEFORE - taskRepeatAfter: \(taskRepeatAfter?.description ?? "nil", privacy: .public)")
                 Log.app.debug("BEFORE - taskRepeatMode: \(taskRepeatMode.displayName, privacy: .public)")
-                
+
                 // WORKAROUND: Update the separate state variables
                 taskRepeatAfter = newAfter
                 taskRepeatMode = newMode
-                
+
                 Log.app.debug("AFTER - taskRepeatAfter: \(taskRepeatAfter?.description ?? "nil", privacy: .public)")
                 Log.app.debug("AFTER - taskRepeatMode: \(taskRepeatMode.displayName, privacy: .public)")
-                
+
                 // Also try to update task (even though we know it fails)
                 task.repeatAfter = newAfter
                 task.repeatMode = newMode
                 Log.app.debug("Task (wrong) - repeatAfter: \(task.repeatAfter?.description ?? "nil", privacy: .public)")
                 Log.app.debug("Task (wrong) - repeatMode: \(task.repeatMode.displayName, privacy: .public)")
-                
+
                 hasChanges = true
                 showingRepeatEditor = false
             },

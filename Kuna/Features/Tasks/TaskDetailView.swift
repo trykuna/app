@@ -49,7 +49,7 @@ struct TaskDetailView: View {
     @State var showingRemindersEditor = false
     @State var showingRepeatEditor = false
     @State private var selectedLabelIds: Set<Int> = []
-    
+
     // WORKAROUND: Separate state for repeat values to bypass mutation issue
     @State var taskRepeatAfter: Int?
     @State var taskRepeatMode: RepeatMode = .afterAmount
@@ -74,7 +74,7 @@ struct TaskDetailView: View {
         self._taskRepeatAfter = State(initialValue: task.repeatAfter)
         self._taskRepeatMode = State(initialValue: task.repeatMode)
     }
-    
+
     // Helper function to format repeat intervals
     private func formatRepeatInterval(_ seconds: Int) -> String {
         switch seconds {
@@ -153,8 +153,8 @@ struct TaskDetailView: View {
                                 Divider().padding(.leading, 16)
                                 TaskRepeatRow(isEditing: isEditing,
                                                 repeatAfter: taskRepeatAfter,
-                                                displayText: taskRepeatAfter.flatMap { 
-                                                    $0 > 0 ? formatRepeatInterval($0) : nil 
+                                                displayText: taskRepeatAfter.flatMap {
+                                                    $0 > 0 ? formatRepeatInterval($0) : nil
                                                 } ?? "",
                                                 onTap: { showingRepeatEditor = true })
                             }
@@ -298,7 +298,7 @@ struct TaskDetailView: View {
             editStartDate = task.startDate
             editDueDate = task.dueDate
             editEndDate = task.endDate
-            
+
             startHasTime = hasTime(task.startDate)
             dueHasTime   = hasTime(task.dueDate)
             endHasTime   = hasTime(task.endDate)
@@ -383,7 +383,7 @@ struct TaskDetailView: View {
     }
 
     private func loadAvailableLabels() async {
-        do { 
+        do {
             availableLabels = try await api.fetchLabels()
         } catch {
             Log.app.error("Failed to load labels: \(String(describing: error))")
@@ -408,9 +408,9 @@ struct TaskDetailView: View {
             }
         }
     }
-    
+
     // MARK: - Direct Calendar Sync
-    
+
     func syncTaskToCalendarDirect(_ task: VikunjaTask) async {
         // Only proceed if calendar sync is enabled and we have permission
         guard settings.calendarSyncEnabled else {
@@ -451,10 +451,10 @@ struct TaskDetailView: View {
         Log.app.debug("Task dates - end: \(task.endDate?.description ?? "nil", privacy: .public)")
         Log.app.debug("Task timestamps - start: \(task.startDate?.timeIntervalSince1970 ?? 0, privacy: .public)")
         Log.app.debug("Task timestamps - end: \(task.endDate?.timeIntervalSince1970 ?? 0, privacy: .public)")
-        
+
         // Only sync tasks that have BOTH start and end dates
         let hasRequiredDates = task.startDate != nil && task.endDate != nil
-        
+
         if hasRequiredDates {
             // Find existing event or create new one
             if let existingEvent = findExistingEventDirect(for: task, in: calendar, using: eventStore) {
@@ -480,7 +480,7 @@ struct TaskDetailView: View {
             }
         }
     }
-    
+
     private func findExistingEventDirect(for task: VikunjaTask,
                                          in calendar: EKCalendar,
                                          using eventStore: EKEventStore) -> EKEvent? {
@@ -500,40 +500,40 @@ struct TaskDetailView: View {
             }
             return matches
         }
-        
+
         return matchingEvent
     }
-    
+
     private func createCalendarEventDirect(for task: VikunjaTask, in calendar: EKCalendar, using eventStore: EKEventStore) async {
         let event = EKEvent(eventStore: eventStore)
         event.calendar = calendar
         event.title = task.title
         event.notes = task.description
         event.url = URL(string: "kuna://task/\(task.id)")
-        
+
         // Calculate dates with proper priority: endDate > dueDate > startDate
         let (startDate, endDate) = calculateEventDatesDirect(for: task)
         event.startDate = startDate
         event.endDate = endDate
-        
+
         // Add priority to notes if set
         if task.priority != .unset {
             let priorityNote = "\n[Priority: \(task.priority.displayName)]"
             event.notes = (event.notes ?? "") + priorityNote
         }
-        
+
         // Add reminders as alarms
         if let reminders = task.reminders, !reminders.isEmpty {
             event.alarms = reminders.map { EKAlarm(absoluteDate: $0.reminder) }
         }
-        
+
         do {
             try eventStore.save(event, span: .thisEvent, commit: true)
         } catch {
             Log.app.error("Failed to create calendar event: \(String(describing: error), privacy: .public)")
         }
     }
-    
+
     private func updateCalendarEventDirect(_ event: EKEvent, with task: VikunjaTask, using eventStore: EKEventStore) async {
         Log.app.debug("Updating event - current start: \(event.startDate?.description ?? "nil", privacy: .public)")
         Log.app.debug("Updating event - current end: \(event.endDate?.description ?? "nil", privacy: .public)")
@@ -555,7 +555,7 @@ struct TaskDetailView: View {
 
         Log.app.debug("Event dates after setting - start: \(eventToUpdate.startDate?.description ?? "nil", privacy: .public)")
         Log.app.debug("Event dates after setting - end: \(eventToUpdate.endDate?.description ?? "nil", privacy: .public)")
-        
+
         // Handle priority note without duplicating it
         var baseNotes = (eventToUpdate.notes ?? "")
         baseNotes = baseNotes.replacingOccurrences(
@@ -563,21 +563,21 @@ struct TaskDetailView: View {
             with: "",
             options: .regularExpression
         )
-        
+
         if task.priority != .unset {
             let priorityNote = "\n[Priority: \(task.priority.displayName)]"
             eventToUpdate.notes = baseNotes + priorityNote
         } else {
             eventToUpdate.notes = baseNotes
         }
-        
+
         // Update reminders
         if let reminders = task.reminders, !reminders.isEmpty {
             eventToUpdate.alarms = reminders.map { EKAlarm(absoluteDate: $0.reminder) }
         } else {
             eventToUpdate.alarms = []
         }
-        
+
         do {
             try eventStore.save(eventToUpdate, span: .thisEvent, commit: true)
             Log.app.debug("Successfully updated calendar event")
@@ -587,7 +587,7 @@ struct TaskDetailView: View {
             Log.app.error("Failed to update calendar event: \(String(describing: error), privacy: .public)")
         }
     }
-    
+
     private func removeCalendarEventDirect(_ event: EKEvent, using eventStore: EKEventStore) async {
         do {
             try eventStore.remove(event, span: .thisEvent, commit: true)
@@ -595,7 +595,7 @@ struct TaskDetailView: View {
             Log.app.error("Failed to remove calendar event: \(String(describing: error), privacy: .public)")
         }
     }
-    
+
     private func calculateEventDatesDirect(for task: VikunjaTask) -> (start: Date, end: Date) {
         // Since we only sync tasks with both start and end dates,
         // we can safely use them directly
