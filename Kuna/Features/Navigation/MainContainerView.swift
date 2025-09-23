@@ -240,6 +240,7 @@ struct ProjectListViewWithMenu: View {
                 }
             }
             .task { await vm.load() }
+            .accessibilityIdentifier("screen.projects")
         }
     }
 }

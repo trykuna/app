@@ -2,6 +2,7 @@
 import Foundation
 import Security
 import SwiftUI
+import os
 
 // MARK: - Widget Model Types (copied from main app)
 
@@ -172,13 +173,13 @@ func readWidgetToken() -> String? {
     ]
     var out: AnyObject?
     let status = SecItemCopyMatching(query as CFDictionary, &out)
-    print("Widget: readWidgetToken status: \(status)")
+    Log.widget.debug("readWidgetToken status: \(status)")
     guard status == errSecSuccess, let data = out as? Data else { 
-        print("Widget: Failed to read token, status: \(status)")
+        Log.widget.error("Failed to read token, status: \(status)")
         return nil 
     }
     let token = String(decoding: data, as: UTF8.self)
-    print("Widget: Token read successfully, length: \(token.count)")
+    Log.widget.debug("Token read successfully, length: \(token.count)")
     return token
 }
 
@@ -192,12 +193,12 @@ func readWidgetServerURL() -> String? {
     ]
     var out: AnyObject?
     let status = SecItemCopyMatching(query as CFDictionary, &out)
-    print("Widget: readWidgetServerURL status: \(status)")
+    Log.widget.debug("readWidgetServerURL status: \(status)")
     guard status == errSecSuccess, let data = out as? Data else { 
-        print("Widget: Failed to read server URL, status: \(status)")
+        Log.widget.error("Failed to read server URL, status: \(status)")
         return nil 
     }
     let url = String(decoding: data, as: UTF8.self)
-    print("Widget: Server URL read successfully: \(url)")
+    Log.widget.debug("Server URL read successfully: \(url)")
     return url
 }

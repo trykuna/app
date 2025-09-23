@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "5DE80E23-F6F1-4DC5-A324-F1F50559D515",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Kuna.xcodeproj",
+        "identifier" : "79F856D62E57C5710028165E",
+        "name" : "KunaUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

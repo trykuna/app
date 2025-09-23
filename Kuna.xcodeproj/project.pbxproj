@@ -63,11 +63,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = UITests.local.xcconfig; sourceTree = "<group>"; };
 		791F94802E57821A004CC4E5 /* KunaUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KunaUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		791F94912E578264004CC4E5 /* UnitTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTestPlan.xctestplan; sourceTree = "<group>"; };
 		7940D16C2E66FC0000C134C8 /* KunaEventKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KunaEventKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7947454D2E4F6C1200C7A1D4 /* Kuna.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kuna.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		797B552E2E745CE80028EA2E /* UXTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UXTests.xctestplan; sourceTree = "<group>"; };
 		79CC51232E553BA600ACDCC3 /* KunaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KunaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		79CC51252E553BA600ACDCC3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		79CC51272E553BA600ACDCC3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -77,6 +77,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		797B550D2E7347E30028EA2E /* Exceptions for "Kuna" folder in "KunaWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Services/Logging.swift,
+			);
+			target = 79CC51222E553BA600ACDCC3 /* KunaWidgetExtension */;
+		};
 		79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -108,6 +115,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				79AE7C5E2E53D592001FCABD /* Exceptions for "Kuna" folder in "Kuna" target */,
+				797B550D2E7347E30028EA2E /* Exceptions for "Kuna" folder in "KunaWidgetExtension" target */,
 			);
 			path = Kuna;
 			sourceTree = "<group>";
@@ -174,6 +182,7 @@
 		794745442E4F6C1200C7A1D4 = {
 			isa = PBXGroup;
 			children = (
+				797B552E2E745CE80028EA2E /* UXTests.xctestplan */,
 				79F311F02E5E7EFF00DC0500 /* crowdin.yml */,
 				791F94912E578264004CC4E5 /* UnitTestPlan.xctestplan */,
 				79CC513B2E553BC900ACDCC3 /* KunaWidgetExtension.entitlements */,
@@ -184,7 +193,6 @@
 				7940D16D2E66FC0000C134C8 /* KunaEventKitTests */,
 				79CC51242E553BA600ACDCC3 /* Frameworks */,
 				7947454E2E4F6C1200C7A1D4 /* Products */,
-				791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -523,7 +531,6 @@
 /* Begin XCBuildConfiguration section */
 		791F94872E57821A004CC4E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_CODE_COVERAGE = Yes;
@@ -598,7 +605,6 @@
 		};
 		794745562E4F6C1400C7A1D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -733,7 +739,6 @@
 		};
 		794745592E4F6C1400C7A1D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -814,7 +819,6 @@
 		};
 		79CC51382E553BA800ACDCC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -871,7 +875,6 @@
 		};
 		79F856E02E57C5710028165E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 791AF2D42E591BB100FDBDB7 /* UITests.local.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9NK92GW676;

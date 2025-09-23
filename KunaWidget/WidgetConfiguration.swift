@@ -2,6 +2,7 @@
 import WidgetKit
 import AppIntents
 import SwiftUI
+import os
 
 // MARK: - Widget Configuration
 struct ProjectSelectionConfiguration: WidgetConfigurationIntent {
@@ -105,7 +106,7 @@ struct ProjectQuery: EntityQuery {
     }
     
     func suggestedEntities() async throws -> [ProjectEntity] {
-        print("Widget Config: suggestedEntities() called - starting project fetch")
+        Log.widget.debug("suggestedEntities() called - starting project fetch")
         // Fetch real projects from API
         do {
             let realProjects = try await fetchProjectsFromAPI()
@@ -124,7 +125,7 @@ struct ProjectQuery: EntityQuery {
             
             return entities
         } catch {
-            print("Widget Config: Failed to fetch projects: \(error)")
+            Log.widget.error("Failed to fetch projects: \(error)")
             // Only return All Projects if API fails - no fake data
             return [ProjectEntity.allProjects]
         }
@@ -132,44 +133,44 @@ struct ProjectQuery: EntityQuery {
     
     private func fetchProjectsFromAPI() async throws -> [WidgetProject] {
         // Try to read from cached projects first
-        print("Widget Config: Attempting to read projects from cache...")
+        Log.widget.debug("Attempting to read projects from cache...")
         if let cachedProjects = readProjectsFromCache() {
-            print("Widget Config: Found \(cachedProjects.count) cached projects")
+            Log.widget.info("Found \(cachedProjects.count) cached projects")
             return cachedProjects
         }
         
-        print("Widget Config: No cached projects, falling back to API...")
+        Log.widget.debug("No cached projects, falling back to API...")
         
         // Fallback to API if cache is empty
         // Read keychain data with detailed logging
-        print("Widget Config: Attempting to read server URL from keychain...")
+        Log.widget.debug("Attempting to read server URL from keychain...")
         guard let serverURLString = readWidgetServerURL() else {
-            print("Widget Config: Failed to read server URL from keychain")
+            Log.widget.error("Failed to read server URL from keychain")
             throw WidgetAPIError.badURL
         }
         
         guard let serverURL = URL(string: serverURLString) else {
-            print("Widget Config: Invalid server URL: \(serverURLString)")
+            Log.widget.error("Invalid server URL: \(serverURLString)")
             throw WidgetAPIError.badURL
         }
         
-        print("Widget Config: Server URL: \(serverURLString)")
+        Log.widget.debug("Server URL: \(serverURLString)")
         
-        print("Widget Config: Attempting to read token from keychain...")
+        Log.widget.debug("Attempting to read token from keychain...")
         guard let token = readWidgetToken() else {
-            print("Widget Config: Failed to read token from keychain")
+            Log.widget.error("Failed to read token from keychain")
             throw WidgetAPIError.missingToken
         }
         
-        print("Widget Config: Token found, length: \(token.count)")
+        Log.widget.debug("Token found, length: \(token.count)")
         
         // Create API config and fetch projects
         let config = WidgetVikunjaConfig(baseURL: serverURL)
         let api = WidgetVikunjaAPI(config: config, token: token)
         
-        print("Widget Config: Fetching projects from API...")
+        Log.widget.debug("Fetching projects from API...")
         let projects = try await api.fetchProjects()
-        print("Widget Config: Fetched \(projects.count) projects")
+        Log.widget.info("Fetched \(projects.count) projects")
         
         return projects
     }
@@ -180,7 +181,7 @@ struct ProjectQuery: EntityQuery {
         
         guard let defaults = UserDefaults(suiteName: appGroupID),
               let data = defaults.data(forKey: projectsKey) else {
-            print("Widget Config: No cached projects found")
+            Log.widget.debug("No cached projects found")
             return nil
         }
         
@@ -197,7 +198,7 @@ struct ProjectQuery: EntityQuery {
                 WidgetProject(id: project.id, title: project.title, description: project.description)
             }
         } catch {
-            print("Widget Config: Failed to decode cached projects: \(error)")
+            Log.widget.error("Failed to decode cached projects: \(error)")
             return nil
         }
     }

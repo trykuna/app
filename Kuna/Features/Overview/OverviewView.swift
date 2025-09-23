@@ -128,6 +128,7 @@ struct OverviewView: View {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 18, weight: .medium))
                     }
+                    .accessibilityIdentifier("MenuButton")
                     .accessibilityLabel(String(localized: "navigation.menu", comment: "Menu button accessibility label"))
                 }
             }
@@ -334,7 +335,7 @@ struct RecentProjectRow: View {
                         }
                     } catch {
                         Log.app.debug(
-                            "Overview: Failed to load recent project \(projectId, privacy: .public): \(String(describing: error), privacy: .public)")
+                            "Overview: Failed to load recent project \(projectId, privacy: .public): \(String(describing: error), privacy: .public)") // swiftlint:disable:this line_length
                         loadFailed = true
                     }
                     isLoading = false
@@ -393,7 +394,7 @@ struct RecentTaskRow: View {
                         task = fetchedTask
                     } catch {
                         Log.app.debug(
-                            "Overview: Failed to load recent task \(taskId, privacy: .public): \(String(describing: error), privacy: .public)")
+                            "Overview: Failed to load recent task \(taskId, privacy: .public): \(String(describing: error), privacy: .public)") // swiftlint:disable:this line_length
                         loadFailed = true
                         // Remove from recent tasks since it no longer exists
                         AppSettings.shared.recentTaskIds.removeAll { $0 == taskId }
@@ -408,7 +409,7 @@ struct RecentTaskRow: View {
 #Preview {
     OverviewView(
         api: VikunjaAPI(
-            config: .init(baseURL: URL(string: "https://example.com")!),
+            config: .init(baseURL: URL(string: "https://example.com")!), // swiftlint:disable:this force_unwrapping
             tokenProvider: { nil }
         ),
         isMenuOpen: .constant(false)

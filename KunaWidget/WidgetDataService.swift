@@ -1,6 +1,7 @@
 // KunaWidget/WidgetDataService.swift
 import Foundation
 import WidgetKit
+import os
 
 @MainActor
 class WidgetDataService {
@@ -32,7 +33,7 @@ class WidgetDataService {
             
             return filteredTasks.map { convertTask($0) }
         } catch {
-            print("Widget data fetch error: \(error)")
+            Log.widget.error("Data fetch error: \(error)")
             // Return empty array - NO FAKE DATA
             return []
         }
@@ -67,7 +68,7 @@ class WidgetDataService {
                     let projectTasks = try await api.fetchTasks(projectId: project.id)
                     allTasks.append(contentsOf: projectTasks)
                 } catch {
-                    print("Failed to fetch tasks for project \(project.id): \(error)")
+                    Log.widget.error("Failed to fetch tasks for project \(project.id): \(error)")
                     // Continue with other projects
                 }
             }

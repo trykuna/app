@@ -39,6 +39,7 @@ struct RelatedTasksView: View {
                 TaskDetailView(task: t, api: api, onUpdate: nil)
             }
         }
+        .accessibilityIdentifier("screen.relatedTasks")
         .onAppear { Task { await refresh() } }
         .alert(String(localized: "common.error"), isPresented: .constant(error != nil)) {
             

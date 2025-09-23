@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import AppIntents
+import os
 
 // MARK: - Shared Cache Types
 private struct SharedTaskSnapshot: Codable {
@@ -31,16 +32,16 @@ private class SharedStore {
     static func readSnapshot() -> SharedTaskSnapshot? {
         guard let defaults = UserDefaults(suiteName: appGroupID),
               let data = defaults.data(forKey: snapshotKey) else {
-            print("Widget: No snapshot data found")
+            Log.widget.debug("No snapshot data found")
             return nil
         }
         
         do {
             let snapshot = try JSONDecoder().decode(SharedTaskSnapshot.self, from: data)
-            print("Widget: Read snapshot with \(snapshot.items.count) tasks from \(snapshot.generatedAt)")
+            Log.widget.info("Read snapshot with \(snapshot.items.count) tasks from \(snapshot.generatedAt)")
             return snapshot
         } catch {
-            print("Widget: Failed to decode snapshot: \(error)")
+            Log.widget.error("Failed to decode snapshot: \(error)")
             return nil
         }
     }
@@ -71,10 +72,10 @@ struct SmallWidgetProvider: AppIntentTimelineProvider {
         
         // Try to read from cached snapshot first
         if let snapshot = SharedStore.readSnapshot() {
-            print("Widget: Using cached snapshot with \(snapshot.items.count) tasks")
+            Log.widget.info("Using cached snapshot with \(snapshot.items.count) tasks")
             tasks = filterTasks(from: snapshot.items, configuration: configuration)
         } else {
-            print("Widget: No cache found, falling back to API")
+            Log.widget.debug("No cache found, falling back to API")
             // Fallback to API if cache is empty
             tasks = await WidgetDataService.shared.getTasks(
                 projectId: configuration.project?.projectId,
@@ -162,10 +163,10 @@ struct MediumWidgetProvider: AppIntentTimelineProvider {
         
         // Try to read from cached snapshot first
         if let snapshot = SharedStore.readSnapshot() {
-            print("Widget: Using cached snapshot with \(snapshot.items.count) tasks")
+            Log.widget.info("Using cached snapshot with \(snapshot.items.count) tasks")
             tasks = filterTasksByProject(from: snapshot.items, configuration: configuration)
         } else {
-            print("Widget: No cache found, falling back to API")
+            Log.widget.debug("No cache found, falling back to API")
             // Fallback to API if cache is empty - get ALL priorities for the project
             tasks = await WidgetDataService.shared.getTasks(
                 projectId: configuration.project?.projectId,

@@ -90,8 +90,8 @@ final class AppSettings: ObservableObject {
     }
     
     enum DefaultView: String, CaseIterable {
-        case projects = "projects"
-        case overview = "overview"
+        case projects
+        case overview
         
         var displayName: String {
             switch self {

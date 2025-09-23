@@ -97,6 +97,7 @@ struct ProjectListView: View {
                 }
             }
             .task { await vm.load() }
+            .accessibilityIdentifier("screen.projects")
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
                     .environmentObject(app)

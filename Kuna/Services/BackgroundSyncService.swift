@@ -48,9 +48,14 @@ final class BackgroundSyncService: ObservableObject {
 
     func register() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskIdentifier, using: nil) { task in
-            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+            guard let refreshTask = task as? BGAppRefreshTask else {
+                task.setTaskCompleted(success: false)
+                return
+            }
+            self.handleAppRefresh(task: refreshTask)
         }
     }
+
     #if DEBUG
     private func logBGEnvironment(prefix: String) {
         let plist = Bundle.main.infoDictionary ?? [:]

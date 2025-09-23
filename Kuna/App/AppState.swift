@@ -338,15 +338,20 @@ final class AppState: ObservableObject {
             )
         }
     }
-    
-    private func getMemoryUsage() -> UInt64 {
-        let (resident, _, _) = getDetailedMemoryUsage()
-        return resident // Only use resident memory - it's the most reliable
+
+    struct MemoryUsage {
+        let resident: UInt64
+        let dirty: UInt64
+        let compressed: UInt64
     }
-    
-    private func getDetailedMemoryUsage() -> (resident: UInt64, dirty: UInt64, compressed: UInt64) {
+
+    private func getMemoryUsage() -> UInt64 {
+        return getDetailedMemoryUsage().resident
+    }
+
+    private func getDetailedMemoryUsage() -> MemoryUsage {
         var info = mach_task_basic_info()
-        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
         
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
@@ -355,17 +360,16 @@ final class AppState: ObservableObject {
         }
         
         if kerr == KERN_SUCCESS {
-            // Just use the basic resident size - VM stats are giving wrong values
-            return (
+            return MemoryUsage(
                 resident: info.resident_size,
-                dirty: 0, // Don't calculate dirty pages - it's unreliable
-                compressed: 0 // Don't calculate compressed - it's unreliable
+                dirty: 0,       // still ignored
+                compressed: 0   // still ignored
             )
         }
-        
-        return (resident: 0, dirty: 0, compressed: 0)
-    }
     
+        return MemoryUsage(resident: 0, dirty: 0, compressed: 0)
+    }
+
     private func performEmergencyMemoryCleanup() {
         Log.app.warning("AppState: Performing emergency memory cleanup")
         
