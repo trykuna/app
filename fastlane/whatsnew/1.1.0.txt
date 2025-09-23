@@ -1,0 +1,3 @@
+Added a new overview screen showing recently viewed tasks and projects.
+Added a new thank you section in the about screen.
+Polish Translation added.
