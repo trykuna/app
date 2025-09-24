@@ -18,9 +18,7 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          # Use a PAT if you want other workflows to run on the PR.
-          # Otherwise the default GITHUB_TOKEN is fine but won't trigger follow-up CI.
-          # token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
           skip-github-release: false
