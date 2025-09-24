@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/trykuna/app/compare/v1.1.0...v1.1.1) (2025-09-24)
+
+
+### Bug Fixes
+
+* merged missing localizations ([e8b63af](https://github.com/trykuna/app/commit/e8b63afc2764116e604be8934a816c3658a50e05))
+
 ## [1.1.0](https://github.com/trykuna/app/compare/v1.0.2...v1.1.0) (2025-09-23)
 
 
