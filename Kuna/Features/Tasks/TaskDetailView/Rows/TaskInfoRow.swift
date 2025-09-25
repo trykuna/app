@@ -41,6 +41,7 @@ struct TaskDescriptionRow: View {
                 .multilineTextAlignment(.trailing)
                 .foregroundColor(.secondary)
                 .lineLimit(1...4)
+                .onChange(of: editedDescription) { _, _ in hasChanges = true }
             } else {
                 Text(taskDescription ?? "No description")
                     .foregroundColor(taskDescription == nil ? .secondary.opacity(0.6) : .secondary)
