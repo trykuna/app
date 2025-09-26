@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/trykuna/app/compare/v1.1.1...v1.1.2) (2025-09-25)
+
+
+### Bug Fixes
+
+* fixed issue when editing task description ([94b0fe8](https://github.com/trykuna/app/commit/94b0fe899e1fe4609c2865a38a938d234f84b2e7))
+
 ## [1.1.1](https://github.com/trykuna/app/compare/v1.1.0...v1.1.1) (2025-09-24)
 
 
