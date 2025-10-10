@@ -24,7 +24,7 @@ jobs:
     name: Validate version matches tag
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Validate Xcode version matches tag
         run: |
@@ -43,7 +43,7 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set Xcode version
         run: xcodebuild -version
@@ -112,7 +112,7 @@ jobs:
       RELEASE_NOTES: ${{ github.event.head_commit.message }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -153,7 +153,7 @@ jobs:
     needs: build_and_upload
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Compute tag name
         id: tag
