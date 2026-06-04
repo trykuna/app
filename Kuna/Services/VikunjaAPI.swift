@@ -1398,4 +1398,39 @@ extension VikunjaAPI {
         }
         return try JSONDecoder.vikunja.decode(VikunjaServerInfo.self, from: data)
     }
+
+    /// Exchanges an OIDC authorization code for a Vikunja JWT.
+    /// Vikunja does the OAuth token exchange server-side and returns its own JWT.
+    static func exchangeOIDCCode(serverURL: String, providerKey: String, code: String) async throws -> String {
+        let apiURL = try AppState.buildAPIURL(from: serverURL)
+        let callbackURL = apiURL
+            .appendingPathComponent("auth")
+            .appendingPathComponent("openid")
+            .appendingPathComponent(providerKey)
+            .appendingPathComponent("callback")
+
+        struct CallbackBody: Encodable {
+            let code: String
+            let redirect_url: String
+        }
+        var req = URLRequest(url: callbackURL)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        req.httpBody = try JSONEncoder().encode(CallbackBody(code: code, redirect_url: "kuna://auth/callback"))
+        req.timeoutInterval = 15
+
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse else {
+            throw APIError.other("No HTTP response from OIDC callback")
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            if let msg = try? JSONDecoder().decode([String: String].self, from: data)["message"] {
+                throw APIError.other(msg)
+            }
+            throw APIError.http(http.statusCode)
+        }
+        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
+        return auth.token
+    }
 }

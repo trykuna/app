@@ -24,7 +24,10 @@ struct VikunjaServerInfo: Decodable {
 struct OIDCProvider: Decodable, Identifiable {
     let name: String
     let key: String
+    /// Authorization endpoint URL (e.g. https://sso.example.com/oauth/authorize)
     let authUrl: String
+    let clientId: String
+    let scope: String
 
     var id: String { key }
 
@@ -32,5 +35,7 @@ struct OIDCProvider: Decodable, Identifiable {
         case name
         case key
         case authUrl = "auth_url"
+        case clientId = "client_id"
+        case scope
     }
 }

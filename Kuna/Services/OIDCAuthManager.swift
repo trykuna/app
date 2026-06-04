@@ -4,26 +4,75 @@ import Foundation
 
 enum OIDCError: Error, LocalizedError, Equatable {
     case cancelled
-    case missingToken
+    case missingCode
+    case stateMismatch
     case invalidCallbackURL
+    case badAuthURL
 
     var errorDescription: String? {
         switch self {
-        case .cancelled:          return String(localized: "auth.oidc.error.cancelled")
-        case .missingToken:       return String(localized: "auth.oidc.error.missingToken")
-        case .invalidCallbackURL: return String(localized: "auth.oidc.error.invalidCallback")
+        case .cancelled:           return String(localized: "auth.oidc.error.cancelled")
+        case .missingCode:         return String(localized: "auth.oidc.error.missingCode")
+        case .stateMismatch:       return String(localized: "auth.oidc.error.stateMismatch")
+        case .invalidCallbackURL:  return String(localized: "auth.oidc.error.invalidCallback")
+        case .badAuthURL:          return String(localized: "auth.oidc.error.badAuthURL")
         }
     }
 }
 
+private let redirectURI = "kuna://auth/callback"
+
 @MainActor
 final class OIDCAuthManager: NSObject, ASWebAuthenticationPresentationContextProviding {
 
-    func authenticate(authURL: URL, callbackScheme: String) async throws -> String {
+    /// Opens a browser for the given OIDC provider, captures the authorization code,
+    /// then returns it. The caller is responsible for exchanging the code with Vikunja.
+    func getAuthorizationCode(for provider: OIDCProvider) async throws -> String {
+        guard var components = URLComponents(string: provider.authUrl) else {
+            throw OIDCError.badAuthURL
+        }
+
+        // Generate a random state value to protect against CSRF
+        let state = UUID().uuidString
+
+        components.queryItems = (components.queryItems ?? []) + [
+            URLQueryItem(name: "client_id",     value: provider.clientId),
+            URLQueryItem(name: "redirect_uri",  value: redirectURI),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "scope",         value: provider.scope),
+            URLQueryItem(name: "state",         value: state),
+        ]
+
+        guard let authURL = components.url else {
+            throw OIDCError.badAuthURL
+        }
+
+        let callbackURL = try await openBrowser(to: authURL)
+
+        guard let returnedComponents = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false) else {
+            throw OIDCError.invalidCallbackURL
+        }
+
+        let items = returnedComponents.queryItems ?? []
+
+        // Verify state to prevent CSRF
+        let returnedState = items.first(where: { $0.name == "state" })?.value
+        guard returnedState == state else {
+            throw OIDCError.stateMismatch
+        }
+
+        guard let code = items.first(where: { $0.name == "code" })?.value, !code.isEmpty else {
+            throw OIDCError.missingCode
+        }
+
+        return code
+    }
+
+    private func openBrowser(to url: URL) async throws -> URL {
         return try await withCheckedThrowingContinuation { continuation in
             let session = ASWebAuthenticationSession(
-                url: authURL,
-                callbackURLScheme: callbackScheme
+                url: url,
+                callbackURLScheme: "kuna"
             ) { callbackURL, error in
                 if let error {
                     let nsError = error as NSError
@@ -38,11 +87,7 @@ final class OIDCAuthManager: NSObject, ASWebAuthenticationPresentationContextPro
                     continuation.resume(throwing: OIDCError.invalidCallbackURL)
                     return
                 }
-                guard let token = Self.extractToken(from: callbackURL) else {
-                    continuation.resume(throwing: OIDCError.missingToken)
-                    return
-                }
-                continuation.resume(returning: token)
+                continuation.resume(returning: callbackURL)
             }
             session.presentationContextProvider = self
             session.prefersEphemeralWebBrowserSession = false
@@ -51,32 +96,8 @@ final class OIDCAuthManager: NSObject, ASWebAuthenticationPresentationContextPro
     }
 
     nonisolated func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        // Return the key window as the presentation anchor
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         return windowScene?.windows.first { $0.isKeyWindow } ?? UIWindow()
-    }
-
-    // Extract token from callback URL.
-    // Vikunja may return the token in different places depending on version:
-    //   kuna://auth/callback?token=...
-    //   kuna://auth/callback#token=...  (fragment)
-    private static func extractToken(from url: URL) -> String? {
-        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            // Check query parameters first
-            if let token = components.queryItems?.first(where: { $0.name == "token" })?.value,
-               !token.isEmpty {
-                return token
-            }
-            // Check URL fragment (hash)
-            if let fragment = components.fragment {
-                let fragmentComponents = URLComponents(string: "?\(fragment)")
-                if let token = fragmentComponents?.queryItems?.first(where: { $0.name == "token" })?.value,
-                   !token.isEmpty {
-                    return token
-                }
-            }
-        }
-        return nil
     }
 }

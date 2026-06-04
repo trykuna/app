@@ -247,13 +247,16 @@ final class AppState: ObservableObject {
     func loginWithOIDC(serverURL: String, provider: OIDCProvider) async throws {
         let apiURL = try Self.buildAPIURL(from: serverURL)
 
-        // Build the full auth URL — Vikunja returns absolute URLs in auth_url
-        guard let authURL = URL(string: provider.authUrl) else {
-            throw APIError.badURL
-        }
-
+        // Step 1: open browser, get authorization code from IdP
         let manager = OIDCAuthManager()
-        let token = try await manager.authenticate(authURL: authURL, callbackScheme: "kuna")
+        let code = try await manager.getAuthorizationCode(for: provider)
+
+        // Step 2: exchange code with Vikunja to get a Vikunja JWT
+        let token = try await VikunjaAPI.exchangeOIDCCode(
+            serverURL: serverURL,
+            providerKey: provider.key,
+            code: code
+        )
 
         let expirationDate = try? JWTDecoder.getExpirationDate(from: token)
 
