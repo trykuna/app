@@ -105,5 +105,16 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kuna</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>tech.systemsmystery.kuna</string>
+		</dict>
+	</array>
 </dict>
 </plist>

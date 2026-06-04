@@ -1379,4 +1379,23 @@ extension VikunjaAPI {
         }
         return results
     }
+
+    // MARK: - Server Info (no auth required)
+
+    /// Fetches server info including available OIDC providers.
+    /// Uses a plain URLSession so no VikunjaAPI instance is needed.
+    static func fetchServerInfo(serverURL: String) async throws -> VikunjaServerInfo {
+        let apiURL = try AppState.buildAPIURL(from: serverURL)
+        let infoURL = apiURL.appendingPathComponent("info")
+        var req = URLRequest(url: infoURL)
+        req.httpMethod = "GET"
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        req.timeoutInterval = 10
+
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw APIError.other("Server info request failed")
+        }
+        return try JSONDecoder.vikunja.decode(VikunjaServerInfo.self, from: data)
+    }
 }
