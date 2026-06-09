@@ -1385,7 +1385,9 @@ extension VikunjaAPI {
     /// Fetches server info including available OIDC providers.
     /// Uses a plain URLSession so no VikunjaAPI instance is needed.
     static func fetchServerInfo(serverURL: String) async throws -> VikunjaServerInfo {
-        let apiURL = try AppState.buildAPIURL(from: serverURL)
+        let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
+        guard let apiURL = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
         let infoURL = apiURL.appendingPathComponent("info")
         var req = URLRequest(url: infoURL)
         req.httpMethod = "GET"
@@ -1402,7 +1404,9 @@ extension VikunjaAPI {
     /// Exchanges an OIDC authorization code for a Vikunja JWT.
     /// Vikunja does the OAuth token exchange server-side and returns its own JWT.
     static func exchangeOIDCCode(serverURL: String, providerKey: String, code: String) async throws -> String {
-        let apiURL = try AppState.buildAPIURL(from: serverURL)
+        let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
+        guard let apiURL = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
         let callbackURL = apiURL
             .appendingPathComponent("auth")
             .appendingPathComponent("openid")
