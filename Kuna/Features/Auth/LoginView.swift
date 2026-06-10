@@ -123,17 +123,15 @@ struct LoginView: View {
                     }
 
                     if mode == .sso {
-                        Section(String(localized: "auth.oidc.section", comment: "Single sign-on section")) {
+                        Section("Single Sign-On") {
                             if isFetchingProviders {
                                 HStack(spacing: 8) {
                                     ProgressView().scaleEffect(0.8)
-                                    Text(String(localized: "auth.oidc.fetchingProviders",
-                                                comment: "Loading OIDC providers"))
+                                    Text("Loading sign-on options…")
                                         .foregroundColor(.secondary)
                                 }
                             } else if oidcProviders.isEmpty {
-                                Text(String(localized: "auth.oidc.noProviders",
-                                            comment: "No SSO providers found for this server"))
+                                Text("No sign-on providers found for this server.")
                                     .foregroundColor(.secondary)
                                     .font(.callout)
                             } else {
@@ -147,13 +145,7 @@ struct LoginView: View {
                                             } else {
                                                 Image(systemName: "person.badge.key")
                                             }
-                                            Text(
-                                                String(
-                                                    format: String(localized: "auth.oidc.signInWith",
-                                                                   comment: "Sign in with provider name"),
-                                                    provider.name
-                                                )
-                                            )
+                                            Text("Sign in with \(provider.name)")
                                         }
                                     }
                                     .buttonStyle(.borderedProminent)
