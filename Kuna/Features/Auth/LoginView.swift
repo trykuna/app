@@ -145,7 +145,7 @@ struct LoginView: View {
                                             } else {
                                                 Image(systemName: "person.badge.key")
                                             }
-                                            Text("Sign in with \(provider.name)")
+                                            Text("Sign in with \(provider.name.capitalized)")
                                         }
                                     }
                                     .buttonStyle(.borderedProminent)
