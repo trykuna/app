@@ -1403,7 +1403,7 @@ extension VikunjaAPI {
 
     /// Exchanges an OIDC authorization code for a Vikunja JWT.
     /// Vikunja does the OAuth token exchange server-side and returns its own JWT.
-    static func exchangeOIDCCode(serverURL: String, providerKey: String, code: String) async throws -> String {
+    static func exchangeOIDCCode(serverURL: String, providerKey: String, code: String, redirectURI: String) async throws -> String {
         let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
         guard let apiURL = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
@@ -1421,7 +1421,7 @@ extension VikunjaAPI {
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue("application/json", forHTTPHeaderField: "Accept")
-        req.httpBody = try JSONEncoder().encode(CallbackBody(code: code, redirect_url: "kuna://auth/callback"))
+        req.httpBody = try JSONEncoder().encode(CallbackBody(code: code, redirect_url: redirectURI))
         req.timeoutInterval = 15
 
         let (data, resp) = try await URLSession.shared.data(for: req)

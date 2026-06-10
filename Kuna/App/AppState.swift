@@ -247,15 +247,20 @@ final class AppState: ObservableObject {
     func loginWithOIDC(serverURL: String, provider: OIDCProvider) async throws {
         let apiURL = try Self.buildAPIURL(from: serverURL)
 
+        // Use custom redirect URI if configured, otherwise fall back to kuna:// custom scheme
+        let customURI = AppSettings.shared.oidcRedirectURI.trimmingCharacters(in: .whitespacesAndNewlines)
+        let redirectURI = customURI.isEmpty ? defaultOIDCRedirectURI : customURI
+
         // Step 1: open browser, get authorization code from IdP
         let manager = OIDCAuthManager()
-        let code = try await manager.getAuthorizationCode(for: provider)
+        let code = try await manager.getAuthorizationCode(for: provider, redirectURI: redirectURI)
 
         // Step 2: exchange code with Vikunja to get a Vikunja JWT
         let token = try await VikunjaAPI.exchangeOIDCCode(
             serverURL: serverURL,
             providerKey: provider.key,
-            code: code
+            code: code,
+            redirectURI: redirectURI
         )
 
         let expirationDate = try? JWTDecoder.getExpirationDate(from: token)

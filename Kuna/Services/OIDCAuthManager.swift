@@ -20,14 +20,14 @@ enum OIDCError: Error, LocalizedError, Equatable {
     }
 }
 
-private let redirectURI = "kuna://auth/callback"
+let defaultOIDCRedirectURI = "kuna://auth/callback"
 
 @MainActor
 final class OIDCAuthManager: NSObject, ASWebAuthenticationPresentationContextProviding {
 
     /// Opens a browser for the given OIDC provider, captures the authorization code,
     /// then returns it. The caller is responsible for exchanging the code with Vikunja.
-    func getAuthorizationCode(for provider: OIDCProvider) async throws -> String {
+    func getAuthorizationCode(for provider: OIDCProvider, redirectURI: String) async throws -> String {
         guard var components = URLComponents(string: provider.authUrl) else {
             throw OIDCError.badAuthURL
         }
@@ -47,7 +47,8 @@ final class OIDCAuthManager: NSObject, ASWebAuthenticationPresentationContextPro
             throw OIDCError.badAuthURL
         }
 
-        let callbackURL = try await openBrowser(to: authURL)
+        let callbackScheme = URL(string: redirectURI)?.scheme ?? "kuna"
+        let callbackURL = try await openBrowser(to: authURL, callbackScheme: callbackScheme)
 
         guard let returnedComponents = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false) else {
             throw OIDCError.invalidCallbackURL
@@ -68,11 +69,11 @@ final class OIDCAuthManager: NSObject, ASWebAuthenticationPresentationContextPro
         return code
     }
 
-    private func openBrowser(to url: URL) async throws -> URL {
+    private func openBrowser(to url: URL, callbackScheme: String) async throws -> URL {
         return try await withCheckedThrowingContinuation { continuation in
             let session = ASWebAuthenticationSession(
                 url: url,
-                callbackURLScheme: "kuna"
+                callbackURLScheme: callbackScheme
             ) { callbackURL, error in
                 if let error {
                     let nsError = error as NSError

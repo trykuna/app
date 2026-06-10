@@ -213,6 +213,11 @@ final class AppSettings: ObservableObject {
         }
     }
 
+    // MARK: - OIDC
+    @Published var oidcRedirectURI: String {
+        didSet { UserDefaults.standard.set(oidcRedirectURI, forKey: "oidcRedirectURI") }
+    }
+
     // MARK: - Analytics Preference
     @Published var analyticsEnabled: Bool {
         didSet {
@@ -257,6 +262,8 @@ final class AppSettings: ObservableObject {
         self.showSyncStatus = UserDefaults.standard.object(forKey: "showSyncStatus") as? Bool ?? true
 
         self.celebrateCompletionConfetti = UserDefaults.standard.object(forKey: "celebrateCompletionConfetti") as? Bool ?? false
+
+        self.oidcRedirectURI = UserDefaults.standard.string(forKey: "oidcRedirectURI") ?? ""
 
         self.analyticsEnabled = UserDefaults.standard.object(forKey: "analyticsEnabled") as? Bool ?? false
         self.analyticsConsentDecision = UserDefaults.standard.string(forKey: "analyticsConsentDecision")
@@ -317,7 +324,8 @@ final class AppSettings: ObservableObject {
             "showEndDate",
             "showSyncStatus",
             "analyticsEnabled",
-            "analyticsConsentDecision"
+            "analyticsConsentDecision",
+            "oidcRedirectURI"
         ]
         keys.forEach { defaults.removeObject(forKey: $0) }
 

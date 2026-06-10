@@ -347,7 +347,23 @@ struct SettingsView: View {
                         StatusIcon(systemName: status.0, color: status.1)
                     }
             }
-        } header: { 
+            HStack(spacing: 12) {
+                LeadingIcon(systemName: "arrow.triangle.2.circlepath", color: .purple)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("SSO Redirect URI").font(.body)
+                    Text("Leave blank to use kuna:// (default). Set to your redirect service URL if your provider requires HTTPS.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            TextField("https://redirect.example.com/auth/callback",
+                      text: $settings.oidcRedirectURI)
+                .font(.caption)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .keyboardType(.URL)
+                .textContentType(.URL)
+        } header: {
             Text(String(localized: "settings.connection.header", comment: "Connection settings header"))
         }
     }
