@@ -5,7 +5,7 @@ struct LoginView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     enum LoginMode: String, CaseIterable, Identifiable {
-        case password = "Password", token = "API Token"
+        case password = "Password", token = "API Token", sso = "SSO"
         var id: String { rawValue }
     }
 
@@ -73,7 +73,10 @@ struct LoginView: View {
                                     .textContentType(.URL)
                                     .focused($focused, equals: .server)
                                     .submitLabel(.next)
-                                    .onSubmit { focused = mode == .password ? .username : .token }
+                                    .onSubmit {
+                                        if mode == .password { focused = .username }
+                                        else if mode == .token { focused = .token }
+                                    }
                             }
 
                             Button {
@@ -96,40 +99,6 @@ struct LoginView: View {
                             ForEach(LoginMode.allCases) { Text($0.rawValue).tag($0) }
                         }
                         .pickerStyle(.segmented)
-
-                        if isFetchingProviders {
-                            HStack(spacing: 8) {
-                                ProgressView().scaleEffect(0.8)
-                                Text(String(localized: "auth.oidc.fetchingProviders",
-                                            comment: "Loading OIDC providers"))
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
-                            }
-                        } else {
-                            ForEach(oidcProviders) { provider in
-                                Button {
-                                    loginWithOIDC(provider: provider)
-                                } label: {
-                                    HStack {
-                                        if isLoggingIn {
-                                            ProgressView().scaleEffect(0.8).padding(.trailing, 4)
-                                        } else {
-                                            Image(systemName: "person.badge.key")
-                                        }
-                                        Text(
-                                            String(
-                                                format: String(localized: "auth.oidc.signInWith",
-                                                               comment: "Sign in with provider name"),
-                                                provider.name
-                                            )
-                                        )
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .disabled(!isServerValid || isLoggingIn)
-                            }
-                        }
                     } footer: {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack(alignment: .top, spacing: 6) {
@@ -153,7 +122,47 @@ struct LoginView: View {
                         .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    if mode == .password {
+                    if mode == .sso {
+                        Section(String(localized: "auth.oidc.section", comment: "Single sign-on section")) {
+                            if isFetchingProviders {
+                                HStack(spacing: 8) {
+                                    ProgressView().scaleEffect(0.8)
+                                    Text(String(localized: "auth.oidc.fetchingProviders",
+                                                comment: "Loading OIDC providers"))
+                                        .foregroundColor(.secondary)
+                                }
+                            } else if oidcProviders.isEmpty {
+                                Text(String(localized: "auth.oidc.noProviders",
+                                            comment: "No SSO providers found for this server"))
+                                    .foregroundColor(.secondary)
+                                    .font(.callout)
+                            } else {
+                                ForEach(oidcProviders) { provider in
+                                    Button {
+                                        loginWithOIDC(provider: provider)
+                                    } label: {
+                                        HStack {
+                                            if isLoggingIn {
+                                                ProgressView().scaleEffect(0.8).padding(.trailing, 4)
+                                            } else {
+                                                Image(systemName: "person.badge.key")
+                                            }
+                                            Text(
+                                                String(
+                                                    format: String(localized: "auth.oidc.signInWith",
+                                                                   comment: "Sign in with provider name"),
+                                                    provider.name
+                                                )
+                                            )
+                                        }
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .disabled(!isServerValid || isLoggingIn)
+                                }
+                            }
+                        }
+                    } else if mode == .password {
                         Section(String(localized: "auth.usernamePassword", comment: "Username & Password")) {
                             TextField(String(localized: "auth.username", comment: "Username"), text: $username)
                                 .textInputAutocapitalization(.never)
