@@ -96,6 +96,40 @@ struct LoginView: View {
                             ForEach(LoginMode.allCases) { Text($0.rawValue).tag($0) }
                         }
                         .pickerStyle(.segmented)
+
+                        if isFetchingProviders {
+                            HStack(spacing: 8) {
+                                ProgressView().scaleEffect(0.8)
+                                Text(String(localized: "auth.oidc.fetchingProviders",
+                                            comment: "Loading OIDC providers"))
+                                    .font(.footnote)
+                                    .foregroundColor(.secondary)
+                            }
+                        } else {
+                            ForEach(oidcProviders) { provider in
+                                Button {
+                                    loginWithOIDC(provider: provider)
+                                } label: {
+                                    HStack {
+                                        if isLoggingIn {
+                                            ProgressView().scaleEffect(0.8).padding(.trailing, 4)
+                                        } else {
+                                            Image(systemName: "person.badge.key")
+                                        }
+                                        Text(
+                                            String(
+                                                format: String(localized: "auth.oidc.signInWith",
+                                                               comment: "Sign in with provider name"),
+                                                provider.name
+                                            )
+                                        )
+                                    }
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .disabled(!isServerValid || isLoggingIn)
+                            }
+                        }
                     } footer: {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack(alignment: .top, spacing: 6) {
@@ -195,48 +229,6 @@ struct LoginView: View {
                         }
                     }
 
-                    if !oidcProviders.isEmpty {
-                        Section(String(localized: "auth.oidc.section", comment: "Single sign-on section")) {
-                            ForEach(oidcProviders) { provider in
-                                Button {
-                                    loginWithOIDC(provider: provider)
-                                } label: {
-                                    HStack {
-                                        if isLoggingIn {
-                                            ProgressView()
-                                                .scaleEffect(0.8)
-                                                .padding(.trailing, 4)
-                                        } else {
-                                            Image(systemName: "person.badge.key")
-                                        }
-                                        Text(
-                                            String(
-                                                format: String(localized: "auth.oidc.signInWith",
-                                                               comment: "Sign in with provider name"),
-                                                provider.name
-                                            )
-                                        )
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .disabled(!isServerValid || isLoggingIn)
-                            }
-                        }
-                    } else if isFetchingProviders {
-                        Section {
-                            HStack(spacing: 8) {
-                                ProgressView()
-                                    .scaleEffect(0.8)
-                                Text(String(localized: "auth.oidc.fetchingProviders",
-                                            comment: "Loading OIDC providers"))
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .listRowBackground(Color.clear)
-                    }
-
                     if let e = error, !e.isEmpty {
                         Section { Text(e).foregroundColor(.red).font(.callout) }
                     }
@@ -245,9 +237,6 @@ struct LoginView: View {
                 .scrollContentBackground(.hidden) // let the ZStack background show
                 .onChange(of: serverURL) { _, newValue in
                     fetchOIDCProviders(for: newValue)
-                }
-                .onAppear {
-                    fetchOIDCProviders(for: serverURL)
                 }
             }
             // Hide the nav title to avoid duplicate "Kuna" text
