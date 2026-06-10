@@ -246,6 +246,9 @@ struct LoginView: View {
                 .onChange(of: serverURL) { _, newValue in
                     fetchOIDCProviders(for: newValue)
                 }
+                .onAppear {
+                    fetchOIDCProviders(for: serverURL)
+                }
             }
             // Hide the nav title to avoid duplicate "Kuna" text
             .toolbar { ToolbarItem(placement: .principal) { EmptyView() } }
@@ -330,6 +333,7 @@ struct LoginView: View {
             } catch {
                 guard !Task.isCancelled else { return }
                 oidcProviders = []
+                Log.app.error("OIDC provider fetch failed: \(String(describing: error), privacy: .public)")
             }
             isFetchingProviders = false
         }
