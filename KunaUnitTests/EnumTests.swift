@@ -105,24 +105,28 @@ final class EnumTests: XCTestCase {
     func testAuthenticationMethodRawValues() {
         XCTAssertEqual(AuthenticationMethod.usernamePassword.rawValue, "Username & Password")
         XCTAssertEqual(AuthenticationMethod.personalToken.rawValue, "Personal API Token")
+        XCTAssertEqual(AuthenticationMethod.oidc.rawValue, "Single Sign-On (OIDC)")
     }
-    
+
     func testAuthenticationMethodDescriptions() {
         XCTAssertEqual(AuthenticationMethod.usernamePassword.description, "Username & Password")
         XCTAssertEqual(AuthenticationMethod.personalToken.description, "Personal API Token")
+        XCTAssertEqual(AuthenticationMethod.oidc.description, "Single Sign-On (OIDC)")
     }
-    
+
     func testAuthenticationMethodSystemImages() {
         XCTAssertEqual(AuthenticationMethod.usernamePassword.systemImage, "person.circle")
         XCTAssertEqual(AuthenticationMethod.personalToken.systemImage, "key")
+        XCTAssertEqual(AuthenticationMethod.oidc.systemImage, "person.badge.key")
     }
-    
+
     func testAuthenticationMethodAllCases() {
-        let expectedCount = 2
+        let expectedCount = 3
         XCTAssertEqual(AuthenticationMethod.allCases.count, expectedCount)
-        
+
         XCTAssertTrue(AuthenticationMethod.allCases.contains(.usernamePassword))
         XCTAssertTrue(AuthenticationMethod.allCases.contains(.personalToken))
+        XCTAssertTrue(AuthenticationMethod.allCases.contains(.oidc))
     }
     
     // MARK: - TaskRelationKind Tests
