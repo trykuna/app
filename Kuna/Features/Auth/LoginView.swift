@@ -3,6 +3,7 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.colorScheme) private var colorScheme
+    @StateObject private var settings = AppSettings.shared
 
     enum LoginMode: String, CaseIterable, Identifiable {
         case password = "Password", token = "API Token", sso = "SSO"
@@ -153,6 +154,22 @@ struct LoginView: View {
                                     .disabled(!isServerValid || isLoggingIn)
                                 }
                             }
+                        }
+
+                        Section {
+                            TextField("https://redirect.example.com/auth/callback",
+                                      text: $settings.oidcRedirectURI)
+                                .font(.caption)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .keyboardType(.URL)
+                                .textContentType(.URL)
+                        } header: {
+                            Text("Redirect URI")
+                        } footer: {
+                            Text("Leave blank to use kuna:// (works with most providers). Set to your redirect service URL if your provider requires HTTPS.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
                     } else if mode == .password {
                         Section(String(localized: "auth.usernamePassword", comment: "Username & Password")) {
