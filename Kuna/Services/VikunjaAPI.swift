@@ -1379,4 +1379,64 @@ extension VikunjaAPI {
         }
         return results
     }
+
+    // MARK: - Server Info (no auth required)
+
+    private static func unauthenticatedAPIURL(from serverURL: String) throws -> URL {
+        let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
+        guard let url = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
+        return url
+    }
+
+    /// Fetches server info including available OIDC providers.
+    /// Uses a plain URLSession so no VikunjaAPI instance is needed.
+    static func fetchServerInfo(serverURL: String) async throws -> VikunjaServerInfo {
+        let apiURL = try unauthenticatedAPIURL(from: serverURL)
+        var req = URLRequest(url: apiURL.appendingPathComponent("info"))
+        req.httpMethod = "GET"
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        req.timeoutInterval = 10
+
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw APIError.other("Server info request failed")
+        }
+        return try JSONDecoder.vikunja.decode(VikunjaServerInfo.self, from: data)
+    }
+
+    /// Exchanges an OIDC authorization code for a Vikunja JWT.
+    /// Vikunja does the OAuth token exchange server-side and returns its own JWT.
+    static func exchangeOIDCCode(serverURL: String, providerKey: String, code: String, redirectURI: String) async throws -> String {
+        let apiURL = try unauthenticatedAPIURL(from: serverURL)
+        let callbackURL = apiURL
+            .appendingPathComponent("auth")
+            .appendingPathComponent("openid")
+            .appendingPathComponent(providerKey)
+            .appendingPathComponent("callback")
+
+        struct CallbackBody: Encodable {
+            let code: String
+            let redirect_url: String
+        }
+        var req = URLRequest(url: callbackURL)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        req.httpBody = try JSONEncoder().encode(CallbackBody(code: code, redirect_url: redirectURI))
+        req.timeoutInterval = 15
+
+        let (data, resp) = try await URLSession.shared.data(for: req)
+        guard let http = resp as? HTTPURLResponse else {
+            throw APIError.other("No HTTP response from OIDC callback")
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            if let msg = try? JSONDecoder().decode([String: String].self, from: data)["message"] {
+                throw APIError.other(msg)
+            }
+            throw APIError.http(http.statusCode)
+        }
+        let auth = try JSONDecoder.vikunja.decode(AuthResponse.self, from: data)
+        return auth.token
+    }
 }

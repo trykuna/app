@@ -1,10 +1,12 @@
 // App/AppState.swift
 import SwiftUI
 import Foundation
+import AuthenticationServices
 
 enum AuthenticationMethod: String, CaseIterable {
     case usernamePassword = "Username & Password"
     case personalToken = "Personal API Token"
+    case oidc = "Single Sign-On (OIDC)"
 
     var description: String {
         return self.rawValue
@@ -14,6 +16,7 @@ enum AuthenticationMethod: String, CaseIterable {
         switch self {
         case .usernamePassword: return "person.circle"
         case .personalToken: return "key"
+        case .oidc: return "person.badge.key"
         }
     }
 }
@@ -43,8 +46,8 @@ final class AppState: ObservableObject {
                 let authMethod = Keychain.readAuthMethod()
                 self.authenticationMethod = authMethod
                 
-                // Only set refresh handlers for username/password auth (JWT tokens)
-                if authMethod == .usernamePassword {
+                // JWT-based methods (username/password and OIDC) get token refresh support
+                if authMethod == .usernamePassword || authMethod == .oidc {
                     self.api = VikunjaAPI(
                         config: .init(baseURL: apiURL),
                         tokenProvider: {
@@ -241,6 +244,46 @@ final class AppState: ObservableObject {
         tokenExpirationDate = nil
     }
 
+    func loginWithOIDC(serverURL: String, provider: OIDCProvider) async throws {
+        // Use custom redirect URI if configured, otherwise fall back to kuna:// custom scheme
+        let customURI = AppSettings.shared.oidcRedirectURI.trimmingCharacters(in: .whitespacesAndNewlines)
+        let redirectURI = customURI.isEmpty ? defaultOIDCRedirectURI : customURI
+
+        // Step 1: open browser, get authorization code from IdP
+        let manager = OIDCAuthManager()
+        let code = try await manager.getAuthorizationCode(for: provider, redirectURI: redirectURI)
+
+        // Step 2: exchange code with Vikunja to get a Vikunja JWT
+        let token = try await VikunjaAPI.exchangeOIDCCode(
+            serverURL: serverURL,
+            providerKey: provider.key,
+            code: code,
+            redirectURI: redirectURI
+        )
+
+        let expirationDate = try? JWTDecoder.getExpirationDate(from: token)
+
+        try Keychain.saveToken(token)
+        try Keychain.saveServerURL(serverURL)
+        try Keychain.saveAuthMethod(.oidc)
+
+        let apiURL = try Self.buildAPIURL(from: serverURL)
+        self.api = VikunjaAPI(
+            config: .init(baseURL: apiURL),
+            tokenProvider: { Keychain.readToken() },
+            tokenRefreshHandler: { [weak self] newToken in
+                try await self?.refreshToken(newToken: newToken)
+            },
+            tokenRefreshFailureHandler: { [weak self] in
+                self?.handleTokenRefreshFailure()
+            }
+        )
+
+        isAuthenticated = true
+        authenticationMethod = .oidc
+        tokenExpirationDate = expirationDate
+    }
+
     func logout() {
         Keychain.clearAll()
         // Reset app preferences on sign out
@@ -269,9 +312,9 @@ final class AppState: ObservableObject {
         return timeInterval > 0 ? timeInterval : nil
     }
 
-    /// User management features are only available for username/password authentication
+    /// User management features are available for JWT-based authentication (username/password and OIDC)
     var canManageUsers: Bool {
-        return authenticationMethod == .usernamePassword
+        return authenticationMethod == .usernamePassword || authenticationMethod == .oidc
     }
 
     // MARK: - Token Refresh

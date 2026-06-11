@@ -3,9 +3,10 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.colorScheme) private var colorScheme
+    @StateObject private var settings = AppSettings.shared
 
     enum LoginMode: String, CaseIterable, Identifiable {
-        case password = "Password", token = "API Token"
+        case password = "Password", token = "API Token", sso = "SSO"
         var id: String { rawValue }
     }
 
@@ -19,6 +20,9 @@ struct LoginView: View {
     @State private var showingTOTP = false
     @State private var totpCode = ""
     @State private var isLoggingIn = false
+    @State private var oidcProviders: [OIDCProvider] = []
+    @State private var isFetchingProviders = false
+    @State private var serverInfoTask: Task<Void, Never>?
 
     @FocusState private var focused: Field?
     enum Field { case server, username, password, token, totp }
@@ -70,7 +74,10 @@ struct LoginView: View {
                                     .textContentType(.URL)
                                     .focused($focused, equals: .server)
                                     .submitLabel(.next)
-                                    .onSubmit { focused = mode == .password ? .username : .token }
+                                    .onSubmit {
+                                        if mode == .password { focused = .username }
+                                        else if mode == .token { focused = .token }
+                                    }
                             }
 
                             Button {
@@ -116,7 +123,55 @@ struct LoginView: View {
                         .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    if mode == .password {
+                    if mode == .sso {
+                        Section("Single Sign-On") {
+                            if isFetchingProviders {
+                                HStack(spacing: 8) {
+                                    ProgressView().scaleEffect(0.8)
+                                    Text("Loading sign-on options…")
+                                        .foregroundColor(.secondary)
+                                }
+                            } else if oidcProviders.isEmpty {
+                                Text("No sign-on providers found for this server.")
+                                    .foregroundColor(.secondary)
+                                    .font(.callout)
+                            } else {
+                                ForEach(oidcProviders) { provider in
+                                    Button {
+                                        loginWithOIDC(provider: provider)
+                                    } label: {
+                                        HStack {
+                                            if isLoggingIn {
+                                                ProgressView().scaleEffect(0.8).padding(.trailing, 4)
+                                            } else {
+                                                Image(systemName: "person.badge.key")
+                                            }
+                                            Text("Sign in with \(provider.name.capitalized)")
+                                        }
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .disabled(!isServerValid || isLoggingIn)
+                                }
+                            }
+                        }
+
+                        Section {
+                            TextField("https://redirect.example.com/auth/callback",
+                                      text: $settings.oidcRedirectURI)
+                                .font(.caption)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .keyboardType(.URL)
+                                .textContentType(.URL)
+                        } header: {
+                            Text("Redirect URI")
+                        } footer: {
+                            Text("Leave blank to use kuna:// (works with most providers). Set to your redirect service URL if your provider requires HTTPS.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    } else if mode == .password {
                         Section(String(localized: "auth.usernamePassword", comment: "Username & Password")) {
                             TextField(String(localized: "auth.username", comment: "Username"), text: $username)
                                 .textInputAutocapitalization(.never)
@@ -198,6 +253,9 @@ struct LoginView: View {
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden) // let the ZStack background show
+                .onChange(of: serverURL) { _, newValue in
+                    fetchOIDCProviders(for: newValue)
+                }
             }
             // Hide the nav title to avoid duplicate "Kuna" text
             .toolbar { ToolbarItem(placement: .principal) { EmptyView() } }
@@ -250,6 +308,41 @@ struct LoginView: View {
             try app.usePersonalToken(serverURL: serverURL, token: personalToken)
         } catch {
             self.error = error.localizedDescription
+        }
+    }
+
+    private func loginWithOIDC(provider: OIDCProvider) {
+        isLoggingIn = true
+        error = nil
+        Task {
+            do {
+                try await app.loginWithOIDC(serverURL: serverURL, provider: provider)
+                isLoggingIn = false
+            } catch let oidcError as OIDCError where oidcError == .cancelled {
+                isLoggingIn = false
+            } catch {
+                isLoggingIn = false
+                self.error = error.localizedDescription
+            }
+        }
+    }
+
+    private func fetchOIDCProviders(for url: String) {
+        serverInfoTask?.cancel()
+        oidcProviders = []
+        guard isServerValid else { return }
+        isFetchingProviders = true
+        serverInfoTask = Task {
+            do {
+                let info = try await VikunjaAPI.fetchServerInfo(serverURL: url)
+                guard !Task.isCancelled else { return }
+                oidcProviders = info.auth?.openidConnect?.providers ?? []
+            } catch {
+                guard !Task.isCancelled else { return }
+                oidcProviders = []
+                Log.app.error("OIDC provider fetch failed: \(String(describing: error), privacy: .public)")
+            }
+            isFetchingProviders = false
         }
     }
 }

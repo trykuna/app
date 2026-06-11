@@ -166,5 +166,6 @@ enum Keychain {
         deleteToken()
         deleteServerURL()
         deleteAuthMethod()
+        delete(account: "vikunja-oidc-provider")
     }
 }

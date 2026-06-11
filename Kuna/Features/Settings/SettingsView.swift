@@ -347,7 +347,7 @@ struct SettingsView: View {
                         StatusIcon(systemName: status.0, color: status.1)
                     }
             }
-        } header: { 
+        } header: {
             Text(String(localized: "settings.connection.header", comment: "Connection settings header"))
         }
     }
