@@ -11,11 +11,11 @@ enum OIDCError: Error, LocalizedError, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .cancelled:           return String(localized: "auth.oidc.error.cancelled")
-        case .missingCode:         return String(localized: "auth.oidc.error.missingCode")
-        case .stateMismatch:       return String(localized: "auth.oidc.error.stateMismatch")
-        case .invalidCallbackURL:  return String(localized: "auth.oidc.error.invalidCallback")
-        case .badAuthURL:          return String(localized: "auth.oidc.error.badAuthURL")
+        case .cancelled:           return "Sign-in was cancelled."
+        case .missingCode:         return "No authorisation code was returned by the provider."
+        case .stateMismatch:       return "The sign-in response could not be verified. Please try again."
+        case .invalidCallbackURL:  return "The sign-in callback URL was invalid."
+        case .badAuthURL:          return "The provider's authorisation URL is invalid."
         }
     }
 }

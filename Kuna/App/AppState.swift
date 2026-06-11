@@ -245,8 +245,6 @@ final class AppState: ObservableObject {
     }
 
     func loginWithOIDC(serverURL: String, provider: OIDCProvider) async throws {
-        let apiURL = try Self.buildAPIURL(from: serverURL)
-
         // Use custom redirect URI if configured, otherwise fall back to kuna:// custom scheme
         let customURI = AppSettings.shared.oidcRedirectURI.trimmingCharacters(in: .whitespacesAndNewlines)
         let redirectURI = customURI.isEmpty ? defaultOIDCRedirectURI : customURI
@@ -268,8 +266,8 @@ final class AppState: ObservableObject {
         try Keychain.saveToken(token)
         try Keychain.saveServerURL(serverURL)
         try Keychain.saveAuthMethod(.oidc)
-        try? Keychain.saveOIDCProvider(provider.key)
 
+        let apiURL = try Self.buildAPIURL(from: serverURL)
         self.api = VikunjaAPI(
             config: .init(baseURL: apiURL),
             tokenProvider: { Keychain.readToken() },

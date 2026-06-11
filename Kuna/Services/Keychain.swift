@@ -161,24 +161,11 @@ enum Keychain {
         delete(account: "vikunja-auth-method")
     }
 
-    // OIDC provider storage
-    static func saveOIDCProvider(_ key: String) throws {
-        try save(token: key, account: "vikunja-oidc-provider")
-    }
-
-    static func readOIDCProvider() -> String? {
-        return read(account: "vikunja-oidc-provider")
-    }
-
-    static func deleteOIDCProvider() {
-        delete(account: "vikunja-oidc-provider")
-    }
-
     // Clear all
     static func clearAll() {
         deleteToken()
         deleteServerURL()
         deleteAuthMethod()
-        deleteOIDCProvider()
+        delete(account: "vikunja-oidc-provider")
     }
 }

@@ -1382,14 +1382,18 @@ extension VikunjaAPI {
 
     // MARK: - Server Info (no auth required)
 
+    private static func unauthenticatedAPIURL(from serverURL: String) throws -> URL {
+        let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
+        guard let url = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
+        return url
+    }
+
     /// Fetches server info including available OIDC providers.
     /// Uses a plain URLSession so no VikunjaAPI instance is needed.
     static func fetchServerInfo(serverURL: String) async throws -> VikunjaServerInfo {
-        let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
-        guard let apiURL = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
-        let infoURL = apiURL.appendingPathComponent("info")
-        var req = URLRequest(url: infoURL)
+        let apiURL = try unauthenticatedAPIURL(from: serverURL)
+        var req = URLRequest(url: apiURL.appendingPathComponent("info"))
         req.httpMethod = "GET"
         req.setValue("application/json", forHTTPHeaderField: "Accept")
         req.timeoutInterval = 10
@@ -1404,9 +1408,7 @@ extension VikunjaAPI {
     /// Exchanges an OIDC authorization code for a Vikunja JWT.
     /// Vikunja does the OAuth token exchange server-side and returns its own JWT.
     static func exchangeOIDCCode(serverURL: String, providerKey: String, code: String, redirectURI: String) async throws -> String {
-        let clean = serverURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        let withScheme = clean.hasPrefix("http://") || clean.hasPrefix("https://") ? clean : "https://\(clean)"
-        guard let apiURL = URL(string: "\(withScheme)/api/v1") else { throw APIError.badURL }
+        let apiURL = try unauthenticatedAPIURL(from: serverURL)
         let callbackURL = apiURL
             .appendingPathComponent("auth")
             .appendingPathComponent("openid")
