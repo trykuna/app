@@ -504,14 +504,14 @@
             "plural" : {
               "one" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld calendar"
+                  "state" : "translated",
+                  "value" : "%lld Kalender"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld calendars"
+                  "state" : "translated",
+                  "value" : "%lld Kalender"
                 }
               }
             }
@@ -628,12 +628,6 @@
         "he" : {
           "variations" : {
             "plural" : {
-              "many" : {
-                "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld calendars"
-                }
-              },
               "one" : {
                 "stringUnit" : {
                   "state" : "new",
@@ -1404,7 +1398,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Foundation — Core system services"
           }
         },
@@ -1595,7 +1589,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Keychain Services — Secure credential storage"
           }
         },
@@ -1787,7 +1781,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "SwiftUI — Apple's native UI framework"
           }
         },
@@ -1978,8 +1972,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Privacy Policy"
+            "state" : "translated",
+            "value" : "Datenschutzrichtlinie"
           }
         },
         "el" : {
@@ -2169,8 +2163,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This is my first iOS app — a vibe‑coding adventure with Claude Code lending a hand.\n\nBig thanks to ChatGPT for UI mockups and keeping things iOS‑native (and steering me away from \"1998 shareware\" vibes).\n\nAnd thanks to everyone who tested builds, gave feedback, and proved task apps can be fun. You're the real MVPs."
+            "state" : "translated",
+            "value" : "Dies ist meine erste iOS‑App — ein kleines „Vibe‑Coding“-Abenteuer, bei dem mir Claude Code zur Seite stand.\n\nGroßen Dank an ChatGPT für die UI‑Mockups, das Bewahren des iOS‑nativen Standards und dafür, mich vor dem „Shareware‑Look von 1998“ bewahrt zu haben.\n\nUnd danke an alle, die Versionen getestet, Feedback gegeben und gezeigt haben, dass Aufgaben‑Apps auch Spaß machen können. Ihr seid die echten MVPs."
           }
         },
         "el" : {
@@ -2360,8 +2354,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Special Thanks"
+            "state" : "translated",
+            "value" : "Besonderer Dank"
           }
         },
         "el" : {
@@ -2551,8 +2545,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add %@"
+            "state" : "translated",
+            "value" : "%@ hinzufügen"
           }
         },
         "el" : {
@@ -2742,8 +2736,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No attachments"
+            "state" : "translated",
+            "value" : "Keine Anhänge"
           }
         },
         "el" : {
@@ -2933,8 +2927,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Logging In..."
+            "state" : "translated",
+            "value" : "Anmeldung läuft..."
           }
         },
         "el" : {
@@ -3124,8 +3118,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Log In"
+            "state" : "translated",
+            "value" : "Anmelden"
           }
         },
         "el" : {
@@ -3315,8 +3309,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "**API Token**: Limited to personal tasks only. User management features are not available due to Vikunja API restrictions."
+            "state" : "translated",
+            "value" : "**API Token**: Nur auf persönliche Aufgaben beschränkt. Benutzerverwaltungsfunktionen sind aufgrund von Vikunja API-Einschränkungen nicht verfügbar."
           }
         },
         "el" : {
@@ -3506,8 +3500,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "In Vikunja, go to **Settings → API Tokens → Create A Token** and create a new token."
+            "state" : "translated",
+            "value" : "Gehe in Vikunja zu **Einstellungen → API-Tokens → Token erstellen** und erstelle einen neuen Token."
           }
         },
         "el" : {
@@ -3697,7 +3691,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "API Token"
           }
         },
@@ -3888,8 +3882,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter your server address — you don’t need to add `/api/v1`; the app will do that for you."
+            "state" : "translated",
+            "value" : "Gib deine Serveradresse ein — `/api/v1` wird durch die App ergänzt."
           }
         },
         "el" : {
@@ -4079,8 +4073,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Server URL Help"
+            "state" : "translated",
+            "value" : "Server-URL Hilfe"
           }
         },
         "el" : {
@@ -4270,8 +4264,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you have two-factor authentication enabled, you'll be prompted for your verification code after entering your credentials."
+            "state" : "translated",
+            "value" : "Wenn Sie die Zwei-Faktor-Authentifizierung aktiviert haben, werden Sie nach der Eingabe Ihrer Zugangsdaten nach Ihrem Bestätigungscode gefragt."
           }
         },
         "el" : {
@@ -4461,8 +4455,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "**Username & Password**: Full access to all features including user management and task assignment."
+            "state" : "translated",
+            "value" : "**Benutzername & Passwort**: Voller Zugriff auf alle Funktionen, einschließlich Benutzerverwaltung und Aufgabenzuordnung."
           }
         },
         "el" : {
@@ -4652,8 +4646,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Login Method"
+            "state" : "translated",
+            "value" : "Anmeldemethode"
           }
         },
         "el" : {
@@ -4843,8 +4837,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Password"
+            "state" : "translated",
+            "value" : "Passwort"
           }
         },
         "el" : {
@@ -4879,8 +4873,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Password"
+            "state" : "translated",
+            "value" : "Mot de passe"
           }
         },
         "he" : {
@@ -5034,8 +5028,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Personal API Token"
+            "state" : "translated",
+            "value" : "Persönlicher API Token"
           }
         },
         "el" : {
@@ -5226,7 +5220,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Server"
           }
         },
@@ -5262,8 +5256,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Server"
+            "state" : "translated",
+            "value" : "Serveur"
           }
         },
         "he" : {
@@ -5417,8 +5411,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The code will be submitted automatically when complete"
+            "state" : "translated",
+            "value" : "Der Code wird nach der Eingabe automatisch gesendet"
           }
         },
         "el" : {
@@ -5608,8 +5602,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter the 6-digit code from your authenticator app"
+            "state" : "translated",
+            "value" : "Geben Sie den 6-stelligen Code aus Ihrer Authentifizierungs-App ein"
           }
         },
         "el" : {
@@ -5799,8 +5793,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Two-Factor Authentication"
+            "state" : "translated",
+            "value" : "Zwei-Faktor-Authentifizierung"
           }
         },
         "el" : {
@@ -5990,8 +5984,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Verify Code"
+            "state" : "translated",
+            "value" : "Verifizierungscode"
           }
         },
         "el" : {
@@ -6181,8 +6175,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Verifying"
+            "state" : "translated",
+            "value" : "Überprüfen"
           }
         },
         "el" : {
@@ -6372,8 +6366,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Username"
+            "state" : "translated",
+            "value" : "Benutzername"
           }
         },
         "el" : {
@@ -6408,8 +6402,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Username"
+            "state" : "translated",
+            "value" : "Nom d'utilisateur"
           }
         },
         "he" : {
@@ -6563,8 +6557,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Username & Password"
+            "state" : "translated",
+            "value" : "Benutzername & Passwort"
           }
         },
         "el" : {
@@ -6599,8 +6593,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Username & Password"
+            "state" : "translated",
+            "value" : "Nom d'utilisateur et mot de passe"
           }
         },
         "he" : {
@@ -6754,8 +6748,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Token"
+            "state" : "translated",
+            "value" : "Verwende Token"
           }
         },
         "el" : {
@@ -6945,8 +6939,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Verification"
+            "state" : "translated",
+            "value" : "Verifizierung"
           }
         },
         "el" : {
@@ -6981,8 +6975,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Verification"
+            "state" : "translated",
+            "value" : "Vérification"
           }
         },
         "he" : {
@@ -7136,8 +7130,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch to '%@' for future syncs? Existing events will remain in the current calendar."
+            "state" : "translated",
+            "value" : "Zu '%@' für zukünftige Synchronisationen wechseln? Vorhandene Ereignisse bleiben im aktuellen Kalender."
           }
         },
         "el" : {
@@ -7327,8 +7321,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add a comment..."
+            "state" : "translated",
+            "value" : "Kommentar hinzufügen..."
           }
         },
         "el" : {
@@ -7363,8 +7357,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add a comment..."
+            "state" : "translated",
+            "value" : "Ajouter un commentaire..."
           }
         },
         "he" : {
@@ -7518,8 +7512,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to delete this comment?"
+            "state" : "translated",
+            "value" : "Soll dieser Kommentar wirklich gelöscht werden?"
           }
         },
         "el" : {
@@ -7554,8 +7548,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to delete this comment?"
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir supprimer ce commentaire ?"
           }
         },
         "he" : {
@@ -7709,8 +7703,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete Comment"
+            "state" : "translated",
+            "value" : "Kommentar löschen"
           }
         },
         "el" : {
@@ -7745,8 +7739,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete Comment"
+            "state" : "translated",
+            "value" : "Supprimer le commentaire"
           }
         },
         "he" : {
@@ -7900,8 +7894,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Be the first to add a comment to this task"
+            "state" : "translated",
+            "value" : "Sei der Erste, der zu dieser Aufgabe einen Kommentar hinzufügt"
           }
         },
         "el" : {
@@ -7936,8 +7930,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Be the first to add a comment to this task"
+            "state" : "translated",
+            "value" : "Soyez le premier à ajouter un commentaire à cette tâche"
           }
         },
         "he" : {
@@ -8091,8 +8085,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start the conversation by adding the first comment."
+            "state" : "translated",
+            "value" : "Beginne die Unterhaltung durch Hinzufügen des ersten Kommentars."
           }
         },
         "el" : {
@@ -8282,8 +8276,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Comments Yet"
+            "state" : "translated",
+            "value" : "Noch keine Kommentare"
           }
         },
         "el" : {
@@ -8318,8 +8312,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Comments Yet"
+            "state" : "translated",
+            "value" : "Pas de commentaires pour le moment"
           }
         },
         "he" : {
@@ -8473,8 +8467,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading comments"
+            "state" : "translated",
+            "value" : "Kommentare werden geladen"
           }
         },
         "el" : {
@@ -8509,8 +8503,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading comments"
+            "state" : "translated",
+            "value" : "Chargement de commentaires"
           }
         },
         "he" : {
@@ -8664,8 +8658,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Comments"
+            "state" : "translated",
+            "value" : "Kommentare"
           }
         },
         "el" : {
@@ -8700,8 +8694,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Comments"
+            "state" : "translated",
+            "value" : "Commentaires"
           }
         },
         "he" : {
@@ -8855,8 +8849,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "About"
+            "state" : "translated",
+            "value" : "Über"
           }
         },
         "el" : {
@@ -8891,8 +8885,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "About"
+            "state" : "translated",
+            "value" : "À propos"
           }
         },
         "he" : {
@@ -9046,7 +9040,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Account"
           }
         },
@@ -9082,8 +9076,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Account"
+            "state" : "translated",
+            "value" : "Compte"
           }
         },
         "he" : {
@@ -9237,8 +9231,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Hinzufügen"
           }
         },
         "el" : {
@@ -9273,8 +9267,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Ajouter"
           }
         },
         "he" : {
@@ -9428,8 +9422,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apply"
+            "state" : "translated",
+            "value" : "Übernehmen"
           }
         },
         "el" : {
@@ -9464,8 +9458,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apply"
+            "state" : "translated",
+            "value" : "Appliquer"
           }
         },
         "he" : {
@@ -9619,8 +9613,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Back"
+            "state" : "translated",
+            "value" : "Zurück"
           }
         },
         "el" : {
@@ -9655,8 +9649,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Back"
+            "state" : "translated",
+            "value" : "Retour"
           }
         },
         "he" : {
@@ -9810,8 +9804,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar"
+            "state" : "translated",
+            "value" : "Kalender"
           }
         },
         "el" : {
@@ -9846,8 +9840,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar"
+            "state" : "translated",
+            "value" : "Calendrier"
           }
         },
         "he" : {
@@ -10001,8 +9995,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
         "el" : {
@@ -10037,8 +10031,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Annuler"
           }
         },
         "he" : {
@@ -10192,8 +10186,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Schließen"
           }
         },
         "el" : {
@@ -10228,8 +10222,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Fermer"
           }
         },
         "he" : {
@@ -10383,8 +10377,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colour"
+            "state" : "translated",
+            "value" : "Farbe"
           }
         },
         "el" : {
@@ -10419,8 +10413,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colour"
+            "state" : "translated",
+            "value" : "Couleur"
           }
         },
         "he" : {
@@ -10574,8 +10568,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Colour"
+            "state" : "translated",
+            "value" : "Aktuelle Farbe"
           }
         },
         "el" : {
@@ -10610,8 +10604,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Colour"
+            "state" : "translated",
+            "value" : "Couleur actuelle"
           }
         },
         "he" : {
@@ -10765,8 +10759,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preset Colours"
+            "state" : "translated",
+            "value" : "Voreingestellte Farben"
           }
         },
         "el" : {
@@ -10801,8 +10795,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preset Colours"
+            "state" : "translated",
+            "value" : "Couleurs présélectionnées"
           }
         },
         "he" : {
@@ -10956,8 +10950,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Configuration"
+            "state" : "translated",
+            "value" : "Einstellungen"
           }
         },
         "el" : {
@@ -10992,7 +10986,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Configuration"
           }
         },
@@ -11147,8 +11141,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Continue"
+            "state" : "translated",
+            "value" : "Fortfahren"
           }
         },
         "el" : {
@@ -11183,8 +11177,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Continue"
+            "state" : "translated",
+            "value" : "Continuer"
           }
         },
         "he" : {
@@ -11338,8 +11332,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create"
+            "state" : "translated",
+            "value" : "Erstellen"
           }
         },
         "el" : {
@@ -11374,8 +11368,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create"
+            "state" : "translated",
+            "value" : "Créer"
           }
         },
         "he" : {
@@ -11529,8 +11523,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Creating..."
+            "state" : "translated",
+            "value" : "Erstelle..."
           }
         },
         "el" : {
@@ -11565,7 +11559,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Creating..."
           }
         },
@@ -11720,8 +11714,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom"
+            "state" : "translated",
+            "value" : "Benutzerdefiniert"
           }
         },
         "el" : {
@@ -11756,8 +11750,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom"
+            "state" : "translated",
+            "value" : "Personnalisé"
           }
         },
         "he" : {
@@ -11911,8 +11905,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Date"
+            "state" : "translated",
+            "value" : "Datum"
           }
         },
         "el" : {
@@ -11947,7 +11941,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Date"
           }
         },
@@ -12102,8 +12096,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Date & Time"
+            "state" : "translated",
+            "value" : "Datum & Uhrzeit"
           }
         },
         "el" : {
@@ -12138,8 +12132,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Date & Time"
+            "state" : "translated",
+            "value" : "Date et heure"
           }
         },
         "he" : {
@@ -12293,7 +12287,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Debug Info"
           }
         },
@@ -12329,8 +12323,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Debug Info"
+            "state" : "translated",
+            "value" : "Infos de debug"
           }
         },
         "he" : {
@@ -12484,8 +12478,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
+            "state" : "translated",
+            "value" : "Löschen"
           }
         },
         "el" : {
@@ -12520,8 +12514,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         },
         "he" : {
@@ -12675,8 +12669,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Description (Optional)"
+            "state" : "translated",
+            "value" : "Beschreibung (optional)"
           }
         },
         "el" : {
@@ -12711,8 +12705,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Description (Optional)"
+            "state" : "translated",
+            "value" : "Description (optionnel)"
           }
         },
         "he" : {
@@ -12865,8 +12859,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Deselect All"
+            "state" : "translated",
+            "value" : "Auswahl aufheben"
           }
         },
         "el" : {
@@ -12901,8 +12895,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Deselect All"
+            "state" : "translated",
+            "value" : "Désélectionner tous"
           }
         },
         "he" : {
@@ -13056,8 +13050,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disabled"
+            "state" : "translated",
+            "value" : "deaktiviert"
           }
         },
         "el" : {
@@ -13092,8 +13086,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disabled"
+            "state" : "translated",
+            "value" : "Désactivé"
           }
         },
         "he" : {
@@ -13247,8 +13241,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "Fertig"
           }
         },
         "el" : {
@@ -13438,8 +13432,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DO NOW"
+            "state" : "translated",
+            "value" : "SOFORT ERLEDIGEN"
           }
         },
         "el" : {
@@ -13474,8 +13468,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DO NOW"
+            "state" : "translated",
+            "value" : "FAIRE MAINTENANT"
           }
         },
         "he" : {
@@ -13629,8 +13623,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "Bearbeiten"
           }
         },
         "el" : {
@@ -13665,8 +13659,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit"
+            "state" : "translated",
+            "value" : "Éditer"
           }
         },
         "he" : {
@@ -13820,8 +13814,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable"
+            "state" : "translated",
+            "value" : "Aktivieren"
           }
         },
         "el" : {
@@ -13856,8 +13850,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable"
+            "state" : "translated",
+            "value" : "Activer"
           }
         },
         "he" : {
@@ -14010,8 +14004,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Repeat"
+            "state" : "translated",
+            "value" : "Wiederholung aktivieren"
           }
         },
         "el" : {
@@ -14046,8 +14040,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Repeat"
+            "state" : "translated",
+            "value" : "Activer la répétition"
           }
         },
         "he" : {
@@ -14201,8 +14195,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Error"
+            "state" : "translated",
+            "value" : "Fehler"
           }
         },
         "el" : {
@@ -14237,8 +14231,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Error"
+            "state" : "translated",
+            "value" : "Erreur"
           }
         },
         "he" : {
@@ -14392,8 +14386,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Error loading projects"
+            "state" : "translated",
+            "value" : "Fehler beim Laden der Projekte"
           }
         },
         "el" : {
@@ -14582,8 +14576,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Favorites"
+            "state" : "translated",
+            "value" : "Favoriten"
           }
         },
         "el" : {
@@ -14618,8 +14612,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Favorites"
+            "state" : "translated",
+            "value" : "Favoris"
           }
         },
         "he" : {
@@ -14773,8 +14767,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filename"
+            "state" : "translated",
+            "value" : "Dateiname"
           }
         },
         "el" : {
@@ -14809,8 +14803,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filename"
+            "state" : "translated",
+            "value" : "Nom du fichier"
           }
         },
         "he" : {
@@ -14964,8 +14958,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "From"
+            "state" : "translated",
+            "value" : "Von"
           }
         },
         "el" : {
@@ -15000,8 +14994,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "From"
+            "state" : "translated",
+            "value" : "De"
           }
         },
         "he" : {
@@ -15155,8 +15149,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High"
+            "state" : "translated",
+            "value" : "Hoch"
           }
         },
         "el" : {
@@ -15191,8 +15185,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High"
+            "state" : "translated",
+            "value" : "Haut"
           }
         },
         "he" : {
@@ -15346,8 +15340,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading"
+            "state" : "translated",
+            "value" : "Lädt"
           }
         },
         "el" : {
@@ -15382,8 +15376,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading"
+            "state" : "translated",
+            "value" : "Chargement"
           }
         },
         "he" : {
@@ -15537,8 +15531,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading..."
+            "state" : "translated",
+            "value" : "Lädt..."
           }
         },
         "el" : {
@@ -15573,8 +15567,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading..."
+            "state" : "translated",
+            "value" : "Chargement..."
           }
         },
         "he" : {
@@ -15728,8 +15722,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low"
+            "state" : "translated",
+            "value" : "Niedrig"
           }
         },
         "el" : {
@@ -15764,8 +15758,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low"
+            "state" : "translated",
+            "value" : "Bas"
           }
         },
         "he" : {
@@ -15919,7 +15913,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Max"
           }
         },
@@ -15955,7 +15949,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Max"
           }
         },
@@ -16110,8 +16104,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Mittel"
           }
         },
         "el" : {
@@ -16146,8 +16140,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Moyen"
           }
         },
         "he" : {
@@ -16301,7 +16295,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Min"
           }
         },
@@ -16337,7 +16331,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Min"
           }
         },
@@ -16492,8 +16486,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Mode"
+            "state" : "translated",
+            "value" : "Modus"
           }
         },
         "el" : {
@@ -16528,7 +16522,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Mode"
           }
         },
@@ -16683,8 +16677,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never"
+            "state" : "translated",
+            "value" : "Nie"
           }
         },
         "el" : {
@@ -16719,8 +16713,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never"
+            "state" : "translated",
+            "value" : "Jamais"
           }
         },
         "he" : {
@@ -16874,8 +16868,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "None"
+            "state" : "translated",
+            "value" : "Keine"
           }
         },
         "el" : {
@@ -16910,8 +16904,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "None"
+            "state" : "translated",
+            "value" : "Aucun"
           }
         },
         "he" : {
@@ -17065,8 +17059,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not set"
+            "state" : "translated",
+            "value" : "Nicht festgelegt"
           }
         },
         "el" : {
@@ -17256,8 +17250,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "Ok"
           }
         },
         "el" : {
@@ -17292,7 +17286,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -17447,7 +17441,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Organisation"
           }
         },
@@ -17483,7 +17477,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Organisation"
           }
         },
@@ -17638,8 +17632,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview"
+            "state" : "translated",
+            "value" : "Vorschau"
           }
         },
         "el" : {
@@ -17830,8 +17824,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Privacy Policy"
+            "state" : "translated",
+            "value" : "Datenschutzrichtlinie"
           }
         },
         "el" : {
@@ -17866,8 +17860,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Privacy Policy"
+            "state" : "translated",
+            "value" : "Politique de confidentialité"
           }
         },
         "he" : {
@@ -18022,8 +18016,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Read-only"
+            "state" : "translated",
+            "value" : "Nur lesen"
           }
         },
         "el" : {
@@ -18213,8 +18207,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Reminders"
+            "state" : "translated",
+            "value" : "Aktuelle Erinnerungen"
           }
         },
         "el" : {
@@ -18404,8 +18398,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Entfernen"
           }
         },
         "el" : {
@@ -18440,8 +18434,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Retirer"
           }
         },
         "he" : {
@@ -18595,8 +18589,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Retry"
+            "state" : "translated",
+            "value" : "Wiederholen"
           }
         },
         "el" : {
@@ -18631,8 +18625,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Retry"
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         },
         "he" : {
@@ -18786,8 +18780,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save"
+            "state" : "translated",
+            "value" : "Speichern"
           }
         },
         "el" : {
@@ -18822,8 +18816,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save"
+            "state" : "translated",
+            "value" : "Sauvegarder"
           }
         },
         "he" : {
@@ -18977,8 +18971,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Changes"
+            "state" : "translated",
+            "value" : "Änderungen Speichern"
           }
         },
         "el" : {
@@ -19013,8 +19007,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Save Changes"
+            "state" : "translated",
+            "value" : "Sauvegarder les modifications"
           }
         },
         "he" : {
@@ -19168,8 +19162,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Saving"
+            "state" : "translated",
+            "value" : "Wird gespeichert"
           }
         },
         "el" : {
@@ -19204,8 +19198,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Saving"
+            "state" : "translated",
+            "value" : "Sauvegarder"
           }
         },
         "he" : {
@@ -19359,8 +19353,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "Suche"
           }
         },
         "el" : {
@@ -19395,8 +19389,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search"
+            "state" : "translated",
+            "value" : "Rechercher"
           }
         },
         "he" : {
@@ -19549,8 +19543,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "Alle auswählen"
           }
         },
         "el" : {
@@ -19585,8 +19579,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select All"
+            "state" : "translated",
+            "value" : "Sélectionner tous"
           }
         },
         "he" : {
@@ -19740,8 +19734,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$ld selected"
+            "state" : "translated",
+            "value" : "%1$ld ausgewählt"
           }
         },
         "el" : {
@@ -19931,8 +19925,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%@ selected"
+            "state" : "translated",
+            "value" : "%@ ausgewählt"
           }
         },
         "el" : {
@@ -20122,8 +20116,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Filename"
+            "state" : "translated",
+            "value" : "Dateiname festlegen"
           }
         },
         "el" : {
@@ -20313,8 +20307,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sign Out"
+            "state" : "translated",
+            "value" : "Abmelden"
           }
         },
         "el" : {
@@ -20349,8 +20343,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sign Out"
+            "state" : "translated",
+            "value" : "Se déconnecter"
           }
         },
         "he" : {
@@ -20505,8 +20499,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Statistics"
+            "state" : "translated",
+            "value" : "Statistiken"
           }
         },
         "el" : {
@@ -20541,8 +20535,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Statistics"
+            "state" : "translated",
+            "value" : "Statistiques"
           }
         },
         "he" : {
@@ -20697,7 +20691,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Status"
           }
         },
@@ -20733,8 +20727,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Status"
+            "state" : "translated",
+            "value" : "Statut"
           }
         },
         "he" : {
@@ -20888,8 +20882,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Days"
+            "state" : "translated",
+            "value" : "Tage"
           }
         },
         "el" : {
@@ -20924,8 +20918,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Days"
+            "state" : "translated",
+            "value" : "Jours"
           }
         },
         "he" : {
@@ -21079,8 +21073,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Months"
+            "state" : "translated",
+            "value" : "Monate"
           }
         },
         "el" : {
@@ -21115,8 +21109,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Months"
+            "state" : "translated",
+            "value" : "Mois"
           }
         },
         "he" : {
@@ -21270,8 +21264,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Today, 12:00"
+            "state" : "translated",
+            "value" : "Heute, 12:00"
           }
         },
         "el" : {
@@ -21306,8 +21300,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Today, 12:00"
+            "state" : "translated",
+            "value" : "Aujourd'hui, 12:00"
           }
         },
         "he" : {
@@ -21461,8 +21455,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weeks"
+            "state" : "translated",
+            "value" : "Wochen"
           }
         },
         "el" : {
@@ -21497,8 +21491,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weeks"
+            "state" : "translated",
+            "value" : "Semaines"
           }
         },
         "he" : {
@@ -21652,8 +21646,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Years"
+            "state" : "translated",
+            "value" : "Jahre"
           }
         },
         "el" : {
@@ -21688,8 +21682,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Years"
+            "state" : "translated",
+            "value" : "Années"
           }
         },
         "he" : {
@@ -21843,8 +21837,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title"
+            "state" : "translated",
+            "value" : "Titel"
           }
         },
         "el" : {
@@ -21879,8 +21873,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title"
+            "state" : "translated",
+            "value" : "Titre"
           }
         },
         "he" : {
@@ -22034,8 +22028,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "To"
+            "state" : "translated",
+            "value" : "An"
           }
         },
         "el" : {
@@ -22070,8 +22064,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "To"
+            "state" : "translated",
+            "value" : "À"
           }
         },
         "he" : {
@@ -22225,8 +22219,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Urgent"
+            "state" : "translated",
+            "value" : "Dringend"
           }
         },
         "el" : {
@@ -22261,7 +22255,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Urgent"
           }
         },
@@ -22415,8 +22409,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every %1$lld %2$@"
+            "state" : "translated",
+            "value" : "Alle %1$lld %2$@"
           }
         },
         "el" : {
@@ -22606,8 +22600,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Excluded Labels (%lld)"
+            "state" : "translated",
+            "value" : "Ausgeschlossene Label (%lld)"
           }
         },
         "el" : {
@@ -22797,8 +22791,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tasks you mark as favorites will appear here for quick access"
+            "state" : "translated",
+            "value" : "Aufgaben, die als Favoriten markiert werden, sind hier für schnellen Zugriff zu finden"
           }
         },
         "el" : {
@@ -22988,8 +22982,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap the star icon on any task to add it to favorites"
+            "state" : "translated",
+            "value" : "Tippe auf das Sternsymbol einer beliebigen Aufgabe, um es zu den Favoriten hinzuzufügen"
           }
         },
         "el" : {
@@ -23179,8 +23173,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Favorite Tasks"
+            "state" : "translated",
+            "value" : "Keine Favoriten"
           }
         },
         "el" : {
@@ -23370,8 +23364,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading favorites"
+            "state" : "translated",
+            "value" : "Favoriten werden geladen"
           }
         },
         "el" : {
@@ -23561,8 +23555,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear Dates"
+            "state" : "translated",
+            "value" : "Datum löschen"
           }
         },
         "el" : {
@@ -24122,8 +24116,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create Label"
+            "state" : "translated",
+            "value" : "Label erstellen"
           }
         },
         "el" : {
@@ -24313,8 +24307,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap to choose a color"
+            "state" : "translated",
+            "value" : "Tippen um eine Farbe auszuwählen"
           }
         },
         "el" : {
@@ -24504,8 +24498,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add a description for this label"
+            "state" : "translated",
+            "value" : "Beschreibung für dieses Label hinzufügen"
           }
         },
         "el" : {
@@ -24695,8 +24689,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Label"
+            "state" : "translated",
+            "value" : "Neues Label"
           }
         },
         "el" : {
@@ -24886,7 +24880,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Label Name"
           }
         },
@@ -24982,8 +24976,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Label Name"
+            "state" : "translated",
+            "value" : "Nome da etiqueta"
           }
         },
         "ro" : {
@@ -25077,8 +25071,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter label name"
+            "state" : "translated",
+            "value" : "Labelnamen eingeben"
           }
         },
         "el" : {
@@ -25268,8 +25262,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to delete '%@'? This action cannot be undone."
+            "state" : "translated",
+            "value" : "Sicher, dass Du %@ löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
           }
         },
         "el" : {
@@ -25459,8 +25453,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete Label"
+            "state" : "translated",
+            "value" : "Label löschen"
           }
         },
         "el" : {
@@ -25650,8 +25644,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tap to choose a colour"
+            "state" : "translated",
+            "value" : "Tippen um eine Farbe auszuwählen"
           }
         },
         "el" : {
@@ -25841,8 +25835,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add a description for this label"
+            "state" : "translated",
+            "value" : "Beschreibung für dieses Label hinzufügen"
           }
         },
         "el" : {
@@ -26032,8 +26026,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Label"
+            "state" : "translated",
+            "value" : "Label bearbeiten"
           }
         },
         "el" : {
@@ -26223,7 +26217,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Label Name"
           }
         },
@@ -26414,8 +26408,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter label name"
+            "state" : "translated",
+            "value" : "Labelnamen eingeben"
           }
         },
         "el" : {
@@ -26605,8 +26599,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create your first label to organize your tasks"
+            "state" : "translated",
+            "value" : "Erstellen dein erstes Label um deine Aufgaben zu organisieren"
           }
         },
         "el" : {
@@ -26796,8 +26790,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Labels"
+            "state" : "translated",
+            "value" : "Keine Label"
           }
         },
         "el" : {
@@ -26987,8 +26981,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading labels..."
+            "state" : "translated",
+            "value" : "Label werden geladen..."
           }
         },
         "el" : {
@@ -27178,8 +27172,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Labels"
+            "state" : "translated",
+            "value" : "Keine Label"
           }
         },
         "el" : {
@@ -27369,8 +27363,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Labels"
+            "state" : "translated",
+            "value" : "Label"
           }
         },
         "el" : {
@@ -27560,8 +27554,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading labels"
+            "state" : "translated",
+            "value" : "Label werden geladen"
           }
         },
         "el" : {
@@ -27751,8 +27745,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Favorites"
+            "state" : "translated",
+            "value" : "Favoriten"
           }
         },
         "el" : {
@@ -27787,8 +27781,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Favorites"
+            "state" : "translated",
+            "value" : "Favoris"
           }
         },
         "he" : {
@@ -27942,8 +27936,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu"
+            "state" : "translated",
+            "value" : "Menü"
           }
         },
         "el" : {
@@ -27978,7 +27972,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Menu"
           }
         },
@@ -28133,8 +28127,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Overview"
+            "state" : "translated",
+            "value" : "Übersicht"
           }
         },
         "el" : {
@@ -28324,8 +28318,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Projects"
+            "state" : "translated",
+            "value" : "Projekte"
           }
         },
         "el" : {
@@ -28360,8 +28354,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Projects"
+            "state" : "translated",
+            "value" : "Projets"
           }
         },
         "he" : {
@@ -28515,8 +28509,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow Anonymous Analytics"
+            "state" : "translated",
+            "value" : "Anonyme Analysen zulassen"
           }
         },
         "el" : {
@@ -28706,8 +28700,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Thanks"
+            "state" : "translated",
+            "value" : "Nein danke"
           }
         },
         "el" : {
@@ -28742,8 +28736,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Thanks"
+            "state" : "translated",
+            "value" : "Non merci"
           }
         },
         "he" : {
@@ -28897,8 +28891,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "We'd like to collect anonymous usage analytics to help improve the app. No personal data is collected, nothing is shared with advertisers, and it's only used to improve features."
+            "state" : "translated",
+            "value" : "Wir möchten anonyme Nutzungsdaten sammeln, um die App zu verbessern. Es werden keine persönlichen Daten erhoben, nichts wird mit Drittanbietern geteilt. Die Daten werden nur zur Verbesserung von Funktionen verwendet."
           }
         },
         "el" : {
@@ -29088,8 +29082,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help Improve Kuna"
+            "state" : "translated",
+            "value" : "Hilf Kuna zu verbessern"
           }
         },
         "el" : {
@@ -29279,8 +29273,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add a new task"
+            "state" : "translated",
+            "value" : "Neue Aufgabe erstellen"
           }
         },
         "el" : {
@@ -29315,8 +29309,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add a new task"
+            "state" : "translated",
+            "value" : "Ajouter une nouvelle tâche"
           }
         },
         "he" : {
@@ -29470,8 +29464,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tasks will be added to your first project. API tokens cannot access user preferences."
+            "state" : "translated",
+            "value" : "Aufgaben werden Ihrem ersten Projekt hinzugefügt. API-Token können nicht auf benutzerdefinierte Einstellungen zugreifen."
           }
         },
         "el" : {
@@ -29661,8 +29655,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "API Token Notice"
+            "state" : "translated",
+            "value" : "API-Token Mitteilung"
           }
         },
         "el" : {
@@ -29852,8 +29846,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent projects"
+            "state" : "translated",
+            "value" : "Keine kürzlichen Projekte"
           }
         },
         "el" : {
@@ -30043,8 +30037,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent tasks"
+            "state" : "translated",
+            "value" : "Keine kürzlichen Aufgaben"
           }
         },
         "el" : {
@@ -30234,8 +30228,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Project not found"
+            "state" : "translated",
+            "value" : "Projekt nicht gefunden"
           }
         },
         "el" : {
@@ -30425,8 +30419,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick add to"
+            "state" : "translated",
+            "value" : "Schnell hinzufügen zu"
           }
         },
         "el" : {
@@ -30616,8 +30610,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Recent Projects"
+            "state" : "translated",
+            "value" : "Kürzliche Projekte"
           }
         },
         "el" : {
@@ -30807,8 +30801,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Recent Tasks"
+            "state" : "translated",
+            "value" : "Kürzliche Aufgaben"
           }
         },
         "el" : {
@@ -30999,8 +30993,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task '%@' added successfully!"
+            "state" : "translated",
+            "value" : "Aufgabe '%@' erfolgreich hinzugefügt!"
           }
         },
         "el" : {
@@ -31190,8 +31184,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task not found"
+            "state" : "translated",
+            "value" : "Aufgabe nicht gefunden"
           }
         },
         "el" : {
@@ -31381,8 +31375,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This project doesn't have any tasks yet. Create your first task to get started!"
+            "state" : "translated",
+            "value" : "Dieses Projekt hat noch keine Aufgaben. Erstelle die erste Aufgabe, um loszulegen!"
           }
         },
         "el" : {
@@ -31572,8 +31566,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Project Details"
+            "state" : "translated",
+            "value" : "Projektinformationen"
           }
         },
         "el" : {
@@ -31763,8 +31757,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Project Name"
+            "state" : "translated",
+            "value" : "Projektname"
           }
         },
         "el" : {
@@ -31954,8 +31948,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$ld of %2$ld selected"
+            "state" : "translated",
+            "value" : "%1$ld von %2$ld ausgewählt"
           }
         },
         "el" : {
@@ -32145,8 +32139,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Error loading projects"
+            "state" : "translated",
+            "value" : "Fehler beim Laden der Projekte"
           }
         },
         "el" : {
@@ -32336,8 +32330,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required Labels (%lld)"
+            "state" : "translated",
+            "value" : "Erforderliche Labels (%lld)"
           }
         },
         "el" : {
@@ -32527,8 +32521,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Community Contributors"
+            "state" : "translated",
+            "value" : "Community Mitwirkende"
           }
         },
         "el" : {
@@ -32718,7 +32712,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "settings.about.contributors.visitGithub"
           }
         },
@@ -32902,8 +32896,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thank you for being part of Kuna!"
+            "state" : "translated",
+            "value" : "Vielen Dank, dass Sie Teil von Kuna sind!"
           }
         },
         "el" : {
@@ -33093,8 +33087,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Feature Suggestions & Contributors"
+            "state" : "translated",
+            "value" : "Feature Vorschläge & Mitwirkende"
           }
         },
         "el" : {
@@ -33283,8 +33277,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A big thank you to everyone who contributes to this little project of mine. I couldn't do it without the suggestions, fixes and translations provided by the community."
+            "state" : "translated",
+            "value" : "Ein großes Dankeschön an alle, die zu diesem kleinen Projekt von mir beitragen. Ohne die Vorschläge, Korrekturen und Übersetzungen der Community könnte ich das nicht tun."
           }
         },
         "el" : {
@@ -33474,8 +33468,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Community Contributors"
+            "state" : "translated",
+            "value" : "Community Mitwirkende"
           }
         },
         "el" : {
@@ -33665,8 +33659,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Translators"
+            "state" : "translated",
+            "value" : "Übersetzer"
           }
         },
         "el" : {
@@ -33701,8 +33695,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Translators"
+            "state" : "translated",
+            "value" : "Traducteurs"
           }
         },
         "he" : {
@@ -33856,8 +33850,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "About"
+            "state" : "translated",
+            "value" : "Über"
           }
         },
         "el" : {
@@ -33892,8 +33886,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "About"
+            "state" : "translated",
+            "value" : "À propos"
           }
         },
         "he" : {
@@ -34047,8 +34041,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Learn more"
+            "state" : "translated",
+            "value" : "Weitere Informationen"
           }
         },
         "el" : {
@@ -34238,8 +34232,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Big shout‑out to the open‑source legends behind Vikunja for building the rock‑solid task platform this app is powered by. Without you, this would just be a very pretty, very empty checklist."
+            "state" : "translated",
+            "value" : "Ein außerordentliches Dankeschön geht an die Open-Source-Legenden hinter Vikunja für den Aufbau einer zuverlässigen Aufgabenplattform, auf der diese App basiert. Ohne sie wäre dies nur eine sehr hübsche, sehr leere Checkliste."
           }
         },
         "el" : {
@@ -34429,8 +34423,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Icon"
+            "state" : "translated",
+            "value" : "App-Icon"
           }
         },
         "el" : {
@@ -34620,8 +34614,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Which view opens when you launch the app"
+            "state" : "translated",
+            "value" : "Ansicht beim Starten der App"
           }
         },
         "el" : {
@@ -34811,8 +34805,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default View"
+            "state" : "translated",
+            "value" : "Standardansicht"
           }
         },
         "el" : {
@@ -35002,8 +34996,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Aussehen"
           }
         },
         "el" : {
@@ -35038,8 +35032,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Apparence"
           }
         },
         "he" : {
@@ -35193,8 +35187,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Changing icon"
+            "state" : "translated",
+            "value" : "Icon ändern"
           }
         },
         "el" : {
@@ -35384,8 +35378,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Icon"
+            "state" : "translated",
+            "value" : "Aktuelles Icon"
           }
         },
         "el" : {
@@ -35575,8 +35569,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose from a variety of app icons to personalize your Kuna experience. The icon change will take effect immediately and persist across app launches."
+            "state" : "translated",
+            "value" : "Wähle aus einer Vielzahl von App-Icons, um das Kuna-Erlebnis zu personalisieren. Die Symboländerung wird sofort wirksam und hält bei allen App-Starts an."
           }
         },
         "el" : {
@@ -35766,8 +35760,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "About App Icons"
+            "state" : "translated",
+            "value" : "Über App-Icons"
           }
         },
         "el" : {
@@ -35957,8 +35951,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate icons are supported"
+            "state" : "translated",
+            "value" : "Alternative Icons werden unterstützt"
           }
         },
         "el" : {
@@ -36148,8 +36142,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Icon Test"
+            "state" : "translated",
+            "value" : "App-Icon Test"
           }
         },
         "el" : {
@@ -36339,8 +36333,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Icon"
+            "state" : "translated",
+            "value" : "App-Icon"
           }
         },
         "el" : {
@@ -36530,8 +36524,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate icons are not supported"
+            "state" : "translated",
+            "value" : "Alternative Icons werden nicht unterstützt"
           }
         },
         "el" : {
@@ -36721,8 +36715,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Token expired"
+            "state" : "translated",
+            "value" : "Token abgelaufen"
           }
         },
         "el" : {
@@ -36912,8 +36906,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Run Sync Now (Debug)"
+            "state" : "translated",
+            "value" : "Sync jetzt ausführen (Debug)"
           }
         },
         "el" : {
@@ -37103,8 +37097,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "iOS schedules background refresh based on system conditions. Frequency is a minimum interval."
+            "state" : "translated",
+            "value" : "iOS plant die Hintergrundaktualisierung basierend auf Systembedingungen. Die Häufigkeit ist ein Mindestintervall."
           }
         },
         "el" : {
@@ -37294,8 +37288,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1 hour"
+            "state" : "translated",
+            "value" : "1 Stunde"
           }
         },
         "el" : {
@@ -37330,8 +37324,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1 hour"
+            "state" : "translated",
+            "value" : "1 heure"
           }
         },
         "he" : {
@@ -37485,8 +37479,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "6 hours"
+            "state" : "translated",
+            "value" : "6 Stunden"
           }
         },
         "el" : {
@@ -37521,8 +37515,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "6 hours"
+            "state" : "translated",
+            "value" : "6 heures"
           }
         },
         "he" : {
@@ -37676,8 +37670,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "12 hours"
+            "state" : "translated",
+            "value" : "12 Stunden"
           }
         },
         "el" : {
@@ -37712,8 +37706,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "12 hours"
+            "state" : "translated",
+            "value" : "12 heures"
           }
         },
         "he" : {
@@ -37867,8 +37861,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "15 mins"
+            "state" : "translated",
+            "value" : "15 Minuten"
           }
         },
         "el" : {
@@ -37903,8 +37897,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "15 mins"
+            "state" : "translated",
+            "value" : "15 minutes"
           }
         },
         "he" : {
@@ -38058,8 +38052,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "24 hours"
+            "state" : "translated",
+            "value" : "24 Stunden"
           }
         },
         "el" : {
@@ -38094,8 +38088,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "24 hours"
+            "state" : "translated",
+            "value" : "24 heures"
           }
         },
         "he" : {
@@ -38249,8 +38243,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "30 mins"
+            "state" : "translated",
+            "value" : "30 Minuten"
           }
         },
         "el" : {
@@ -38285,8 +38279,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "30 mins"
+            "state" : "translated",
+            "value" : "30 minutes"
           }
         },
         "he" : {
@@ -38440,8 +38434,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How often to refresh tasks in background"
+            "state" : "translated",
+            "value" : "Aktualisierungsintervall von Aufgaben im Hintergrund"
           }
         },
         "el" : {
@@ -38631,8 +38625,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Frequency"
+            "state" : "translated",
+            "value" : "Häufigkeit"
           }
         },
         "el" : {
@@ -38667,8 +38661,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Frequency"
+            "state" : "translated",
+            "value" : "Fréquence"
           }
         },
         "he" : {
@@ -38822,8 +38816,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Background Sync & Notifications (Beta)"
+            "state" : "translated",
+            "value" : "Hintergrundsynchronisation & Benachrichtigungen (Beta)"
           }
         },
         "el" : {
@@ -39013,8 +39007,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include summary notification"
+            "state" : "translated",
+            "value" : "Zusammenfassungs-Benachrichtigung einschließen"
           }
         },
         "el" : {
@@ -39204,8 +39198,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last Attempt: %@"
+            "state" : "translated",
+            "value" : "Letzter Versuch: %@"
           }
         },
         "el" : {
@@ -39395,8 +39389,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last Success: %@"
+            "state" : "translated",
+            "value" : "Zuletzt erfolgreich: %@"
           }
         },
         "el" : {
@@ -39586,8 +39580,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Notifications: %@"
+            "state" : "translated",
+            "value" : "Benachrichtigungen: %@"
           }
         },
         "el" : {
@@ -39777,8 +39771,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Notify when assigned to me"
+            "state" : "translated",
+            "value" : "Benachrichtigen, wenn mir zugewiesen"
           }
         },
         "el" : {
@@ -39873,8 +39867,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Notify when assigned to me"
+            "state" : "translated",
+            "value" : "Notificar quando atribuído a mim"
           }
         },
         "ro" : {
@@ -39968,8 +39962,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Notify on new tasks"
+            "state" : "translated",
+            "value" : "Benachrichtigung bei neuen Aufgaben"
           }
         },
         "el" : {
@@ -40159,8 +40153,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Notify on updated tasks"
+            "state" : "translated",
+            "value" : "Benachrichtigung bei aktualisierten Aufgaben"
           }
         },
         "el" : {
@@ -40350,8 +40344,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Notify when watched labels change"
+            "state" : "translated",
+            "value" : "Benachrichtigung beim Änderungen von beobachteten Labels"
           }
         },
         "el" : {
@@ -40541,8 +40535,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync tasks periodically in the background"
+            "state" : "translated",
+            "value" : "Aufgaben regelmäßig im Hintergrund synchronisieren"
           }
         },
         "el" : {
@@ -40732,8 +40726,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Background Sync"
+            "state" : "translated",
+            "value" : "Hintergrundsynchronisation"
           }
         },
         "el" : {
@@ -40923,8 +40917,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Watched Labels"
+            "state" : "translated",
+            "value" : "Beobachtete Label"
           }
         },
         "el" : {
@@ -41114,8 +41108,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "To sync tasks with your calendar, please grant calendar access in Settings."
+            "state" : "translated",
+            "value" : "Um Aufgaben mit Ihrem Kalender zu synchronisieren, gewähre bitte den Kalenderzugriff in den Einstellungen."
           }
         },
         "el" : {
@@ -41305,8 +41299,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Access Required"
+            "state" : "translated",
+            "value" : "Kalenderzugriff benötigt"
           }
         },
         "el" : {
@@ -41496,8 +41490,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Advanced Options"
+            "state" : "translated",
+            "value" : "Erweiterte Einstellungen"
           }
         },
         "el" : {
@@ -41532,8 +41526,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Advanced Options"
+            "state" : "translated",
+            "value" : "Options avancées"
           }
         },
         "he" : {
@@ -41687,8 +41681,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar"
+            "state" : "translated",
+            "value" : "Kalender"
           }
         },
         "el" : {
@@ -41723,8 +41717,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar"
+            "state" : "translated",
+            "value" : "Calendrier"
           }
         },
         "he" : {
@@ -41878,8 +41872,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendars"
+            "state" : "translated",
+            "value" : "Kalender"
           }
         },
         "el" : {
@@ -41914,8 +41908,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendars"
+            "state" : "translated",
+            "value" : "Calendriers"
           }
         },
         "he" : {
@@ -42069,8 +42063,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear Errors"
+            "state" : "translated",
+            "value" : "Log leeren"
           }
         },
         "el" : {
@@ -42260,8 +42254,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default calendar for all tasks"
+            "state" : "translated",
+            "value" : "Standardkalender für alle Aufgaben"
           }
         },
         "el" : {
@@ -42451,8 +42445,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Kuna Tasks"
+            "state" : "translated",
+            "value" : "Kuna Aufgaben"
           }
         },
         "el" : {
@@ -42643,8 +42637,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync tasks with your calendar app"
+            "state" : "translated",
+            "value" : "Aufgaben mit Ihrer Kalender-App synchronisieren"
           }
         },
         "el" : {
@@ -42834,8 +42828,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable Calendar Sync"
+            "state" : "translated",
+            "value" : "Kalender-Sync deaktivieren"
           }
         },
         "el" : {
@@ -43025,8 +43019,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will permanently delete all Kuna calendars and events"
+            "state" : "translated",
+            "value" : "Dies löscht dauerhaft alle Kuna-Kalender und -Ereignisse"
           }
         },
         "el" : {
@@ -43216,8 +43210,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable Calendar Sync"
+            "state" : "translated",
+            "value" : "Kalender-Sync deaktivieren"
           }
         },
         "el" : {
@@ -43407,8 +43401,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What should happen to your existing calendars and events?"
+            "state" : "translated",
+            "value" : "Was soll mit deinen bestehenden Kalendern und Ereignissen passieren?"
           }
         },
         "el" : {
@@ -43598,8 +43592,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable Calendar Sync"
+            "state" : "translated",
+            "value" : "Kalender-Sync deaktivieren"
           }
         },
         "el" : {
@@ -43789,8 +43783,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Aktiviert"
           }
         },
         "el" : {
@@ -43980,8 +43974,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Sync"
+            "state" : "translated",
+            "value" : "Sync aktivieren"
           }
         },
         "el" : {
@@ -44171,8 +44165,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Recent Errors"
+            "state" : "translated",
+            "value" : "Letzte Fehler"
           }
         },
         "el" : {
@@ -44362,8 +44356,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Safely sync your tasks with calendar apps. Kuna creates its own calendars and never touches your existing ones."
+            "state" : "translated",
+            "value" : "Synchronisiere deine Aufgaben sicher mit Kalender-Apps. Kuna erstellt eigene Kalender und beschreibt nie die vorhandenen Kalender."
           }
         },
         "el" : {
@@ -44553,8 +44547,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep your tasks in sync with your calendar app"
+            "state" : "translated",
+            "value" : "Behalte deine Aufgaben mit deiner Kalender-App synchron"
           }
         },
         "el" : {
@@ -44744,8 +44738,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync with Calendar"
+            "state" : "translated",
+            "value" : "Mit Kalender synchronisieren"
           }
         },
         "el" : {
@@ -44935,8 +44929,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How would you like to organize your synced tasks?"
+            "state" : "translated",
+            "value" : "Wie möchtest du deine synchronisierten Aufgaben organisieren?"
           }
         },
         "el" : {
@@ -45126,8 +45120,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose Sync Mode"
+            "state" : "translated",
+            "value" : "Sync Modus wählen"
           }
         },
         "el" : {
@@ -45317,8 +45311,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Sync"
+            "state" : "translated",
+            "value" : "Kalender-Sync"
           }
         },
         "el" : {
@@ -45508,8 +45502,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Review your calendar sync configuration:"
+            "state" : "translated",
+            "value" : "Überprüfe deine Kalender-Sync Einstellungen:"
           }
         },
         "el" : {
@@ -45699,8 +45693,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anonymous Analytics"
+            "state" : "translated",
+            "value" : "Anonyme Analysedaten"
           }
         },
         "el" : {
@@ -45890,8 +45884,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Selection"
+            "state" : "translated",
+            "value" : "Kalenderauswahl"
           }
         },
         "el" : {
@@ -46081,8 +46075,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync All Projects"
+            "state" : "translated",
+            "value" : "Alle Projekte synchronisieren"
           }
         },
         "el" : {
@@ -46272,8 +46266,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select specific projects below to sync to your calendar."
+            "state" : "translated",
+            "value" : "Wähle unten bestimmte Projekte aus, die mit deinem Kalender synchronisiert werden sollen."
           }
         },
         "el" : {
@@ -46463,8 +46457,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically include all current and future projects"
+            "state" : "translated",
+            "value" : "Automatisch alle aktuellen und zukünftigen Projekte einbeziehen"
           }
         },
         "el" : {
@@ -46654,8 +46648,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync All Projects"
+            "state" : "translated",
+            "value" : "Alle Projekte synchronisieren"
           }
         },
         "el" : {
@@ -46845,8 +46839,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Projects"
+            "state" : "translated",
+            "value" : "Projekte auswählen"
           }
         },
         "el" : {
@@ -47036,8 +47030,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose which projects to create calendars for:"
+            "state" : "translated",
+            "value" : "Wähle aus, für welche Projekte Kalender erstellt werden sollen:"
           }
         },
         "el" : {
@@ -47227,8 +47221,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose which projects to include in your Kuna calendar:"
+            "state" : "translated",
+            "value" : "Wähle aus, welche Projekte in den Kuna-Kalendern aufgenommen werden sollen:"
           }
         },
         "el" : {
@@ -47418,8 +47412,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Read-only"
+            "state" : "translated",
+            "value" : "Nur lesen"
           }
         },
         "el" : {
@@ -47609,8 +47603,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reconfigure"
+            "state" : "translated",
+            "value" : "Neu konfigurieren"
           }
         },
         "el" : {
@@ -47800,8 +47794,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request Access"
+            "state" : "translated",
+            "value" : "Zugriff anfordern"
           }
         },
         "el" : {
@@ -47991,8 +47985,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select any of your existing calendars to sync tasks to. Only calendars that allow modifications are shown."
+            "state" : "translated",
+            "value" : "Wähle einen vorhandenen Kalender, mit dem Aufgaben synchronisiert werden sollen. Nur Kalender, die Änderungen erlauben, werden angezeigt."
           }
         },
         "el" : {
@@ -48182,8 +48176,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose Different Calendar"
+            "state" : "translated",
+            "value" : "Wähle einen anderen Kalender"
           }
         },
         "el" : {
@@ -48373,8 +48367,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Kuna will automatically create and use a dedicated 'Kuna Tasks' calendar. Tap Advanced Options to choose a different calendar."
+            "state" : "translated",
+            "value" : "Kuna wird automatisch einen Kalender für \"Kuna Aufgaben\" erstellen und verwenden. Tippe auf erweiterte Optionen, um einen anderen Kalender auszuwählen."
           }
         },
         "el" : {
@@ -48564,8 +48558,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Selection"
+            "state" : "translated",
+            "value" : "Kalenderauswahl"
           }
         },
         "el" : {
@@ -48755,8 +48749,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Sync Setup"
+            "state" : "translated",
+            "value" : "Kalender-Sync-Einstellungen"
           }
         },
         "el" : {
@@ -48946,8 +48940,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set up Calendar Sync"
+            "state" : "translated",
+            "value" : "Kalender-Sync einrichten"
           }
         },
         "el" : {
@@ -49138,8 +49132,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Technical Details"
+            "state" : "translated",
+            "value" : "Technische Details anzeigen"
           }
         },
         "el" : {
@@ -49329,8 +49323,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Statistics"
+            "state" : "translated",
+            "value" : "Statistiken"
           }
         },
         "el" : {
@@ -49365,8 +49359,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Statistics"
+            "state" : "translated",
+            "value" : "Statistiques"
           }
         },
         "he" : {
@@ -49520,7 +49514,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Status"
           }
         },
@@ -49556,8 +49550,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Status"
+            "state" : "translated",
+            "value" : "Statut"
           }
         },
         "he" : {
@@ -49711,8 +49705,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last synced: %@"
+            "state" : "translated",
+            "value" : "Zuletzt synchronisiert: %@"
           }
         },
         "el" : {
@@ -49902,8 +49896,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never synced"
+            "state" : "translated",
+            "value" : "Noch nie synchronisiert"
           }
         },
         "el" : {
@@ -50093,8 +50087,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Kuna creates its own calendars and never edits your existing ones."
+            "state" : "translated",
+            "value" : "Kuna erstellt eigene Kalender und bearbeitet niemals die bestehenden Kalender."
           }
         },
         "el" : {
@@ -50284,8 +50278,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch"
+            "state" : "translated",
+            "value" : "Wechseln"
           }
         },
         "el" : {
@@ -50476,8 +50470,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch Calendar?"
+            "state" : "translated",
+            "value" : "Kalender wechseln?"
           }
         },
         "el" : {
@@ -50667,8 +50661,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync Now"
+            "state" : "translated",
+            "value" : "Jetzt synchronisieren"
           }
         },
         "el" : {
@@ -50858,8 +50852,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Technical Details"
+            "state" : "translated",
+            "value" : "Technische Details"
           }
         },
         "el" : {
@@ -51049,8 +51043,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Sync"
+            "state" : "translated",
+            "value" : "Kalender-Sync"
           }
         },
         "el" : {
@@ -51240,8 +51234,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Writable"
+            "state" : "translated",
+            "value" : "Schreibbar"
           }
         },
         "el" : {
@@ -51431,8 +51425,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Authentication Method"
+            "state" : "translated",
+            "value" : "Authentifizierungsmethode"
           }
         },
         "el" : {
@@ -51622,8 +51616,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Connection"
+            "state" : "translated",
+            "value" : "Verbindung"
           }
         },
         "el" : {
@@ -51813,8 +51807,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No server configured"
+            "state" : "translated",
+            "value" : "Kein Server konfiguriert"
           }
         },
         "el" : {
@@ -52004,7 +51998,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Server"
           }
         },
@@ -52040,8 +52034,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Server"
+            "state" : "translated",
+            "value" : "Serveur"
           }
         },
         "he" : {
@@ -52195,8 +52189,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Token Expiration"
+            "state" : "translated",
+            "value" : "Token Ablauf"
           }
         },
         "el" : {
@@ -52386,8 +52380,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The Vikunja API restricts user management operations when using personal API tokens. To assign tasks to other users or manage team members, you need to log in with username and password authentication."
+            "state" : "translated",
+            "value" : "Die Vikunja API beschränkt die Benutzerverwaltung bei der Verwendung persönlicher API-Token. Um anderen Benutzern Aufgaben zuweisen zu können oder Teammitglieder zu verwalten, musst du dich mit der Benutzername und Passwort-Authentifizierungsmethode anmelden."
           }
         },
         "el" : {
@@ -52577,8 +52571,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You can still create and manage your personal tasks with full functionality."
+            "state" : "translated",
+            "value" : "Du kannst deine persönlichen Aufgaben immer noch mit vollem Funktionsumfang erstellen und verwalten."
           }
         },
         "el" : {
@@ -52768,8 +52762,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why is user management limited?"
+            "state" : "translated",
+            "value" : "Warum ist die Benutzerverwaltung eingeschränkt?"
           }
         },
         "el" : {
@@ -52959,8 +52953,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Requires username/password login"
+            "state" : "translated",
+            "value" : "Benötigt Benutzername und Passwort-Authentifizierungsmethode"
           }
         },
         "el" : {
@@ -53150,8 +53144,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switch to Username/Password Login"
+            "state" : "translated",
+            "value" : "Zu Benutzername und Passwort-Authentifizierungsmethode wechseln"
           }
         },
         "el" : {
@@ -53341,8 +53335,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "User Management"
+            "state" : "translated",
+            "value" : "Benutzerverwaltung"
           }
         },
         "el" : {
@@ -53532,8 +53526,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show paperclip icons for tasks with attachments"
+            "state" : "translated",
+            "value" : "Büroklammer-Icons für Aufgaben mit Anhängen anzeigen"
           }
         },
         "el" : {
@@ -53723,8 +53717,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Attachment Icons"
+            "state" : "translated",
+            "value" : "Anhang Icons"
           }
         },
         "el" : {
@@ -53914,8 +53908,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show confetti when marking a task complete"
+            "state" : "translated",
+            "value" : "Zeige Konfetti, sobald eine Aufgabe als abgeschlossen markiert wird"
           }
         },
         "el" : {
@@ -54105,8 +54099,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Celebration"
+            "state" : "translated",
+            "value" : "Party"
           }
         },
         "el" : {
@@ -54296,8 +54290,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Celebrate Completion"
+            "state" : "translated",
+            "value" : "Aufgabenabschluss feiern"
           }
         },
         "el" : {
@@ -54487,8 +54481,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use the default blue color for task color indicators"
+            "state" : "translated",
+            "value" : "Benutze das Standard-Blau für Aufgaben Statusanzeigen"
           }
         },
         "el" : {
@@ -54678,8 +54672,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default Color Balls"
+            "state" : "translated",
+            "value" : "Standardfarbpalette"
           }
         },
         "el" : {
@@ -54869,8 +54863,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Display color indicators for all tasks"
+            "state" : "translated",
+            "value" : "Farbige Statusanzeigen für alle Aufgaben anzeigen"
           }
         },
         "el" : {
@@ -55060,8 +55054,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task Colours"
+            "state" : "translated",
+            "value" : "Farben für Aufgaben"
           }
         },
         "el" : {
@@ -55251,8 +55245,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show comment count badges on tasks"
+            "state" : "translated",
+            "value" : "Kommentaranzahl an Aufgaben anzeigen"
           }
         },
         "el" : {
@@ -55442,8 +55436,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Comment Counts"
+            "state" : "translated",
+            "value" : "Anzahl Kommentare"
           }
         },
         "el" : {
@@ -55633,8 +55627,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show a task's due date"
+            "state" : "translated",
+            "value" : "Fälligkeitsdatum einer Aufgabe anzeigen"
           }
         },
         "el" : {
@@ -55824,8 +55818,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Due Date"
+            "state" : "translated",
+            "value" : "Fälligkeitsdatum"
           }
         },
         "el" : {
@@ -55860,8 +55854,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Due Date"
+            "state" : "translated",
+            "value" : "Date d'échéance"
           }
         },
         "he" : {
@@ -56015,8 +56009,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show a task's end date"
+            "state" : "translated",
+            "value" : "Fälligkeitsdatum einer Aufgabe anzeigen"
           }
         },
         "el" : {
@@ -56206,8 +56200,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "End Date"
+            "state" : "translated",
+            "value" : "Enddatum"
           }
         },
         "el" : {
@@ -56242,8 +56236,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "End Date"
+            "state" : "translated",
+            "value" : "Date de fin"
           }
         },
         "he" : {
@@ -56397,8 +56391,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task Dates"
+            "state" : "translated",
+            "value" : "Termine"
           }
         },
         "el" : {
@@ -56588,8 +56582,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show a task's start date"
+            "state" : "translated",
+            "value" : "Startdatum einer Aufgabe anzeigen"
           }
         },
         "el" : {
@@ -56779,8 +56773,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Control which elements are displayed in task lists. Changes apply to all task views."
+            "state" : "translated",
+            "value" : "Lege fest, welche Elemente in der Aufgabenliste angezeigt werden. Änderungen gelten für alle Aufgabenansichten."
           }
         },
         "el" : {
@@ -56970,8 +56964,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sample task title"
+            "state" : "translated",
+            "value" : "Beispieltitel für Aufgabe"
           }
         },
         "el" : {
@@ -57161,8 +57155,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Live preview of task list appearance based on your settings."
+            "state" : "translated",
+            "value" : "Live-Vorschau der Aufgabenliste basierend auf deinen Einstellungen."
           }
         },
         "el" : {
@@ -57352,8 +57346,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show priority indicators on tasks"
+            "state" : "translated",
+            "value" : "Zeige Prioritätsindikatoren an Aufgaben"
           }
         },
         "el" : {
@@ -57543,8 +57537,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Priority Indicators"
+            "state" : "translated",
+            "value" : "Prioritätsindikatoren"
           }
         },
         "el" : {
@@ -57734,8 +57728,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Customize what appears on task lists"
+            "state" : "translated",
+            "value" : "Passe an, was in den Aufgabenlisten erscheint"
           }
         },
         "el" : {
@@ -57925,8 +57919,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show whether a task is synced to Calendar"
+            "state" : "translated",
+            "value" : "Zeigt an, ob eine Aufgabe mit dem Kalender synchronisiert ist"
           }
         },
         "el" : {
@@ -58116,8 +58110,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sync Status"
+            "state" : "translated",
+            "value" : "Synchronisierungsstatus"
           }
         },
         "el" : {
@@ -58307,8 +58301,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Display Options"
+            "state" : "translated",
+            "value" : "Anzeigeoptionen"
           }
         },
         "el" : {
@@ -58498,8 +58492,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Icon: %@"
+            "state" : "translated",
+            "value" : "Aktuelles Icon: %@"
           }
         },
         "el" : {
@@ -58689,8 +58683,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Information"
+            "state" : "translated",
+            "value" : "Informationen"
           }
         },
         "el" : {
@@ -58725,7 +58719,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Information"
           }
         },
@@ -58880,8 +58874,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help improve the app by sending anonymous usage data"
+            "state" : "translated",
+            "value" : "Hilf mit, die App zu verbessern, indem du anonyme Nutzungsdaten sendest"
           }
         },
         "el" : {
@@ -59071,8 +59065,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anonymous Analytics"
+            "state" : "translated",
+            "value" : "Anonyme Analysedaten"
           }
         },
         "el" : {
@@ -59262,8 +59256,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Privacy"
+            "state" : "translated",
+            "value" : "Datenschutz"
           }
         },
         "el" : {
@@ -59453,8 +59447,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Processing"
+            "state" : "translated",
+            "value" : "Verarbeitung"
           }
         },
         "el" : {
@@ -59644,8 +59638,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Project Sync"
+            "state" : "translated",
+            "value" : "Projekt-Sync"
           }
         },
         "el" : {
@@ -59835,8 +59829,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick add to %@"
+            "state" : "translated",
+            "value" : "Schnell hinzufügen zu %@"
           }
         },
         "el" : {
@@ -60026,8 +60020,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How tasks are sorted when you open a project"
+            "state" : "translated",
+            "value" : "Wie Aufgaben beim Öffnen eines Projekts sortiert sind"
           }
         },
         "el" : {
@@ -60217,8 +60211,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default Sort Order"
+            "state" : "translated",
+            "value" : "Standardsortierung"
           }
         },
         "el" : {
@@ -60408,8 +60402,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings"
+            "state" : "translated",
+            "value" : "Einstellungen"
           }
         },
         "el" : {
@@ -60444,8 +60438,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Settings"
+            "state" : "translated",
+            "value" : "Paramètres"
           }
         },
         "he" : {
@@ -60599,8 +60593,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expires in %@"
+            "state" : "translated",
+            "value" : "Läuft ab in %@"
           }
         },
         "el" : {
@@ -60790,8 +60784,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Watched Labels"
+            "state" : "translated",
+            "value" : "Beobachtete Label"
           }
         },
         "el" : {
@@ -60981,8 +60975,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Task"
+            "state" : "translated",
+            "value" : "Aufgabe hinzufügen"
           }
         },
         "el" : {
@@ -61017,8 +61011,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Task"
+            "state" : "translated",
+            "value" : "Ajouter une tâche"
           }
         },
         "he" : {
@@ -61172,8 +61166,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Files"
+            "state" : "translated",
+            "value" : "Dateien"
           }
         },
         "el" : {
@@ -61208,8 +61202,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Files"
+            "state" : "translated",
+            "value" : "Fichiers"
           }
         },
         "he" : {
@@ -61363,8 +61357,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Photo Library"
+            "state" : "translated",
+            "value" : "Fotobibliothek"
           }
         },
         "el" : {
@@ -61554,8 +61548,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Upload"
+            "state" : "translated",
+            "value" : "Hochladen"
           }
         },
         "el" : {
@@ -61590,8 +61584,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Upload"
+            "state" : "translated",
+            "value" : "Télécharger"
           }
         },
         "he" : {
@@ -61745,8 +61739,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter a custom name for '%@'"
+            "state" : "translated",
+            "value" : "Gib einen benutzerdefinierten Namen für '%@ ' ein"
           }
         },
         "el" : {
@@ -61937,8 +61931,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Color"
+            "state" : "translated",
+            "value" : "Farbe wählen"
           }
         },
         "el" : {
@@ -62128,8 +62122,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No comments yet"
+            "state" : "translated",
+            "value" : "Keine Kommentare vorhanden"
           }
         },
         "el" : {
@@ -62164,8 +62158,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No comments yet"
+            "state" : "translated",
+            "value" : "Aucun commentaire pour le moment"
           }
         },
         "he" : {
@@ -62319,8 +62313,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Task"
+            "state" : "translated",
+            "value" : "Aufgabe hinzufügen"
           }
         },
         "el" : {
@@ -62355,8 +62349,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Task"
+            "state" : "translated",
+            "value" : "Ajouter une tâche"
           }
         },
         "he" : {
@@ -62510,8 +62504,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create Task"
+            "state" : "translated",
+            "value" : "Aufgabe erstellen"
           }
         },
         "el" : {
@@ -62546,8 +62540,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create Task"
+            "state" : "translated",
+            "value" : "Créer une tâche"
           }
         },
         "he" : {
@@ -62701,8 +62695,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create First Task"
+            "state" : "translated",
+            "value" : "Erste Aufgabe erstellen"
           }
         },
         "el" : {
@@ -62737,8 +62731,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create First Task"
+            "state" : "translated",
+            "value" : "Créer une première tâche"
           }
         },
         "he" : {
@@ -62892,8 +62886,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create New Task"
+            "state" : "translated",
+            "value" : "Neue Aufgabe erstellen"
           }
         },
         "el" : {
@@ -62928,8 +62922,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create New Task"
+            "state" : "translated",
+            "value" : "Créer une nouvelle tâche"
           }
         },
         "he" : {
@@ -63083,8 +63077,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter description"
+            "state" : "translated",
+            "value" : "Beschreibung eingeben"
           }
         },
         "el" : {
@@ -63119,8 +63113,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter description"
+            "state" : "translated",
+            "value" : "Entrer la description"
           }
         },
         "he" : {
@@ -63274,8 +63268,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Due Date"
+            "state" : "translated",
+            "value" : "Fälligkeitsdatum"
           }
         },
         "el" : {
@@ -63310,8 +63304,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Due Date"
+            "state" : "translated",
+            "value" : "Date d'échéance"
           }
         },
         "he" : {
@@ -63465,8 +63459,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "End Date"
+            "state" : "translated",
+            "value" : "Enddatum"
           }
         },
         "el" : {
@@ -63501,8 +63495,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "End Date"
+            "state" : "translated",
+            "value" : "Date de fin"
           }
         },
         "he" : {
@@ -63656,8 +63650,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Priority"
+            "state" : "translated",
+            "value" : "Priorität"
           }
         },
         "el" : {
@@ -63692,8 +63686,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Priority"
+            "state" : "translated",
+            "value" : "Priorité"
           }
         },
         "he" : {
@@ -63847,8 +63841,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Progress"
+            "state" : "translated",
+            "value" : "Fortschritt"
           }
         },
         "el" : {
@@ -63883,8 +63877,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Progress"
+            "state" : "translated",
+            "value" : "Progression"
           }
         },
         "he" : {
@@ -64038,8 +64032,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No reminders"
+            "state" : "translated",
+            "value" : "Keine Erinnerungen"
           }
         },
         "el" : {
@@ -64229,8 +64223,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No assignees"
+            "state" : "translated",
+            "value" : "Kein Benutzer zugewiesen"
           }
         },
         "el" : {
@@ -64420,8 +64414,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Assignees"
+            "state" : "translated",
+            "value" : "Zugewiesene Nutzer:innen"
           }
         },
         "el" : {
@@ -64611,8 +64605,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Attachment"
+            "state" : "translated",
+            "value" : "Anhang hinzufügen"
           }
         },
         "el" : {
@@ -64802,8 +64796,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Attachment"
+            "state" : "translated",
+            "value" : "Anhang hinzufügen"
           }
         },
         "el" : {
@@ -64993,8 +64987,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Due Date"
+            "state" : "translated",
+            "value" : "Fälligkeitsdatum hinzufügen"
           }
         },
         "el" : {
@@ -65029,8 +65023,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Due Date"
+            "state" : "translated",
+            "value" : "Ajouter une date de fin"
           }
         },
         "he" : {
@@ -65184,8 +65178,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No due date"
+            "state" : "translated",
+            "value" : "Kein Fälligkeitsdatum"
           }
         },
         "el" : {
@@ -65220,8 +65214,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No due date"
+            "state" : "translated",
+            "value" : "Pas de date de fin"
           }
         },
         "he" : {
@@ -65375,8 +65369,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add due date"
+            "state" : "translated",
+            "value" : "Fälligkeitsdatum hinzufügen"
           }
         },
         "el" : {
@@ -65411,8 +65405,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add due date"
+            "state" : "translated",
+            "value" : "Ajouter une date de fin"
           }
         },
         "he" : {
@@ -65566,8 +65560,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add End Date"
+            "state" : "translated",
+            "value" : "Enddatum hinzufügen"
           }
         },
         "el" : {
@@ -65602,8 +65596,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add End Date"
+            "state" : "translated",
+            "value" : "Ajouter une date de fin"
           }
         },
         "he" : {
@@ -65757,8 +65751,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No end date"
+            "state" : "translated",
+            "value" : "Kein Enddatum"
           }
         },
         "el" : {
@@ -65793,8 +65787,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No end date"
+            "state" : "translated",
+            "value" : "Pas de date de fin"
           }
         },
         "he" : {
@@ -65948,8 +65942,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add end date"
+            "state" : "translated",
+            "value" : "Enddatum hinzufügen"
           }
         },
         "el" : {
@@ -65984,8 +65978,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add end date"
+            "state" : "translated",
+            "value" : "Ajouter une date de fin"
           }
         },
         "he" : {
@@ -66139,8 +66133,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Start Date"
+            "state" : "translated",
+            "value" : "Startdatum hinzufügen"
           }
         },
         "el" : {
@@ -66175,8 +66169,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Start Date"
+            "state" : "translated",
+            "value" : "Ajouter une date de début"
           }
         },
         "he" : {
@@ -66330,8 +66324,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No start date"
+            "state" : "translated",
+            "value" : "Kein Startdatum"
           }
         },
         "el" : {
@@ -66366,8 +66360,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No start date"
+            "state" : "translated",
+            "value" : "Pas de date de début"
           }
         },
         "he" : {
@@ -66521,8 +66515,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add start date"
+            "state" : "translated",
+            "value" : "Startdatum hinzufügen"
           }
         },
         "el" : {
@@ -66557,8 +66551,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add start date"
+            "state" : "translated",
+            "value" : "Ajouter une date de début"
           }
         },
         "he" : {
@@ -66712,8 +66706,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No description"
+            "state" : "translated",
+            "value" : "Keine Beschreibung"
           }
         },
         "el" : {
@@ -66748,8 +66742,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No description"
+            "state" : "translated",
+            "value" : "Pas de description"
           }
         },
         "he" : {
@@ -66903,8 +66897,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add description"
+            "state" : "translated",
+            "value" : "Beschreibung hinzufügen"
           }
         },
         "el" : {
@@ -66939,8 +66933,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add description"
+            "state" : "translated",
+            "value" : "Ajouter une description"
           }
         },
         "he" : {
@@ -67094,8 +67088,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Description"
+            "state" : "translated",
+            "value" : "Beschreibung"
           }
         },
         "el" : {
@@ -67130,7 +67124,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Description"
           }
         },
@@ -67285,8 +67279,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No labels"
+            "state" : "translated",
+            "value" : "Keine Label"
           }
         },
         "el" : {
@@ -67321,8 +67315,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No labels"
+            "state" : "translated",
+            "value" : "Pas de labels"
           }
         },
         "he" : {
@@ -67476,8 +67470,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No priority"
+            "state" : "translated",
+            "value" : "Keine Priorität"
           }
         },
         "el" : {
@@ -67512,8 +67506,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No priority"
+            "state" : "translated",
+            "value" : "Pas de priorités"
           }
         },
         "he" : {
@@ -67667,8 +67661,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Priority"
+            "state" : "translated",
+            "value" : "Priorität"
           }
         },
         "el" : {
@@ -67703,8 +67697,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Priority"
+            "state" : "translated",
+            "value" : "Priorité"
           }
         },
         "he" : {
@@ -67858,8 +67852,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Progress"
+            "state" : "translated",
+            "value" : "Fortschritt"
           }
         },
         "el" : {
@@ -67894,8 +67888,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Progress"
+            "state" : "translated",
+            "value" : "Progression"
           }
         },
         "he" : {
@@ -68049,8 +68043,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Related Tasks"
+            "state" : "translated",
+            "value" : "Zugehörige Aufgaben"
           }
         },
         "el" : {
@@ -68240,8 +68234,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add reminder"
+            "state" : "translated",
+            "value" : "Erinnerung hinzufügen"
           }
         },
         "el" : {
@@ -68276,8 +68270,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add reminder"
+            "state" : "translated",
+            "value" : "Ajouter un rappel"
           }
         },
         "he" : {
@@ -68431,8 +68425,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add New Reminder"
+            "state" : "translated",
+            "value" : "Neue Erinnerung hinzufügen"
           }
         },
         "el" : {
@@ -68622,8 +68616,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add reminders to get notified about this task"
+            "state" : "translated",
+            "value" : "Erinnerungen hinzufügen, um über diese Aufgabe benachrichtigt zu werden"
           }
         },
         "el" : {
@@ -68813,8 +68807,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Reminders"
+            "state" : "translated",
+            "value" : "Keine Erinnerungen"
           }
         },
         "el" : {
@@ -68849,8 +68843,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Reminders"
+            "state" : "translated",
+            "value" : "Pas de rappels"
           }
         },
         "he" : {
@@ -68909,8 +68903,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Reminders"
+            "state" : "translated",
+            "value" : "Nenhum lembrete"
           }
         },
         "ro" : {
@@ -69004,8 +68998,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Reminders Set"
+            "state" : "translated",
+            "value" : "Keine Erinnerungen eingestellt"
           }
         },
         "el" : {
@@ -69195,8 +69189,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminders"
+            "state" : "translated",
+            "value" : "Erinnerungen"
           }
         },
         "el" : {
@@ -69231,8 +69225,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminders"
+            "state" : "translated",
+            "value" : "Rappels"
           }
         },
         "he" : {
@@ -69386,8 +69380,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat every:"
+            "state" : "translated",
+            "value" : "Wiederhole alle:"
           }
         },
         "el" : {
@@ -69577,8 +69571,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task will not repeat"
+            "state" : "translated",
+            "value" : "Aufgabe wird nicht wiederholt"
           }
         },
         "el" : {
@@ -69768,8 +69762,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat Task"
+            "state" : "translated",
+            "value" : "Aufgabe wiederholen"
           }
         },
         "el" : {
@@ -69959,8 +69953,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat"
+            "state" : "translated",
+            "value" : "Wiederholen"
           }
         },
         "el" : {
@@ -69995,8 +69989,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat"
+            "state" : "translated",
+            "value" : "Répétez"
           }
         },
         "he" : {
@@ -70150,8 +70144,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "SCHEDULING"
+            "state" : "translated",
+            "value" : "Terminplanung"
           }
         },
         "el" : {
@@ -70341,8 +70335,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task Details"
+            "state" : "translated",
+            "value" : "Aufgabendetails"
           }
         },
         "el" : {
@@ -70532,8 +70526,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Create your first task to get started!"
+            "state" : "translated",
+            "value" : "Erstelle deine erste Aufgabe, um loszulegen!"
           }
         },
         "el" : {
@@ -70723,8 +70717,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Tasks Yet"
+            "state" : "translated",
+            "value" : "Noch keine Aufgaben"
           }
         },
         "el" : {
@@ -70914,8 +70908,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filter by Due Date"
+            "state" : "translated",
+            "value" : "Nach Fälligkeitsdatum filtern"
           }
         },
         "el" : {
@@ -71105,8 +71099,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filter by Labels"
+            "state" : "translated",
+            "value" : "Nach Label filtern"
           }
         },
         "el" : {
@@ -71296,8 +71290,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filter by Priority"
+            "state" : "translated",
+            "value" : "Nach Priorität filtern"
           }
         },
         "el" : {
@@ -71487,8 +71481,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filter by Progress"
+            "state" : "translated",
+            "value" : "Nach Fortschritt filtern"
           }
         },
         "el" : {
@@ -71678,7 +71672,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Max: %@"
           }
         },
@@ -71869,7 +71863,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Min: %@"
           }
         },
@@ -72061,8 +72055,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick Filter"
+            "state" : "translated",
+            "value" : "Schnellfilter"
           }
         },
         "el" : {
@@ -72253,8 +72247,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick Filters"
+            "state" : "translated",
+            "value" : "Schnellfilter"
           }
         },
         "el" : {
@@ -72444,8 +72438,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Filters"
+            "state" : "translated",
+            "value" : "Filter zurücksetzen"
           }
         },
         "el" : {
@@ -72636,8 +72630,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Completed Tasks"
+            "state" : "translated",
+            "value" : "Erledigte Aufgaben anzeigen"
           }
         },
         "el" : {
@@ -72828,8 +72822,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Incomplete Tasks"
+            "state" : "translated",
+            "value" : "Unerledigte Aufgaben anzeigen"
           }
         },
         "el" : {
@@ -73020,8 +73014,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Tasks"
+            "state" : "translated",
+            "value" : "Aufgaben sortieren"
           }
         },
         "el" : {
@@ -73211,7 +73205,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Status"
           }
         },
@@ -73247,8 +73241,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Status"
+            "state" : "translated",
+            "value" : "Statut"
           }
         },
         "he" : {
@@ -73402,8 +73396,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filter Tasks"
+            "state" : "translated",
+            "value" : "Aufgaben filtern"
           }
         },
         "el" : {
@@ -73593,8 +73587,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "TASK INFO"
+            "state" : "translated",
+            "value" : "AUFGABEN INFO"
           }
         },
         "el" : {
@@ -73785,8 +73779,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Labels"
+            "state" : "translated",
+            "value" : "Label auswählen"
           }
         },
         "el" : {
@@ -73976,8 +73970,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Load earlier"
+            "state" : "translated",
+            "value" : "Ältere laden"
           }
         },
         "el" : {
@@ -74167,8 +74161,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Load more"
+            "state" : "translated",
+            "value" : "Weitere laden"
           }
         },
         "el" : {
@@ -74358,8 +74352,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task List"
+            "state" : "translated",
+            "value" : "Aufgabenliste"
           }
         },
         "el" : {
@@ -74394,8 +74388,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task List"
+            "state" : "translated",
+            "value" : "Liste de tâches"
           }
         },
         "he" : {
@@ -74549,8 +74543,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading tasks"
+            "state" : "translated",
+            "value" : "Aufgaben werden geladen"
           }
         },
         "el" : {
@@ -74585,8 +74579,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading tasks"
+            "state" : "translated",
+            "value" : "Chargement des tâches"
           }
         },
         "he" : {
@@ -74740,8 +74734,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pick Task"
+            "state" : "translated",
+            "value" : "Aufgabe auswählen"
           }
         },
         "el" : {
@@ -74931,8 +74925,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pick Task"
+            "state" : "translated",
+            "value" : "Aufgabe auswählen"
           }
         },
         "el" : {
@@ -75122,8 +75116,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task title"
+            "state" : "translated",
+            "value" : "Titel der Aufgabe"
           }
         },
         "el" : {
@@ -75158,8 +75152,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Task title"
+            "state" : "translated",
+            "value" : "Titre de la tâche"
           }
         },
         "he" : {
@@ -75313,8 +75307,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Min Priority"
+            "state" : "translated",
+            "value" : "Min. Priorität"
           }
         },
         "el" : {
@@ -75349,8 +75343,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Min Priority"
+            "state" : "translated",
+            "value" : "Priorité minimum"
           }
         },
         "he" : {
@@ -75504,8 +75498,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Priority"
+            "state" : "translated",
+            "value" : "Max. Priorität"
           }
         },
         "el" : {
@@ -75540,8 +75534,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Priority"
+            "state" : "translated",
+            "value" : "Priorité maximum"
           }
         },
         "he" : {
@@ -75695,8 +75689,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading related tasks..."
+            "state" : "translated",
+            "value" : "Verwandte Aufgaben werden geladen..."
           }
         },
         "el" : {
@@ -75886,8 +75880,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No related tasks"
+            "state" : "translated",
+            "value" : "Keine verwandten Aufgaben"
           }
         },
         "el" : {
@@ -76077,8 +76071,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use the picker below to relate another task."
+            "state" : "translated",
+            "value" : "Benutzen Sie die Auswahl unten, um eine andere Aufgabe zu verknüpfen."
           }
         },
         "el" : {
@@ -76268,8 +76262,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Related Tasks"
+            "state" : "translated",
+            "value" : "Keine verwandten Aufgaben"
           }
         },
         "el" : {
@@ -76460,8 +76454,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Related Tasks"
+            "state" : "translated",
+            "value" : "Verwandte Aufgaben"
           }
         },
         "el" : {
@@ -76651,8 +76645,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Kind"
+            "state" : "translated",
+            "value" : "Art"
           }
         },
         "el" : {
@@ -76843,8 +76837,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminder"
+            "state" : "translated",
+            "value" : "Erinnerung"
           }
         },
         "el" : {
@@ -76879,8 +76873,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminder"
+            "state" : "translated",
+            "value" : "Rappel"
           }
         },
         "he" : {
@@ -77035,8 +77029,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminder Date"
+            "state" : "translated",
+            "value" : "Erinnerungsdatum"
           }
         },
         "el" : {
@@ -77227,8 +77221,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminders"
+            "state" : "translated",
+            "value" : "Erinnerungen"
           }
         },
         "el" : {
@@ -77263,8 +77257,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminders"
+            "state" : "translated",
+            "value" : "Rappels"
           }
         },
         "he" : {
@@ -77418,8 +77412,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminders"
+            "state" : "translated",
+            "value" : "Erinnerungen"
           }
         },
         "el" : {
@@ -77454,8 +77448,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminders"
+            "state" : "translated",
+            "value" : "Rappels"
           }
         },
         "he" : {
@@ -77610,8 +77604,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat"
+            "state" : "translated",
+            "value" : "Wiederholen"
           }
         },
         "el" : {
@@ -77646,8 +77640,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat"
+            "state" : "translated",
+            "value" : "Répétez"
           }
         },
         "he" : {
@@ -77801,8 +77795,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Interval"
+            "state" : "translated",
+            "value" : "Benutzerdefiniertes Intervall"
           }
         },
         "el" : {
@@ -77837,8 +77831,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Interval"
+            "state" : "translated",
+            "value" : "Intervalle personnalisé"
           }
         },
         "he" : {
@@ -77992,8 +77986,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Daily"
+            "state" : "translated",
+            "value" : "täglich"
           }
         },
         "el" : {
@@ -78183,8 +78177,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This task will repeat %@"
+            "state" : "translated",
+            "value" : "Die Aufgabe wird %@ wiederholt"
           }
         },
         "el" : {
@@ -78374,8 +78368,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Daily"
+            "state" : "translated",
+            "value" : "täglich"
           }
         },
         "el" : {
@@ -78565,8 +78559,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every X days"
+            "state" : "translated",
+            "value" : "Alle X Tage"
           }
         },
         "el" : {
@@ -78756,8 +78750,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every %.1f days"
+            "state" : "translated",
+            "value" : "Alle %.1f Tage"
           }
         },
         "el" : {
@@ -78947,8 +78941,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every X hours"
+            "state" : "translated",
+            "value" : "Alle X Stunden"
           }
         },
         "el" : {
@@ -79138,8 +79132,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every X weeks"
+            "state" : "translated",
+            "value" : "Alle X Wochen"
           }
         },
         "el" : {
@@ -79329,8 +79323,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hourly"
+            "state" : "translated",
+            "value" : "stündlich"
           }
         },
         "el" : {
@@ -79365,8 +79359,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hourly"
+            "state" : "translated",
+            "value" : "Horaire"
           }
         },
         "he" : {
@@ -79520,8 +79514,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every 30 days"
+            "state" : "translated",
+            "value" : "Alle 30 Tage"
           }
         },
         "el" : {
@@ -79556,8 +79550,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every 30 days"
+            "state" : "translated",
+            "value" : "Tous les 30 jours"
           }
         },
         "he" : {
@@ -79711,8 +79705,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weekly"
+            "state" : "translated",
+            "value" : "wöchentlich"
           }
         },
         "el" : {
@@ -79747,8 +79741,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weekly"
+            "state" : "translated",
+            "value" : "Hebdomadaire"
           }
         },
         "he" : {
@@ -79902,8 +79896,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every"
+            "state" : "translated",
+            "value" : "Alle"
           }
         },
         "el" : {
@@ -79938,8 +79932,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every"
+            "state" : "translated",
+            "value" : "Tous"
           }
         },
         "he" : {
@@ -80094,8 +80088,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat Interval"
+            "state" : "translated",
+            "value" : "Wiederholungsintervall"
           }
         },
         "el" : {
@@ -80285,8 +80279,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Mode"
+            "state" : "translated",
+            "value" : "Modus"
           }
         },
         "el" : {
@@ -80321,7 +80315,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Mode"
           }
         },
@@ -80476,8 +80470,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Mode"
+            "state" : "translated",
+            "value" : "Modus"
           }
         },
         "el" : {
@@ -80512,7 +80506,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Mode"
           }
         },
@@ -80667,8 +80661,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat Mode"
+            "state" : "translated",
+            "value" : "Wiederholungsmodus"
           }
         },
         "el" : {
@@ -80858,8 +80852,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every 30 days"
+            "state" : "translated",
+            "value" : "Alle 30 Tage"
           }
         },
         "el" : {
@@ -80894,8 +80888,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Every 30 days"
+            "state" : "translated",
+            "value" : "Tous les 30 jours"
           }
         },
         "he" : {
@@ -81049,8 +81043,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick Options"
+            "state" : "translated",
+            "value" : "Schnelleinstellungen"
           }
         },
         "el" : {
@@ -81085,8 +81079,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick Options"
+            "state" : "translated",
+            "value" : "Options rapides"
           }
         },
         "he" : {
@@ -81241,8 +81235,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat Settings"
+            "state" : "translated",
+            "value" : "Wiederholungseinstellungen"
           }
         },
         "el" : {
@@ -81432,8 +81426,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat"
+            "state" : "translated",
+            "value" : "Wiederholen"
           }
         },
         "el" : {
@@ -81468,8 +81462,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Repeat"
+            "state" : "translated",
+            "value" : "Répétez"
           }
         },
         "he" : {
@@ -81623,8 +81617,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unit"
+            "state" : "translated",
+            "value" : "Einheit"
           }
         },
         "el" : {
@@ -81814,8 +81808,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Days"
+            "state" : "translated",
+            "value" : "Tage"
           }
         },
         "el" : {
@@ -81850,8 +81844,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Days"
+            "state" : "translated",
+            "value" : "Jours"
           }
         },
         "he" : {
@@ -82005,8 +81999,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hours"
+            "state" : "translated",
+            "value" : "Stunden"
           }
         },
         "el" : {
@@ -82041,8 +82035,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hours"
+            "state" : "translated",
+            "value" : "Heures"
           }
         },
         "he" : {
@@ -82196,8 +82190,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Months"
+            "state" : "translated",
+            "value" : "Monate"
           }
         },
         "el" : {
@@ -82232,8 +82226,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Months"
+            "state" : "translated",
+            "value" : "Mois"
           }
         },
         "he" : {
@@ -82387,8 +82381,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weeks"
+            "state" : "translated",
+            "value" : "Wochen"
           }
         },
         "el" : {
@@ -82423,8 +82417,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weeks"
+            "state" : "translated",
+            "value" : "Semaines"
           }
         },
         "he" : {
@@ -82578,8 +82572,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use custom interval"
+            "state" : "translated",
+            "value" : "Benutzerdefinierten Intervall verwenden"
           }
         },
         "el" : {
@@ -82769,8 +82763,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weekly"
+            "state" : "translated",
+            "value" : "Wöchentlich"
           }
         },
         "el" : {
@@ -82805,8 +82799,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Weekly"
+            "state" : "translated",
+            "value" : "Hebdomadaire"
           }
         },
         "he" : {
@@ -82960,8 +82954,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sample task title"
+            "state" : "translated",
+            "value" : "Beispieltitel für Aufgabe"
           }
         },
         "el" : {
@@ -83151,8 +83145,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Type part of a title or description to find a task"
+            "state" : "translated",
+            "value" : "Geben Sie einen Teil eines Titels oder einer Beschreibung ein, um eine Aufgabe zu finden"
           }
         },
         "el" : {
@@ -83342,8 +83336,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No tasks found"
+            "state" : "translated",
+            "value" : "Keine Aufgaben gefunden"
           }
         },
         "el" : {
@@ -83533,8 +83527,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search tasks..."
+            "state" : "translated",
+            "value" : "Aufgaben suchen..."
           }
         },
         "el" : {
@@ -83724,8 +83718,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search for tasks"
+            "state" : "translated",
+            "value" : "Aufgaben suchen"
           }
         },
         "el" : {
@@ -83916,8 +83910,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a task"
+            "state" : "translated",
+            "value" : "Aufgabe auswählen"
           }
         },
         "el" : {
@@ -83952,8 +83946,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a task"
+            "state" : "translated",
+            "value" : "Sélectionnez une tâche"
           }
         },
         "he" : {
@@ -84107,8 +84101,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a task to view its details"
+            "state" : "translated",
+            "value" : "Wähle eine Aufgabe aus, um ihre Details anzuzeigen"
           }
         },
         "el" : {
@@ -84298,8 +84292,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a task"
+            "state" : "translated",
+            "value" : "Aufgabe auswählen"
           }
         },
         "el" : {
@@ -84334,8 +84328,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a task"
+            "state" : "translated",
+            "value" : "Sélectionnez une tâche"
           }
         },
         "he" : {
@@ -84489,8 +84483,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Tasks"
+            "state" : "translated",
+            "value" : "Aufgaben sortieren"
           }
         },
         "el" : {
@@ -84525,8 +84519,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Tasks"
+            "state" : "translated",
+            "value" : "Trier les tâches"
           }
         },
         "he" : {
@@ -84681,8 +84675,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Date"
+            "state" : "translated",
+            "value" : "Startdatum"
           }
         },
         "el" : {
@@ -84872,8 +84866,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This task will sync automatically on save"
+            "state" : "translated",
+            "value" : "Diese Aufgabe wird beim Speichern automatisch synchronisiert"
           }
         },
         "el" : {
@@ -85063,8 +85057,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar sync requires both start and end dates"
+            "state" : "translated",
+            "value" : "Kalender-Sync erfordert Start- und Enddaten"
           }
         },
         "el" : {
@@ -85254,8 +85248,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tasks"
+            "state" : "translated",
+            "value" : "Aufgaben"
           }
         },
         "el" : {
@@ -85290,8 +85284,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tasks"
+            "state" : "translated",
+            "value" : "Tâches"
           }
         },
         "he" : {
@@ -85445,8 +85439,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Find Users"
+            "state" : "translated",
+            "value" : "Benutzer suchen"
           }
         },
         "el" : {
@@ -85636,8 +85630,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter a username or name to find users you can assign to tasks"
+            "state" : "translated",
+            "value" : "Gib einen Benutzernamen oder einen Namen ein, um diesen eine Aufgabe zuzuweisen"
           }
         },
         "el" : {
@@ -85827,8 +85821,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Try a different search term"
+            "state" : "translated",
+            "value" : "Versuche einen anderen Suchbegriff"
           }
         },
         "el" : {
@@ -86018,8 +86012,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No users found"
+            "state" : "translated",
+            "value" : "Keine Benutzer gefunden"
           }
         },
         "el" : {
@@ -86209,8 +86203,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search users..."
+            "state" : "translated",
+            "value" : "Benutzer suchen..."
           }
         },
         "el" : {
@@ -86400,8 +86394,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search for '%@'"
+            "state" : "translated",
+            "value" : "Suche nach '%@'"
           }
         },
         "el" : {
@@ -86591,8 +86585,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Searching users"
+            "state" : "translated",
+            "value" : "Suche Benutzer"
           }
         },
         "el" : {
@@ -86782,8 +86776,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search for User"
+            "state" : "translated",
+            "value" : "Nach Benutzer suchen"
           }
         },
         "el" : {
@@ -86878,8 +86872,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search for User"
+            "state" : "translated",
+            "value" : "Pesquisar por usuário"
           }
         },
         "ro" : {
